@@ -17,9 +17,8 @@ class DefaultController extends Controller
     /**
      * Display the homepage.
      * @Route("/", name="homepage")
-     * @param Request $request The HTTP request.
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [
