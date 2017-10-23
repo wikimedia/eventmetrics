@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"MusikAnimal"
+		]
+	},
+	"developed-by": "Developed by Community Tech, WMF",
+	"documentation": "Documentation",
+	"feedback": "Feedback",
+	"grant-metrics": "Grant Metrics",
+	"num-days": "{{PLURAL:$1|day|days}}",
+	"num-hours": "{{PLURAL:$1|hour|hours}}",
+	"num-minutes": "{{PLURAL:$1|minute|minutes}}",
+	"num-seconds": "{{PLURAL:$1|second|seconds}}",
+	"report-issue": "Report an issue",
+	"view-source": "View source",
+	"welcome": "Welcome to Grant Metrics"
+}

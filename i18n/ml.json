@@ -1,0 +1,6 @@
+{
+	"num-days": "{{PLURAL:$1| ദിവസം}}",
+	"num-hours": "({{PLURAL:$1| മണിക്കൂർ}})",
+	"num-minutes": "{{PLURAL:$1|മിനിറ്റ്}}",
+	"num-seconds": "{{PLURAL:$1|സെക്കന്റ്}}"
+}

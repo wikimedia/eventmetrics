@@ -1,0 +1,9 @@
+{
+	"documentation": "بەڵگەنامە",
+	"num-days": "{{PLURAL:$1|ڕۆژ}}",
+	"num-hours": "{{PLURAL:$1|کاتژمێر}}",
+	"num-minutes": "{{PLURAL: $1|خولەک|خولەک}}",
+	"num-seconds": "{{PLURAL: $1|چرکە|چرکە}}",
+	"report-issue": "ڕاپۆرت دان لەسەر کێشەیەک",
+	"view-source": "بینینی سەرچاوە"
+}

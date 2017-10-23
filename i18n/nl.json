@@ -1,0 +1,10 @@
+{
+	"documentation": "Documentatie",
+	"feedback": "Terugkoppeling",
+	"num-days": "{{PLURAL: $1|dag|dagen}}",
+	"num-hours": "{{PLURAL: $1|uur}}",
+	"num-minutes": "{{PLURAL: $1|minuut|minuten}}",
+	"num-seconds": "{{PLURAL: $1|seconde|seconden}}",
+	"report-issue": "Probleem melden",
+	"view-source": "Broncode bekijken"
+}

@@ -7,8 +7,12 @@ parameters:
     database_name: symfony
     database_user: root
     database_password: ~
-    # You should uncomment this if you want to use pdo_sqlite
-    #database_path: '%kernel.project_dir%/var/data/data.sqlite'
+
+    database_replica_host: 127.0.0.1
+    database_replica_port: ~
+    database_replica_name: enwiki_p
+    database_replica_user: ~
+    database_replica_password: ~
 
     mailer_transport: smtp
     mailer_host: 127.0.0.1

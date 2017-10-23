@@ -1,0 +1,10 @@
+{
+	"documentation": "Dokumentation",
+	"feedback": "Återkoppling",
+	"num-days": "{{PLURAL: $1|dag|dagar}}",
+	"num-hours": "{{PLURAL: $1|timme|timmar}}",
+	"num-minutes": "{{PLURAL: $1|minut|minuter}}",
+	"num-seconds": "{{PLURAL: $1|sekund|sekunder}}",
+	"report-issue": "Rapportera ett problem",
+	"view-source": "Visa källkod"
+}

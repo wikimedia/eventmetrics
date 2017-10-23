@@ -1,0 +1,9 @@
+{
+	"documentation": "Tài liệu",
+	"num-days": "{{PLURAL:$1|ngày|ngày}}",
+	"num-hours": "{{PLURAL:$1|giờ|giờ}}",
+	"num-minutes": "{{PLURAL:$1|phút|phút}}",
+	"num-seconds": "{{PLURAL:$1|giây|giây}}",
+	"report-issue": "Báo cáo lỗi",
+	"view-source": "Xem mã nguồn"
+}

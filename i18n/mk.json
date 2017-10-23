@@ -1,0 +1,10 @@
+{
+	"documentation": "Документација",
+	"feedback": "Мислења",
+	"num-days": "{{PLURAL:$1|ден|дена}}",
+	"num-hours": "{{PLURAL:$1|час|часа}}",
+	"num-minutes": "{{PLURAL:$1|минута|минути}}",
+	"num-seconds": "{{PLURAL:$1|секунда|секунди}}",
+	"report-issue": "Пријави проблем",
+	"view-source": "Изворен код"
+}

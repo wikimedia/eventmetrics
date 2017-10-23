@@ -1,0 +1,9 @@
+{
+	"documentation": "תיעוד",
+	"num-days": "{{PLURAL:$1|יום|ימים}}",
+	"num-hours": "{{PLURAL:$1|שעה|שעות}}",
+	"num-minutes": "{{PLURAL:$1|דקה|דקות}}",
+	"num-seconds": "{{PLURAL:$1|שנייה|שניות}}",
+	"report-issue": "דיווח בעיה",
+	"view-source": "הצגת מקור"
+}

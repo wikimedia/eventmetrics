@@ -1,0 +1,10 @@
+{
+	"documentation": "Documentation",
+	"feedback": "Avis",
+	"num-days": "{{PLURAL: $1|jour|jours}}",
+	"num-hours": "{{PLURAL: $1|heure|heures}}",
+	"num-minutes": "{{PLURAL: $1|minute|minutes}}",
+	"num-seconds": "{{PLURAL: $1|seconde|secondes}}",
+	"report-issue": "Signaler un problème",
+	"view-source": "Voir la source"
+}

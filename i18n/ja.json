@@ -1,0 +1,10 @@
+{
+	"documentation": "説明書",
+	"feedback": "フィードバック",
+	"num-days": "{{PLURAL: $1|日}}",
+	"num-hours": "{{PLURAL: $1|時間}}",
+	"num-minutes": "{{PLURAL: $1|分}}",
+	"num-seconds": "{{PLURAL: $1|秒}}",
+	"report-issue": "問題の報告",
+	"view-source": "ソースを閲覧"
+}

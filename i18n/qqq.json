@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"MusikAnimal"
+		]
+	},
+	"developed-by": "Footer text to indicate author. 'Community Tech' is the name of the WMF team who developed the tool.",
+	"documentation": "The word documentation. This is used as the text for a link to a documentation page.\n{{Identical|Documentation}}",
+	"feedback": "Link in the footer to give feedback.\n{{Identical|Feedback}}",
+	"grant-metrics": "Title of the Grant Metrics application.",
+	"num-days": "Conditional PLURAL form of 'days'. $1 is the number.\n{{Identical|Day}}",
+	"num-hours": "Conditional PLURAL form of 'hours'. $1 is the number.\n{{Identical|Hour}}",
+	"num-minutes": "Conditional PLURAL form of 'minutes'. $1 is the number.\n{{Identical|Minute}}",
+	"num-seconds": "Conditional PLURAL form of 'seconds'. $1 is the number.\n{{Identical|Second}}",
+	"report-issue": "Link to report an issue or bug with the tool",
+	"view-source": "Link to the source code for the tool\n{{Identical|View source}}",
+	"welcome": "Message shown on the homepage. 'Grant Metrics' is the name of the application."
+}
