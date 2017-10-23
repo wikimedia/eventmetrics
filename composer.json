@@ -1,6 +1,7 @@
 {
     "name": "lziemba/grantmetrics",
-    "license": "proprietary",
+    "description": "WMF tool that provides grantees a simple, easy to use interface for reporting their shared metrics",
+    "license": "GPL-3.0+",
     "type": "project",
     "autoload": {
         "psr-4": {
