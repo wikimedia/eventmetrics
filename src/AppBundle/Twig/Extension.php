@@ -71,7 +71,7 @@ abstract class Extension extends Twig_Extension
 
         // Set up Intuition, using the selected language.
         $intuition = new Intuition('grantmetrics');
-        $path = $this->container->getParameter('kernel.root_dir') . '/../i18n';
+        $path = $this->container->getParameter('kernel.root_dir').'/../i18n';
         $intuition->registerDomain('grantmetrics', $path);
         $intuition->setLang(strtolower($useLang));
 
