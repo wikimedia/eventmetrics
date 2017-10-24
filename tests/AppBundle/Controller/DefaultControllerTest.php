@@ -12,7 +12,7 @@ class DefaultControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(201, $client->getResponse()->getStatusCode());
         $this->assertContains('Welcome to Grant Metrics', $crawler->filter('div')->text());
     }
 }
