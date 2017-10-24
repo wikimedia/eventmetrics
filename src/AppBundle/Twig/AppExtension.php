@@ -43,17 +43,17 @@ class AppExtension extends Extension
     {
         $options = ['is_safe' => ['html']];
         return [
-            new \Twig_SimpleFunction('requestTime', [ $this, 'requestTime' ], $options),
-            new \Twig_SimpleFunction('memoryUsage', [ $this, 'requestMemory' ], $options),
-            new \Twig_SimpleFunction('msg', [ $this, 'intuitionMessage' ], $options),
-            new \Twig_SimpleFunction('lang', [ $this, 'getLang' ], $options),
-            new \Twig_SimpleFunction('langName', [ $this, 'getLangName' ], $options),
-            new \Twig_SimpleFunction('allLangs', [ $this, 'getAllLangs' ]),
-            new \Twig_SimpleFunction('isRTL', [ $this, 'intuitionIsRTL' ]),
-            new \Twig_SimpleFunction('isRTLLang', [ $this, 'intuitionIsRTLLang' ]),
-            new \Twig_SimpleFunction('shortHash', [ $this, 'gitShortHash' ]),
-            new \Twig_SimpleFunction('hash', [ $this, 'gitHash' ]),
-            new \Twig_SimpleFunction('releaseDate', [ $this, 'gitDate' ]),
+            new \Twig_SimpleFunction('requestTime', [$this, 'requestTime'], $options),
+            new \Twig_SimpleFunction('memoryUsage', [$this, 'requestMemory'], $options),
+            new \Twig_SimpleFunction('msg', [$this, 'intuitionMessage'], $options),
+            new \Twig_SimpleFunction('lang', [$this, 'getLang'], $options),
+            new \Twig_SimpleFunction('langName', [$this, 'getLangName'], $options),
+            new \Twig_SimpleFunction('allLangs', [$this, 'getAllLangs']),
+            new \Twig_SimpleFunction('isRTL', [$this, 'intuitionIsRTL']),
+            new \Twig_SimpleFunction('isRTLLang', [$this, 'intuitionIsRTLLang']),
+            new \Twig_SimpleFunction('shortHash', [$this, 'gitShortHash']),
+            new \Twig_SimpleFunction('hash', [$this, 'gitHash']),
+            new \Twig_SimpleFunction('releaseDate', [$this, 'gitDate']),
             new \Twig_SimpleFunction('formatDuration', [$this, 'formatDuration']),
             new \Twig_SimpleFunction('numberFormat', [$this, 'numberFormat']),
         ];
@@ -199,9 +199,9 @@ class AppExtension extends Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('capitalize_first', [ $this, 'capitalizeFirst' ]),
-            new \Twig_SimpleFilter('percent_format', [ $this, 'percentFormat' ]),
-            new \Twig_SimpleFilter('diff_format', [ $this, 'diffFormat' ], [ 'is_safe' => [ 'html' ] ]),
+            new \Twig_SimpleFilter('capitalize_first', [$this, 'capitalizeFirst']),
+            new \Twig_SimpleFilter('percent_format', [$this, 'percentFormat']),
+            new \Twig_SimpleFilter('diff_format', [$this, 'diffFormat'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('num_format', [$this, 'numberFormat']),
             new \Twig_SimpleFilter('date_format', [$this, 'dateFormat']),
         ];
