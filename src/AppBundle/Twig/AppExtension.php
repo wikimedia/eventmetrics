@@ -62,6 +62,8 @@ class AppExtension extends Extension
     /**
      * Get the duration of the current HTTP request in seconds.
      * @return string
+     * Untestable since there is no request stack in the tests.
+     * @codeCoverageIgnore
      */
     public function requestTime()
     {

@@ -82,6 +82,8 @@ abstract class Extension extends Twig_Extension
     /**
      * Shorthand to get the current request from the request stack.
      * @return Request
+     * There is no request stack in the tests.
+     * @codeCoverageIgnore
      */
     protected function getCurrentRequest()
     {
