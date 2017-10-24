@@ -6,10 +6,11 @@ build:
     tests:
         override:
             -
-                command: vendor/bin/simple-phpunit --coverage-clover=coverage.xml
+                command: 'vendor/bin/simple-phpunit --coverage-clover=coverage.xml'
                 coverage:
-                    file: coverage.xml
-                    format: php-clover
+                    file: 'coverage.xml'
+                    format: 'clover'
+
 filter:
     excluded_paths:
         - 'var/*'
