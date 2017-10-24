@@ -1,0 +1,9 @@
+{
+	"documentation": "Documentație",
+	"num-days": "{{PLURAL:$1|zi|zile|de zile}}",
+	"num-hours": "{{PLURAL:$1|oră|ore|de ore}}",
+	"num-minutes": "{{PLURAL:$1|minut|minute|de minute}}",
+	"num-seconds": "{{PLURAL:$1|secundă|secunde|de secunde}}",
+	"report-issue": "Raportează o problemă",
+	"view-source": "Vizualizare sursă"
+}

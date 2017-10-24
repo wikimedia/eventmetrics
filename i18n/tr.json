@@ -1,0 +1,9 @@
+{
+	"documentation": "Belgelendirme",
+	"num-days": "{{PLURAL: $1|gün|gün}}",
+	"num-hours": "{{PLURAL: $1|hour|saat}}",
+	"num-minutes": "{{PLURAL: $1|minute|dakika}}",
+	"num-seconds": "{{PLURAL: $1|second|saniye}}",
+	"report-issue": "Sorun bildirin",
+	"view-source": "Kaynağı gör"
+}

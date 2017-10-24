@@ -1,0 +1,8 @@
+{
+	"documentation": "Ձեռնարկ",
+	"num-days": "{{PLURAL:$1|օր}}",
+	"num-hours": "{{PLURAL:$1|ժամ}}",
+	"num-minutes": "{{PLURAL:$1|րոպե}}",
+	"num-seconds": "{{PLURAL:$1|վայրկյան}}",
+	"view-source": "Դիտել ելատեքստը"
+}

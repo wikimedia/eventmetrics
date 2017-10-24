@@ -1,0 +1,10 @@
+{
+	"documentation": "Dokumentatioun",
+	"feedback": "Feedback",
+	"num-days": "{{PLURAL: $1|Dag|Deeg}}",
+	"num-hours": "{{PLURAL: $1|Stonn|Stonnen}}",
+	"num-minutes": "{{PLURAL: $1|Minutt|Minutten}}",
+	"num-seconds": "{{PLURAL: $1|Sekonn|Sekonnen}}",
+	"report-issue": "E Problem mellen",
+	"view-source": "Quellcode weisen"
+}

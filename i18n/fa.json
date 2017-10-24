@@ -1,0 +1,10 @@
+{
+	"documentation": "مستندات",
+	"feedback": "بازخورد",
+	"num-days": "{{PLURAL: $1|روز|روز}}",
+	"num-hours": "{{PLURAL: $1|ساعت|ساعت}}",
+	"num-minutes": "{{PLURAL: $1|دقیقه|دقیقه}}",
+	"num-seconds": "{{PLURAL: $1|ثانیه|ثانیه}}",
+	"report-issue": "یک مسئله را گزارش کنید",
+	"view-source": "نمایش مبدأ"
+}

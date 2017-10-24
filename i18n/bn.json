@@ -1,0 +1,10 @@
+{
+	"documentation": "নথিপত্র",
+	"feedback": "প্রতিক্রিয়া",
+	"num-days": "{{PLURAL:$1|দিন}}",
+	"num-hours": "{{PLURAL: $1|ঘণ্টা}}",
+	"num-minutes": "{{PLURAL: $1|মিনিট}}",
+	"num-seconds": "$1 {{PLURAL:$1|সেকেন্ড}}",
+	"report-issue": "একটি সমস্যা প্রতিবেদন করুন",
+	"view-source": "উৎস দেখুন"
+}

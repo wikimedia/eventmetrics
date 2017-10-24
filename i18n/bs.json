@@ -1,0 +1,10 @@
+{
+	"documentation": "Dokumentacija",
+	"feedback": "Povratne informacije",
+	"num-days": "{{PLURAL:$1|dan|dana}}",
+	"num-hours": "{{PLURAL:$1|sat|sata|sati}}",
+	"num-minutes": "{{PLURAL:$1|minut|minute|minuta}}",
+	"num-seconds": "{{PLURAL:$1|sekunda|sekunde|sekundi}}",
+	"report-issue": "Prijavi problem",
+	"view-source": "Pogledaj izvor"
+}
