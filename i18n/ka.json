@@ -1,6 +1,8 @@
 {
 	"documentation": "დოკუმენტაცია",
 	"feedback": "გამოხმაურება",
+	"help-translate": "დაგვეხმარეთ თარგმნაში",
+	"logout": "გასვლა",
 	"num-days": "{{PLURAL:$1|დღე|დღე}}",
 	"num-hours": "{{PLURAL:$1|საათი|საათი}}",
 	"num-minutes": "{{PLURAL:$1|წუთი|წუთი}}",

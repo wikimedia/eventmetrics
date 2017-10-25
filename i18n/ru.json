@@ -1,6 +1,8 @@
 {
 	"documentation": "Документация",
 	"feedback": "Обратная связь",
+	"help-translate": "Помочь с переводом",
+	"logout": "Завершение сеанса",
 	"num-days": "{{PLURAL: $1|день|дней|дня}}",
 	"num-hours": "{{PLURAL: $1|час|часа|часов}}",
 	"num-minutes": "{{PLURAL: $1|минута|минуты|минут}}",

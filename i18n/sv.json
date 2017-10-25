@@ -1,6 +1,8 @@
 {
 	"documentation": "Dokumentation",
 	"feedback": "Återkoppling",
+	"help-translate": "Hjälp till att översätta",
+	"logout": "Logga ut",
 	"num-days": "{{PLURAL: $1|dag|dagar}}",
 	"num-hours": "{{PLURAL: $1|timme|timmar}}",
 	"num-minutes": "{{PLURAL: $1|minut|minuter}}",

@@ -1,3 +1,72 @@
+@import 'mixins';
+
 html {
     height: 100%;
+}
+
+body {
+    min-height: 100%;
+    position: relative;
+
+    /* add spacing for sticky footer */
+    &::after {
+        content: '';
+        display: block;
+        min-height: 148px;
+    }
+}
+
+.app-header {
+    line-height: 48px;
+}
+
+.lang-group {
+    .dropdown-menu {
+        max-height: 214px;
+        overflow-y: scroll;
+    }
+
+    .btn {
+        padding-left: 30px;
+    }
+
+    svg {
+        height: 17px;
+        left: 8px;
+        position: absolute;
+        top: 8px;
+        width: 17px;
+    }
+}
+
+.app-footer {
+    bottom: 0;
+    left: 0;
+    line-height: 30px;
+    margin-top: 30px;
+    min-height: 30px;
+    position: absolute;
+    width: 100%;
+}
+
+.footer-links {
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+
+    li {
+        flex-grow: 1;
+        text-align: center;
+    }
+}
+
+@media (max-width: $bootstrap-sm) {
+    .footer-links {
+        display: block;
+
+        li {
+            display: block !important;
+            text-align: left;
+        }
+    }
 }

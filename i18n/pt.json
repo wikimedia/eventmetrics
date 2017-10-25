@@ -1,5 +1,7 @@
 {
 	"documentation": "documentação",
+	"help-translate": "Ajude a traduzir",
+	"logout": "Sair",
 	"num-days": "{{PLURAL: $1|dia|dias}}",
 	"num-hours": "{{PLURAL: $1|hora|horas}}",
 	"num-minutes": "{{PLURAL: $1|minuto|minutos}}",

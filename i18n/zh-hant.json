@@ -1,6 +1,8 @@
 {
 	"documentation": "文件",
 	"feedback": "意見回饋",
+	"help-translate": "協助翻譯",
+	"logout": "登出",
 	"num-days": "{{PLURAL:$1|天|天}}",
 	"num-hours": "{{PLURAL:$1|小時|小時}}",
 	"num-minutes": "{{PLURAL:$1|分|分}}",

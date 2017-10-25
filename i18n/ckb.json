@@ -1,5 +1,7 @@
 {
 	"documentation": "بەڵگەنامە",
+	"help-translate": "یارمەتیی وەرگێڕان",
+	"logout": "چوونە دەرەوە",
 	"num-days": "{{PLURAL:$1|ڕۆژ}}",
 	"num-hours": "{{PLURAL:$1|کاتژمێر}}",
 	"num-minutes": "{{PLURAL: $1|خولەک|خولەک}}",

@@ -1,5 +1,6 @@
 {
 	"feedback": "கருத்து",
+	"logout": "விடுபதிகை",
 	"num-days": "{{PLURAL: $1|நாள்|நாட்கள்}}",
 	"num-hours": "{{PLURAL: $1|மணி|மணிகள்}}",
 	"num-minutes": "{{PLURAL:$1|நிமிடம்|நிமிடங்கள்}}",

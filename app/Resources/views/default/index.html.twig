@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div>
-        {{ msg('welcome') }}
+    <div class="text-center splash-dialog">
+        <h1>{{ msg('welcome') }}</h1>
+        <button class="btn btn-default">
+            {{ msg('login-with-oauth') }}
+        </button>
     </div>
 {% endblock %}

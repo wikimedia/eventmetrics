@@ -1,6 +1,8 @@
 {
 	"documentation": "Documentazione",
 	"feedback": "Commenti",
+	"help-translate": "Aiuta a tradurre",
+	"logout": "Esci",
 	"num-days": "{{PLURAL: $1|giorno|giorni}}",
 	"num-hours": "{{PLURAL: $1|ora|ore}}",
 	"num-minutes": "{{PLURAL: $1|minuto|minuti}}",

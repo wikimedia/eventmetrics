@@ -1,5 +1,6 @@
 {
 	"documentation": "Ձեռնարկ",
+	"logout": "Դուրս գալ",
 	"num-days": "{{PLURAL:$1|օր}}",
 	"num-hours": "{{PLURAL:$1|ժամ}}",
 	"num-minutes": "{{PLURAL:$1|րոպե}}",

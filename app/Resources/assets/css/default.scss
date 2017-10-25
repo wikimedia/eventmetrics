@@ -1,0 +1,8 @@
+@import 'mixins';
+
+.default {
+    .splash-dialog {
+        @include center();
+        top: calc(50% - 30px);
+    }
+}

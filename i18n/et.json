@@ -1,4 +1,5 @@
 {
+	"logout": "Logi välja",
 	"num-days": "{{PLURAL: $1|päev|päeva}}",
 	"num-hours": "{{PLURAL: $1|tund|tundi}}",
 	"num-minutes": "{{PLURAL: $1|minut|minutit}}",

@@ -1,6 +1,8 @@
 {
 	"documentation": "Dokumentaatio",
 	"feedback": "Palaute",
+	"help-translate": "Auta kääntämisessä",
+	"logout": "Kirjaudu ulos",
 	"report-issue": "Ilmoita ongelmasta",
 	"view-source": "Näytä lähdekoodi"
 }

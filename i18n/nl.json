@@ -1,6 +1,8 @@
 {
 	"documentation": "Documentatie",
 	"feedback": "Terugkoppeling",
+	"help-translate": "Helpen met vertalen",
+	"logout": "Afmelden",
 	"num-days": "{{PLURAL: $1|dag|dagen}}",
 	"num-hours": "{{PLURAL: $1|uur}}",
 	"num-minutes": "{{PLURAL: $1|minuut|minuten}}",
