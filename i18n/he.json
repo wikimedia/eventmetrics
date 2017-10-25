@@ -1,5 +1,7 @@
 {
 	"documentation": "תיעוד",
+	"help-translate": "עזור לתרגם",
+	"logout": "יציאה מהחשבון",
 	"num-days": "{{PLURAL:$1|יום|ימים}}",
 	"num-hours": "{{PLURAL:$1|שעה|שעות}}",
 	"num-minutes": "{{PLURAL:$1|דקה|דקות}}",

@@ -1,6 +1,8 @@
 {
 	"documentation": "Dokumentacja",
 	"feedback": "Opinie",
+	"help-translate": "Pomóż w tłumaczeniu",
+	"logout": "Zakończenie sesji",
 	"num-days": "{{PLURAL:$1|dzień|dni}}",
 	"num-hours": "{{PLURAL:$1|godzina|godzin}}",
 	"num-minutes": "{{PLURAL:$1|minuta|minuty|minut}}",

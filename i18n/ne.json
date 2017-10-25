@@ -1,5 +1,6 @@
 {
 	"feedback": "प्रतिक्रिया",
+	"logout": "निर्गमन (लग आउट)",
 	"num-days": "{{PLURAL: $1|day|days}}",
 	"num-hours": "{{PLURAL: $1|hour|hours}}",
 	"num-minutes": "{{PLURAL: $1|minute|minutes}}",

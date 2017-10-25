@@ -1,6 +1,8 @@
 {
 	"documentation": "مستندات",
 	"feedback": "بازخورد",
+	"help-translate": "کمک به ترجمه",
+	"logout": "خروج از سامانه",
 	"num-days": "{{PLURAL: $1|روز|روز}}",
 	"num-hours": "{{PLURAL: $1|ساعت|ساعت}}",
 	"num-minutes": "{{PLURAL: $1|دقیقه|دقیقه}}",

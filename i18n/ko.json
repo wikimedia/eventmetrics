@@ -1,6 +1,8 @@
 {
 	"documentation": "설명서",
 	"feedback": "피드백",
+	"help-translate": "변역 돕기",
+	"logout": "로그아웃",
 	"num-days": "{{PLURAL: $1|일}}",
 	"num-hours": "{{PLURAL: $1|시간}}",
 	"num-minutes": "{{PLURAL: $1|분}}",

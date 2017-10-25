@@ -1,6 +1,8 @@
 {
 	"documentation": "Dokumentacija",
 	"feedback": "Povratne informacije",
+	"help-translate": "Pomozite s prijevodima",
+	"logout": "Odjavi me",
 	"num-days": "{{PLURAL:$1|dan|dana}}",
 	"num-hours": "{{PLURAL:$1|sat|sata|sati}}",
 	"num-minutes": "{{PLURAL:$1|minut|minute|minuta}}",

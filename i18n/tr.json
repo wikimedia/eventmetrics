@@ -1,5 +1,7 @@
 {
 	"documentation": "Belgelendirme",
+	"help-translate": "Çeviriye yardım edin",
+	"logout": "Oturumu kapat",
 	"num-days": "{{PLURAL: $1|gün|gün}}",
 	"num-hours": "{{PLURAL: $1|hour|saat}}",
 	"num-minutes": "{{PLURAL: $1|minute|dakika}}",
