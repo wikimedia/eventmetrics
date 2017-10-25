@@ -30,7 +30,7 @@ build_failure_conditions:
     - 'issues.severity(>= MAJOR).new.exists'       # New issues of major or higher severity
 
     - 'project.metric("scrutinizer.quality", < 9)' # Code Quality Rating drops below 9
-    # - 'project.metric("scrutinizer.test_coverage", < 0.80)' # Code Coverage drops below 80%
+    - 'project.metric("scrutinizer.test_coverage", < 0.80)' # Code Coverage drops below 80%
 
-    # # Code Coverage decreased from previous inspection
-    # - 'project.metric_change("scrutinizer.test_coverage", < 0)'
+    # Code Coverage decreased from previous inspection
+    - 'project.metric_change("scrutinizer.test_coverage", < -1)'

@@ -89,7 +89,20 @@ doctrine:
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+        mappings:
+            model:
+                type: annotation
+                dir: '%kernel.root_dir%/../src/AppBundle/Model'
+                prefix: AppBundle\Model
+                alias: Model
+                is_bundle: false
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: Application Migrations
+    organize_migrations: false
 
 # Swiftmailer Configuration
 swiftmailer:

@@ -25,6 +25,7 @@
         "Krinkle/intuition": "^0.6.1",
         "components/jquery": "^3.2",
         "doctrine/doctrine-bundle": "^1.6",
+        "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.5",
         "incenteev/composer-parameter-handler": "^2.0",
         "leafo/scssphp": "^0.7.1",
