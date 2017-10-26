@@ -46,21 +46,21 @@ class Event extends Model
 
     /**
      * One Event has many Participants.
-     * @ORM\OneToMany(targetEntity="Participant", mappedBy="event")
+     * @ORM\OneToMany(targetEntity="Participant", mappedBy="event", orphanRemoval=true)
      * @var ArrayCollection|Participant[] Participants of this Event.
      */
     protected $participants;
 
     /**
-     * One Event has many Participants.
-     * @ORM\OneToMany(targetEntity="EventStat", mappedBy="event")
+     * One Event has many EventStats.
+     * @ORM\OneToMany(targetEntity="EventStat", mappedBy="event", orphanRemoval=true)
      * @var ArrayCollection|EventStat[] Statistics of this Event.
      */
     protected $stats;
 
     /**
      * One Event has many EventWikis.
-     * @ORM\OneToMany(targetEntity="EventWiki", mappedBy="event")
+     * @ORM\OneToMany(targetEntity="EventWiki", mappedBy="event", orphanRemoval=true)
      * @var ArrayCollection|EventWiki[] Wikis that this event takes place on.
      */
     protected $wikis;
@@ -196,6 +196,30 @@ class Event extends Model
     }
 
     /**
+     * Add an EventStat to this Program.
+     * @param EventStat $eventStat
+     */
+    public function addStatistic(EventStat $eventStat)
+    {
+        if ($this->stats->contains($eventStat)) {
+            return;
+        }
+        $this->stats->add($eventStat);
+    }
+
+    /**
+     * Remove an eventStat from this Program.
+     * @param EventStat $eventStat
+     */
+    public function removeStatistic(EventStat $eventStat)
+    {
+        if (!$this->stats->contains($eventStat)) {
+            return;
+        }
+        $this->stats->removeElement($eventStat);
+    }
+
+    /**
      * Get participants of this Event.
      * @return ArrayCollection|Participant[]
      */
@@ -205,11 +229,59 @@ class Event extends Model
     }
 
     /**
+     * Add an Participant to this Event.
+     * @param Participant $participant
+     */
+    public function addParticipant(Participant $participant)
+    {
+        if ($this->participants->contains($participant)) {
+            return;
+        }
+        $this->participants->add($participant);
+    }
+
+    /**
+     * Remove a Participant from this Event.
+     * @param Participant $participant
+     */
+    public function removeParticipant(Participant $participant)
+    {
+        if (!$this->participants->contains($participant)) {
+            return;
+        }
+        $this->participants->removeElement($participant);
+    }
+
+    /**
      * Get wikis this event is taking place on.
      * @return ArrayCollection|EventWiki[]
      */
     public function getWikis()
     {
         return $this->wikis;
+    }
+
+    /**
+     * Add a EventWiki to this Event.
+     * @param EventWiki $wiki
+     */
+    public function addWiki(EventWiki $wiki)
+    {
+        if ($this->wikis->contains($wiki)) {
+            return;
+        }
+        $this->wikis->add($wiki);
+    }
+
+    /**
+     * Remove a EventWiki from this Event.
+     * @param EventWiki $wiki
+     */
+    public function removeWiki(EventWiki $wiki)
+    {
+        if (!$this->wikis->contains($wiki)) {
+            return;
+        }
+        $this->wikis->removeElement($wiki);
     }
 }

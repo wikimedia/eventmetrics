@@ -60,6 +60,7 @@ class Participant extends Model
     public function __construct(Event $event, $userId)
     {
         $this->event = $event;
+        $this->event->addParticipant($this);
         $this->userId = $userId;
     }
 

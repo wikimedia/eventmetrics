@@ -54,6 +54,7 @@ class EventWiki extends Model
     public function __construct(Event $event, $dbName)
     {
         $this->event = $event;
+        $this->event->addWiki($this);
         $this->dbName = $dbName;
     }
 

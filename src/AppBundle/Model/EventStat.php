@@ -68,6 +68,7 @@ class EventStat extends Model
     public function __construct(Event $event, $metric, $value)
     {
         $this->event = $event;
+        $this->event->addStatistic($this);
         $this->assignMetric($metric, $value);
     }
 

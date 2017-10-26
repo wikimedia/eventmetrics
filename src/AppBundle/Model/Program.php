@@ -36,7 +36,7 @@ class Program extends Model
 
     /**
      * One Program has many Events.
-     * @ORM\OneToMany(targetEntity="Event", mappedBy="program")
+     * @ORM\OneToMany(targetEntity="Event", mappedBy="program", orphanRemoval=true)
      * @var ArrayCollection|Event[] Events that belong to this program.
      */
     protected $events;
@@ -78,6 +78,41 @@ class Program extends Model
     }
 
     /**
+     * Get Organizers of this Program.
+     * @return ArrayCollection|Organizer[]
+     */
+    public function getOrganizers()
+    {
+        return $this->organizers;
+    }
+
+    /**
+     * Add an organizer to this Program.
+     * @param Organizer $organizer
+     */
+    public function addOrganizer(Organizer $organizer)
+    {
+        if ($this->organizers->contains($organizer)) {
+            return;
+        }
+        $this->organizers->add($organizer);
+        $organizer->addProgram($this);
+    }
+
+    /**
+     * Remove an organizer from this Program.
+     * @param Organizer $organizer
+     */
+    public function removeOrganizer(Organizer $organizer)
+    {
+        if (!$this->organizers->contains($organizer)) {
+            return;
+        }
+        $this->organizers->removeElement($organizer);
+        $organizer->removeProgram($this);
+    }
+
+    /**
      * Get Events belonging to this Program.
      * @return ArrayCollection|Event[]
      */
@@ -87,11 +122,26 @@ class Program extends Model
     }
 
     /**
-     * Get Organizers of this Program.
-     * @return ArrayCollection|Organizer[]
+     * Add an event to this Program.
+     * @param Event $event
      */
-    public function getOrganizers()
+    public function addEvent(Event $event)
     {
-        return $this->organizers;
+        if ($this->events->contains($event)) {
+            return;
+        }
+        $this->events->add($event);
+    }
+
+    /**
+     * Remove an event from this Program.
+     * @param Event $event
+     */
+    public function removeEvent(Event $event)
+    {
+        if (!$this->events->contains($event)) {
+            return;
+        }
+        $this->events->removeElement($event);
     }
 }

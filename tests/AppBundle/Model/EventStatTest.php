@@ -32,9 +32,13 @@ class EventStatTest extends PHPUnit_Framework_TestCase
 
         $eventStat = new EventStat($event, 'retention', 50);
 
+        // Getters.
         $this->assertEquals($event, $eventStat->getEvent());
         $this->assertEquals('retention', $eventStat->getMetric());
         $this->assertEquals(50, $eventStat->getValue());
+
+        // Make sure the association was made on the Event object, too.
+        $this->assertEquals($eventStat, $event->getStatistics()[0]);
 
         // Invalid metric.
         $this->expectException(InvalidArgumentException::class);

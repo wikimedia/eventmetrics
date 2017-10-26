@@ -59,4 +59,39 @@ class Organizer extends Model
     {
         return $this->userId;
     }
+
+    /**
+     * Get a list of programs that this organizer oversees.
+     * @return ArrayCollection|Program[]
+     */
+    public function getPrograms()
+    {
+        return $this->programs;
+    }
+
+    /**
+     * Associate this Organizer with a program.
+     * @param Program $program
+     */
+    public function addProgram(Program $program)
+    {
+        if ($this->programs->contains($program)) {
+            return;
+        }
+        $this->programs->add($program);
+        $program->addOrganizer($this);
+    }
+
+    /**
+     * Remove association of this Organizer with the given program.
+     * @param Program $program
+     */
+    public function removeProgram(Program $program)
+    {
+        if (!$this->programs->contains($program)) {
+            return;
+        }
+        $this->programs->removeElement($program);
+        $program->removeOrganizer($this);
+    }
 }
