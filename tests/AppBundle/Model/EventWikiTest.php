@@ -30,9 +30,13 @@ class EventWikiTest extends PHPUnit_Framework_TestCase
             'America/New_York'
         );
 
-        $eventStat = new EventWiki($event, 'testwiki_p');
+        $wiki = new EventWiki($event, 'testwiki_p');
 
-        $this->assertEquals($event, $eventStat->getEvent());
-        $this->assertEquals('testwiki_p', $eventStat->getDbName());
+        // Basic getters.
+        $this->assertEquals($event, $wiki->getEvent());
+        $this->assertEquals('testwiki_p', $wiki->getDbName());
+
+        // Make sure the association was made on the Event object, too.
+        $this->assertEquals($wiki, $event->getWikis()[0]);
     }
 }

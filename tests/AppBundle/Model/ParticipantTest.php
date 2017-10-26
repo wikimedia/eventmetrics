@@ -30,7 +30,11 @@ class ParticipantTest extends PHPUnit_Framework_TestCase
         );
         $participant = new Participant($event, 50);
 
+        // Basic getters.
         $this->assertEquals(50, $participant->getUserId());
         $this->assertEquals($event, $participant->getEvent());
+
+        // Make sure the association was made on the Event object, too.
+        $this->assertEquals($participant, $event->getParticipants()[0]);
     }
 }
