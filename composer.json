@@ -27,6 +27,7 @@
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.5",
+        "eightpoints/guzzle-bundle": "^6.1",
         "incenteev/composer-parameter-handler": "^2.0",
         "leafo/scssphp": "^0.7.1",
         "mediawiki/oauthclient": "^0.1.2",

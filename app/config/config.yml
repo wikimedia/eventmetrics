@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: random_background.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -68,6 +69,10 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/fonts/glyphicons-halflings-regular.svg
             output: "fonts/glyphicons-halflings-regular.svg"
+        opensans_ttf:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/fonts/OpenSans-Regular.ttf
+            output: "fonts/OpenSans-regular.svg"
 
 # Doctrine Configuration
 doctrine:
@@ -111,3 +116,17 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+guzzle:
+    # (de)activate logging/profiler; default: %kernel.debug%
+    logging: true
+
+    clients:
+        commons:
+            base_url: "https://commons.wikimedia.org/w/api.php"
+
+            # guzzle client options (full description here: https://guzzle.readthedocs.org/en/latest/request-options.html)
+            options:
+                headers:
+                    Accept: "application/json"
+                timeout: 30
