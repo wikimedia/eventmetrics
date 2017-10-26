@@ -4,7 +4,13 @@ html {
     height: 100%;
 }
 
+@font-face {
+    font-family: 'Open Sans';
+    src: url('fonts/OpenSans-Regular.ttf');
+}
+
 body {
+    font-family: 'Open Sans', sans-serif !important;
     min-height: 100%;
     position: relative;
 
@@ -40,13 +46,19 @@ body {
 }
 
 .app-footer {
+    border-radius: 0 !important;
     bottom: 0;
     left: 0;
-    line-height: 30px;
+    line-height: 40px;
+    margin-bottom: 0 !important;
     margin-top: 30px;
-    min-height: 30px;
-    position: absolute;
+    min-height: 40px !important;
+    position: absolute !important;
     width: 100%;
+
+    ul {
+        margin: 0;
+    }
 }
 
 .footer-links {
