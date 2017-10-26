@@ -54,6 +54,9 @@ class ProgramTest extends PHPUnit_Framework_TestCase
         // Removing the organizer.
         $program->removeOrganizer($organizer);
         $this->assertEquals(0, count($program->getOrganizers()));
+
+        // Double-remove shouldn't error out.
+        $program->removeOrganizer($organizer);
     }
 
     /**
