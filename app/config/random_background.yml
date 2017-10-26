@@ -1,0 +1,39 @@
+parameters:
+
+    # Idea based on Earwig's Copyvios tool: https://tools.wmflabs.org/copyvios.
+    # Image selection courtesy of Earwig:   https://commons.wikimedia.org/wiki/User:The_Earwig/POTD
+    picture_of_the_day:
+        - File:Wehranlage Grosshesselohe XL.jpg
+        - File:Oberaargletscher from Oberaar, 2010 07.JPG
+        - File:Weil am Rhein - Dreiländerbrücke10.jpg
+        - File:Hoodoos in the Bryce Canyon National Park.jpg
+        - File:Elisabethkirche Schneeberg color corr.jpg
+        - File:Metz Porte des Allemands R07.jpg
+        - File:Chevaux estive Pyrenees.jpg
+        - File:Madinat Jumeirah-Dubai3303.JPG
+        - File:QC - Ufer Sankt Lorenzstrom bei Kamouraska.jpg
+        - File:Great Fountain Geyser Sunset.jpg
+        - File:Pontederia cordata 4 PP.jpg
+        - File:Colosseo di Roma panoramic.jpg
+        - File:Lac du Milieu de Bastan Hautes Pyrénées 02 BLS.JPG
+        - File:Rock face, Ruby Beach, Olympic National Park, Washington State, 1992.JPG
+        - File:NGC 2683 Spiral galaxy.jpg
+        - File:Durdle Door Overview.jpg
+        - File:Crepuscular rays at Sunset near Waterberg Plateau.jpg
+        - File:2012-03-14 21-42-55-file-etoiles-14f-2min-3d.jpg
+        - File:Laufener Hütte (Juni 2012).JPG
+        - File:Salar de Atacama.jpg
+        - File:Hohenschwangau - Schloss Neuschwanstein1.jpg
+        - File:Lanzarote 3 Luc Viatour.jpg
+        - File:Autignac, Hérault 01.jpg
+        - File:13-09-29-nordfriesisches-wattenmeer-RalfR-05.jpg
+        - File:NGC6960.jpg
+        - File:Eesti põhjarannik.jpg
+        - File:View to Geiranger from Flydalsjuvet, 2013 June.jpg
+        - File:Sunrise at viru bog.jpg
+        - File:Heart and Soul nebulae.jpg
+        - File:Albarracín, Teruel, España, 2014-01-10, DD 051.JPG
+        - File:Spaso-Kamenny Monastery 2013.jpg
+        - File:Valley View Yosemite August 2013 002.jpg
+        - File:Hellamaa panoraam.jpg
+        - File:Amanecer en Huitzila, México, 2013-10-10, DD 01.JPG
