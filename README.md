@@ -15,6 +15,6 @@ After cloning the repository, run:
 
 * `composer install`. Use `grantmetrics` as the `database_name`. Fill out your credentials accordingly.
 * `php bin/console doctrine:database:create` to create the database.
-* `php bin/console doctrine:migrate` to run the migrations.
+* `php bin/console doctrine:migratations:migrate` to run the migrations.
 * `php bin/console server:start` to start the server.
 * You should be up and running at http://localhost:8000

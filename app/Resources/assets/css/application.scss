@@ -9,6 +9,15 @@ html {
     src: url('fonts/OpenSans-Regular.ttf');
 }
 
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('fonts/fontawesome-webfont.ttf');
+}
+
+.font-awesome {
+    font-family: 'FontAwesome';
+}
+
 body {
     font-family: 'Open Sans', sans-serif !important;
     min-height: 100%;
@@ -69,6 +78,10 @@ body {
     li {
         flex-grow: 1;
         text-align: center;
+    }
+
+    a:hover {
+        text-decoration: none;
     }
 }
 

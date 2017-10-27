@@ -17,6 +17,7 @@ class DefaultController extends Controller
 {
     /**
      * Display the homepage.
+     * @Route("", name="homepageNoSlash")
      * @Route("/", name="homepage")
      */
     public function indexAction()

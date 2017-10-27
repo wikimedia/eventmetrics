@@ -72,7 +72,11 @@ assetic:
         opensans_ttf:
             inputs:
                 - %kernel.root_dir%/../app/Resources/fonts/OpenSans-Regular.ttf
-            output: "fonts/OpenSans-regular.svg"
+            output: "fonts/OpenSans-regular.ttf"
+        fontawesome_ttf:
+            inputs:
+                - %kernel.root_dir%/../app/Resources/fonts/fontawesome-webfont.ttf
+            output: "fonts/fontawesome-webfont.ttf"
 
 # Doctrine Configuration
 doctrine:

@@ -4,6 +4,7 @@
 			"MusikAnimal"
 		]
 	},
+	"attribution": "Text for a link that gives attribution to images and fonts used in the application.\n{{Identical|Attribution}}",
 	"developed-by": "Footer text to indicate author. 'Community Tech' is the name of the WMF team who developed the tool.",
 	"documentation": "The word documentation. This is used as the text for a link to a documentation page.\n{{Identical|Documentation}}",
 	"feedback": "Link in the footer to give feedback.\n{{Identical|Feedback}}",
