@@ -72,7 +72,7 @@ assetic:
         opensans_ttf:
             inputs:
                 - %kernel.root_dir%/../app/Resources/fonts/OpenSans-Regular.ttf
-            output: "fonts/OpenSans-regular.ttf"
+            output: "fonts/OpenSans-Regular.ttf"
         fontawesome_ttf:
             inputs:
                 - %kernel.root_dir%/../app/Resources/fonts/fontawesome-webfont.ttf
