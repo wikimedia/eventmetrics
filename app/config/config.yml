@@ -65,6 +65,14 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf
             output: "fonts/glyphicons-halflings-regular.ttf"
+        bootstrap_glyphicons_woff:
+            inputs:
+                - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/fonts/glyphicons-halflings-regular.woff
+            output: "fonts/glyphicons-halflings-regular.woff"
+        bootstrap_glyphicons_woff2:
+            inputs:
+                - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2
+            output: "fonts/glyphicons-halflings-regular.woff2"
         bootstrap_glyphicons_svg:
             inputs:
                 - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/fonts/glyphicons-halflings-regular.svg
@@ -81,19 +89,31 @@ assetic:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver: pdo_mysql
-        host: '%database_host%'
-        port: '%database_port%'
-        dbname: '%database_name%'
-        user: '%database_user%'
-        password: '%database_password%'
-        charset: UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: '%kernel.project_dir%/var/data/data.sqlite'
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #path: '%database_path%'
+        connections:
+            grantmetrics:
+                driver:   pdo_mysql
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%database_password%"
+                charset:  UTF8
+            centralauth:
+                driver:   pdo_mysql
+                host:     "%database_replica_host%"
+                port:     "%database_replica_port%"
+                dbname:   "centralauth"
+                user:     "%database_replica_user%"
+                password: "%database_replica_password%"
+                charset:  UTF8
+            replicas:
+                driver:   pdo_mysql
+                host:     "%database_replica_host%"
+                port:     "%database_replica_port%"
+                dbname:   "%database_replica_name%"
+                user:     "%database_replica_user%"
+                password: "%database_replica_password%"
+                charset:  UTF8
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'

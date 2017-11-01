@@ -21,3 +21,8 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    # Oauth consumer credentials, from https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration
+    oauth_key:                  ~
+    oauth_secret:               ~
+    oauth_callback:             http://localhost/grantmetrics/app_dev.php/oauth_callback
