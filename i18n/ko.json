@@ -8,5 +8,6 @@
 	"num-minutes": "{{PLURAL: $1|분}}",
 	"num-seconds": "{{PLURAL: $1|초}}",
 	"report-issue": "이슈 보고",
+	"submit": "확인",
 	"view-source": "원본 보기"
 }

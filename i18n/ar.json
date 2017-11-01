@@ -7,5 +7,6 @@
 	"num-minutes": "{{PLURAL:$1|دقيقة|دقائق}}",
 	"num-seconds": "{{PLURAL:$1|ثانية|ثواني}}",
 	"report-issue": "أبلغ عن خلل",
+	"submit": "قدّم",
 	"view-source": "اعرض المصدر"
 }

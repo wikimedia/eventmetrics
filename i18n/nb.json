@@ -7,5 +7,6 @@
 	"num-minutes": "{{PLURAL: $1|minutt|minutter}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekunder}}",
 	"report-issue": "Rapporter et problem",
+	"submit": "Send",
 	"view-source": "Vis kode"
 }

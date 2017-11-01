@@ -7,5 +7,6 @@
 	"num-minutes": "{{PLURAL: $1|خولەک|خولەک}}",
 	"num-seconds": "{{PLURAL: $1|چرکە|چرکە}}",
 	"report-issue": "ڕاپۆرت دان لەسەر کێشەیەک",
+	"submit": "ناردن",
 	"view-source": "بینینی سەرچاوە"
 }

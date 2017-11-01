@@ -5,5 +5,6 @@
 	"num-hours": "{{PLURAL:$1|ժամ}}",
 	"num-minutes": "{{PLURAL:$1|րոպե}}",
 	"num-seconds": "{{PLURAL:$1|վայրկյան}}",
+	"submit": "Հաշվել",
 	"view-source": "Դիտել ելատեքստը"
 }

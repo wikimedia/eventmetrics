@@ -7,5 +7,6 @@
 	"num-minutes": "{{PLURAL:$1|minuta|minuty|minut}}",
 	"num-seconds": "{{PLURAL: $1|sekunda|sekundy|sekund}}",
 	"report-issue": "Nahlásit problém",
+	"submit": "Odeslat",
 	"view-source": "Zobrazit zdrojový kód"
 }

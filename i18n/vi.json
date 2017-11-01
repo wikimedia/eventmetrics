@@ -7,5 +7,6 @@
 	"num-minutes": "{{PLURAL:$1|phút|phút}}",
 	"num-seconds": "{{PLURAL:$1|giây|giây}}",
 	"report-issue": "Báo cáo lỗi",
+	"submit": "Gửi",
 	"view-source": "Xem mã nguồn"
 }

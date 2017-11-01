@@ -8,5 +8,6 @@
 	"num-minutes": "{{PLURAL:$1|წუთი|წუთი}}",
 	"num-seconds": "{{PLURAL: $1|წამი|წამი}}",
 	"report-issue": "პრობლემის შეტყობინება",
+	"submit": "მიღება",
 	"view-source": "წყაროს ხილვა"
 }

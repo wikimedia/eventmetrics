@@ -8,5 +8,6 @@
 	"num-minutes": "{{PLURAL:$1|минута|минути}}",
 	"num-seconds": "{{PLURAL:$1|секунда|секунди}}",
 	"report-issue": "Пријави проблем",
+	"submit": "Поднеси",
 	"view-source": "Изворен код"
 }

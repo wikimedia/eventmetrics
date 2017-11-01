@@ -8,5 +8,6 @@
 	"num-minutes": "{{PLURAL:$1|分|分}}",
 	"num-seconds": "{{PLURAL:$1|秒|秒}}",
 	"report-issue": "問題回報",
+	"submit": "提交",
 	"view-source": "查看原始碼"
 }

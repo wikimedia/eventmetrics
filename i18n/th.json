@@ -7,5 +7,6 @@
 	"num-minutes": "{{PLURAL: $1|นาที|นาที}}",
 	"num-seconds": "{{PLURAL: $1|วินาที|วินาที}}",
 	"report-issue": "รายงานผล",
+	"submit": "บันทึก",
 	"view-source": "ดูโค้ด"
 }

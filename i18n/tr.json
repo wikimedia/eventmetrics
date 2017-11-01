@@ -7,5 +7,6 @@
 	"num-minutes": "{{PLURAL: $1|minute|dakika}}",
 	"num-seconds": "{{PLURAL: $1|second|saniye}}",
 	"report-issue": "Sorun bildirin",
+	"submit": "Gönder",
 	"view-source": "Kaynağı gör"
 }

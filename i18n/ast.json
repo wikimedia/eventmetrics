@@ -5,5 +5,6 @@
 	"num-days": "{{PLURAL: $1|día|díes}}",
 	"num-hours": "{{PLURAL: $1|hora|hores}}",
 	"num-minutes": "{{PLURAL: $1|minutu|minutos}}",
-	"num-seconds": "{{PLURAL: $1|segundu|segundos}}"
+	"num-seconds": "{{PLURAL: $1|segundu|segundos}}",
+	"submit": "Unviar"
 }

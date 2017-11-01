@@ -8,5 +8,6 @@
 	"num-minutes": "{{PLURAL: $1|minut|minutter}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekunder}}",
 	"report-issue": "Rapporter et problem",
+	"submit": "Udfør",
 	"view-source": "Vis kildekode"
 }

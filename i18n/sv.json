@@ -8,5 +8,6 @@
 	"num-minutes": "{{PLURAL: $1|minut|minuter}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekunder}}",
 	"report-issue": "Rapportera ett problem",
+	"submit": "Skicka",
 	"view-source": "Visa källkod"
 }

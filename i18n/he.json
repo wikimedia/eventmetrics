@@ -7,5 +7,6 @@
 	"num-minutes": "{{PLURAL:$1|דקה|דקות}}",
 	"num-seconds": "{{PLURAL:$1|שנייה|שניות}}",
 	"report-issue": "דיווח בעיה",
+	"submit": "שליחה",
 	"view-source": "הצגת מקור"
 }

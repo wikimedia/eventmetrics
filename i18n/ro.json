@@ -7,5 +7,6 @@
 	"num-minutes": "{{PLURAL:$1|minut|minute|de minute}}",
 	"num-seconds": "{{PLURAL:$1|secundă|secunde|de secunde}}",
 	"report-issue": "Raportează o problemă",
+	"submit": "Trimite",
 	"view-source": "Vizualizare sursă"
 }

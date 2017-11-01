@@ -7,5 +7,6 @@
 	"num-minutes": "{{PLURAL: $1|分}}",
 	"num-seconds": "{{PLURAL: $1|秒}}",
 	"report-issue": "問題の報告",
+	"submit": "送信",
 	"view-source": "ソースを閲覧"
 }

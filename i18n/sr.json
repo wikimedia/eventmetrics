@@ -3,5 +3,6 @@
 	"num-days": "{{PLURAL: $1|дан|дана}}",
 	"num-hours": "{{PLURAL: $1|сат|сата|сати}}",
 	"num-minutes": "{{PLURAL:$1|минут|минута}}",
-	"num-seconds": "{{PLURAL:$1|секунда|секунде|секунди}}"
+	"num-seconds": "{{PLURAL:$1|секунда|секунде|секунди}}",
+	"submit": "Пошаљи"
 }

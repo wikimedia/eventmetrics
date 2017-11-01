@@ -4,5 +4,6 @@
 	"num-days": "{{PLURAL: $1|நாள்|நாட்கள்}}",
 	"num-hours": "{{PLURAL: $1|மணி|மணிகள்}}",
 	"num-minutes": "{{PLURAL:$1|நிமிடம்|நிமிடங்கள்}}",
-	"num-seconds": "{{PLURAL: $1|வினாடி|வினாடிகள்}}"
+	"num-seconds": "{{PLURAL: $1|வினாடி|வினாடிகள்}}",
+	"submit": "சமர்ப்பிக்கவும்"
 }

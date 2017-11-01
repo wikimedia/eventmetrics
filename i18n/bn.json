@@ -8,5 +8,6 @@
 	"num-minutes": "{{PLURAL: $1|মিনিট}}",
 	"num-seconds": "$1 {{PLURAL:$1|সেকেন্ড}}",
 	"report-issue": "একটি সমস্যা প্রতিবেদন করুন",
+	"submit": "জমা দিন",
 	"view-source": "উৎস দেখুন"
 }

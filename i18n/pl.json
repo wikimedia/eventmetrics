@@ -8,5 +8,6 @@
 	"num-minutes": "{{PLURAL:$1|minuta|minuty|minut}}",
 	"num-seconds": "{{PLURAL:$1|sekunda|$1 sekund}}",
 	"report-issue": "Zgłoś problem",
+	"submit": "Wyślij",
 	"view-source": "Kod źródłowy"
 }
