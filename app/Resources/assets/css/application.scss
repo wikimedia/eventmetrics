@@ -33,6 +33,42 @@ body {
 
 .app-header {
     line-height: 48px;
+    min-height: 53px !important;
+
+    > .container-fluid {
+        padding-right: 7px;
+    }
+
+    .breadcrumb {
+        background: transparent;
+        display: inline;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.home-link {
+    display: inline-block;
+    margin-right: 12px;
+    padding-right: 12px;
+    position: relative;
+
+    &::after {
+        background: #e7e7e7;
+        bottom: 0;
+        content: '';
+        display: inline-block;
+        height: 80%;
+        left: 100%;
+        margin: auto;
+        position: absolute;
+        top: 3px;
+        width: 1px;
+    }
+}
+
+.logged-in {
+    margin-right: 10px;
 }
 
 .lang-group {
@@ -83,6 +119,10 @@ body {
     a:hover {
         text-decoration: none;
     }
+}
+
+.form-group label::after {
+    content: ':';
 }
 
 @media (max-width: $bootstrap-sm) {
