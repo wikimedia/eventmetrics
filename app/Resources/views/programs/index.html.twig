@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="active">{{ msg('my-programs') }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="page-header">
+            <a href="{{ path('NewProgram') }}" class="btn btn-default pull-right">
+                {{ msg('add-new-program') }}
+            </a>
+            <h1>{{ msg('my-programs') }}</h1>
+        </div>
+
+        <table class="table gm-table">
+            <thead>
+                <tr>
+                    <th>{{ msg('program') }}</th>
+                    <th>{{ msg('events') }}</th>
+                    <th>{{ msg('participants') }}</th>
+                    <th>{{ msg('new-editors') }}</th>
+                    <th>{{ msg('day-retention', [30]) }}</th>
+                    <th>{{ msg('pages-created') }}</th>
+                    <th>{{ msg('pages-improved') }}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+{% endblock %}
