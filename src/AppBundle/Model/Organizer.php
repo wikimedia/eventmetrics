@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * An Organizer is a user who organizes one or more programs.
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(
  *     name="organizer",
  *     indexes={
@@ -21,6 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Organizer extends Model
 {
+
     /**
      * @ORM\Id
      * @ORM\Column(name="org_id", type="integer")
@@ -36,6 +38,11 @@ class Organizer extends Model
     protected $userId;
 
     /**
+     * @var string Username retrieved using the $userId.
+     */
+    protected $username;
+
+    /**
      * Many Organizers have many Programs.
      * @ORM\ManyToMany(targetEntity="Program", mappedBy="organizers")
      * @var ArrayCollection|Program[] Programs overseen by this organizer.
@@ -44,20 +51,37 @@ class Organizer extends Model
 
     /**
      * Organizer constructor.
-     * @param int $userId ID of the user, corresponds with `centralauth`.`globaluser`.
+     * @param string $usernameOrId User's global user ID or username.
      */
-    public function __construct($userId)
+    public function __construct($usernameOrId)
     {
-        $this->userId = $userId;
         $this->programs = new ArrayCollection();
+
+        if (is_int($usernameOrId)) {
+            $this->userId = $usernameOrId;
+        } else {
+            $this->username = $usernameOrId;
+        }
     }
 
     /**
      * Get the user ID of the Organizer.
+     * Corresponds with `gu_id` on `centralauth`.`globaluser`.
      */
     public function getUserId()
     {
         return $this->userId;
+    }
+
+    /**
+     * Get the username, either from cache or `centralauth`.`globaluser`.
+     */
+    public function getUsername()
+    {
+        if (!isset($this->username)) {
+            $this->username = $this->getNameFromUserId($this->userId);
+        }
+        return $this->username;
     }
 
     /**
@@ -93,5 +117,17 @@ class Organizer extends Model
         }
         $this->programs->removeElement($program);
         $program->removeOrganizer($this);
+    }
+
+    /**
+     * Ensure the user ID is set for this organizer.
+     * @ORM\PrePersist
+     */
+    public function setUserIdIfNull()
+    {
+        if (isset($this->userId)) {
+            return;
+        }
+        $this->userId = $this->getUserIdFromName($this->username);
     }
 }

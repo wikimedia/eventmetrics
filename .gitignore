@@ -1,6 +1,5 @@
 /.web-server-pid
 /app/config/parameters.yml
-/build/
 /phpunit.xml
 /var/*
 !/var/cache
@@ -20,6 +19,7 @@
 /web/assetic/
 /web/fonts/
 /output/
+/docs/api/
 
 *.swp
 .DS_Store

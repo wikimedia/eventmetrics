@@ -7,6 +7,7 @@ namespace Tests\AppBundle\Model;
 
 use PHPUnit_Framework_TestCase;
 use AppBundle\Model\Program;
+use AppBundle\Repository\ProgramRepository;
 use AppBundle\Model\Event;
 use AppBundle\Model\Organizer;
 
@@ -20,8 +21,10 @@ class ProgramTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
-        $program = new Program('  Test program  ');
-        $this->assertEquals('Test program', $program->getTitle());
+        $organizer = new Organizer(50);
+        $program = new Program($organizer);
+        $this->assertEquals(1, count($program->getOrganizers()));
+        $this->assertEquals($organizer, $program->getOrganizers()[0]);
         $this->assertInstanceOf(
             'Doctrine\Common\Collections\ArrayCollection',
             $program->getEvents()
@@ -37,26 +40,55 @@ class ProgramTest extends PHPUnit_Framework_TestCase
      */
     public function testAddRemoveOrganizer()
     {
-        $program = new Program('Test program');
-
-        $this->assertEquals(0, count($program->getOrganizers()));
-
-        // Add an organizer.
         $organizer = new Organizer(50);
-        $program->addOrganizer($organizer);
+        $program = new Program($organizer);
+
+        // Add another organizer by user ID.
+        $organizer2 = new Organizer(100);
+        $program->addOrganizer($organizer2);
 
         $this->assertEquals($organizer, $program->getOrganizers()[0]);
+        $this->assertEquals($organizer2, $program->getOrganizers()[1]);
 
         // Try adding the same one, which shouldn't duplicate.
         $program->addOrganizer($organizer);
-        $this->assertEquals(1, count($program->getOrganizers()));
+        $this->assertEquals(2, $program->getNumOrganizers());
+        $this->assertEquals(
+            [$organizer, $organizer2],
+            $program->getOrganizers()->toArray()
+        );
+        $this->assertEquals(
+            [50, 100],
+            $program->getOrganizerIds()
+        );
 
         // Removing the organizer.
-        $program->removeOrganizer($organizer);
-        $this->assertEquals(0, count($program->getOrganizers()));
+        $program->removeOrganizer($organizer2);
+        $this->assertEquals(1, $program->getNumOrganizers());
+        $this->assertEquals(
+            [$organizer],
+            $program->getOrganizers()->toArray()
+        );
+        $this->assertEquals(
+            [50],
+            $program->getOrganizerIds()
+        );
 
         // Double-remove shouldn't error out.
-        $program->removeOrganizer($organizer);
+        $program->removeOrganizer($organizer2);
+    }
+
+    /**
+     * Test setting organizers by username.
+     */
+    public function testSetOrganizerNames()
+    {
+        $organizer = new Organizer('Foo');
+        $program = new Program($organizer);
+        $programRepo = new ProgramRepository();
+        $program->setRepository($programRepo);
+
+        $program->setOrganizerNames(['Foo', 'Bar', 'Baz']);
     }
 
     /**
@@ -64,7 +96,8 @@ class ProgramTest extends PHPUnit_Framework_TestCase
      */
     public function testAddRemoveEvent()
     {
-        $program = new Program('Test program');
+        $organizer = new Organizer(50);
+        $program = new Program($organizer);
 
         $this->assertEquals(0, count($program->getEvents()));
 

@@ -33,18 +33,20 @@ class OrganizerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($organizer->getPrograms()));
 
         // Add a program.
-        $program = new Program('Test program');
+        $program = new Program($organizer);
         $organizer->addProgram($program);
 
-        $this->assertEquals($program, $organizer->getPrograms()[0]);
+        // Additional program.
+        $program2 = new Program($organizer);
+        $organizer->addProgram($program);
 
         // Try adding the same one, which shouldn't duplicate.
-        $organizer->addProgram($program);
-        $this->assertEquals(1, count($organizer->getPrograms()));
+        $organizer->addProgram($program2);
+        $this->assertEquals(2, count($organizer->getPrograms()));
 
         // Removing the program.
         $organizer->removeProgram($program);
-        $this->assertEquals(0, count($organizer->getPrograms()));
+        $this->assertEquals(1, count($organizer->getPrograms()));
 
         // Double-remove shouldn't error out.
         $organizer->removeProgram($program);

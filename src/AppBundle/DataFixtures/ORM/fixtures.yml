@@ -1,0 +1,3 @@
+AppBundle\Model\Organizer:
+    organizer_1:
+        __construct: [50]

@@ -1,18 +1,42 @@
 <?php
+/**
+ * This file contains only the DefaultControllerTest class.
+ */
 
 namespace Tests\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DefaultControllerTest extends WebTestCase
+class DefaultControllerTest extends DatabaseAwareWebTestCase
 {
+
+    public function setup()
+    {
+        parent::setUp();
+
+        $this->client = static::createClient();
+        $this->container = $this->client->getContainer();
+    }
+
     public function testIndex()
     {
-        $client = static::createClient();
+        $this->crawler = $this->client->request('GET', '/');
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(200, $this->response->getStatusCode());
+        $this->assertContains('Welcome to Grant Metrics', $this->crawler->filter('.splash-dialog')->text());
+    }
 
-        $crawler = $client->request('GET', '/');
+    public function testLogout()
+    {
+        // Create identity mock of MusikAnimal and put it in the session.
+        $identityMock = (object) ['username' => 'MusikAnimal'];
+        $this->container->get('session')->set('logged_in_user', $identityMock);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Welcome to Grant Metrics', $crawler->filter('.splash-dialog')->text());
+        $this->crawler = $this->client->request('GET', '/logout');
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(302, $this->response->getStatusCode());
+        $this->assertNull(
+            $this->container->get('session')->get('logged_in_user')
+        );
     }
 }
