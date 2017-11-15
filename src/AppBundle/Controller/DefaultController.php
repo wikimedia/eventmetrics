@@ -8,13 +8,23 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use GuzzleHttp\Client;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
+use MediaWiki\OAuthClient\Client as OAuthClient;
+use MediaWiki\OAuthClient\ClientConfig;
+use MediaWiki\OAuthClient\Consumer;
+use MediaWiki\OAuthClient\Exception;
+use GuzzleHttp\Client as GuzzleClient;
 
 /**
  * The DefaultController handles the homepage, about pages, and user authentication.
+ * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
  */
 class DefaultController extends Controller
 {
+    /** @var OAuthClient The Oauth HTTP client. */
+    protected $oauthClient;
+
     /**
      * Display the homepage.
      * @Route("", name="homepageNoSlash")
@@ -48,7 +58,7 @@ class DefaultController extends Controller
             'formatversion' => 2,
         ];
 
-        /** @var GuzzleHttp\Client $client */
+        /** @var GuzzleClient $client */
         $client = $this->get('guzzle.client.commons');
 
         $res = $client->get('', ['query' => $params])
@@ -59,5 +69,100 @@ class DefaultController extends Controller
             ->pages[0]
             ->imageinfo[0]
             ->url;
+    }
+
+    /**
+     * Redirect to Meta for Oauth authentication.
+     * @Route("/login", name="login")
+     * @return RedirectResponse
+     * @throws Exception If initialization fails.
+     * @codeCoverageIgnore
+     */
+    public function loginAction()
+    {
+        try {
+            list($next, $token) = $this->getOauthClient()->initiate();
+        } catch (Exception $oauthException) {
+            throw $oauthException;
+        }
+
+        // Save the request token to the session.
+        /** @var Session $session */
+        $session = $this->get('session');
+        $session->set('oauth_request_token', $token);
+
+        return new RedirectResponse($next);
+    }
+
+    /**
+     * Receive authentication credentials back from the OAuth wiki.
+     * @Route("/oauth_callback", name="OAuthCallback")
+     * @param Request $request The HTTP request.
+     * @return RedirectResponse
+     * @codeCoverageIgnore
+     */
+    public function oauthCallbackAction(Request $request)
+    {
+        // Give up if the required GET params don't exist.
+        if (!$request->get('oauth_verifier')) {
+            throw $this->createNotFoundException('No OAuth verifier given.');
+        }
+
+        /** @var Session $session */
+        $session = $this->get('session');
+
+        // Complete authentication.
+        $client = $this->getOauthClient();
+        $token = $session->get('oauth_request_token');
+        $verifier = $request->get('oauth_verifier');
+        $accessToken = $client->complete($token, $verifier);
+
+        // Store access token, and remove request token.
+        $session->set('oauth_access_token', $accessToken);
+        $session->remove('oauth_request_token');
+
+        // Store user identity.
+        $ident = $client->identify($accessToken);
+        $session->set('logged_in_user', $ident);
+
+        // Send to 'My programs' pages.
+        return $this->redirectToRoute('Programs');
+    }
+
+    /**
+     * Get an OAuth client, configured to the default project.
+     * (This shouldn't really be in this class, but oh well.)
+     * @return OAuthClient
+     * @codeCoverageIgnore
+     */
+    protected function getOauthClient()
+    {
+        if ($this->oauthClient instanceof OAuthClient) {
+            return $this->oauthClient;
+        }
+
+        $endpoint = 'https://meta.wikimedia.org/w/index.php?title=Special:OAuth';
+
+        $conf = new ClientConfig($endpoint);
+        $consumerKey = $this->getParameter('oauth_key');
+        $consumerSecret = $this->getParameter('oauth_secret');
+
+        $conf->setConsumer(new Consumer($consumerKey, $consumerSecret));
+        $this->oauthClient = new OAuthClient($conf);
+
+        // Use 'oob' as the callback is hardcoded in the consumer registration.
+        $this->oauthClient->setCallback('oob');
+
+        return $this->oauthClient;
+    }
+
+    /**
+     * Log out the user and return to the homepage.
+     * @Route("/logout", name="logout")
+     */
+    public function logoutAction()
+    {
+        $this->get('session')->invalidate();
+        return $this->redirectToRoute('homepage');
     }
 }

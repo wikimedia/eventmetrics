@@ -108,9 +108,11 @@ class Event extends Model
 
     /**
      * Event constructor.
+     * @param Program $program Program that this event belongs to.
      * @param string $title Title of the event. This should be unique for the program.
      * @param DateTime|string $start Start date of the event.
      * @param DateTime|string $end End date of the event.
+     * @param string $timezone Official timezone code within the tz database.
      */
     public function __construct(Program $program, $title, $start = null, $end = null, $timezone = 'UTC')
     {

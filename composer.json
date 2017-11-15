@@ -43,6 +43,8 @@
         "twig/twig": "^1.0||^2.0"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^2.4",
+        "nelmio/alice": "2.1.4",
         "sensio/generator-bundle": "^3.0",
         "squizlabs/php_codesniffer": "^3.1",
         "symfony/phpunit-bridge": "^3.0"

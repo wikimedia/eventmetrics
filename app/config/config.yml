@@ -102,7 +102,7 @@ doctrine:
                 driver:   pdo_mysql
                 host:     "%database_replica_host%"
                 port:     "%database_replica_port%"
-                dbname:   "centralauth"
+                dbname:   "centralauth_p"
                 user:     "%database_replica_user%"
                 password: "%database_replica_password%"
                 charset:  UTF8
@@ -117,14 +117,23 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        mappings:
-            model:
-                type: annotation
-                dir: '%kernel.root_dir%/../src/AppBundle/Model'
-                prefix: AppBundle\Model
-                alias: Model
-                is_bundle: false
+        default_entity_manager: grantmetrics
+        entity_managers:
+            grantmetrics:
+                connection: grantmetrics
+                mappings:
+                    model:
+                        type: annotation
+                        dir: '%kernel.root_dir%/../src/AppBundle/Model'
+                        prefix: AppBundle\Model
+                        alias: Model
+                        is_bundle: false
+            centralauth:
+                connection: centralauth
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+            replicas:
+                connection: replicas
+                naming_strategy: doctrine.orm.naming_strategy.underscore
 
 doctrine_migrations:
     dir_name: "%kernel.root_dir%/DoctrineMigrations"

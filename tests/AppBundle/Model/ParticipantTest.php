@@ -8,6 +8,7 @@ namespace Tests\AppBundle\Model;
 use PHPUnit_Framework_TestCase;
 use AppBundle\Model\Participant;
 use AppBundle\Model\Event;
+use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 
 /**
@@ -20,7 +21,8 @@ class ParticipantTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
-        $program = new Program('Test program');
+        $organizer = new Organizer(50);
+        $program = new Program($organizer);
         $event = new Event(
             $program,
             '  My program  ',

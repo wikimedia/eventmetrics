@@ -17,13 +17,11 @@ use AppBundle\Repository\Repository;
  */
 abstract class Model
 {
-
     /** @var Repository The repository for this model. */
     private $repository;
 
     /**
      * Set this model's data repository.
-     *
      * @param Repository $repository
      */
     public function setRepository(Repository $repository)
@@ -33,16 +31,62 @@ abstract class Model
 
     /**
      * Get this model's repository.
-     *
      * @return Repository A subclass of Repository.
      * @throws Exception If the repository hasn't been set yet.
      */
     public function getRepository()
     {
         if (!$this->repository instanceof Repository) {
-            $msg = sprintf('Repository for %s must be set before using.', get_class($this));
-            throw new Exception($msg);
+            $class = get_class($this);
+
+            // Attempt to autoload the repository class.
+            $entity = explode('\\', $class);
+            $repoClass = 'AppBundle\\Repository\\'.end($entity).'Repository';
+            if (class_exists($repoClass)) {
+                $this->repository = new $repoClass;
+            } else {
+                // Otherwise throw exception.
+                $msg = sprintf('Repository for %s must be set before using.', $class);
+                throw new Exception($msg);
+            }
         }
         return $this->repository;
+    }
+
+    /**
+     * Has a Repository been set on this Model?
+     * @return bool
+     */
+    public function hasRepository()
+    {
+        return $this->repository instanceof Repository;
+    }
+
+    /**
+     * Get the global user ID for the given username, based on the central auth database.
+     * @param  string $username
+     * @return int
+     */
+    public function getUserIdFromName($username)
+    {
+        $ret = $this->getRepository()->getUserIdsFromNames([$username]);
+        if (count($ret) === 0) {
+            return null;
+        }
+        return $ret[0]['user_id'];
+    }
+
+    /**
+     * Get the username given the global user ID, based on the central auth database.
+     * @param  int $userId
+     * @return string
+     */
+    public function getNameFromUserId($userId)
+    {
+        $ret = $this->getRepository()->getNamesFromUserIds([$userId]);
+        if (count($ret) === 0) {
+            return null;
+        }
+        return $ret[0]['user_name'];
     }
 }

@@ -1,13 +1,20 @@
 <?php
+/**
+ * This file contains only the ControllerActionExtension class.
+ */
 
 namespace AppBundle\Twig;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig_Extension;
 
+/**
+ * Twig extension that provides convient methods to get the names
+ * of the current controller and action.
+ */
 class ControllerActionExtension extends Twig_Extension
 {
-    /** @var RequestStack */
+    /** @var RequestStack The request stack. */
     protected $requestStack;
 
     /**
@@ -28,6 +35,10 @@ class ControllerActionExtension extends Twig_Extension
         return 'controller_action_twig_extension';
     }
 
+    /**
+     * Get all functions that this class provides.
+     * @return array
+     */
     public function getFunctions()
     {
         return [

@@ -8,11 +8,17 @@ parameters:
     database_user: root
     database_password: ~
 
+    database_test_host: 127.0.0.1
+    database_test_port: ~
+    database_test_name: grantmetrics_test
+    database_test_user: root
+    database_test_password: ~
+
     database_replica_host: 127.0.0.1
     database_replica_port: ~
     database_replica_name: enwiki_p
-    database_replica_user: ~
-    database_replica_password: ~
+    database_replica_user: root
+    database_replica_password:
 
     mailer_transport: smtp
     mailer_host: 127.0.0.1

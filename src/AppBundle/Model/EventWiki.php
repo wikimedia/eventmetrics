@@ -48,8 +48,8 @@ class EventWiki extends Model
 
     /**
      * Event constructor.
-     * @param int $eventId Foreign key corresponding to `event`.`event_id`.
-     * @param int $string Database name of the wiki. Corresponds to `dbname` in `meta`.`wiki`.
+     * @param Event $event Event that this EventWiki belongs to.
+     * @param string $dbName Database name of the wiki. Corresponds to `dbname` in `meta`.`wiki`.
      */
     public function __construct(Event $event, $dbName)
     {

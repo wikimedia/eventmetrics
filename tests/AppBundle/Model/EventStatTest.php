@@ -9,6 +9,7 @@ use PHPUnit_Framework_TestCase;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\Program;
 use AppBundle\Model\Event;
+use AppBundle\Model\Organizer;
 use InvalidArgumentException;
 
 /**
@@ -21,7 +22,8 @@ class EventStatTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
-        $program = new Program('Test program');
+        $organizer = new Organizer(50);
+        $program = new Program($organizer);
         $event = new Event(
             $program,
             '  My program  ',

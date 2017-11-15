@@ -9,6 +9,7 @@ use PHPUnit_Framework_TestCase;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
+use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use AppBundle\Model\Participant;
 
@@ -22,7 +23,8 @@ class EventTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->program = new Program('Test program');
+        $organizer = new Organizer(50);
+        $this->program = new Program($organizer);
     }
     /**
      * Tests constructor and basic getters.

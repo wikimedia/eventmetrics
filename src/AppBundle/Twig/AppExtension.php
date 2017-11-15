@@ -43,6 +43,7 @@ class AppExtension extends Extension
     {
         $options = ['is_safe' => ['html']];
         return [
+            new \Twig_SimpleFunction('loggedInUser', [$this, 'loggedInUser']),
             new \Twig_SimpleFunction('requestTime', [$this, 'requestTime'], $options),
             new \Twig_SimpleFunction('memoryUsage', [$this, 'requestMemory'], $options),
             new \Twig_SimpleFunction('msg', [$this, 'intuitionMessage'], $options),
@@ -56,7 +57,17 @@ class AppExtension extends Extension
             new \Twig_SimpleFunction('releaseDate', [$this, 'gitDate']),
             new \Twig_SimpleFunction('formatDuration', [$this, 'formatDuration']),
             new \Twig_SimpleFunction('numberFormat', [$this, 'numberFormat']),
+            new \Twig_SimpleFunction('loggedInUser', [$this, 'loggedInUser']),
         ];
+    }
+
+    /**
+     * Get the currently logged in user's details.
+     * @return string[]
+     */
+    public function loggedInUser()
+    {
+        return $this->container->get('session')->get('logged_in_user');
     }
 
     /**
