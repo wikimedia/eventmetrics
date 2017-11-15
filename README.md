@@ -22,7 +22,7 @@ After cloning the repository, run:
 
 There is one internal [Symfony bundle](https://symfony.com/doc/current/bundles.html), called `AppBundle`. It contains a separate directory for the controllers, models, respositories, Twig helpers, and fixtures.
 
-Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the grantmetrics database. These `grantmetrics` tables in general should not be queried directly with SQL.
+Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the grantmetrics database. Within the code, these `grantmetrics` tables in general should not be directly queried with SQL.
 
 Repositories are responsible for querying the replicas, MediaWiki API, file system, etc., wherever external data lives. They do not do any post-processing. Repositories should automatically be assigned to the models, but you may need to set the DI container too. The process would look something like:
 
@@ -35,7 +35,7 @@ $this->setRepository($programRepo);
 
 ## Assets
 
-Local CSS and JavaScript live in app/Resources/assets. Fonts and vendor assets must be defined in config.yml, and if needed, sourced in the `<head>` of base.html.twig.
+Local CSS and JavaScript live in [app/Resources/assets](https://github.com/wikimedia/grantmetrics/tree/master/app/Resources/assets). Fonts and vendor assets must be defined in [config.yml](https://github.com/wikimedia/grantmetrics/blob/master/app/config/config.yml#L44), and if needed, sourced in the `<head>` of [base.html.twig](https://github.com/wikimedia/grantmetrics/blob/master/app/Resources/views/base.html.twig).
 
 Ultimately all compiled assets are copied to the web/ directory (publicly accessible). This should happen automatically, but if not try dumping the assets with `php bin/console assetic:dump`. If you find you have to keep doing this regularly, you can continually watch for changes with `php bin/console assetic:watch`.
 
@@ -52,11 +52,11 @@ The test database is automatically populated with the fixtures, which live in `s
 
 ### Functional tests
 
-Controller tests extend DatabaseAwareWebTestCase, which loads fixtures and ensures full stack traces are shown when there is an HTTP error. Some class properties must be set for this to work:
+Controller tests extend [`DatabaseAwareWebTestCase`](https://github.com/wikimedia/grantmetrics/blob/master/tests/AppBundle/Controller/DatabaseAwareWebTestCase.php), which loads fixtures and ensures full stack traces are shown when there is an HTTP error. Some class properties must be set for this to work:
 
 * `$this->client` - the Symfony client.
 * `$this->container` - the DI container.
 * `$this->crawler` - the DOM crawler.
 * `$this->response` - response of any requests you make.
 
-See `ProgramControllerTest` for an example.
+See [`ProgramControllerTest`](https://github.com/wikimedia/grantmetrics/blob/master/tests/AppBundle/Controller/ProgramControllerTest.php) for an example.
