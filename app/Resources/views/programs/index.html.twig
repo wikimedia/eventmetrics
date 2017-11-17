@@ -15,7 +15,7 @@
             <h1>{{ msg('my-programs') }}</h1>
         </div>
 
-        <table class="table gm-table">
+        <table class="table gm-table programs-list">
             <thead>
                 <tr>
                     <th>{{ msg('program') }}</th>
@@ -27,6 +27,23 @@
                     <th>{{ msg('pages-improved') }}</th>
                 </tr>
             </thead>
+            <tbody>
+                {% for program in programs %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('Program', {'slug': program.slug}) }}">
+                                {{ program.title }}
+                            </a>
+                        </td>
+                        <td>{{ program.numEvents }}</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 {% endblock %}
