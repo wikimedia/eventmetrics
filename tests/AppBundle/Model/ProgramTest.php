@@ -106,6 +106,7 @@ class ProgramTest extends PHPUnit_Framework_TestCase
         $program->addEvent($event);
 
         $this->assertEquals($event, $program->getEvents()[0]);
+        $this->assertEquals(1, $program->getNumEvents());
 
         // Try adding the same one, which shouldn't duplicate.
         $program->addEvent($event);
@@ -117,5 +118,16 @@ class ProgramTest extends PHPUnit_Framework_TestCase
 
         // Double-remove shouldn't error out.
         $program->removeEvent($event);
+    }
+
+    /**
+     * Normalized slug of the program.
+     */
+    public function testSlug()
+    {
+        $organizer = new Organizer(50);
+        $program = new Program($organizer);
+        $program->setTitle(" My fun program #5??? ");
+        $this->assertEquals('My_fun_program_5', $program->getSlug());
     }
 }

@@ -9,7 +9,6 @@ use AppBundle\Model\Organizer;
 
 /**
  * This class supplies and fetches data for the Program class.
- *
  * @codeCoverageIgnore
  */
 class ProgramRepository extends Repository

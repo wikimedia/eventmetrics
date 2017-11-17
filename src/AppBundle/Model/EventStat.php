@@ -91,6 +91,7 @@ class EventStat extends Model
 
     /**
      * Get the Event this EventStat applies to.
+     * @return Event
      */
     public function getEvent()
     {
@@ -99,6 +100,7 @@ class EventStat extends Model
 
     /**
      * Get the metric type of this EventStat.
+     * @return string
      */
     public function getMetric()
     {
@@ -107,9 +109,21 @@ class EventStat extends Model
 
     /**
      * Get the value of the EventStat.
+     * @return mixed
      */
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Get valid types of metrics.
+     * @static
+     * @return string[]
+     * @codeCoverageIgnore
+     */
+    public static function getMetricTypes()
+    {
+        return self::METRIC_TYPES;
     }
 }

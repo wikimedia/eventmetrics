@@ -47,7 +47,7 @@ class Organizer extends Model
      * @ORM\ManyToMany(targetEntity="Program", mappedBy="organizers")
      * @var ArrayCollection|Program[] Programs overseen by this organizer.
      */
-    private $programs;
+    protected $programs;
 
     /**
      * Organizer constructor.
@@ -70,6 +70,7 @@ class Organizer extends Model
      */
     public function getUserId()
     {
+        $this->setUserIdIfNull();
         return $this->userId;
     }
 

@@ -7,8 +7,8 @@ build:
             - php bin/console doctrine:database:create --env=test --no-interaction --quiet
             - php bin/console doctrine:migrations:migrate --env=test --no-interaction --quiet
             - export MW='REL1_30'
-            - bash ./build/travis/install-mediawiki.sh
-            - bash ./build/travis/run-webserver.sh
+            - bash ./build/ci/install-mediawiki.sh
+            - bash ./build/ci/run-webserver.sh
             - export MW_API='http://localhost:8080/w/api.php'
             - export MW_USER='CIUser'
             - export MW_PASSWORD='CIPass'

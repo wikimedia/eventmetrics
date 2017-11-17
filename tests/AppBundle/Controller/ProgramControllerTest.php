@@ -30,6 +30,15 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     {
         $this->crawler = $this->client->request('GET', '/programs');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $this->createProgram();
+
+        // Test again, making sure the new program is listed on the page.
+        $this->crawler = $this->client->request('GET', '/programs');
+        $this->assertContains(
+            'My test program',
+            $this->crawler->filter('.programs-list')->text()
+        );
     }
 
     public function testNew()
@@ -49,10 +58,8 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
 
     public function testCreate()
     {
-        $this->crawler = $this->client->request('GET', '/programs/new');
-        $form = $this->crawler->selectButton('Submit')->form();
-        $form['form[title]'] = 'My test program';
-        $this->crawler = $this->client->submit($form);
+        $this->createProgram();
+
         $this->response = $this->client->getResponse();
         $this->assertEquals(302, $this->response->getStatusCode());
 
@@ -68,5 +75,16 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $program->setRepository($programRepo);
 
         $this->assertEquals(['MusikAnimal'], $program->getOrganizerNames());
+    }
+
+    /**
+     * Creates a test program.
+     */
+    private function createProgram()
+    {
+        $this->crawler = $this->client->request('GET', '/programs/new');
+        $form = $this->crawler->selectButton('Submit')->form();
+        $form['form[title]'] = 'My test program';
+        $this->crawler = $this->client->submit($form);
     }
 }

@@ -97,6 +97,17 @@ class Program extends Model
     }
 
     /**
+     * Get the slug of the Program to be used in URLs.
+     * @return string
+     */
+    public function getSlug()
+    {
+        // Strip everything but unicode letters and digits, and convert spaces to underscores.
+        $sanitized = preg_replace('/[^\p{L}0-9 ]|#|\?/', '', $this->title);
+        return str_replace(' ', '_', trim($sanitized));
+    }
+
+    /**
      * Set the title of this Program.
      * @param string $title
      */
@@ -205,25 +216,6 @@ class Program extends Model
         $organizer->removeProgram($this);
     }
 
-    // /**
-    //  * Make sure the user IDs are set on all the organizers.
-    //  */
-    // public function prepareOrganizers()
-    // {
-    //     if (count(array_filter($this->getOrganizerIds())) === $this->getNumOrganizers()) {
-    //         // All organizers have IDs set.
-    //         return;
-    //     }
-
-    //     $usernames = $this->getOrganizerNames();
-    //     $userData = $this->getRepository()->getUserIdsFromNames($usernames);
-
-    //     $out = [];
-    //     foreach ($dataum as $userData) {
-    //         $out[$dataum['user_name']] = $dataum['user_id'];
-    //     }
-    // }
-
     /**
      * Get Events belonging to this Program.
      * @return ArrayCollection|Event[]
@@ -231,6 +223,15 @@ class Program extends Model
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Get the number of Events belonging to this Program.
+     * @return int
+     */
+    public function getNumEvents()
+    {
+        return count($this->events);
     }
 
     /**
