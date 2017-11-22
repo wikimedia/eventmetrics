@@ -29,6 +29,11 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
+    AppBundle\EventSubscriber\UserSubscriber:
+        tags:
+            - { name: doctrine.event_listener, event: postLoad }
+            - { name: doctrine.event_listener, event: prePersist }
+
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:

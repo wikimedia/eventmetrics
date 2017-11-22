@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     options={"engine":"InnoDB"}
  * )
  */
-class Participant extends Model
+class Participant
 {
     /**
      * @ORM\Id
@@ -45,6 +45,11 @@ class Participant extends Model
      * @var int Corresponds to the `gu_id` column in `centralauth`.`globaluser` on the replicas.
      */
     protected $userId;
+
+    /**
+     * @var string Username retrieved using the $userId.
+     */
+    protected $username;
 
     /**
      * @ORM\Column(name="par_new_editor", type="boolean")
@@ -78,5 +83,33 @@ class Participant extends Model
     public function getUserId()
     {
         return $this->userId;
+    }
+
+    /**
+     * Set the user ID.
+     * Corresponds with `gu_id` on `centralauth`.`globaluser`.
+     * @param int $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    }
+
+    /**
+     * Get the username.
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Set the username.
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
     }
 }

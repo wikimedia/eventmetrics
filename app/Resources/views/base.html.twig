@@ -4,13 +4,23 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>
-            {% if gmTitle is defined %}{{ gmTitle }} - {% endif %}
+            {% if gmTitle is defined %}{{ msgIfExists(gmTitle) }} - {% endif %}
             {{ msg('grant-metrics') }}
         </title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
+        {# Must be before loading the individual JS files #}
+        <script type="text/javascript">
+            {# For $.i18n, loaded in application.js #}
+            i18nLang = "{{ lang() }}";
+            i18nPath = "{{ asset('i18n/' ~ lang() ~ '.json') }}";
+        </script>
+
         {% block javascripts %}
             {% javascripts '@jquery_js' %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+            {% javascripts '@jquery_i18n' %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
             {% javascripts '@bootstrap_js' %}
@@ -74,6 +84,20 @@
             </div>
         </header>
         <main class="app-body">
+            <div class="alert-container container">
+                {% if app.session.flashBag.peekAll %}
+                    {% for level, messages in app.session.flashBag.all %}
+                        {% set level = level == 'notice' ? 'danger' : level %}
+                        <div class="alert alert-{{ level }} alert-dismissible" role="alert">
+                            <button class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{ msg(messages[0]) }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
             {% block body %}
             {% endblock %}
         </main>

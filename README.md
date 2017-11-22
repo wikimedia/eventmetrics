@@ -27,10 +27,9 @@ Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doc
 Repositories are responsible for querying the replicas, MediaWiki API, file system, etc., wherever external data lives. They do not do any post-processing. Repositories should automatically be assigned to the models, but you may need to set the DI container too. The process would look something like:
 
 ```php
-$program = new Program([...args]);
-$programRepo = new ProgramRepository();
-$programRepo->setContainer($container);
-$this->setRepository($programRepo);
+$em = $this->container->get('doctrine')->getManager();
+$organizerRepo = new OrganizerRepository($em);
+$organizerRepo->setContainer($this->container);
 ```
 
 ## Assets
@@ -50,7 +49,7 @@ To run the tests, use `./vendor/bin/simple-phpunit tests/`
 
 The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM/fixtures.yml`
 
-### Functional tests
+### Functional/integration tests
 
 Controller tests extend [`DatabaseAwareWebTestCase`](https://github.com/wikimedia/grantmetrics/blob/master/tests/AppBundle/Controller/DatabaseAwareWebTestCase.php), which loads fixtures and ensures full stack traces are shown when there is an HTTP error. Some class properties must be set for this to work:
 

@@ -10,7 +10,7 @@ use IntlDateFormatter;
 use DateTime;
 
 /**
- * Twig functions and filters.
+ * Various Twig functions and filters.
  * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
  */
 class AppExtension extends Extension
@@ -44,9 +44,8 @@ class AppExtension extends Extension
         $options = ['is_safe' => ['html']];
         return [
             new \Twig_SimpleFunction('loggedInUser', [$this, 'loggedInUser']),
-            new \Twig_SimpleFunction('requestTime', [$this, 'requestTime'], $options),
-            new \Twig_SimpleFunction('memoryUsage', [$this, 'requestMemory'], $options),
             new \Twig_SimpleFunction('msg', [$this, 'intuitionMessage'], $options),
+            new \Twig_SimpleFunction('msgIfExists', [$this, 'intuitionMessageIfExists'], $options),
             new \Twig_SimpleFunction('lang', [$this, 'getLang'], $options),
             new \Twig_SimpleFunction('langName', [$this, 'getLangName'], $options),
             new \Twig_SimpleFunction('allLangs', [$this, 'getAllLangs']),
@@ -54,10 +53,8 @@ class AppExtension extends Extension
             new \Twig_SimpleFunction('isRTLLang', [$this, 'intuitionIsRTLLang']),
             new \Twig_SimpleFunction('shortHash', [$this, 'gitShortHash']),
             new \Twig_SimpleFunction('hash', [$this, 'gitHash']),
-            new \Twig_SimpleFunction('releaseDate', [$this, 'gitDate']),
             new \Twig_SimpleFunction('formatDuration', [$this, 'formatDuration']),
             new \Twig_SimpleFunction('numberFormat', [$this, 'numberFormat']),
-            new \Twig_SimpleFunction('loggedInUser', [$this, 'loggedInUser']),
         ];
     }
 
@@ -71,32 +68,6 @@ class AppExtension extends Extension
     }
 
     /**
-     * Get the duration of the current HTTP request in seconds.
-     * @return string
-     * Untestable since there is no request stack in the tests.
-     * @codeCoverageIgnore
-     */
-    public function requestTime()
-    {
-        if (!isset($this->requestTime)) {
-            $this->requestTime = microtime(true) - $this->getCurrentRequest()->server->get('REQUEST_TIME_FLOAT');
-        }
-
-        return $this->requestTime;
-    }
-
-    /**
-     * Get the formatted real memory usage.
-     * @return float
-     */
-    public function requestMemory()
-    {
-        $mem = memory_get_usage(false);
-        $div = pow(1024, 2);
-        return $mem / $div;
-    }
-
-    /**
      * Get an i18n message.
      * @param string $message
      * @param array $vars
@@ -104,10 +75,30 @@ class AppExtension extends Extension
      */
     public function intuitionMessage($message = '', $vars = [])
     {
+        if (is_array($message)) {
+            $vars = $message;
+            $message = $message[0];
+            $vars = array_slice($vars, 1);
+        }
         return $this->getIntuition()->msg($message, [
             'domain' => 'grantmetrics',
             'variables' => $vars
         ]);
+    }
+
+    /**
+     * Get an i18n message if the key exists, otherwise treat as plain text.
+     * @param string $message
+     * @param array $vars
+     * @return mixed|null|string
+     */
+    public function intuitionMessageIfExists($message = '', $vars = [])
+    {
+        if ($this->getIntuition()->msgExists($message)) {
+            return $this->intuitionMessage($message, $vars);
+        } else {
+            return $message;
+        }
     }
 
     /**
@@ -190,16 +181,6 @@ class AppExtension extends Extension
     public function gitHash()
     {
         return exec('git rev-parse HEAD');
-    }
-
-    /**
-     * Get the date of the HEAD commit.
-     * @return string
-     */
-    public function gitDate()
-    {
-        $date = new DateTime(exec('git show -s --format=%ci'));
-        return $date->format('Y-m-d');
     }
 
 

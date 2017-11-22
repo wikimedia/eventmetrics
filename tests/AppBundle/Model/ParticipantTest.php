@@ -21,6 +21,36 @@ class ParticipantTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
+        list($event, $participant) = $this->createEventAndParticipant();
+
+        // Basic getters.
+        $this->assertEquals(50, $participant->getUserId());
+        $this->assertEquals($event, $participant->getEvent());
+
+        // Make sure the association was made on the Event object, too.
+        $this->assertEquals($participant, $event->getParticipants()[0]);
+    }
+
+    /**
+     * Basic setters.
+     */
+    public function testSetters()
+    {
+        list($event, $participant) = $this->createEventAndParticipant();
+
+        $participant->setUsername('MusikAnimal');
+        $participant->setUserId(123);
+
+        $this->assertEquals(123, $participant->getUserId());
+        $this->assertEquals('MusikAnimal', $participant->getUsername());
+    }
+
+    /**
+     * Create a sample Event and Participant.
+     * @return mixed[]
+     */
+    public function createEventAndParticipant()
+    {
         $organizer = new Organizer(50);
         $program = new Program($organizer);
         $event = new Event(
@@ -32,11 +62,6 @@ class ParticipantTest extends PHPUnit_Framework_TestCase
         );
         $participant = new Participant($event, 50);
 
-        // Basic getters.
-        $this->assertEquals(50, $participant->getUserId());
-        $this->assertEquals($event, $participant->getEvent());
-
-        // Make sure the association was made on the Event object, too.
-        $this->assertEquals($participant, $event->getParticipants()[0]);
+        return [$event, $participant];
     }
 }

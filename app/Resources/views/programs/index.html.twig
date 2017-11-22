@@ -29,10 +29,19 @@
             </thead>
             <tbody>
                 {% for program in programs %}
-                    <tr>
+                    <tr class="program-entry">
                         <td>
-                            <a href="{{ path('Program', {'slug': program.slug}) }}">
-                                {{ program.title }}
+                            <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
+                            <a href="{{ path('EditProgram', {'title': program.title}) }}"
+                                class="program-action program-action__edit text-muted"
+                            >
+                                <span class="glyphicon glyphicon-cog"></span>
+                            </a>
+                            <a href="{{ path('DeleteProgram', {'title': program.title}) }}"
+                                class="program-action program-action__delete text-danger"
+                                data-title="{{ program.displayTitle }}"
+                            >
+                                <span class="glyphicon glyphicon-trash"></span>
                             </a>
                         </td>
                         <td>{{ program.numEvents }}</td>
