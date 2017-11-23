@@ -26,7 +26,7 @@ use DateTime;
  *     options={"engine":"InnoDB"}
  * )
  */
-class Event extends Model
+class Event
 {
     /**
      * @ORM\Id

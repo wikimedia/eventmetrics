@@ -51,4 +51,19 @@ class OrganizerTest extends PHPUnit_Framework_TestCase
         // Double-remove shouldn't error out.
         $organizer->removeProgram($program);
     }
+
+    /**
+     * Basic setters.
+     */
+    public function testSetters()
+    {
+        $organizer = new Organizer(50);
+
+        $organizer->setUsername('MusikAnimal');
+        $organizer->setUserId(123);
+
+        $this->assertFalse($organizer->exists());
+        $this->assertEquals(123, $organizer->getUserId());
+        $this->assertEquals('MusikAnimal', $organizer->getUsername());
+    }
 }

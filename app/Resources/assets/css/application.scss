@@ -90,6 +90,15 @@ body {
     }
 }
 
+.alert-container .alert:last-child {
+    margin: 0;
+
+    .close {
+        opacity: 0.8;
+        top: -1px;
+    }
+}
+
 .app-footer {
     border-radius: 0 !important;
     bottom: 0;

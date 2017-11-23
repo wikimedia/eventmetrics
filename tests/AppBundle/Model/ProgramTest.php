@@ -85,9 +85,6 @@ class ProgramTest extends PHPUnit_Framework_TestCase
     {
         $organizer = new Organizer('Foo');
         $program = new Program($organizer);
-        $programRepo = new ProgramRepository();
-        $program->setRepository($programRepo);
-
         $program->setOrganizerNames(['Foo', 'Bar', 'Baz']);
     }
 
@@ -123,11 +120,12 @@ class ProgramTest extends PHPUnit_Framework_TestCase
     /**
      * Normalized slug of the program.
      */
-    public function testSlug()
+    public function testSanitizeTitle()
     {
         $organizer = new Organizer(50);
         $program = new Program($organizer);
-        $program->setTitle(" My fun program #5??? ");
-        $this->assertEquals('My_fun_program_5', $program->getSlug());
+        $program->setTitle(" My fun program 5 ");
+        $this->assertEquals('My_fun_program_5', $program->getTitle());
+        $this->assertEquals('My fun program 5', $program->getDisplayTitle());
     }
 }

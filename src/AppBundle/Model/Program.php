@@ -22,8 +22,9 @@ use AppBundle\Repository\OrganizerRepository;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="program_title_uniq", columns={"program_title"})},
  *     options={"engine":"InnoDB"}
  * )
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ProgramRepository")
  */
-class Program extends Model
+class Program
 {
     /**
      * @ORM\Id
@@ -71,20 +72,22 @@ class Program extends Model
      * @param Organizer $organizer Original organizer of the program.
      * @param Container|null $container The DI container.
      */
-    public function __construct(Organizer $organizer, $container = null)
+    public function __construct(Organizer $organizer)
     {
         $this->events = new ArrayCollection();
         $this->organizers = new ArrayCollection();
 
-        // Set the repository and its container.
-        if ($container) {
-            $repo = new ProgramRepository();
-            $repo->setContainer($container);
-            $this->setRepository($repo);
-        }
-
         // Add initial organizer.
         $this->addOrganizer($organizer);
+    }
+
+    /**
+     * Get the ID of the program.
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -97,23 +100,22 @@ class Program extends Model
     }
 
     /**
-     * Get the slug of the Program to be used in URLs.
-     * @return string
-     */
-    public function getSlug()
-    {
-        // Strip everything but unicode letters and digits, and convert spaces to underscores.
-        $sanitized = preg_replace('/[^\p{L}0-9 ]|#|\?/', '', $this->title);
-        return str_replace(' ', '_', trim($sanitized));
-    }
-
-    /**
      * Set the title of this Program.
      * @param string $title
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        // Enforce unicode, and use underscores instead of spaces.
+        $this->title = str_replace(' ', '_', utf8_encode(trim($title)));
+    }
+
+    /**
+     * Get the display variant of the program title.
+     * @param string $title
+     */
+    public function getDisplayTitle()
+    {
+        return str_replace('_', ' ', $this->title);
     }
 
     /**
@@ -151,9 +153,7 @@ class Program extends Model
      */
     public function getOrganizerNames()
     {
-        // FIXME: get in one go instead of individually.
         return array_map(function ($organizer) {
-            $this->setRepositoryOnOrganizer($organizer);
             return $organizer->getUsername();
         }, $this->organizers->toArray());
     }
@@ -183,24 +183,8 @@ class Program extends Model
         if ($this->organizers->contains($organizer)) {
             return;
         }
-        $this->setRepositoryOnOrganizer($organizer);
         $this->organizers->add($organizer);
         $organizer->addProgram($this);
-    }
-
-    /**
-     * Assign an OrganizerRepository to the given Organizer, and set the container.
-     * @todo This doesn't feel right. Perhaps there's a cleaner way?
-     * @param Organizer $organizer [description]
-     */
-    private function setRepositoryOnOrganizer(Organizer $organizer)
-    {
-        $container = $this->getRepository()->getContainer();
-        if (isset($container) && !$organizer->hasRepository()) {
-            $organizerRepo = new OrganizerRepository();
-            $organizerRepo->setContainer($container);
-            $organizer->setRepository($organizerRepo);
-        }
     }
 
     /**

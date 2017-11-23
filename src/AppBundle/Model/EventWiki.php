@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     options={"engine":"InnoDB"}
  * )
  */
-class EventWiki extends Model
+class EventWiki
 {
     /**
      * @ORM\Id

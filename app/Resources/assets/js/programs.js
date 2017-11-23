@@ -1,7 +1,13 @@
 $(function () {
-    if ($('body').hasClass('program-new')) {
+    if ($('body').hasClass('program-new') || $('body').hasClass('program-edit')) {
         setupOrganizerForm();
     }
+
+    $('.program-action__delete').on('click', function () {
+        return window.confirm(
+            $.i18n('confirm-deletion', $(this).data('title'))
+        );
+    });
 });
 
 function setupOrganizerForm()

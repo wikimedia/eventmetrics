@@ -23,7 +23,7 @@ use InvalidArgumentException;
  *     options={"engine":"InnoDB"}
  * )
  */
-class EventStat extends Model
+class EventStat
 {
     const METRIC_TYPES = [
         'retention',

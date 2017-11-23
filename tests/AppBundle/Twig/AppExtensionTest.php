@@ -149,7 +149,6 @@ class AppExtensionTest extends WebTestCase
     {
         $this->assertEquals(7, strlen($this->appExtension->gitShortHash()));
         $this->assertEquals(40, strlen($this->appExtension->gitHash()));
-        $this->assertRegExp('/\d{4}-\d{2}-\d{2}/', $this->appExtension->gitDate());
     }
 
     /**
@@ -159,13 +158,5 @@ class AppExtensionTest extends WebTestCase
     {
         $this->assertEquals('Foo', $this->appExtension->capitalizeFirst('foo'));
         $this->assertEquals('Bar', $this->appExtension->capitalizeFirst('Bar'));
-    }
-
-    /**
-     * Getting amount of time it took to complete the request.
-     */
-    public function testRequestTime()
-    {
-        $this->assertTrue(is_double($this->appExtension->requestMemory()));
     }
 }

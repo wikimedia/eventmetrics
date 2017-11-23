@@ -1,0 +1,56 @@
+{{ form_errors(form) }}
+
+<fieldset class="program__basic-info">
+    <div class="form-group">
+        {{ form_label(form.title, msg('title')) }}
+        <div class="col-sm-8">
+            {{ form_widget(form.title, {'value': program.displayTitle}) }}
+        </div>
+    </div>
+</fieldset>
+
+{# This is what gets copied when they add a new organizer row. #}
+<div class="form-group organizer-row organizer-row__template hidden">
+    <div class="col-sm-8 col-lg-offset-2">
+        <input class="form-control">
+    </div>
+    <div class="col-sm-2">
+        <button class="btn btn-default remove-organizer">
+            {{ msg('remove') }}
+        </button>
+    </div>
+</div>
+
+<fieldset class="program__organizers">
+    {# The organizer currently viewing the program cannot remove or rename themself. #}
+    {% for organizer in form.organizerNames %}
+        {% set isViewingOrganizer = organizer.vars.value == loggedInUser().username %}
+        <div class="form-group organizer-row">
+            {% if loop.index == 1 %}
+                <label for="" class="col-sm-2 control-label">{{ msg('organizers') }}</label>
+            {% else %}
+                <div class="col-sm-2"></div>
+            {% endif %}
+            <div class="col-sm-8">
+                {{ form_widget(organizer, {'attr': {'readonly': isViewingOrganizer}}) }}
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-default"{% if isViewingOrganizer %} disabled="disabled"{% endif %}>
+                    {{ msg('remove') }}
+                </button>
+            </div>
+        </div>
+    {% endfor %}
+</fieldset>
+
+<div class="form-group">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-2">
+        <a href="#" class="add-organizer">
+            <div class="glyphicon glyphicon-plus-sign"></div>
+            {{ msg('add-organizer') }}
+        </a>
+    </div>
+</div>
+
+{{ form_widget(form.submit, {'label': msg('submit')}) }}
