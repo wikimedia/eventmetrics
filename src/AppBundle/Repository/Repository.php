@@ -42,6 +42,9 @@ abstract class Repository extends EntityRepository
     /** @var Connection The CentralAuth database connection. */
     private $centralAuthConnection;
 
+    /** @var EntityManager The Doctrine entity manager. */
+    protected $em;
+
     /**
      * Create a new Repository with a null logger.
      * Each Repository should define getEntityClass(), which gets
@@ -53,6 +56,7 @@ abstract class Repository extends EntityRepository
         $metadata = $em->getClassMetadata($this->getEntityClass());
         parent::__construct($em, $metadata);
 
+        $this->em = $em;
         $this->log = new NullLogger();
     }
 
@@ -90,7 +94,6 @@ abstract class Repository extends EntityRepository
     /**
      * Get the database connection for the 'grantmetrics' database.
      * @return Connection
-     * @codeCoverageIgnore
      */
     protected function getGrantmetricsConnection()
     {
@@ -106,7 +109,6 @@ abstract class Repository extends EntityRepository
     /**
      * Get the database connection for the replicas.
      * @return Connection
-     * @codeCoverageIgnore
      */
     protected function getCentralAuthConnection()
     {
@@ -122,7 +124,6 @@ abstract class Repository extends EntityRepository
     /**
      * Get the database connection for the replicas.
      * @return Connection
-     * @codeCoverageIgnore
      */
     protected function getReplicaConnection()
     {

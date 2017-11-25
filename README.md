@@ -22,7 +22,7 @@ After cloning the repository, run:
 
 There is one internal [Symfony bundle](https://symfony.com/doc/current/bundles.html), called `AppBundle`. It contains a separate directory for the controllers, models, respositories, Twig helpers, and fixtures.
 
-Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the grantmetrics database. Within the code, these `grantmetrics` tables in general should not be directly queried with SQL.
+Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the grantmetrics database.
 
 Repositories are responsible for querying the replicas, MediaWiki API, file system, etc., wherever external data lives. They do not do any post-processing. Repositories should automatically be assigned to the models, but you may need to set the DI container too. The process would look something like:
 
@@ -47,7 +47,9 @@ First make sure your test schema is up-to-date:
 
 To run the tests, use `./vendor/bin/simple-phpunit tests/`
 
-The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM/fixtures.yml`
+The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM/fixtures.yml`.
+
+Repository classes should not need tests. Add `@codeCoverageIgnore` to the bottom of the class summary so that coverage statistics are not affected.
 
 ### Functional/integration tests
 

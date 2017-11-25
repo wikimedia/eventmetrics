@@ -5,19 +5,8 @@
 
 namespace Tests\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
 class DefaultControllerTest extends DatabaseAwareWebTestCase
 {
-
-    public function setup()
-    {
-        parent::setUp();
-
-        $this->client = static::createClient();
-        $this->container = $this->client->getContainer();
-    }
-
     public function testIndex()
     {
         $this->crawler = $this->client->request('GET', '/');

@@ -13,14 +13,12 @@ use Doctrine\ORM\EntityManager;
 
 /**
  * This class supplies and fetches data for the Program class.
+ * @codeCoverageIgnore
  */
 class ProgramRepository extends Repository
 {
     /** @var Connection The connection to the database. */
     protected $conn;
-
-    /** @var EntityManager The Doctrine entity manager. */
-    protected $em;
 
     /**
      * Constructor for the ProgramRepository.
@@ -29,8 +27,6 @@ class ProgramRepository extends Repository
     public function __construct(EntityManager $em)
     {
         parent::__construct($em);
-
-        $this->em = $this->getEntityManager();
         $this->conn = $em->getConnection();
     }
 
@@ -51,31 +47,38 @@ class ProgramRepository extends Repository
      */
     public function createOrUpdate(Program $program)
     {
-        // if ($program->getId() !== null) {
-        //     $this->em->persist($program);
-        //     $this->em->flush();
-        //     $programId = $program->getId();
-        // }
+        $programId = $program->getId();
 
-        // Create the program record.
-        $stmt = $this->conn->prepare("
-            INSERT INTO program (program_id, program_title)
-            VALUES(:programId, :title)
-            ON DUPLICATE KEY UPDATE
-                program_id = LAST_INSERT_ID(program_id),
-                program_title = program_title
-        ");
-        $stmt->execute([
-            'programId' => $program->getId(),
-            'title' => $program->getTitle(),
-        ]);
-
-        $programId = $this->conn->lastInsertId();
+        if ($programId) {
+            $this->update($program);
+        } else {
+            $programId = $this->create($program);
+        }
 
         // Update data for the organizers, including the join table.
         $this->updateProgramOrganizers((int)$programId, $program->getOrganizers());
 
         return $programId;
+    }
+
+    public function create(Program $program)
+    {
+        $stmt = $this->conn->prepare("
+            INSERT INTO program (program_title)
+            VALUES(:title)
+        ");
+        $stmt->execute(['title' => $program->getTitle()]);
+        return $this->conn->lastInsertId();
+    }
+
+    public function update(Program $program)
+    {
+        $stmt = $this->conn->prepare("
+            UPDATE program
+            SET program_title = :title
+            WHERE program_id = ".$program->getId()
+        );
+        $stmt->execute(['title' => $program->getTitle()]);
     }
 
     /**
