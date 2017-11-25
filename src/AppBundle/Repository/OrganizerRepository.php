@@ -10,6 +10,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
  * This class supplies and fetches data for the Organizer class.
+ * @codeCoverageIgnore
  */
 class OrganizerRepository extends Repository
 {

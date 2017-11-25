@@ -21,9 +21,6 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->addFixture(new LoadFixtures());
         $this->executeFixtures();
 
-        $this->client = static::createClient();
-        $this->container = $this->client->getContainer();
-
         // Create identity mock of MusikAnimal and put it in the session.
         $identityMock = (object)['username' => 'MusikAnimal'];
         $this->container->get('session')->set('logged_in_user', $identityMock);
@@ -83,22 +80,22 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->assertEquals(['MusikAnimal'], $program->getOrganizerNames());
     }
 
-    // /**
-    //  * Updating a program.
-    //  */
-    // public function testUpdate()
-    // {
-    //     $this->createProgram('My test program');
-    //     $this->crawler = $this->client->request('GET', '/programs/edit/My_test_program');
-    //     $form = $this->crawler->selectButton('Submit')->form();
-    //     $form['form[title]'] = 'The Lion King';
-    //     $this->crawler = $this->client->submit($form);
+    /**
+     * Updating a program.
+     */
+    public function testUpdate()
+    {
+        $this->createProgram('My test program');
+        $this->crawler = $this->client->request('GET', '/programs/edit/My_test_program');
+        $form = $this->crawler->selectButton('Submit')->form();
+        $form['form[title]'] = 'The Lion King';
+        $this->crawler = $this->client->submit($form);
 
-    //     $programs = $this->entityManager->getRepository('Model:Program')->findByTitle('The_Lion_King');
-    //     $this->assertCount(1, $programs);
-    //     $program = $programs[0];
-    //     $this->assertNotNull($program);
-    // }
+        $programs = $this->entityManager->getRepository('Model:Program')->findByTitle('The_Lion_King');
+        $this->assertCount(1, $programs);
+        $program = $programs[0];
+        $this->assertNotNull($program);
+    }
 
     /**
      * Test program deletion.

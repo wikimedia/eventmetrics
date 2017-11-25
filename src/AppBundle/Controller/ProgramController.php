@@ -79,22 +79,22 @@ class ProgramController extends Controller
      */
     public function editAction(Request $request, $title)
     {
-        // $em = $this->container->get('doctrine')->getManager();
-        // $program = $em->getRepository(Program::class)
-        //     ->findOneBy(['title' => $title]);
+        $em = $this->container->get('doctrine')->getManager();
+        $program = $em->getRepository(Program::class)
+            ->findOneBy(['title' => $title]);
 
-        // // Handle the Form for the request, and redirect if they submitted.
-        // $form = $this->handleFormSubmission($request, $program);
-        // if ($form instanceof RedirectResponse) {
-        //     return $form;
-        // }
+        // Handle the Form for the request, and redirect if they submitted.
+        $form = $this->handleFormSubmission($request, $program);
+        if ($form instanceof RedirectResponse) {
+            return $form;
+        }
 
-        // return $this->render('programs/edit.html.twig', [
-        //     'form' => $form->createView(),
-        //     'program' => $program,
-        //     'gmTitle' => $program->getDisplayTitle(),
-        //     'organizers' => $program->getOrganizers(),
-        // ]);
+        return $this->render('programs/edit.html.twig', [
+            'form' => $form->createView(),
+            'program' => $program,
+            'gmTitle' => $program->getDisplayTitle(),
+            'organizers' => $program->getOrganizers(),
+        ]);
     }
 
     /**
