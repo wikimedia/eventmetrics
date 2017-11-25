@@ -61,6 +61,11 @@ class ProgramRepository extends Repository
         return $programId;
     }
 
+    /**
+     * Create a new record for the give program in the database.
+     * @param  Program $program
+     * @return int The program_id.
+     */
     public function create(Program $program)
     {
         $stmt = $this->conn->prepare("
@@ -71,12 +76,17 @@ class ProgramRepository extends Repository
         return $this->conn->lastInsertId();
     }
 
+    /**
+     * Persist the given program to the database.
+     * @param  Program $program
+     */
     public function update(Program $program)
     {
+        $programId = $program->getId();
         $stmt = $this->conn->prepare("
             UPDATE program
             SET program_title = :title
-            WHERE program_id = $program->getId()
+            WHERE program_id = $programId
         ");
         $stmt->execute(['title' => $program->getTitle()]);
     }
