@@ -54,6 +54,9 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
     public function setUp()
     {
         self::bootKernel();
+
+        $this->client = static::createClient();
+        $this->container = $this->client->getContainer();
     }
 
     /**

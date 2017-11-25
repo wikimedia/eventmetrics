@@ -20,6 +20,7 @@ class OrganizerTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $organizer = new Organizer(50);
+        $this->assertEquals(null, $organizer->getId());
         $this->assertEquals(50, $organizer->getUserId());
     }
 
