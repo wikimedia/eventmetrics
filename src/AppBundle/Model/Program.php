@@ -159,6 +159,33 @@ class Program
     }
 
     /**
+     * Sort the organizers collection alphabetically, and put the organizer
+     * with the given username ($primary) first.
+     * @param string $primary Username of organizer who should come first.
+     */
+    public function sortOrganizers($primary)
+    {
+        $primaryOrg = null;
+        $nonPrimaryOrgs = [];
+
+        foreach ($this->getOrganizers() as $organizer) {
+            if ($organizer->getUsername() === $primary) {
+                $primaryOrg = $organizer;
+            } else {
+                $nonPrimaryOrgs[] = $organizer;
+            }
+        }
+
+        usort($nonPrimaryOrgs, function ($a, $b) {
+            return strnatcmp($a->getUsername(), $b->getUsername());
+        });
+
+        $this->organizers = new ArrayCollection(
+            array_merge([$primaryOrg], $nonPrimaryOrgs)
+        );
+    }
+
+    /**
      * Set the Organizers of this Program with the given usernames.
      * @param array $usernames Usernames of the organizers.
      */

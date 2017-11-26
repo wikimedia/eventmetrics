@@ -34,6 +34,10 @@ services:
             - { name: doctrine.event_listener, event: postLoad }
             - { name: doctrine.event_listener, event: prePersist }
 
+    AppBundle\EventSubscriber\ProgramSubscriber:
+        tags:
+            - { name: doctrine.event_listener, event: postLoad }
+
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:
