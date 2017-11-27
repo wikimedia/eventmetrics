@@ -13,8 +13,6 @@ A Wikimedia Foundation tool that provides grantees a simple, easy to use interfa
 After cloning the repository, run:
 
 * `composer install`. Use `grantmetrics` as the `database_name`. Fill out your credentials accordingly.
-* `php bin/console doctrine:database:create` to create the database.
-* `php bin/console doctrine:migrations:migrate` to run the migrations.
 * `php bin/console server:start` to start the server.
 * You should be up and running at http://localhost:8000
 
@@ -22,7 +20,7 @@ After cloning the repository, run:
 
 There is one internal [Symfony bundle](https://symfony.com/doc/current/bundles.html), called `AppBundle`. It contains a separate directory for the controllers, models, respositories, Twig helpers, and fixtures.
 
-Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the grantmetrics database.
+Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the `grantmetrics` database. Database interaction should generally be done with Doctrine's `EntityManager`.
 
 Repositories are responsible for querying the replicas, MediaWiki API, file system, etc., wherever external data lives. They do not do any post-processing. Repositories should automatically be assigned to the models, but you may need to set the DI container too. The process would look something like:
 
