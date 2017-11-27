@@ -32,10 +32,11 @@ class OrganizerRepository extends Repository
     public function getOrganizerByUsername($username)
     {
         $userId = $this->getUserIdFromName($username);
+
+        // Username is invalid, so just return a new Organizer
+        // without a user ID so that the Form can produce errors.
         if ($userId === null) {
-            // This should never happen at this point in the code,
-            // so throw an Exception.
-            throw new \Exception("User:$username not found!");
+            return new Organizer($username);
         }
 
         $em = $this->container->get('doctrine')->getManager();
@@ -49,34 +50,5 @@ class OrganizerRepository extends Repository
         $organizer->setUsername($username);
 
         return $organizer;
-    }
-
-    /**
-     * Create or update the given Organizer, persisting to database.
-     * @param  Organizer $organizer
-     * @return int The ID of the record in the database.
-     */
-    public function createOrUpdate(Organizer $organizer)
-    {
-        $em = $this->getEntityManager();
-
-        // Invoke prepersist callback.
-        $eventManager = $em->getEventManager();
-        $eventArgs = new LifecycleEventArgs($organizer, $em);
-        $eventManager->dispatchEvent(\Doctrine\ORM\Events::prePersist, $eventArgs);
-
-        // Write to database.
-        $conn = $em->getConnection();
-        $stmt = $conn->prepare("
-            INSERT INTO organizer (org_user_id)
-            VALUES (:userId)
-            ON DUPLICATE KEY UPDATE
-                org_id = LAST_INSERT_ID(org_id),
-                org_user_id = org_user_id
-        ");
-        $stmt->execute([
-            'userId' => $organizer->getUserId(),
-        ]);
-        return $conn->lastInsertId();
     }
 }

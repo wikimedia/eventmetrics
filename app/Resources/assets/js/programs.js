@@ -15,6 +15,12 @@ function setupOrganizerForm()
     // keep track of how many email fields have been rendered
     var organizerCount = $('.program__organizers .organizer-row').length;
 
+    // Add listeners to existing Remove buttons on the form.
+    $('.remove-organizer').on('click', function (e) {
+        e.preventDefault();
+        $(this).parents('.organizer-row').remove();
+    });
+
     $('.add-organizer').on('click', function (e) {
         e.preventDefault();
 
@@ -30,7 +36,7 @@ function setupOrganizerForm()
         var $newRow = $('.organizer-row:last');
 
         // Add name attribute to the input of the new row.
-        $newRow.find('input').prop('name', 'form[organizerNames][' + organizerCount + ']');
+        $newRow.find('input').prop('name', 'form[organizers][' + organizerCount + ']');
 
         // Increment count so the next added row will have the correct name attribute.
         organizerCount++;

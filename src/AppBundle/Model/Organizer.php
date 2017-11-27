@@ -7,6 +7,7 @@ namespace AppBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * An Organizer is a user who organizes one or more programs.
@@ -33,6 +34,7 @@ class Organizer
 
     /**
      * @ORM\Column(name="org_user_id", type="integer")
+     * @Assert\NotBlank()
      * @var int Corresponds to the `gu_id` column in `centralauth`.`globaluser`.
      */
     protected $userId;
@@ -44,7 +46,7 @@ class Organizer
 
     /**
      * Many Organizers have many Programs.
-     * @ORM\ManyToMany(targetEntity="Program", mappedBy="organizers")
+     * @ORM\ManyToMany(targetEntity="Program", mappedBy="organizers", cascade={"persist"})
      * @var ArrayCollection|Program[] Programs overseen by this organizer.
      */
     protected $programs;

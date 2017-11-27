@@ -33,6 +33,7 @@ class ProgramTest extends PHPUnit_Framework_TestCase
             'Doctrine\Common\Collections\ArrayCollection',
             $program->getOrganizers()
         );
+        $this->assertNull($program->getId());
     }
 
     /**
