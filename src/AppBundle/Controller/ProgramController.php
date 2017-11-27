@@ -60,6 +60,11 @@ class ProgramController extends Controller
         // Handle the Form for the request, and redirect if they submitted.
         $form = $this->handleFormSubmission($request, $program);
         if ($form instanceof RedirectResponse) {
+            // Flash message will be shown at the top of the page.
+            $this->addFlash('success', /** @scrutinizer ignore-type */ [
+                'program-created',
+                $program->getDisplayTitle(),
+            ]);
             return $form;
         }
 
@@ -87,6 +92,11 @@ class ProgramController extends Controller
         // Handle the Form for the request, and redirect if they submitted.
         $form = $this->handleFormSubmission($request, $program);
         if ($form instanceof RedirectResponse) {
+            // Flash message will be shown at the top of the page.
+            $this->addFlash('success', /** @scrutinizer ignore-type */ [
+                'program-updated',
+                $program->getDisplayTitle(),
+            ]);
             return $form;
         }
 
