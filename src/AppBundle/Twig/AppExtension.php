@@ -127,7 +127,7 @@ class AppExtension extends Extension
      */
     public function getAllLangs()
     {
-        $messageFiles = glob($this->container->getParameter('kernel.root_dir') . '/../i18n/*.json');
+        $messageFiles = glob($this->container->getParameter('kernel.root_dir').'/../i18n/*.json');
 
         $languages = array_values(array_unique(array_map(
             function ($filename) {
@@ -269,10 +269,10 @@ class AppExtension extends Extension
         if (!$denominator) {
             $quotient = $numerator;
         } else {
-            $quotient = ( $numerator / $denominator ) * 100;
+            $quotient = ($numerator / $denominator) * 100;
         }
 
-        return $this->numberFormat($quotient, $precision) . '%';
+        return $this->numberFormat($quotient, $precision).'%';
     }
 
     /**
@@ -308,7 +308,7 @@ class AppExtension extends Extension
         list($val, $key) = $this->getDurationMessageKey($seconds);
 
         if ($translate) {
-            return $this->numberFormat($val) . ' ' . $this->intuitionMessage("num-$key", [$val]);
+            return $this->numberFormat($val).' '.$this->intuitionMessage("num-$key", [$val]);
         } else {
             return [$this->numberFormat($val), "num-$key"];
         }
@@ -329,15 +329,15 @@ class AppExtension extends Extension
 
         if ($seconds >= 86400) {
             // Over a day
-            $val = (int) floor($seconds / 86400);
+            $val = (int)floor($seconds / 86400);
             $key = 'days';
         } elseif ($seconds >= 3600) {
             // Over an hour, less than a day
-            $val = (int) floor($seconds / 3600);
+            $val = (int)floor($seconds / 3600);
             $key = 'hours';
         } elseif ($seconds >= 60) {
             // Over a minute, less than an hour
-            $val = (int) floor($seconds / 60);
+            $val = (int)floor($seconds / 60);
             $key = 'minutes';
         }
 

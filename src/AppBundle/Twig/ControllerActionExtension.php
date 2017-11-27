@@ -53,7 +53,7 @@ class ControllerActionExtension extends Twig_Extension
      * @return string
      * There is no request stack in unit tests.
      * @codeCoverageIgnore
-    */
+     */
     public function getControllerName()
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -73,7 +73,7 @@ class ControllerActionExtension extends Twig_Extension
      * @return string
      * There is no request stack in unit tests.
      * @codeCoverageIgnore
-    */
+     */
     public function getActionName()
     {
         $request = $this->requestStack->getCurrentRequest();
