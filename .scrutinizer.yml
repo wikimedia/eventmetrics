@@ -27,6 +27,7 @@ build:
                 command: php phpDocumentor.phar -d src --template="checkstyle"
             -
                 command: 'vendor/bin/simple-phpunit --coverage-clover=coverage.xml'
+                idle_timeout: 300
                 coverage:
                     file: 'coverage.xml'
                     format: 'clover'

@@ -159,6 +159,22 @@ class Program
     }
 
     /**
+     * Set the Organizers of this Program with the given usernames.
+     * @param array $usernames Usernames of the organizers.
+     */
+    public function setOrganizerNames(array $usernames)
+    {
+        // Clear out existing organizers.
+        $this->organizers->clear();
+
+        // Instantiate a new organizer for each username and add to the program.
+        foreach ($usernames as $username) {
+            $organizer = new Organizer($username);
+            $this->addOrganizer($organizer);
+        }
+    }
+
+    /**
      * Sort the organizers collection alphabetically, and put the organizer
      * with the given username ($primary) first.
      * @param string $primary Username of organizer who should come first.
@@ -183,22 +199,6 @@ class Program
         $this->organizers = new ArrayCollection(
             array_merge([$primaryOrg], $nonPrimaryOrgs)
         );
-    }
-
-    /**
-     * Set the Organizers of this Program with the given usernames.
-     * @param array $usernames Usernames of the organizers.
-     */
-    public function setOrganizerNames(array $usernames)
-    {
-        // Clear out existing organizers.
-        $this->organizers->clear();
-
-        // Instantiate a new organizer for each username and add to the program.
-        foreach ($usernames as $username) {
-            $organizer = new Organizer($username);
-            $this->addOrganizer($organizer);
-        }
     }
 
     /**

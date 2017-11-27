@@ -14,9 +14,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Form;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Model\Program;
 use AppBundle\Repository\ProgramRepository;
 use AppBundle\Model\Organizer;
@@ -167,9 +168,9 @@ class ProgramController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $program = $form->getData();
-            $this->getDoctrine()
-                ->getRepository(Program::class)
-                ->createOrUpdate($program);
+            $em = $this->container->get('doctrine')->getManager();
+            $em->persist($program);
+            $em->flush();
 
             return $this->redirectToRoute('Programs');
         }
@@ -184,21 +185,49 @@ class ProgramController extends Controller
      */
     private function getFormForProgram(Program $program)
     {
-        return $this->createFormBuilder($program)
+        $builder = $this->createFormBuilder($program)
             ->add('title', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
-                    // new Type(\DateTime::class),
                 ]
             ])
-            ->add('organizerNames', CollectionType::class, [
+            ->add('organizers', CollectionType::class, [
                 'entry_type' => TextType::class,
                 'constraints' => new NotBlank(),
                 'allow_add' => true,
                 'allow_delete' => true,
-                // 'prototype' => true,
             ])
-            ->add('submit', SubmitType::class)
-            ->getForm();
+            ->add('submit', SubmitType::class);
+
+        $builder->get('organizers')
+            ->addModelTransformer($this->getCallbackTransformer());
+
+        return $builder->getForm();
+    }
+
+    /**
+     * Transform organizer data to or from the form.
+     * This essentially pulls in the username from the user ID,
+     * and sets the user ID before persisting so that the username
+     * can be validated.
+     * @return CallbackTransformer
+     */
+    private function getCallbackTransformer()
+    {
+        return new CallbackTransformer(
+            function ($organizerObjects) {
+                return array_map(function ($organizer) {
+                    return $organizer->getUsername();
+                }, $organizerObjects->toArray());
+            },
+            function ($organizerNames) {
+                return array_map(function ($organizerName) {
+                    $em = $this->container->get('doctrine')->getManager();
+                    $organizerRepo = new OrganizerRepository($em);
+                    $organizerRepo->setContainer($this->container);
+                    return $organizerRepo->getOrganizerByUsername($organizerName);
+                }, $organizerNames);
+            }
+        );
     }
 }

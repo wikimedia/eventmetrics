@@ -26,28 +26,35 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->container->get('session')->set('logged_in_user', $identityMock);
     }
 
+    public function testWorkflow()
+    {
+        $this->indexSpec();
+        $this->newSpec();
+        $this->createSpec();
+        $this->updateSpec();
+
+        $this->crawler = $this->client->request('GET', '/programs');
+        $this->assertContains(
+            'The Lion King',
+            $this->crawler->filter('.programs-list')->text()
+        );
+
+        $this->deleteSpec();
+    }
+
     /**
      * Index page, listing all the viewing organizer's programs.
      */
-    public function testIndex()
+    private function indexSpec()
     {
         $this->crawler = $this->client->request('GET', '/programs');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-
-        $this->createProgram('My test program');
-
-        // Test again, making sure the new program is listed on the page.
-        $this->crawler = $this->client->request('GET', '/programs');
-        $this->assertContains(
-            'My test program',
-            $this->crawler->filter('.programs-list')->text()
-        );
     }
 
     /**
      * Form to create a new program.
      */
-    public function testNew()
+    private function newSpec()
     {
         $this->crawler = $this->client->request('GET', '/programs/new');
 
@@ -58,16 +65,18 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         );
         $this->assertContains(
             'MusikAnimal',
-            $this->crawler->filter('#form_organizerNames_0')->attr('value')
+            $this->crawler->filter('#form_organizers_0')->attr('value')
         );
     }
 
     /**
      * Creating a new program.
      */
-    public function testCreate()
+    private function createSpec()
     {
-        $this->createProgram('My test program');
+        $form = $this->crawler->selectButton('Submit')->form();
+        $form['form[title]'] = ' My test program ';
+        $this->crawler = $this->client->submit($form);
 
         $this->response = $this->client->getResponse();
         $this->assertEquals(302, $this->response->getStatusCode());
@@ -83,9 +92,8 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     /**
      * Updating a program.
      */
-    public function testUpdate()
+    private function updateSpec()
     {
-        $this->createProgram('My test program');
         $this->crawler = $this->client->request('GET', '/programs/edit/My_test_program');
         $form = $this->crawler->selectButton('Submit')->form();
         $form['form[title]'] = 'The Lion King';
@@ -100,15 +108,14 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     /**
      * Test program deletion.
      */
-    public function testDelete()
+    private function deleteSpec()
     {
-        $this->createProgram('My test program');
         $this->assertCount(
             1,
             $this->entityManager->getRepository('Model:Program')->findAll()
         );
 
-        $this->crawler = $this->client->request('GET', '/programs/delete/My_test_program');
+        $this->crawler = $this->client->request('GET', '/programs/delete/The_Lion_King');
         $this->response = $this->client->getResponse();
         $this->assertEquals(302, $this->response->getStatusCode());
 
@@ -116,16 +123,5 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
             0,
             $this->entityManager->getRepository('Model:Program')->findAll()
         );
-    }
-
-    /**
-     * Creates a test program.
-     */
-    private function createProgram($title)
-    {
-        $this->crawler = $this->client->request('GET', '/programs/new');
-        $form = $this->crawler->selectButton('Submit')->form();
-        $form['form[title]'] = $title;
-        $this->crawler = $this->client->submit($form);
     }
 }
