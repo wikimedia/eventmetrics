@@ -59,3 +59,14 @@ Controller tests extend [`DatabaseAwareWebTestCase`](https://github.com/wikimedi
 * `$this->response` - response of any requests you make.
 
 See [`ProgramControllerTest`](https://github.com/wikimedia/grantmetrics/blob/master/tests/AppBundle/Controller/ProgramControllerTest.php) for an example.
+
+## Deployment
+
+The application currently is running on WMF's Toolforge environment at https://tools.wmflabs.org/grantmetrics
+
+You'll need to run deploy cammands in the bash shell for the Kubernetes container:
+
+* `webservice --backend=kubernetes php5.6 shell`
+* `composer install`
+* `php bin/console cache:clear --env=prod`
+* `php bin/console assetic:dump --env=prod`
