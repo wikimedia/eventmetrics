@@ -39,6 +39,8 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
             $this->crawler->filter('.programs-list')->text()
         );
 
+        $this->showSpec();
+
         $this->deleteSpec();
     }
 
@@ -103,6 +105,24 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->assertCount(1, $programs);
         $program = $programs[0];
         $this->assertNotNull($program);
+    }
+
+    /**
+     * Showing a program.
+     */
+    private function showSpec()
+    {
+        $this->crawler = $this->client->request('GET', '/programs/The_Lion_King');
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(200, $this->response->getStatusCode());
+        $this->assertContains(
+            'The Lion King',
+            $this->crawler->filter('.page-header')->text()
+        );
+        $this->assertContains(
+            'MusikAnimal',
+            $this->crawler->filter('.programs-organizers')->text()
+        );
     }
 
     /**

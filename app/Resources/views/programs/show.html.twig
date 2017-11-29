@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
+        </li>
+        <li class="active">{{ program.displayTitle }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="page-header">
+            <h1>
+                {{ program.displayTitle }}
+                <small>
+                    (<a href="{{ path('EditProgram', {'title': program.title}) }}">{{ msg('edit-program')|lower }}</a>)
+                </small>
+            </h1>
+            <div class="programs-organizers">
+                {{ msg('organizers') }}:
+                {{ program.organizerNames|join(', ') }}
+            </div>
+        </div>
+
+        <table class="table gm-table programs-list">
+            <thead>
+                <tr>
+                    <th>{{ msg('event') }}</th>
+                    <th>{{ msg('participants') }}</th>
+                    <th>{{ msg('new-editors') }}</th>
+                    <th>{{ msg('day-retention', [30]) }}</th>
+                    <th>{{ msg('pages-created') }}</th>
+                    <th>{{ msg('pages-improved') }}</th>
+                    <th>{{ msg('options') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in program.events %}
+                    <tr class="event-entry">
+                        <td>{{ event.displayTitle }}</td>
+                        <td>{{ event.numParticipants }}</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
