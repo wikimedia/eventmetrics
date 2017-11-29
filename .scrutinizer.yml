@@ -24,7 +24,7 @@ build:
             -
                 command: ./vendor/bin/phpcs -s .
             -
-                command: php phpDocumentor.phar -d src --template="checkstyle"
+                command: php phpDocumentor.phar -d src -t docs/api --template="checkstyle"
             -
                 command: 'vendor/bin/simple-phpunit --coverage-clover=coverage.xml'
                 idle_timeout: 300

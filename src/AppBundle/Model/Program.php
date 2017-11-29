@@ -125,6 +125,7 @@ class Program
     }
 
     /**
+     * Validates that the title is not a reserved string.
      * @Assert\Callback
      * @param ExecutionContext $context Supplied by Symfony.
      */
@@ -139,7 +140,9 @@ class Program
     }
 
     /**
+     * Validates that the Program's Organizers have user IDs.
      * @Assert\Callback
+     * @param ExecutionContext $context Supplied by Symfony.
      */
     public function validateOrganizers(ExecutionContext $context)
     {
