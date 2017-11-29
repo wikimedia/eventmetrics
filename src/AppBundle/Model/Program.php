@@ -47,14 +47,14 @@ class Program
 
     /**
      * One Program has many Events.
-     * @ORM\OneToMany(targetEntity="Event", mappedBy="program", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Event", mappedBy="program", orphanRemoval=true, fetch="EXTRA_LAZY")
      * @var ArrayCollection|Event[] Events that belong to this program.
      */
     protected $events;
 
     /**
      * Many Programs have many Organizers.
-     * @ORM\ManyToMany(targetEntity="Organizer", inversedBy="programs", orphanRemoval=true, cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Organizer", inversedBy="programs", cascade={"persist"})
      * @ORM\JoinTable(
      *     name="organizers_programs",
      *     joinColumns={

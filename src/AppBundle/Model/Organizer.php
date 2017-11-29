@@ -48,7 +48,7 @@ class Organizer
 
     /**
      * Many Organizers have many Programs.
-     * @ORM\ManyToMany(targetEntity="Program", mappedBy="organizers", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Program", mappedBy="organizers", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @var ArrayCollection|Program[] Programs overseen by this organizer.
      */
     protected $programs;
