@@ -36,6 +36,25 @@ Local CSS and JavaScript live in [app/Resources/assets](https://github.com/wikim
 
 Ultimately all compiled assets are copied to the web/ directory (publicly accessible). This should happen automatically, but if not try dumping the assets with `php bin/console assetic:dump`. If you find you have to keep doing this regularly, you can continually watch for changes with `php bin/console assetic:watch`.
 
+## i18n
+
+All messages live in the i18n/ directory.
+
+For PHP, (Intuition)[https://packagist.org/packages/krinkle/intuition] is used. Within the views, you can access a message using the `msg('message-key', ['arg1', 'arg2', ...])` function. Intuition is not available outside the views, but you probably don't need it in those cases anyway.
+
+When working with model validations, you'll provide the message key and parameters that will in turn get passed into the view. For basic constraints, just put the key name. For instance `@UniqueEntity("title", message="error-program-title-dup")` for a duplicate program title. The name of the program is automatically passed in as the first parameter in the message. For [custom callbacks](https://symfony.com/doc/current/reference/constraints/Callback.html), use the validation builder and set the parameters accordingly. For instance, to validate that a program title is not reserved:
+
+```php
+if (in_array($this->title, ['edit', 'delete'])) {
+    $context->buildViolation('error-program-title-reserved')
+        ->setParameter(0, '<code>edit</code>, <code>delete</code>')
+        ->atPath('title')
+        ->addViolation();
+}
+```
+
+In JavaScript, we use (jquery.i18n)[https://github.com/wikimedia/jquery.i18n]. The syntax is `$.i18n('message-key', 'arg1', 'arg2', ...)`.
+
 ## Tests
 
 First make sure your test schema is up-to-date:

@@ -4,13 +4,17 @@
 			"MusikAnimal"
 		]
 	},
-	"add-new-program": "Button to create a new program. This is shown on the 'My Programs' page.",
+	"add-new-program": "Heading for page to create a new program. This is also used as button text shown on the 'My Programs' page.",
 	"add-organizer": "Link to add a new organizer to a program.",
 	"attribution": "Text for a link that gives attribution to images and fonts used in the application.\n{{Identical|Attribution}}",
 	"confirm-deletion": "Popup message confirming the user wants to delete the program. $1 is the name of the program.",
 	"day-retention": "Heading for the column listing the N-day retention of participants of a program. Shown in the 'My Programs' table. $1 is the number of days.",
 	"developed-by": "Footer text to indicate author. 'Community Tech' is the name of the WMF team who developed the tool.",
 	"documentation": "The word documentation. This is used as the text for a link to a documentation page.\n{{Identical|Documentation}}",
+	"edit-program": "Heading for the page to edit a program.",
+	"error-program-title-dup": "Error message shown when creating a program with the same title as an existing program. $1 is the title.",
+	"error-program-title-reserved": "Error message shown when creating a program with a reserved (invalid) title. $1 is a list of the names that the program title can't be.",
+	"error-usernames": "Error message shown when invalid usernames are entered. $1 is the number of usernames.",
 	"events": "Heading for the column listing the number of events that are in a program, in the 'My Programs' table.\n{{Identical|Events}}",
 	"feedback": "Link in the footer to give feedback.\n{{Identical|Feedback}}",
 	"grant-metrics": "Title of the Grant Metrics application.",

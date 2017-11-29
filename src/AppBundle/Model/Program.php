@@ -8,7 +8,9 @@ namespace AppBundle\Model;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Model\Organizer;
 use AppBundle\Repository\ProgramRepository;
 use AppBundle\Repository\OrganizerRepository;
@@ -23,6 +25,7 @@ use AppBundle\Repository\OrganizerRepository;
  *     options={"engine":"InnoDB"}
  * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ProgramRepository")
+ * @UniqueEntity("title", message="error-program-title-dup")
  */
 class Program
 {
@@ -35,10 +38,9 @@ class Program
     protected $id;
 
     /**
-     * @ORM\Column(name="program_title", type="string", length=255)
+     * @ORM\Column(name="program_title", type="string", length=255, unique=true)
      * @Assert\Type("string")
-     * @Assert\Length(max = 255)
-     * @fixme i18n for maxMessage (currently using default)
+     * @Assert\Length(max=255)
      * @var string The title of the program.
      */
     protected $title;
@@ -90,6 +92,10 @@ class Program
         return $this->id;
     }
 
+    /*********
+     * TITLE *
+     *********/
+
     /**
      * Get the title of this Program.
      * @return string
@@ -117,6 +123,39 @@ class Program
     {
         return str_replace('_', ' ', $this->title);
     }
+
+    /**
+     * @Assert\Callback
+     * @param ExecutionContext $context Supplied by Symfony.
+     */
+    public function validateUnreservedTitle(ExecutionContext $context)
+    {
+        if (in_array($this->title, ['edit', 'delete'])) {
+            $context->buildViolation('error-program-title-reserved')
+                ->setParameter(0, '<code>edit</code>, <code>delete</code>')
+                ->atPath('title')
+                ->addViolation();
+        }
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validateOrganizers(ExecutionContext $context)
+    {
+        $orgIds = $this->getOrganizerIds();
+        $numEmpty = count($orgIds) - count(array_filter($orgIds));
+        if ($numEmpty > 0) {
+            $context->buildViolation('error-usernames')
+                ->setParameter(0, $numEmpty)
+                ->atPath('organizers')
+                ->addViolation();
+        }
+    }
+
+    /**************
+     * ORGANIZERS *
+     **************/
 
     /**
      * Get Organizers of this Program.
@@ -226,6 +265,10 @@ class Program
         $this->organizers->removeElement($organizer);
         $organizer->removeProgram($this);
     }
+
+    /**********
+     * EVENTS *
+     **********/
 
     /**
      * Get Events belonging to this Program.

@@ -5,16 +5,15 @@
 
 namespace Tests\AppBundle\Model;
 
-use PHPUnit_Framework_TestCase;
 use AppBundle\Model\Program;
-use AppBundle\Repository\ProgramRepository;
 use AppBundle\Model\Event;
 use AppBundle\Model\Organizer;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Tests for the Program class.
  */
-class ProgramTest extends PHPUnit_Framework_TestCase
+class ProgramTest extends KernelTestCase
 {
     /**
      * Tests constructor and basic getters.
@@ -128,5 +127,30 @@ class ProgramTest extends PHPUnit_Framework_TestCase
         $program->setTitle(" My fun program 5 ");
         $this->assertEquals('My_fun_program_5', $program->getTitle());
         $this->assertEquals('My fun program 5', $program->getDisplayTitle());
+    }
+
+    /**
+     * Tests the validators on the model.
+     */
+    public function testValidations()
+    {
+        $organizer = new Organizer('');
+        $program = new Program($organizer);
+        $program->setTitle('edit');
+
+        self::bootKernel();
+        $validator = static::$kernel->getContainer()->get('validator');
+
+        $errors = $validator->validate($program);
+
+        $this->assertEquals(
+            'error-program-title-reserved',
+            $errors->get(0)->getMessage()
+        );
+
+        $this->assertEquals(
+            'error-usernames',
+            $errors->get(1)->getMessage()
+        );
     }
 }

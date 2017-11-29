@@ -33,8 +33,10 @@ class Organizer
     protected $id;
 
     /**
+     * NotBlank assertion is also handled with validations for Program and Event,
+     * so we don't want to render an error message, hence the `message=""`.
      * @ORM\Column(name="org_user_id", type="integer")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="")
      * @var int Corresponds to the `gu_id` column in `centralauth`.`globaluser`.
      */
     protected $userId;

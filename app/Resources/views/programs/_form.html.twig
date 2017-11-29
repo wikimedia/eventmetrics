@@ -1,12 +1,9 @@
+{% form_theme form 'macros/forms.html.twig' %}
+
 {{ form_errors(form) }}
 
 <fieldset class="program__basic-info">
-    <div class="form-group">
-        {{ form_label(form.title, msg('title')) }}
-        <div class="col-sm-8">
-            {{ form_widget(form.title, {'value': program.displayTitle}) }}
-        </div>
-    </div>
+    {{ form_row(form.title) }}
 </fieldset>
 
 {# This is what gets copied when they add a new organizer row. #}
@@ -22,19 +19,17 @@
 </div>
 
 <fieldset class="program__organizers">
-    {% set numInvalidUsernames = 0 %}
     {# The organizer currently viewing the program cannot remove or rename themself. #}
     {% for organizer in form.organizers %}
         {% set isViewingOrganizer = organizer.vars.value == loggedInUser().username %}
         {% set invalidUsername = false %}
         {% if form_errors(organizer)|length > 0 %}
-            {% set numInvalidUsernames = numInvalidUsernames + 1 %}
             {% set invalidUsername = true %}
         {% endif %}
 
-        <div class="form-group organizer-row">
+        <div class="form-group organizer-row{% if invalidUsername %} has-error{% endif %}">
             {% if loop.index == 1 %}
-                <label for="" class="col-sm-2 control-label">{{ msg('organizers') }}</label>
+                <label for="form_organizers_1" class="col-sm-2 control-label{% if form_errors(form.organizers) %} text-danger{% endif %}">{{ msg('organizers') }}</label>
             {% else %}
                 <div class="col-sm-2"></div>
             {% endif %}
