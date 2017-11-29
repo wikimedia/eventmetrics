@@ -142,13 +142,13 @@ class ProgramController extends Controller
      */
     public function showAction($title)
     {
-    //     $em = $this->container->get('doctrine')->getManager();
-    //     $program = $em->getRepository(Program::class)
-    //         ->findOneBy(['title' => $title]);
+        $em = $this->container->get('doctrine')->getManager();
+        $program = $em->getRepository(Program::class)
+            ->findOneBy(['title' => $title]);
 
-    //     return $this->render('programs/show.html.twig', [
-    //         'program' => $program,
-    //     ]);
+        return $this->render('programs/show.html.twig', [
+            'program' => $program,
+        ]);
     }
 
     /**

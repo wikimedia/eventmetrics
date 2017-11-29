@@ -40,7 +40,8 @@ class EventTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($this->program, $event->getProgram());
-        $this->assertEquals('My program', $event->getTitle());
+        $this->assertEquals('My_program', $event->getTitle());
+        $this->assertEquals('My program', $event->getDisplayTitle());
         $this->assertEquals('America/New_York', $event->getTimezone());
 
         $this->assertInstanceOf(
@@ -66,8 +67,7 @@ class EventTest extends PHPUnit_Framework_TestCase
             $this->program,
             '  My program  ',
             '2017-01-01',
-            new \DateTime('2017-03-01'),
-            'America/New_York'
+            new \DateTime('2017-03-01')
         );
         $this->assertEquals(new \DateTime('2017-01-01'), $event->getStart());
         $this->assertEquals(new \DateTime('2017-03-01'), $event->getEnd());
@@ -77,8 +77,7 @@ class EventTest extends PHPUnit_Framework_TestCase
             $this->program,
             'My program',
             new \DateTime('2017-03-01'),
-            '2017-04-01',
-            'America/New_York'
+            '2017-04-01'
         );
         $this->assertEquals(new \DateTime('2017-03-01'), $event2->getStart());
         $this->assertEquals(new \DateTime('2017-04-01'), $event2->getEnd());
@@ -140,11 +139,11 @@ class EventTest extends PHPUnit_Framework_TestCase
 
         // Try adding the same one, which shouldn't duplicate.
         $event->addParticipant($participant);
-        $this->assertEquals(1, count($event->getParticipants()));
+        $this->assertEquals(1, $event->getNumParticipants());
 
         // Removing the event.
         $event->removeParticipant($participant);
-        $this->assertEquals(0, count($event->getParticipants()));
+        $this->assertEquals(0, $event->getNumParticipants());
 
         // Double-remove shouldn't error out.
         $event->removeParticipant($participant);

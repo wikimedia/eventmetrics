@@ -3,7 +3,7 @@
 {{ form_errors(form) }}
 
 <fieldset class="program__basic-info">
-    {{ form_row(form.title) }}
+    {{ form_row(form.title, {'value': form.vars.data.displayTitle}) }}
 </fieldset>
 
 {# This is what gets copied when they add a new organizer row. #}

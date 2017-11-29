@@ -114,11 +114,11 @@ class Event
      * @param DateTime|string $end End date of the event.
      * @param string $timezone Official timezone code within the tz database.
      */
-    public function __construct(Program $program, $title, $start = null, $end = null, $timezone = 'UTC')
+    public function __construct(Program $program, $title = null, $start = null, $end = null, $timezone = 'UTC')
     {
         $this->program = $program;
-        $this->title = trim($title);
-        $this->timezone = $timezone;
+        $this->setTitle($title);
+        $this->setTimezone($timezone);
         $this->assignDate('start', $start);
         $this->assignDate('end', $end);
 
@@ -127,21 +127,9 @@ class Event
         $this->wikis = new ArrayCollection();
     }
 
-    /**
-     * Convert the given date argument to a DateTime and save to class property.
-     * @param  string $key 'start' or 'end'.
-     * @param  DateTime|string $value
-     */
-    private function assignDate($key, $value)
-    {
-        if (isset($key)) {
-            if ($value instanceof DateTime) {
-                $this->{$key} = $value;
-            } else {
-                $this->{$key} = new DateTime($value);
-            }
-        }
-    }
+    /***********
+     * PROGRAM *
+     ***********/
 
     /**
      * Get the Program associated with this Event.
@@ -152,6 +140,10 @@ class Event
         return $this->program;
     }
 
+    /*********
+     * TITLE *
+     *********/
+
     /**
      * Get the title of this Event.
      * @return string
@@ -160,6 +152,29 @@ class Event
     {
         return $this->title;
     }
+
+    /**
+     * Set the title of this Event.
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        // Enforce unicode, and use underscores instead of spaces.
+        $this->title = str_replace(' ', '_', utf8_encode(trim($title)));
+    }
+
+    /**
+     * Get the display variant of the program title.
+     * @param string $title
+     */
+    public function getDisplayTitle()
+    {
+        return str_replace('_', ' ', $this->title);
+    }
+
+    /*********
+     * DATES *
+     *********/
 
     /**
      * Get the start date of this Event.
@@ -180,6 +195,22 @@ class Event
     }
 
     /**
+     * Convert the given date argument to a DateTime and save to class property.
+     * @param  string $key 'start' or 'end'.
+     * @param  DateTime|string $value
+     */
+    private function assignDate($key, $value)
+    {
+        if (isset($key)) {
+            if ($value instanceof DateTime) {
+                $this->{$key} = $value;
+            } else {
+                $this->{$key} = new DateTime($value);
+            }
+        }
+    }
+
+    /**
      * Get the end date of this Event.
      * @return string
      */
@@ -187,6 +218,19 @@ class Event
     {
         return $this->timezone;
     }
+
+    /**
+     * Get the end date of this Event.
+     * @param string $timezone Official timezone code within the tz database.
+     */
+    public function setTimezone($timezone)
+    {
+        $this->timezone = $timezone;
+    }
+
+    /**************
+     * STATISTICS *
+     **************/
 
     /**
      * Get statistics about this Event.
@@ -221,6 +265,10 @@ class Event
         $this->stats->removeElement($eventStat);
     }
 
+    /****************
+     * PARTICIPANTS *
+     ****************/
+
     /**
      * Get participants of this Event.
      * @return ArrayCollection|Participant[]
@@ -228,6 +276,15 @@ class Event
     public function getParticipants()
     {
         return $this->participants;
+    }
+
+    /**
+     * Get the number of participants of this Event.
+     * @return int
+     */
+    public function getNumParticipants()
+    {
+        return count($this->participants);
     }
 
     /**
@@ -253,6 +310,10 @@ class Event
         }
         $this->participants->removeElement($participant);
     }
+
+    /********
+     * WIKI *
+     ********/
 
     /**
      * Get wikis this event is taking place on.
