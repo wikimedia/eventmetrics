@@ -7,6 +7,7 @@
 	"num-hours": "{{PLURAL: $1|घण्टा|घण्टों}}",
 	"num-minutes": "{{PLURAL: $1|मिनट|मिनटों}}",
 	"num-seconds": "{{PLURAL: $1|सेकण्ड|सेकण्ड}}",
+	"optional": "वैकल्पिक",
 	"report-issue": "समस्या बताओ",
 	"submit": "जमा करें",
 	"view-source": "स्रोत देखें"

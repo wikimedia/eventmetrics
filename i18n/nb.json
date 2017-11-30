@@ -6,6 +6,7 @@
 	"num-hours": "{{PLURAL: $1|time|timer}}",
 	"num-minutes": "{{PLURAL: $1|minutt|minutter}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekunder}}",
+	"optional": "valgfritt",
 	"report-issue": "Rapporter et problem",
 	"submit": "Send",
 	"view-source": "Vis kode"

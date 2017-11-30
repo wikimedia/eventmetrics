@@ -4,5 +4,6 @@
 	"num-hours": "{{PLURAL: $1|小时}}",
 	"num-minutes": "{{PLURAL: $1|分}}",
 	"num-seconds": "{{PLURAL: $1|秒}}",
+	"optional": "可选",
 	"submit": "提交"
 }

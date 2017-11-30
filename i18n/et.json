@@ -4,5 +4,6 @@
 	"num-hours": "{{PLURAL: $1|tund|tundi}}",
 	"num-minutes": "{{PLURAL: $1|minut|minutit}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekundit}}",
+	"optional": "valikuline",
 	"submit": "Saada"
 }

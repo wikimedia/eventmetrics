@@ -7,6 +7,7 @@
 	"num-hours": "{{PLURAL:$1|小時|小時}}",
 	"num-minutes": "{{PLURAL:$1|分|分}}",
 	"num-seconds": "{{PLURAL:$1|秒|秒}}",
+	"optional": "可選",
 	"report-issue": "問題回報",
 	"submit": "提交",
 	"view-source": "查看原始碼"

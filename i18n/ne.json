@@ -5,5 +5,6 @@
 	"num-hours": "{{PLURAL: $1|hour|hours}}",
 	"num-minutes": "{{PLURAL: $1|minute|minutes}}",
 	"num-seconds": "{{PLURAL: $1|second|seconds}}",
+	"optional": "वैकल्पिक",
 	"submit": "संग्रह गर्नुहोस्"
 }

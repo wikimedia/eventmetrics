@@ -6,6 +6,7 @@
 	"num-hours": "{{PLURAL:$1|hodina|hodiny|hodin}}",
 	"num-minutes": "{{PLURAL:$1|minuta|minuty|minut}}",
 	"num-seconds": "{{PLURAL: $1|sekunda|sekundy|sekund}}",
+	"optional": "nepovinné",
 	"report-issue": "Nahlásit problém",
 	"submit": "Odeslat",
 	"view-source": "Zobrazit zdrojový kód"

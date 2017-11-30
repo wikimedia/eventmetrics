@@ -1,0 +1,91 @@
+{% form_theme form 'macros/forms.html.twig' %}
+
+{{ form_errors(form) }}
+
+<fieldset class="event__basic-info">
+    {{ form_row(form.title, {'value': form.vars.data.displayTitle}) }}
+</fieldset>
+
+<fieldset class="event__wikis">
+    {% for wiki in form.wikis %}
+        {% set invalidWiki = false %}
+        {% if form_errors(wiki)|length > 0 %}
+            {% set invalidWiki = true %}
+        {% endif %}
+
+        <div class="form-group wiki-row{% if invalidWiki %} has-error{% endif %} wiki-row__template">
+            <div class="col-sm-2 text-right label-group">
+                <label for="form_wikis_0" class="control-label{% if form_errors(form.wikis) %} text-danger{% endif %}">{% spaceless %}
+                    {{ msg('wikis') }}
+                {% endspaceless %}</label>
+                <br/>
+                <small class="text-muted">({{ msg('optional')|lower }})</small>
+            </div>
+            <div class="col-sm-8">
+                {{ form_widget(wiki) }}
+                {% if invalidWiki %}
+                    <span class="font-awesome invalid-input">&#xf071;</span>
+                {% endif %}
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-default remove-wiki">
+                    {{ msg('remove') }}
+                </button>
+            </div>
+        </div>
+    {% endfor %}
+</fieldset>
+
+<div class="form-group">
+    <div class="col-sm-2 col-sm-offset-2">
+        <a href="#" class="add-wiki">
+            <div class="glyphicon glyphicon-plus-sign"></div>
+            {{ msg('add-wiki') }}
+        </a>
+    </div>
+</div>
+
+<fieldset class="event__time-selector">
+    <div class="form-group">
+        <div class="col-sm-2 text-right">
+            <label class="control-label">{% spaceless %}
+                {{ msg('time') }}
+            {% endspaceless %}</label>
+            <br/>
+            <small class="text-muted">({{ msg('optional')|lower }})</small>
+        </div>
+        <div class="col-sm-8 enable-time">
+            {{ form_widget(form.enableTime, {'label': msg('enable-event-times')}) }}
+        </div>
+    </div>
+</fieldset>
+
+<fieldset class="event__time disabled">
+    <div class="form-group">
+        <div class="col-sm-2 col-sm-offset-2">
+            {{ form_label(form.start.date, msg('start-date')) }}
+            {{ form_widget(form.start.date) }}
+        </div>
+        <div class="col-sm-2">
+            {{ form_label(form.start.time, msg('start-time')) }}
+            {{ form_widget(form.start.time) }}
+        </div>
+        <div class="col-sm-2">
+            {{ form_label(form.timezone, msg('timezone')) }}
+            {{ form_widget(form.timezone) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 col-sm-offset-2">
+            {{ form_label(form.end.date, msg('end-date')) }}
+            {{ form_widget(form.end.date) }}
+        </div>
+        <div class="col-sm-2">
+            {{ form_label(form.end.time, msg('end-time')) }}
+            {{ form_widget(form.end.time) }}
+        </div>
+    </div>
+</fieldset>
+
+{{ form_row(form._token) }}
+{{ form_widget(form.submit, {'label': msg('submit')}) }}

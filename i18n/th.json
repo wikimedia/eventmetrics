@@ -6,6 +6,7 @@
 	"num-hours": "{{PLURAL: $1|ชั่วโมง|ชั่วโมง}}",
 	"num-minutes": "{{PLURAL: $1|นาที|นาที}}",
 	"num-seconds": "{{PLURAL: $1|วินาที|วินาที}}",
+	"optional": "เลือก",
 	"report-issue": "รายงานผล",
 	"submit": "บันทึก",
 	"view-source": "ดูโค้ด"

@@ -36,8 +36,13 @@ class UserSubscriber
      */
     public function postLoad(LifecycleEventArgs $event)
     {
-        list($entity, $repo) = $this->getEntityAndRepo($event);
-        if ($this->isUserType($entity) && $entity->getUsername() === null) {
+        $entity = $event->getEntity();
+        if (!$this->isUserType($entity)) {
+            return;
+        }
+
+        $repo = $this->getRepository($entity, $event);
+        if ($entity->getUsername() === null) {
             $this->setUsername($entity, $repo);
         }
     }
@@ -49,8 +54,13 @@ class UserSubscriber
      */
     public function prePersist(LifecycleEventArgs $event)
     {
-        list($entity, $repo) = $this->getEntityAndRepo($event);
-        if ($this->isUserType($entity) && $entity->getUserId() === null) {
+        $entity = $event->getEntity();
+        if (!$this->isUserType($entity)) {
+            return;
+        }
+
+        $repo = $this->getRepository($entity, $event);
+        if ($entity->getUserId() === null) {
             $this->setUserId($entity, $repo);
         }
     }
@@ -91,14 +101,12 @@ class UserSubscriber
 
     /**
      * Get the entity and corresponding repository, given the lifecycle event.
+     * @param  Organizer|Participant $entity
      * @param  LifecycleEventArgs $event
-     * @return mixed[]
+     * @return Repository
      */
-    private function getEntityAndRepo(LifecycleEventArgs $event)
+    private function getRepository($entity, LifecycleEventArgs $event)
     {
-        /** @var Entity */
-        $entity = $event->getEntity();
-
         /** @var EntityManager */
         $em = $event->getEntityManager();
 
@@ -106,6 +114,6 @@ class UserSubscriber
         $repo = $em->getRepository(get_class($entity));
         $repo->setContainer($this->container);
 
-        return [$entity, $repo];
+        return $repo;
     }
 }

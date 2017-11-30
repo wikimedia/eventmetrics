@@ -6,5 +6,6 @@
 	"num-hours": "{{PLURAL: $1|hora|hores}}",
 	"num-minutes": "{{PLURAL: $1|minutu|minutos}}",
 	"num-seconds": "{{PLURAL: $1|segundu|segundos}}",
+	"optional": "opcional",
 	"submit": "Unviar"
 }

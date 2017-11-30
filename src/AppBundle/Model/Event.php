@@ -101,10 +101,10 @@ class Event
     protected $updated;
 
     /**
-     * @ORM\Column(name="event_valid", type="boolean", options={"default":0})
+     * @ORM\Column(name="event_valid", type="boolean", options={"default": true})
      * @var bool Whether the event has passed validity checks.
      */
-    protected $valid;
+    protected $valid = true;
 
     /**
      * Event constructor.
@@ -186,12 +186,30 @@ class Event
     }
 
     /**
+     * Set the start date of this Event.
+     * @param DateTime|string $value
+     */
+    public function setStart($value)
+    {
+        $this->assignDate('start', $value);
+    }
+
+    /**
      * Get the end date of this Event.
      * @return string
      */
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * Set the end date of this Event.
+     * @param DateTime|string $value
+     */
+    public function setEnd($value)
+    {
+        $this->assignDate('end', $value);
     }
 
     /**

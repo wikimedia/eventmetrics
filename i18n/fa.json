@@ -7,6 +7,7 @@
 	"num-hours": "{{PLURAL: $1|ساعت|ساعت}}",
 	"num-minutes": "{{PLURAL: $1|دقیقه|دقیقه}}",
 	"num-seconds": "{{PLURAL: $1|ثانیه|ثانیه}}",
+	"optional": "اختیاری",
 	"report-issue": "یک مسئله را گزارش کنید",
 	"submit": "ثبت",
 	"view-source": "نمایش مبدأ"

@@ -7,6 +7,7 @@
 	"num-hours": "{{PLURAL: $1|Stonn|Stonnen}}",
 	"num-minutes": "{{PLURAL: $1|Minutt|Minutten}}",
 	"num-seconds": "{{PLURAL: $1|Sekonn|Sekonnen}}",
+	"optional": "Fakultativ",
 	"report-issue": "E Problem mellen",
 	"submit": "Späicheren",
 	"view-source": "Quellcode weisen"

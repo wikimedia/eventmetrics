@@ -6,6 +6,7 @@
 	"num-hours": "{{PLURAL: $1|時間}}",
 	"num-minutes": "{{PLURAL: $1|分}}",
 	"num-seconds": "{{PLURAL: $1|秒}}",
+	"optional": "省略可能",
 	"report-issue": "問題の報告",
 	"submit": "送信",
 	"view-source": "ソースを閲覧"

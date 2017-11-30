@@ -131,7 +131,7 @@ body {
 }
 
 .form-group {
-    label::after {
+    label:not(.checkbox)::after {
         content: ':';
     }
 

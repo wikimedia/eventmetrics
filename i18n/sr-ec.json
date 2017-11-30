@@ -7,6 +7,7 @@
 	"num-hours": "{{PLURAL:$1|сат|сата|сати}}",
 	"num-minutes": "{{PLURAL:$1|минут|минута|минута}}",
 	"num-seconds": "{{PLURAL:$1|секунд|секунда|секунди}}",
+	"optional": "Опционо",
 	"report-issue": "Пријави проблем",
 	"submit": "Пошаљи",
 	"view-source": "Погледај извор"

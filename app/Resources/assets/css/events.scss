@@ -1,0 +1,28 @@
+.event {
+    .wiki-row {
+        margin-bottom: 0;
+    }
+
+    .event__time.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .enable-time__label {
+        display: inline-block;
+    }
+
+    .wiki-row {
+        &:first-child .remove-wiki {
+            display: none;
+        }
+
+        &:not(:first-child) .label-group {
+            visibility: hidden;
+        }
+    }
+
+    .enable-time label::after {
+        content: '';
+    }
+}

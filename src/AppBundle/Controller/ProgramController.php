@@ -70,8 +70,7 @@ class ProgramController extends Controller
 
         return $this->render('programs/new.html.twig', [
             'form' => $form->createView(),
-            'program' => $program,
-            'gmTitle' => 'add-new-program',
+            'gmTitle' => 'create-new-program',
         ]);
     }
 
@@ -203,7 +202,6 @@ class ProgramController extends Controller
             ])
             ->add('organizers', CollectionType::class, [
                 'entry_type' => TextType::class,
-                'constraints' => new NotBlank(),
                 'allow_add' => true,
                 'allow_delete' => true,
             ])

@@ -7,6 +7,7 @@
 	"num-hours": "{{PLURAL:$1|sat|sata|sati}}",
 	"num-minutes": "{{PLURAL:$1|minut|minute|minuta}}",
 	"num-seconds": "{{PLURAL:$1|sekunda|sekunde|sekundi}}",
+	"optional": "Neobavezno",
 	"report-issue": "Prijavi problem",
 	"submit": "Pošalji",
 	"view-source": "Pogledaj izvor"

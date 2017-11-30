@@ -4,5 +4,6 @@
 	"num-hours": "{{PLURAL:$1|сағат|сағат}}",
 	"num-minutes": "{{PLURAL:$1|$1 минут|$1 минут}}",
 	"num-seconds": "{{PLURAL:$1|$1 секунт|$1 секунт}}",
+	"optional": "қосымша",
 	"submit": "Жіберу"
 }

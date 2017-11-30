@@ -5,6 +5,7 @@
 	"num-hours": "{{PLURAL:$1|ora|oras}}",
 	"num-minutes": "{{PLURAL:$1|minuta|minutas}}",
 	"num-seconds": "{{PLURAL:$1|segonda|segondas}}",
+	"optional": "Facultatiu",
 	"report-issue": "Senhalar un problèma",
 	"view-source": "Afichar la font"
 }

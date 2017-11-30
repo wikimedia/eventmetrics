@@ -6,6 +6,7 @@
 	"num-hours": "{{PLURAL:$1|giờ|giờ}}",
 	"num-minutes": "{{PLURAL:$1|phút|phút}}",
 	"num-seconds": "{{PLURAL:$1|giây|giây}}",
+	"optional": "tùy chọn",
 	"report-issue": "Báo cáo lỗi",
 	"submit": "Gửi",
 	"view-source": "Xem mã nguồn"

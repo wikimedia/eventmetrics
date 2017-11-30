@@ -26,6 +26,8 @@ build:
             -
                 command: php phpDocumentor.phar -d src -t docs/api --template="checkstyle"
             -
+                command: ( [[ -z $(grep "error" docs/api/checkstyle.xml) ]] )
+            -
                 command: 'vendor/bin/simple-phpunit --coverage-clover=coverage.xml'
                 idle_timeout: 300
                 coverage:

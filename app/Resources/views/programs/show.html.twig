@@ -12,6 +12,9 @@
 {% block body %}
     <div class="container">
         <div class="page-header">
+            <a href="{{ path('NewEvent', {'programTitle': program.title}) }}" class="btn btn-default pull-right">
+                {{ msg('create-new-event') }}
+            </a>
             <h1>
                 {{ program.displayTitle }}
                 <small>
@@ -20,7 +23,10 @@
             </h1>
             <div class="programs-organizers">
                 {{ msg('organizers') }}:
-                {{ program.organizerNames|join(', ') }}
+                {% for username in program.organizerNames %}
+                    <a target="_blank" href="https://meta.wikimedia.org/wiki/User:{{ username }}">{{ username }}</a>
+                    {% if not loop.last %},{% endif %}
+                {% endfor %}
             </div>
         </div>
 

@@ -4,5 +4,6 @@
 	"num-hours": "{{PLURAL: $1|сат|сата|сати}}",
 	"num-minutes": "{{PLURAL:$1|минут|минута}}",
 	"num-seconds": "{{PLURAL:$1|секунда|секунде|секунди}}",
+	"optional": "необавезно",
 	"submit": "Пошаљи"
 }

@@ -4,5 +4,6 @@
 	"num-hours": "({{PLURAL:$1| മണിക്കൂർ}})",
 	"num-minutes": "{{PLURAL:$1|മിനിറ്റ്}}",
 	"num-seconds": "{{PLURAL:$1|സെക്കന്റ്}}",
+	"optional": "നിർബന്ധമില്ല",
 	"submit": "സമർപ്പിക്കുക"
 }

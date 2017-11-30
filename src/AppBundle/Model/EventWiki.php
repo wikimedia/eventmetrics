@@ -51,7 +51,7 @@ class EventWiki
      * @param Event $event Event that this EventWiki belongs to.
      * @param string $dbName Database name of the wiki. Corresponds to `dbname` in `meta`.`wiki`.
      */
-    public function __construct(Event $event, $dbName)
+    public function __construct(Event $event, $dbName = null)
     {
         $this->event = $event;
         $this->event->addWiki($this);

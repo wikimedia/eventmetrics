@@ -4,5 +4,6 @@
 	"num-hours": "{{PLURAL:$1|сахьт}}",
 	"num-minutes": "{{PLURAL:$1|минут}}",
 	"num-seconds": "{{PLURAL:$1|секунд}}",
+	"optional": "(опционал)",
 	"submit": "ДӀадахьийта"
 }

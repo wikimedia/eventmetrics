@@ -72,7 +72,6 @@ class Program
     /**
      * Program constructor.
      * @param Organizer $organizer Original organizer of the program.
-     * @param Container|null $container The DI container.
      */
     public function __construct(Organizer $organizer)
     {

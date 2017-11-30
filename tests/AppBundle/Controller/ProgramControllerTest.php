@@ -18,7 +18,6 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     {
         parent::setUp();
 
-        $this->addFixture(new LoadFixtures());
         $this->executeFixtures();
 
         // Create identity mock of MusikAnimal and put it in the session.
@@ -62,7 +61,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertContains(
-            'Add a new program',
+            'Create a new program',
             $this->crawler->filter('.page-header')->text()
         );
         $this->assertContains(
