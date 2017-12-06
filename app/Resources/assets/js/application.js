@@ -44,7 +44,7 @@ function setupAddRemove(model, column)
         var $template = $(rowClass + '__template')
             .clone()
             .removeClass('hidden')
-            .removeClass(column + '-row__template');
+            .removeClass(column + '-row__template')
 
         // Insert after the last row.
         $(rowClass + ':last').after($template);
@@ -53,7 +53,8 @@ function setupAddRemove(model, column)
 
         // Add name attribute to the input of the new row.
         $newRow.find('input').prop('name', 'form[' + column + 's][' + rowCount + ']')
-            .prop('id', 'form_' + column + 's_' + rowCount);
+            .prop('id', 'form_' + column + 's_' + rowCount)
+            .val('');
 
         // Increment count so the next added row will have the correct name attribute.
         rowCount++;

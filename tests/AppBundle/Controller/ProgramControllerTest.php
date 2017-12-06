@@ -5,10 +5,6 @@
 
 namespace Tests\AppBundle\Controller;
 
-use AppBundle\DataFixtures\ORM\LoadFixtures;
-use AppBundle\Model\Program;
-use AppBundle\Repository\ProgramRepository;
-
 /**
  * Integration/functional tests for the ProgramController.
  */
@@ -82,11 +78,10 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
         $this->assertEquals(302, $this->response->getStatusCode());
 
-        $programs = $this->entityManager->getRepository('Model:Program')->findByTitle('My_test_program');
-        $this->assertCount(1, $programs);
-        $program = $programs[0];
+        $program = $this->entityManager
+            ->getRepository('Model:Program')
+            ->findOneBy(['title' => 'My_test_program']);
         $this->assertNotNull($program);
-
         $this->assertEquals(['MusikAnimal'], $program->getOrganizerNames());
     }
 
@@ -100,9 +95,9 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $form['form[title]'] = 'The Lion King';
         $this->crawler = $this->client->submit($form);
 
-        $programs = $this->entityManager->getRepository('Model:Program')->findByTitle('The_Lion_King');
-        $this->assertCount(1, $programs);
-        $program = $programs[0];
+        $program = $this->entityManager
+            ->getRepository('Model:Program')
+            ->findOneBy(['title' => 'The_Lion_King']);
         $this->assertNotNull($program);
     }
 

@@ -39,19 +39,30 @@
                     <th>{{ msg('day-retention', [30]) }}</th>
                     <th>{{ msg('pages-created') }}</th>
                     <th>{{ msg('pages-improved') }}</th>
-                    <th>{{ msg('options') }}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for event in program.events %}
                     <tr class="event-entry">
-                        <td>{{ event.displayTitle }}</td>
+                        <td>
+                            {{ event.displayTitle }}
+                            <a href="{{ path('EditEvent', {'programTitle': program.title, 'title': event.title}) }}"
+                                class="event-action event-action__edit text-muted"
+                            >
+                                <span class="glyphicon glyphicon-cog"></span>
+                            </a>
+                            <a href="{{ path('DeleteEvent', {'programTitle': program.title, 'title': event.title}) }}"
+                                class="event-action event-action__delete text-danger"
+                                data-title="{{ event.displayTitle }}"
+                            >
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </td>
                         <td>{{ event.numParticipants }}</td>
                         <td>0</td>
                         <td>0</td>
                         <td>0</td>
                         <td>0</td>
-                        <td></td>
                     </tr>
                 {% endfor %}
             </tbody>

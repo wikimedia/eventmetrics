@@ -5,7 +5,7 @@
 
 namespace Tests\AppBundle\Model;
 
-use PHPUnit_Framework_TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
@@ -16,7 +16,7 @@ use AppBundle\Model\Participant;
 /**
  * Tests for the Event class.
  */
-class EventTest extends PHPUnit_Framework_TestCase
+class EventTest extends KernelTestCase
 {
     /** @var Program The Program that the Event is part of. */
     protected $program;
@@ -180,5 +180,27 @@ class EventTest extends PHPUnit_Framework_TestCase
 
         // Double-remove shouldn't error out.
         $event->removeWiki($wiki);
+    }
+
+    /**
+     * Tests the validators on the model.
+     */
+    public function testValidations()
+    {
+        $organizer = new Organizer('MusikAnimal');
+        $organizer->setUserId(50);
+        $program = new Program($organizer);
+        $event = new Event($program);
+        $event->setTitle('delete');
+
+        self::bootKernel();
+        $validator = static::$kernel->getContainer()->get('validator');
+
+        $errors = $validator->validate($event);
+
+        $this->assertEquals(
+            'error-title-reserved',
+            $errors->get(0)->getMessage()
+        );
     }
 }

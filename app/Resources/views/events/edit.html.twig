@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('Program', {'title': event.program.title}) }}">{{ event.program.displayTitle }}</a>
+        </li>
+        <li class="active">{{ event.displayTitle }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="page-header">
+            <h1>{{ msg('edit-event') }}</h1>
+        </div>
+
+        {{ form_start(form, {'method': 'post'}) }}
+            {% include 'events/_form.html.twig' with {'form': form} %}
+        {{ form_end(form, {'render_rest': false}) }}
+    </div>
+{% endblock %}

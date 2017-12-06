@@ -3,7 +3,8 @@
         margin-top: 10px;
     }
 
-    .program-action {
+    .program-action,
+    .event-action {
         visibility: hidden;
 
         &:hover {
@@ -11,7 +12,8 @@
         }
     }
 
-    .program-entry:hover .program-action {
+    .program-entry:hover .program-action,
+    .event-entry:hover .event-action {
         visibility: visible;
     }
 }

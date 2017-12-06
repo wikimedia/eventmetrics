@@ -62,25 +62,25 @@
 
 <fieldset class="event__time disabled">
     <div class="form-group">
-        <div class="col-sm-2 col-sm-offset-2">
+        <div class="col-sm-2 col-sm-offset-2{% if form_errors(form.start) %} has-error{% endif %}">
             {{ form_label(form.start.date, msg('start-date')) }}
             {{ form_widget(form.start.date) }}
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2{% if form_errors(form.start) %} has-error{% endif %}">
             {{ form_label(form.start.time, msg('start-time')) }}
             {{ form_widget(form.start.time) }}
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2{% if form_errors(form.timezone) %} has-error{% endif %}">
             {{ form_label(form.timezone, msg('timezone')) }}
             {{ form_widget(form.timezone) }}
         </div>
     </div>
     <div class="form-group">
-        <div class="col-sm-2 col-sm-offset-2">
+        <div class="col-sm-2 col-sm-offset-2{% if form_errors(form.end) %} has-error{% endif %}">
             {{ form_label(form.end.date, msg('end-date')) }}
             {{ form_widget(form.end.date) }}
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2{% if form_errors(form.end) %} has-error{% endif %}">
             {{ form_label(form.end.time, msg('end-time')) }}
             {{ form_widget(form.end.time) }}
         </div>

@@ -3,7 +3,7 @@ $(function () {
         setupAddRemove('program', 'organizer');
     }
 
-    $('.program-action__delete').on('click', function () {
+    $('.program-action__delete, .event-action__delete').on('click', function () {
         return window.confirm(
             $.i18n('confirm-deletion', $(this).data('title'))
         );

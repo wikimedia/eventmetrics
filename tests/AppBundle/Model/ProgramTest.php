@@ -144,7 +144,7 @@ class ProgramTest extends KernelTestCase
         $errors = $validator->validate($program);
 
         $this->assertEquals(
-            'error-program-title-reserved',
+            'error-title-reserved',
             $errors->get(0)->getMessage()
         );
 

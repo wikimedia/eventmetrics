@@ -6,7 +6,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <ul class="list-unstyled">
-                    {{ msg(error.messageTemplate, error.messageParameters) }}
+                    {{ msgIfExists(error.messageTemplate, error.messageParameters) }}
                 </ul>
             </div>
         {%- endif %}

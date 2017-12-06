@@ -1,6 +1,14 @@
 .event {
     .wiki-row {
         margin-bottom: 0;
+
+        &:first-child .remove-wiki {
+            display: none;
+        }
+
+        &:not(:first-child) .label-group {
+            visibility: hidden;
+        }
     }
 
     .event__time.disabled {
@@ -12,14 +20,8 @@
         display: inline-block;
     }
 
-    .wiki-row {
-        &:first-child .remove-wiki {
-            display: none;
-        }
-
-        &:not(:first-child) .label-group {
-            visibility: hidden;
-        }
+    .event__time-selector .form-group {
+        margin-bottom: 0;
     }
 
     .enable-time label::after {

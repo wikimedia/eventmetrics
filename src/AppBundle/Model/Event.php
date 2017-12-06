@@ -7,6 +7,9 @@ namespace AppBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContext;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use DateTime;
 
 /**
@@ -25,6 +28,8 @@ use DateTime;
  *     },
  *     options={"engine":"InnoDB"}
  * )
+ * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity("title", message="error-event-title-dup")
  */
 class Event
 {
@@ -66,7 +71,9 @@ class Event
     protected $wikis;
 
     /**
-     * @ORM\Column(name="event_title", type="string", length=255)
+     * @ORM\Column(name="event_title", type="string", length=255, unique=true)
+     * @Assert\Type("string")
+     * @Assert\Length(max=255)
      * @var string The title of the event.
      */
     protected $title;
@@ -172,6 +179,21 @@ class Event
         return str_replace('_', ' ', $this->title);
     }
 
+    /**
+     * Validates that the title is not a reserved string.
+     * @Assert\Callback
+     * @param ExecutionContext $context Supplied by Symfony.
+     */
+    public function validateUnreservedTitle(ExecutionContext $context)
+    {
+        if (in_array($this->title, ['edit', 'delete'])) {
+            $context->buildViolation('error-title-reserved')
+                ->setParameter(0, '<code>edit</code>, <code>delete</code>')
+                ->atPath('title')
+                ->addViolation();
+        }
+    }
+
     /*********
      * DATES *
      *********/
@@ -187,7 +209,7 @@ class Event
 
     /**
      * Set the start date of this Event.
-     * @param DateTime|string $value
+     * @param DateTime|string|null $value
      */
     public function setStart($value)
     {
@@ -205,7 +227,7 @@ class Event
 
     /**
      * Set the end date of this Event.
-     * @param DateTime|string $value
+     * @param DateTime|string|null $value
      */
     public function setEnd($value)
     {
@@ -219,13 +241,22 @@ class Event
      */
     private function assignDate($key, $value)
     {
-        if (isset($key)) {
-            if ($value instanceof DateTime) {
-                $this->{$key} = $value;
-            } else {
-                $this->{$key} = new DateTime($value);
-            }
+        if ($value instanceof DateTime) {
+            $this->{$key} = $value;
+        } elseif (is_string($value)) {
+            $this->{$key} = new DateTime($value);
+        } else {
+            $this->{$key} = null;
         }
+    }
+
+    /**
+     * Have dates been set on this Event?
+     * @return bool
+     */
+    public function hasDates()
+    {
+        return isset($this->start) && isset($this->end);
     }
 
     /**

@@ -9,11 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContext;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use AppBundle\Model\Organizer;
-use AppBundle\Repository\ProgramRepository;
-use AppBundle\Repository\OrganizerRepository;
 
 /**
  * A Program has its own title, with many organizers and many events.
@@ -131,7 +127,7 @@ class Program
     public function validateUnreservedTitle(ExecutionContext $context)
     {
         if (in_array($this->title, ['edit', 'delete'])) {
-            $context->buildViolation('error-program-title-reserved')
+            $context->buildViolation('error-title-reserved')
                 ->setParameter(0, '<code>edit</code>, <code>delete</code>')
                 ->atPath('title')
                 ->addViolation();

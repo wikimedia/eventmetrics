@@ -6,11 +6,10 @@
 namespace Tests\AppBundle\Controller;
 
 use AppBundle\DataFixtures\ORM\LoadFixtures;
-use AppBundle\Model\Event;
 use DateTime;
 
 /**
- * Integration/functional tests for the ProgramController.
+ * Integration/functional tests for the EventController.
  */
 class EventControllerTest extends DatabaseAwareWebTestCase
 {
@@ -41,6 +40,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->indexSpec();
         $this->newSpec();
         $this->createSpec();
+        $this->updateSpec();
+        $this->deleteSpec();
     }
 
     /**
@@ -85,11 +86,10 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
         $this->assertEquals(302, $this->response->getStatusCode());
 
-        $events = $this->entityManager->getRepository('Model:Event')->findByTitle('The_Lion_King');
-        $this->assertCount(1, $events);
-        $event = $events[0];
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'The_Lion_King']);
         $this->assertNotNull($event);
-
         $this->assertEquals(
             'My_fun_program',
             $event->getProgram()->getTitle()
@@ -99,15 +99,76 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             $event->getStart()
         );
 
-        $eventWikis = $this->entityManager->getRepository('Model:EventWiki')->findBy([
-            'event' => $event
-        ]);
-        $this->assertCount(1, $eventWikis);
-        $eventWiki = $eventWikis[0];
+        $eventWiki = $this->entityManager
+            ->getRepository('Model:EventWiki')
+            ->findOneBy(['event' => $event]);
         $this->assertNotNull($eventWiki);
         $this->assertEquals(
             'enwiki',
             $eventWiki->getDbName()
+        );
+    }
+
+    /**
+     * Updating an event.
+     */
+    private function updateSpec()
+    {
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/The_Lion_King');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $form = $this->crawler->selectButton('Submit')->form();
+
+        // FIXME: assert enableTime is set, and the event wiki
+
+        $form['form[title]'] = 'Pinocchio';
+        $form['form[wikis][0]'] = 'dewiki';
+        $form['form[enableTime]']->untick();
+        $this->crawler = $this->client->submit($form);
+
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'The_Lion_King']);
+        $this->assertNull($event);
+        $eventWiki = $this->entityManager
+            ->getRepository('Model:EventWiki')
+            ->findOneBy(['dbName' => 'enwiki']);
+        $this->assertNull($eventWiki);
+
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Pinocchio']);
+        $this->entityManager->refresh($event);
+        $this->assertNotNull($event);
+        $this->assertNull($event->getStart());
+        $this->assertNull($event->getEnd());
+        $eventWiki = $this->entityManager
+            ->getRepository('Model:EventWiki')
+            ->findOneBy(['event' => $event]);
+        $this->assertNotNull($eventWiki);
+        $this->assertEquals(
+            'dewiki',
+            $eventWiki->getDbName()
+        );
+    }
+
+    /**
+     * Test event deletion.
+     */
+    private function deleteSpec()
+    {
+        $this->assertCount(
+            1,
+            $this->entityManager->getRepository('Model:Event')->findAll()
+        );
+
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/delete/Pinocchio');
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(302, $this->response->getStatusCode());
+
+        $this->assertCount(
+            0,
+            $this->entityManager->getRepository('Model:Event')->findAll()
         );
     }
 }
