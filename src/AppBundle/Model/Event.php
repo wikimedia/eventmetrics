@@ -60,7 +60,7 @@ class Event
 
     /**
      * One Event has many EventWikis.
-     * @ORM\OneToMany(targetEntity="EventWiki", mappedBy="event", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="EventWiki", mappedBy="event", orphanRemoval=true, cascade={"persist"})
      * @var ArrayCollection|EventWiki[] Wikis that this event takes place on.
      */
     protected $wikis;

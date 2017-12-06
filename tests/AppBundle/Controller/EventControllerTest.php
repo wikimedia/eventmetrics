@@ -73,7 +73,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     {
         $form = $this->crawler->selectButton('Submit')->form();
         $form['form[title]'] = ' The Lion King ';
-        // $form['form[wikis][0]'] = 'en.wikipedia.org';
+        $form['form[wikis][0]'] = 'enwiki';
         $form['form[enableTime]']->tick();
         $form['form[start][date]'] = '2017-01-01 18:00';
         $form['form[start][time]'] = '18:00';
@@ -97,6 +97,17 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->assertEquals(
             new DateTime('2017-01-01 18:00'),
             $event->getStart()
+        );
+
+        $eventWikis = $this->entityManager->getRepository('Model:EventWiki')->findBy([
+            'event' => $event
+        ]);
+        $this->assertCount(1, $eventWikis);
+        $eventWiki = $eventWikis[0];
+        $this->assertNotNull($eventWiki);
+        $this->assertEquals(
+            'enwiki',
+            $eventWiki->getDbName()
         );
     }
 }
