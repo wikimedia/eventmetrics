@@ -94,7 +94,11 @@ class AppExtension extends Extension
      */
     public function intuitionMessageIfExists($message = '', $vars = [])
     {
-        if ($this->getIntuition()->msgExists($message)) {
+        $exists = $this->getIntuition()->msgExists($message, [
+            'domain' => 'grantmetrics',
+            'variables' => $vars,
+        ]);
+        if ($exists) {
             return $this->intuitionMessage($message, $vars);
         } else {
             return $message;

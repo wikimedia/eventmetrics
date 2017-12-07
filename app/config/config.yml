@@ -109,6 +109,14 @@ doctrine:
                 user:     "%database_replica_user%"
                 password: "%database_replica_password%"
                 charset:  UTF8
+            meta:
+                driver:   pdo_mysql
+                host:     "%database_replica_host%"
+                port:     "%database_replica_port%"
+                dbname:   "meta_p"
+                user:     "%database_replica_user%"
+                password: "%database_replica_password%"
+                charset:  UTF8
             replicas:
                 driver:   pdo_mysql
                 host:     "%database_replica_host%"
@@ -136,6 +144,9 @@ doctrine:
                 naming_strategy: doctrine.orm.naming_strategy.underscore
             replicas:
                 connection: replicas
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+            meta:
+                connection: meta
                 naming_strategy: doctrine.orm.naming_strategy.underscore
 
 doctrine_migrations:

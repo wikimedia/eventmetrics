@@ -21,10 +21,13 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Valid;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Program;
+use AppBundle\Repository\EventWikiRepository;
 
 /**
  * The EventController handles showing, creating and editing events.
@@ -161,9 +164,29 @@ class EventController extends Controller
             return $this->redirectToRoute('Program', [
                 'title' => $event->getProgram()->getTitle(),
             ]);
+        } elseif ($form->isSubmitted() && !$form->isValid()) {
+            $this->handleEvenetWikiErrors($form);
         }
 
         return $form;
+    }
+
+    /**
+     * Consolidate errors of wikis associated with the event.
+     * @param  Form $form
+     */
+    private function handleEvenetWikiErrors(Form $form)
+    {
+        $numWikiErrors = count($form['wikis']->getErrors(true));
+        if ($numWikiErrors > 0) {
+            $form->addError(new FormError(
+                // For the model-level, doesn't actually get rendered in the view.
+                "$numWikiErrors wikis are invalid",
+                // i18n arguments.
+                'error-wikis',
+                [$numWikiErrors]
+            ));
+        }
     }
 
     /**
@@ -186,6 +209,7 @@ class EventController extends Controller
                 'delete_empty' => true,
                 'empty_data' => '',
                 'required' => false,
+                'constraints' => [new Valid()],
             ])
             ->add('enableTime', CheckboxType::class, [
                 'mapped' => false,
@@ -204,9 +228,6 @@ class EventController extends Controller
             ])
             ->add('timezone', TimezoneType::class)
             ->add('submit', SubmitType::class)
-            // ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $formEvent) {
-            //     var_dump(get_class());
-            // })
             ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $formEvent) {
                 $event = $formEvent->getData();
                 $form = $formEvent->getForm();
@@ -231,24 +252,46 @@ class EventController extends Controller
      */
     private function getWikiCallbackTransformer(Event $event)
     {
+        $em = $this->container->get('doctrine')->getManager();
+        $eventWikiRepo = new EventWikiRepository($em);
+        $eventWikiRepo->setContainer($this->container);
+
         return new CallbackTransformer(
-            function ($wikiObjects) use ($event) {
+            function ($wikiObjects) {
                 $wikis = $wikiObjects->toArray();
                 return array_map(function ($wiki) {
                     return $wiki->getDbName();
                 }, $wikis);
             },
-            function ($dbNames) use ($event) {
-                return array_map(function ($dbName) use ($event) {
-                    $em = $this->container->get('doctrine')->getManager();
-                    $eventWiki = $em->getRepository(EventWiki::class)
-                        ->findOneBy(['dbName' => $dbName]);
-                    if ($eventWiki === null) {
-                        $eventWiki = new EventWiki($event, $dbName);
-                    }
-                    return $eventWiki;
-                }, $dbNames);
+            function ($dbNames) use ($event, $eventWikiRepo) {
+                return $this->normalizeEventWikis($dbNames, $event, $eventWikiRepo);
             }
         );
+    }
+
+    /**
+     * Take the list of wikis provided by the user (enwiki, en.wikipedia, or en.wikipedia.org)
+     * and normalize them to the database name (enwiki). This method also instantiates a new
+     * EventWiki if one did not already exist.
+     * @param  string[]            $wikis As retrieved by the form.
+     * @param  Event               $event
+     * @param  EventWikiRepository $eventWikiRepo
+     * @return EventWiki[]
+     */
+    private function normalizeEventWikis($wikis, Event $event, EventWikiRepository $eventWikiRepo)
+    {
+        return array_map(function ($wiki) use ($event, $eventWikiRepo) {
+            $normalized = $eventWikiRepo->getDbNameFromEventWikiInput($wiki);
+            $eventWiki = $eventWikiRepo->findOneBy([
+                'event' => $event,
+                'dbName' => $normalized,
+            ]);
+
+            if ($eventWiki === null) {
+                $eventWiki = new EventWiki($event, $normalized);
+            }
+
+            return $eventWiki;
+        }, $wikis);
     }
 }

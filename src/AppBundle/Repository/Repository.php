@@ -42,6 +42,9 @@ abstract class Repository extends EntityRepository
     /** @var Connection The CentralAuth database connection. */
     private $centralAuthConnection;
 
+    /** @var Connection The meta database connection. */
+    private $metaConnection;
+
     /** @var EntityManager The Doctrine entity manager. */
     protected $em;
 
@@ -119,6 +122,21 @@ abstract class Repository extends EntityRepository
                 ->getConnection();
         }
         return $this->centralAuthConnection;
+    }
+
+    /**
+     * Get the database connection for the replicas.
+     * @return Connection
+     */
+    protected function getMetaConnection()
+    {
+        if (!$this->metaConnection instanceof Connection) {
+            $this->metaConnection = $this->getContainer()
+                ->get('doctrine')
+                ->getManager('meta')
+                ->getConnection();
+        }
+        return $this->metaConnection;
     }
 
     /**

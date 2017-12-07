@@ -22,6 +22,7 @@
 	"error-program-title-dup": "A program already exists with the title $1.",
 	"error-title-reserved": "Title cannot be any of: $1.",
 	"error-usernames": "$1 {{PLURAL:$1|username|usernames}} {{PLURAL:$1|is|are}} invalid. Check the spelling and capitalization.",
+	"error-wikis": "$1 {{PLURAL:$1|wiki|wikis}} {{PLURAL:$1|is|are}} invalid. Check the spelling.",
 	"event": "Event",
 	"event-created": "The event '$1' was successfully created.",
 	"event-deleted": "The event '$1' was deleted.",

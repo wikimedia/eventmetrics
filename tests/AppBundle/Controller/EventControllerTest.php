@@ -40,6 +40,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->indexSpec();
         $this->newSpec();
         $this->createSpec();
+        $this->validateSpec();
         $this->updateSpec();
         $this->deleteSpec();
     }
@@ -119,10 +120,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         $form = $this->crawler->selectButton('Submit')->form();
 
-        // FIXME: assert enableTime is set, and the event wiki
-
         $form['form[title]'] = 'Pinocchio';
-        $form['form[wikis][0]'] = 'dewiki';
+        $form['form[wikis][0]'] = 'de.wikipedia';
         $form['form[enableTime]']->untick();
         $this->crawler = $this->client->submit($form);
 
@@ -132,7 +131,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->assertNull($event);
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
-            ->findOneBy(['dbName' => 'enwiki']);
+            ->findOneBy(['dbName' => 'enwiki_p']);
         $this->assertNull($eventWiki);
 
         $event = $this->entityManager
@@ -149,6 +148,24 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->assertEquals(
             'dewiki',
             $eventWiki->getDbName()
+        );
+    }
+
+    /**
+     * Test relevant errors are shown when updating an event.
+     */
+    private function validateSpec()
+    {
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/The_Lion_King');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $form = $this->crawler->selectButton('Submit')->form();
+        $form['form[wikis][0]'] = 'invalid_wiki';
+        $this->crawler = $this->client->submit($form);
+
+        $this->assertContains(
+            '1 wiki is invalid.',
+            $this->crawler->filter('.alert-danger')->text()
         );
     }
 

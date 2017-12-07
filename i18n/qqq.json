@@ -22,6 +22,7 @@
 	"error-program-title-dup": "Error message shown when creating a program with the same title as an existing program. $1 is the title.",
 	"error-title-reserved": "Error message shown when creating a program or event with a reserved (invalid) title. $1 is a list of the names that the title can't be.",
 	"error-usernames": "Error message shown when invalid usernames are entered. $1 is the number of usernames.",
+	"error-wikis": "Error message shown when invalid wikis are entered. $1 is the number of wikis.",
 	"event": "Label for an event.\n{{Identical|Event}}",
 	"event-created": "Message saying a event was created. $1 is the name of the event.",
 	"event-deleted": "Message saying a event was deleted. $1 is the name of the event.",

@@ -115,4 +115,16 @@ mysql -u root -e "CREATE DATABASE centralauth_p; USE centralauth_p; SOURCE centr
 php maintenance/migratePass0.php
 php maintenance/migratePass1.php
 
+echo '
+CREATE TABLE wiki (
+    dbname VARCHAR(32),
+    lang VARCHAR(12),
+    url TEXT
+);
+INSERT INTO wiki VALUES("enwiki", "en", "https://en.wikipedia.org");
+INSERT INTO wiki VALUES("dewiki", "de", "https://de.wikipedia.org");
+INSERT INTO wiki VALUES("frwiki", "fr", "https://fr.wikipedia.org");
+' >> meta_database.sql
+mysql -u root -e "CREATE DATABASE meta_p; USE meta_p; SOURCE meta_database.sql; GRANT all on meta_p.* to 'root'@'localhost';"
+
 cd $originalDirectory

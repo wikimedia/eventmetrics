@@ -6,6 +6,7 @@
 namespace AppBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * An EventWiki belongs to an Event.
@@ -21,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     },
  *     options={"engine":"InnoDB"}
  * )
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EventWikiRepository")
  */
 class EventWiki
 {
@@ -41,7 +43,8 @@ class EventWiki
     protected $event;
 
     /**
-     * @ORM\Column(name="ew_dbname", type="string", length=32)
+     * @ORM\Column(name="ew_dbname", type="string", length=32, nullable=false)
+     * @Assert\NotBlank(message="")
      * @var string Database name of the wiki. Corresponds to `dbname` in `meta`.`wiki`.
      */
     protected $dbName;
