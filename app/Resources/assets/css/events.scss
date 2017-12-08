@@ -27,4 +27,12 @@
     .enable-time label::after {
         content: '';
     }
+
+    .events-metadata td {
+        padding-bottom: 3px;
+
+        &:first-child {
+            padding-right: 10px;
+        }
+    }
 }

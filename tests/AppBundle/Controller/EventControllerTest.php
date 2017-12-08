@@ -35,6 +35,9 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->assertEquals(302, $this->response->getStatusCode());
     }
 
+    /**
+     * Workflow, including creating, updating and deleting events.
+     */
     public function testWorkflow()
     {
         $this->indexSpec();
@@ -42,6 +45,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->createSpec();
         $this->validateSpec();
         $this->updateSpec();
+        $this->showSpec();
         $this->deleteSpec();
     }
 
@@ -167,6 +171,16 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             '1 wiki is invalid.',
             $this->crawler->filter('.alert-danger')->text()
         );
+    }
+
+    /**
+     * Show page, which lists participants and statistics.
+     */
+    private function showSpec()
+    {
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Pinocchio');
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(200, $this->response->getStatusCode());
     }
 
     /**

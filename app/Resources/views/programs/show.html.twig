@@ -45,7 +45,7 @@
                 {% for event in program.events %}
                     <tr class="event-entry">
                         <td>
-                            {{ event.displayTitle }}
+                            <a href="{{ path('Event', {'programTitle': program.title, 'title': event.title}) }}">{{ event.displayTitle }}</a>
                             <a href="{{ path('EditEvent', {'programTitle': program.title, 'title': event.title}) }}"
                                 class="event-action event-action__edit text-muted"
                             >

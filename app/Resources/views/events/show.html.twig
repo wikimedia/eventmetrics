@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
+        </li>
+        <li>
+            <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
+        </li>
+        <li class="active">
+            {{ event.displayTitle }}
+        </li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="page-header">
+            <h1>
+                {{ event.displayTitle }}
+                <small>
+                    (<a href="{{ path('EditEvent', {'programTitle': program.title, 'title': event.title}) }}">{{ msg('edit-event')|lower }}</a>)
+                </small>
+            </h1>
+        </div>
+
+        <table class="events-metadata">
+            <tr>
+                <td>{{ msg('wikis') }}:</td>
+                <td>
+                    {% for wiki in event.wikis %}
+                        {{ wiki.dbName }}
+                        {% if not loop.last %},{% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            {% if event.hasDates %}
+                <tr>
+                    <td>{{ msg('start-date') }}:</td>
+                    <td>
+                        {{ event.start|date('Y-m-d h:m (e)') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ msg('end-date') }}:</td>
+                    <td>
+                        {{ event.end|date('Y-m-d h:m') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ msg('timezone') }}:</td>
+                    <td>
+                        {{ event.timezone }}
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+{% endblock %}
