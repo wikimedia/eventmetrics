@@ -24,3 +24,4 @@
 *.swp
 .DS_Store
 i18n_helper.js
+phpDocumentor.phar

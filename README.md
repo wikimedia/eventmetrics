@@ -57,12 +57,22 @@ In JavaScript, we use [jquery.i18n](https://github.com/wikimedia/jquery.i18n). T
 
 ## Tests
 
-First make sure your test schema is up-to-date:
+Use `composer test` to run the full test suite. It will download all necessary components and run migrations as necessary.
 
-* `php bin/console doctrine:database:create --env=test` (first time only).
+Otherwise, first make sure your test schema is up-to-date:
+
+* `php bin/console doctrine:database:create --env=test --if-not-exists`
 * `php bin/console doctrine:migrations:migrate --env=test` to run the migrations.
 
-To run the tests, use `./vendor/bin/simple-phpunit tests/`
+and that you have downloaded the necessary version of [phpDocumentor](https://www.phpdoc.org/):
+
+* `curl -L https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.0/phpDocumentor.phar --output phpDocumentor.phar`
+
+Then you can run the individual commands:
+
+* PHPUnit (unit/integration) - `./vendor/bin/simple-phpunit tests/`
+* CodeSniffer (linting) - `./vendor/bin/phpcs -s .`
+* phpDocumentor (validate doc blocks) - `php phpDocumentor.phar -d src -t docs/api --template='checkstyle'`
 
 The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM/fixtures.yml`.
 
