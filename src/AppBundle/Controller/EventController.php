@@ -446,7 +446,7 @@ class EventController extends Controller
      * @param  ParticipantRepository $participantRepo
      * @return Participant[]
      */
-    private function getParticipantFromRow(Event $event, $row, $participantRepo)
+    private function getParticipantFromRow(Event $event, $row, ParticipantRepository $participantRepo)
     {
         if ($row['user_id'] === null) {
             // Username is invalid, so just return a new Participant

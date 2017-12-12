@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use DateTime;
+use AppBundle\Model\Traits\TitleUserTrait;
 
 /**
  * An Event belongs to one program, and has many participants.
@@ -33,6 +34,12 @@ use DateTime;
  */
 class Event
 {
+    /**
+     * NOTE: Some methods pertaining to titles and Participants
+     * live in the TitleUserTrait trait.
+     */
+    use TitleUserTrait;
+
     /**
      * @ORM\Id
      * @ORM\Column(name="event_id", type="integer")
@@ -134,6 +141,17 @@ class Event
         $this->wikis = new ArrayCollection();
     }
 
+    /**
+     * The class name of users associated with Events.
+     * This is referenced in TitleUserTrait.
+     * @see TitleUserTrait
+     * @return string
+     */
+    public function getUserClassName()
+    {
+        return 'Participant';
+    }
+
     /***********
      * PROGRAM *
      ***********/
@@ -145,53 +163,6 @@ class Event
     public function getProgram()
     {
         return $this->program;
-    }
-
-    /*********
-     * TITLE *
-     *********/
-
-    /**
-     * Get the title of this Event.
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set the title of this Event.
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        // Enforce unicode, and use underscores instead of spaces.
-        $this->title = str_replace(' ', '_', utf8_encode(trim($title)));
-    }
-
-    /**
-     * Get the display variant of the program title.
-     * @param string $title
-     */
-    public function getDisplayTitle()
-    {
-        return str_replace('_', ' ', $this->title);
-    }
-
-    /**
-     * Validates that the title is not a reserved string.
-     * @Assert\Callback
-     * @param ExecutionContext $context Supplied by Symfony.
-     */
-    public function validateUnreservedTitle(ExecutionContext $context)
-    {
-        if (in_array($this->title, ['edit', 'delete'])) {
-            $context->buildViolation('error-title-reserved')
-                ->setParameter(0, '<code>edit</code>, <code>delete</code>')
-                ->atPath('title')
-                ->addViolation();
-        }
     }
 
     /*********
@@ -270,7 +241,7 @@ class Event
 
     /**
      * Get the display variant of the timezone.
-     * @param string $title
+     * @return string
      */
     public function getDisplayTimezone()
     {
@@ -389,23 +360,6 @@ class Event
         return array_map(function ($participant) {
             return $participant->getUsername();
         }, $this->participants->toArray());
-    }
-
-    /**
-     * Validates that the Event's Participants have user IDs.
-     * @Assert\Callback
-     * @param ExecutionContext $context Supplied by Symfony.
-     */
-    public function validateParticipants(ExecutionContext $context)
-    {
-        $parIds = $this->getParticipantIds();
-        $numEmpty = count($parIds) - count(array_filter($parIds));
-        if ($numEmpty > 0) {
-            $context->buildViolation('error-usernames')
-                ->setParameter(0, $numEmpty)
-                ->atPath('participants')
-                ->addViolation();
-        }
     }
 
     /********

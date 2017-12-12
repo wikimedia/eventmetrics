@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use AppBundle\Model\Traits\TitleUserTrait;
 
 /**
  * A Program has its own title, with many organizers and many events.
@@ -25,6 +26,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Program
 {
+    /**
+     * NOTE: Some methods pertaining to titles and Organizers
+     * live in the TitleUserTrait trait.
+     */
+    use TitleUserTrait;
+
     /**
      * @ORM\Id
      * @ORM\Column(name="program_id", type="integer")
@@ -87,68 +94,15 @@ class Program
         return $this->id;
     }
 
-    /*********
-     * TITLE *
-     *********/
-
     /**
-     * Get the title of this Program.
+     * The class name of users associated with Events.
+     * This is referenced in TitleUserTrait.
+     * @see TitleUserTrait
      * @return string
      */
-    public function getTitle()
+    public function getUserClassName()
     {
-        return $this->title;
-    }
-
-    /**
-     * Set the title of this Program.
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        // Enforce unicode, and use underscores instead of spaces.
-        $this->title = str_replace(' ', '_', utf8_encode(trim($title)));
-    }
-
-    /**
-     * Get the display variant of the program title.
-     * @param string $title
-     */
-    public function getDisplayTitle()
-    {
-        return str_replace('_', ' ', $this->title);
-    }
-
-    /**
-     * Validates that the title is not a reserved string.
-     * @Assert\Callback
-     * @param ExecutionContext $context Supplied by Symfony.
-     */
-    public function validateUnreservedTitle(ExecutionContext $context)
-    {
-        if (in_array($this->title, ['edit', 'delete'])) {
-            $context->buildViolation('error-title-reserved')
-                ->setParameter(0, '<code>edit</code>, <code>delete</code>')
-                ->atPath('title')
-                ->addViolation();
-        }
-    }
-
-    /**
-     * Validates that the Program's Organizers have user IDs.
-     * @Assert\Callback
-     * @param ExecutionContext $context Supplied by Symfony.
-     */
-    public function validateOrganizers(ExecutionContext $context)
-    {
-        $orgIds = $this->getOrganizerIds();
-        $numEmpty = count($orgIds) - count(array_filter($orgIds));
-        if ($numEmpty > 0) {
-            $context->buildViolation('error-usernames')
-                ->setParameter(0, $numEmpty)
-                ->atPath('organizers')
-                ->addViolation();
-        }
+        return 'Organizer';
     }
 
     /**************

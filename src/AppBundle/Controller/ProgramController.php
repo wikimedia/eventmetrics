@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Model\Program;
 use AppBundle\Repository\ProgramRepository;
@@ -204,6 +205,7 @@ class ProgramController extends Controller
                 'entry_type' => TextType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
+                'constraints' => [new Valid()],
             ])
             ->add('submit', SubmitType::class);
 
