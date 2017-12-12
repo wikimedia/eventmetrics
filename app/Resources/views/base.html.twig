@@ -11,6 +11,9 @@
 
         {# Must be before loading the individual JS files #}
         <script type="text/javascript">
+            {# For JavaScripts that make requests to the application server. #}
+            baseUrl = "{{ path('homepage') }}";
+
             {# For $.i18n, loaded in application.js #}
             i18nLang = "{{ lang() }}";
             i18nPath = "{{ asset('i18n/' ~ lang() ~ '.json') }}";

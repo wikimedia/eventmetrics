@@ -4,7 +4,7 @@ $(function () {
         return;
     }
 
-    $.get('/api/background/' + $(window).outerWidth()).done(function (imageInfo) {
+    $.get(baseUrl + 'api/background/' + $(window).outerWidth()).done(function (imageInfo) {
         $('body.default-index').attr(
             'style',
             'background-image:url(' + imageInfo.thumburl + ');'
