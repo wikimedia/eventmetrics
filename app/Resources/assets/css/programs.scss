@@ -2,18 +2,4 @@
     #form_submit {
         margin-top: 10px;
     }
-
-    .program-action,
-    .event-action {
-        visibility: hidden;
-
-        &:hover {
-            text-decoration: none;
-        }
-    }
-
-    .program-entry:hover .program-action,
-    .event-entry:hover .event-action {
-        visibility: visible;
-    }
 }

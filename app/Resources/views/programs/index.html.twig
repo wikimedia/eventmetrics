@@ -25,6 +25,7 @@
                     <th>{{ msg('day-retention', [30]) }}</th>
                     <th>{{ msg('pages-created') }}</th>
                     <th>{{ msg('pages-improved') }}</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +33,14 @@
                     <tr class="program-entry">
                         <td>
                             <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
+                        </td>
+                        <td>{{ program.numEvents }}</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>
                             <a href="{{ path('EditProgram', {'title': program.title}) }}"
                                 class="program-action program-action__edit text-muted"
                             >
@@ -44,12 +53,6 @@
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
                         </td>
-                        <td>{{ program.numEvents }}</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
                     </tr>
                 {% endfor %}
             </tbody>

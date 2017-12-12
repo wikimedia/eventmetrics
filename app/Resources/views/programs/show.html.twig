@@ -24,8 +24,7 @@
             <div class="programs-organizers">
                 {{ msg('organizers') }}:
                 {% for username in program.organizerNames %}
-                    <a target="_blank" href="https://meta.wikimedia.org/wiki/User:{{ username }}">{{ username }}</a>
-                    {% if not loop.last %},{% endif %}
+                    <a target="_blank" href="https://meta.wikimedia.org/wiki/User:{{ username }}">{{ username }}</a>{% if not loop.last %},{% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -39,6 +38,7 @@
                     <th>{{ msg('day-retention', [30]) }}</th>
                     <th>{{ msg('pages-created') }}</th>
                     <th>{{ msg('pages-improved') }}</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -46,6 +46,13 @@
                     <tr class="event-entry">
                         <td>
                             <a href="{{ path('Event', {'programTitle': program.title, 'title': event.title}) }}">{{ event.displayTitle }}</a>
+                        </td>
+                        <td>{{ event.numParticipants }}</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>
                             <a href="{{ path('EditEvent', {'programTitle': program.title, 'title': event.title}) }}"
                                 class="event-action event-action__edit text-muted"
                             >
@@ -58,11 +65,6 @@
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
                         </td>
-                        <td>{{ event.numParticipants }}</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
                     </tr>
                 {% endfor %}
             </tbody>
