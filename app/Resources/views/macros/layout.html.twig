@@ -1,0 +1,30 @@
+{#
+ # Generate an accordion
+ # @param string title       - i18n message that is the title of the content block, shown in a header
+ # @param string content     - raw content to show in the section body
+ # @param string description - shown on the right in grayed text
+ #}
+{% macro eventAccordion(title, description, content) %}
+    <section class="event-section panel panel-default">
+        <div class="panel-heading clearfix" role="tab" id="participantsHeading">
+            <h3 class="panel-title col-sm-4">
+                <a role="button" data-toggle="collapse" data-parent="#eventParticipants" href="#participantsBody" aria-expanded="false" aria-controls="participantsBody">
+                    {{ msg('participants') }}
+                </a>
+            </h3>
+            {# <span class="col-sm-2">
+                <a role="button" data-toggle="collapse" data-parent="#eventParticipants" href="#participantsBody" aria-expanded="false" aria-controls="participantsBody">
+                    [ {{ msg('open-section') }} ]
+                </a>
+            </span> #}
+            <span class="event-section col-sm-8 text-right">
+                {{ description }}
+            </span>
+        </div>
+        <div id="participantsBody" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="participantsHeading">
+            <div class="panel-body">
+                {{ content }}
+            </div>
+        </div>
+    </section>
+{% endmacro %}

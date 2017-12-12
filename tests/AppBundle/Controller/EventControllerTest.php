@@ -46,6 +46,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->validateSpec();
         $this->updateSpec();
         $this->showSpec();
+        $this->participantsSpec();
         $this->deleteSpec();
     }
 
@@ -181,6 +182,43 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Pinocchio');
         $this->response = $this->client->getResponse();
         $this->assertEquals(200, $this->response->getStatusCode());
+    }
+
+    /**
+     * Adding/remove participants to the event.
+     */
+    private function participantsSpec()
+    {
+        $form = $this->crawler->selectButton('Submit')->form();
+
+        $form['form[new_participants]'] = "  MusikAnimal  \r\nInvalid_user";
+        $this->crawler = $this->client->submit($form);
+
+        $this->assertContains(
+            '1 username is invalid',
+            $this->crawler->filter('.alert-danger')->text()
+        );
+
+        $form = $this->crawler->selectButton('Submit')->form();
+
+        $this->assertEquals('Invalid user', $form['form[participants][0]']->getValue());
+        $this->assertEquals('MusikAnimal', $form['form[participants][1]']->getValue());
+
+        // Remove invalid user and submit again.
+        unset($form['form[participants][0]']);
+        $this->crawler = $this->client->submit($form);
+
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(302, $this->response->getStatusCode());
+
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Pinocchio']);
+
+        $this->assertEquals(
+            ['MusikAnimal'],
+            $event->getParticipantNames()
+        );
     }
 
     /**

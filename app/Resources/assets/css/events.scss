@@ -28,11 +28,46 @@
         content: '';
     }
 
-    .events-metadata td {
+    .event-metadata td {
         padding-bottom: 3px;
 
         &:first-child {
             padding-right: 10px;
         }
+    }
+
+    .event-stats {
+        margin: 36px 0;
+    }
+
+    .event-export {
+        margin-left: 10px;
+
+        .glyphicon {
+            margin-right: 3px;
+            position: relative;
+            top: 2px;
+        }
+    }
+
+    .event-section {
+        h3 {
+            font-size: 24px;
+        }
+
+        .panel-heading {
+            padding: 10px 0px;
+
+            & > h3,
+            & > span {
+                height: 26px;
+                line-height: 26px;
+            }
+        }
+    }
+
+    .event-new-participants {
+        margin-bottom: 25px;
+        max-width: 458px;
     }
 }

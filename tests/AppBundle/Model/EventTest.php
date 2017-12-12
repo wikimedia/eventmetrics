@@ -43,6 +43,7 @@ class EventTest extends KernelTestCase
         $this->assertEquals('My_program', $event->getTitle());
         $this->assertEquals('My program', $event->getDisplayTitle());
         $this->assertEquals('America/New_York', $event->getTimezone());
+        $this->assertEquals('America/New York', $event->getDisplayTimezone());
 
         $this->assertInstanceOf(
             'Doctrine\Common\Collections\ArrayCollection',
@@ -133,9 +134,11 @@ class EventTest extends KernelTestCase
 
         // Add a Participant.
         $participant = new Participant($event, 50);
+        $participant->setUsername('DannyH (WMF)');
         $event->addParticipant($participant);
 
         $this->assertEquals($participant, $event->getParticipants()[0]);
+        $this->assertEquals(['DannyH (WMF)'], $event->getParticipantNames());
 
         // Try adding the same one, which shouldn't duplicate.
         $event->addParticipant($participant);

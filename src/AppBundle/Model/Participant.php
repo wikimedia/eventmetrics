@@ -6,6 +6,7 @@
 namespace AppBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * A Participant is a user who participates in an Event.
@@ -21,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     },
  *     options={"engine":"InnoDB"}
  * )
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ParticipantRepository")
  */
 class Participant
 {
@@ -41,7 +43,10 @@ class Participant
     protected $event;
 
     /**
+     * NotBlank assertion is also handled with validations for Program and Event,
+     * so we don't want to render an error message, hence the `message=""`.
      * @ORM\Column(name="par_user_id", type="integer")
+     * @Assert\NotBlank(message="")
      * @var int Corresponds to the `gu_id` column in `centralauth`.`globaluser` on the replicas.
      */
     protected $userId;
@@ -55,14 +60,14 @@ class Participant
      * @ORM\Column(name="par_new_editor", type="boolean")
      * @var bool Whether or not they are considered a new editor, as of the time of the event.
      */
-    protected $newEditor;
+    protected $newEditor = false;
 
     /**
      * Event constructor.
      * @param Event $event Event the Participant is participating in.
      * @param int $userId ID of the user, corresponds with `centralauth`.`globaluser`.
      */
-    public function __construct(Event $event, $userId)
+    public function __construct(Event $event, $userId = null)
     {
         $this->event = $event;
         $this->event->addParticipant($this);

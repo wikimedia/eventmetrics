@@ -6,7 +6,6 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Model\Organizer;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
  * This class supplies and fetches data for the Organizer class.

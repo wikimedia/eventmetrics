@@ -51,7 +51,7 @@ class Event
 
     /**
      * One Event has many Participants.
-     * @ORM\OneToMany(targetEntity="Participant", mappedBy="event", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Participant", mappedBy="event", orphanRemoval=true, cascade={"persist"})
      * @var ArrayCollection|Participant[] Participants of this Event.
      */
     protected $participants;
@@ -269,6 +269,15 @@ class Event
     }
 
     /**
+     * Get the display variant of the timezone.
+     * @param string $title
+     */
+    public function getDisplayTimezone()
+    {
+        return str_replace('_', ' ', $this->timezone);
+    }
+
+    /**
      * Get the end date of this Event.
      * @param string $timezone Official timezone code within the tz database.
      */
@@ -358,6 +367,45 @@ class Event
             return;
         }
         $this->participants->removeElement($participant);
+    }
+
+    /**
+     * Get the user IDs of all the Participants of this Event.
+     * @return int[]
+     */
+    public function getParticipantIds()
+    {
+        return array_map(function ($participant) {
+            return $participant->getUserId();
+        }, $this->participants->toArray());
+    }
+
+    /**
+     * Get the usernames of the Participants of this Event.
+     * @return ArrayCollection|string[]
+     */
+    public function getParticipantNames()
+    {
+        return array_map(function ($participant) {
+            return $participant->getUsername();
+        }, $this->participants->toArray());
+    }
+
+    /**
+     * Validates that the Event's Participants have user IDs.
+     * @Assert\Callback
+     * @param ExecutionContext $context Supplied by Symfony.
+     */
+    public function validateParticipants(ExecutionContext $context)
+    {
+        $parIds = $this->getParticipantIds();
+        $numEmpty = count($parIds) - count(array_filter($parIds));
+        if ($numEmpty > 0) {
+            $context->buildViolation('error-usernames')
+                ->setParameter(0, $numEmpty)
+                ->atPath('participants')
+                ->addViolation();
+        }
     }
 
     /********

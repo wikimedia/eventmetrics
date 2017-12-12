@@ -1,4 +1,6 @@
 {% extends 'base.html.twig' %}
+{% import 'macros/layout.html.twig' as layout %}
+{% form_theme form 'blocks/forms.html.twig' %}
 
 {% block breadcrumb %}
     <ol class="breadcrumb">
@@ -25,7 +27,24 @@
             </h1>
         </div>
 
-        <table class="events-metadata">
+        <div class="btn-group pull-right event-export">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-export"></span>
+                {{ msg('export') }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="#">Export totals as wiki table</a>
+                </li>
+                <li>
+                    <a href="#">Export raw data as CSV</a>
+                </li>
+            </ul>
+        </div>
+        <a href="#" class="btn btn-default pull-right">{{ msg('calculate-totals') }}</a>
+
+        <table class="event-metadata">
             <tr>
                 <td>{{ msg('wikis') }}:</td>
                 <td>
@@ -39,7 +58,8 @@
                 <tr>
                     <td>{{ msg('start-date') }}:</td>
                     <td>
-                        {{ event.start|date('Y-m-d h:m (e)') }}
+                        {{ event.start|date('Y-m-d h:m') }}
+                        ({{ event.displayTimezone }})
                     </td>
                 </tr>
                 <tr>
@@ -48,13 +68,71 @@
                         {{ event.end|date('Y-m-d h:m') }}
                     </td>
                 </tr>
-                <tr>
-                    <td>{{ msg('timezone') }}:</td>
-                    <td>
-                        {{ event.timezone }}
-                    </td>
-                </tr>
             {% endif %}
         </table>
+
+        <div class="row event-stats">
+            <div class="col-sm-2 col-sm-offset-1 text-center">
+                <h4>{{ msg('participants') }}</h4>
+                <h3>{{ event.numParticipants }}</h3>
+            </div>
+            <div class="col-sm-2 text-center">
+                <h4>{{ msg('new-editors') }}</h4>
+                <h3>0</h3>
+            </div>
+            <div class="col-sm-2 text-center">
+                <h4>{{ msg('day-retention', [30]) }}</h4>
+                <h3>0</h3>
+            </div>
+            <div class="col-sm-2 text-center">
+                <h4>{{ msg('pages-created') }}</h4>
+                <h3>0</h3>
+            </div>
+            <div class="col-sm-2 text-center">
+                <h4>{{ msg('pages-improved') }}</h4>
+                <h3>0</h3>
+            </div>
+        </div>
+
+        {% set content %}
+            {{ form_errors(form) }}
+
+            {{ form_start(form, {'method': 'post', 'attr': {'class': 'form-horizontal'}}) }}
+                {% for participant in form.participants %}
+                    {% set invalidParticipant = false %}
+                    {% if form_errors(participant)|length > 0 %}
+                        {% set invalidParticipant = true %}
+                    {% endif %}
+                    <div class="form-group participant-row{% if invalidParticipant %} has-error{% endif %}">
+                        <div class="col-sm-4">
+                            {{ form_widget(participant) }}
+                            {% if invalidParticipant %}
+                                <span class="font-awesome invalid-input">&#xf071;</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-default remove-participant">
+                                {{ msg('remove') }}
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <label class="event-add-participants" for="add_participants">
+                    {{ msg('add-more-participants') }}
+                </label>
+                {{ form_widget(form.new_participants, {'attr': {'class': 'event-new-participants', 'rows': 10}}) }}
+
+                {{ form_widget(form.submit, {'label': msg('submit')}) }}
+            {{ form_end(form) }}
+        {% endset %}
+        {{
+            layout.eventAccordion(
+                'participants',
+                event.numParticipants ~ ' ' ~ msg('num-participants', [event.numParticipants]),
+                content
+            )
+        }}
+
     </div>
 {% endblock %}

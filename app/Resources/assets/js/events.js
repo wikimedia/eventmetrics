@@ -9,6 +9,11 @@ $(function () {
         setupAddRemove('event', 'wiki');
     }
 
+    // Add/remove participants hooks for when viewing an event.
+    if ($('body').hasClass('event-show')) {
+        setupAddRemove('event', 'participant');
+    }
+
     $('.event-action__delete').on('click', function () {
         return window.confirm(
             $.i18n('confirm-deletion', $(this).data('title'))

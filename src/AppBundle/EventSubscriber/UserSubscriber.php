@@ -41,6 +41,7 @@ class UserSubscriber
             return;
         }
 
+        // Fetch and set the username on the entity.
         $repo = $this->getRepository($entity, $event);
         if ($entity->getUsername() === null) {
             $this->setUsername($entity, $repo);
@@ -48,7 +49,7 @@ class UserSubscriber
     }
 
     /**
-     * Set the username on the Organizer or Participant
+     * Set the user ID on the Organizer or Participant.
      * for display purposes.
      * @param LifecycleEventArgs $event Doctrine lifecycle event arguments.
      */
@@ -59,6 +60,11 @@ class UserSubscriber
             return;
         }
 
+        $entity->setUsername(
+            ucfirst(trim(str_replace('_', ' ', $entity->getUsername())))
+        );
+
+        // Fetch and set the user ID on the entity.
         $repo = $this->getRepository($entity, $event);
         if ($entity->getUserId() === null) {
             $this->setUserId($entity, $repo);
