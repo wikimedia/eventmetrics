@@ -48,10 +48,14 @@
             <tr>
                 <td>{{ msg('wikis') }}:</td>
                 <td>
-                    {% for wiki in event.wikis %}
-                        {{ wiki.dbName }}
-                        {% if not loop.last %},{% endif %}
-                    {% endfor %}
+                    {% if event.wikis|length > 0 %}
+                        {% for wiki in event.wikis %}
+                            {{ wiki.dbName }}
+                            {% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {{ msg('all') }}
+                    {% endif %}
                 </td>
             </tr>
             {% if event.hasDates %}
@@ -124,7 +128,8 @@
                 {{ form_widget(form.new_participants, {'attr': {'class': 'event-new-participants', 'rows': 10}}) }}
 
                 {{ form_widget(form.submit, {'label': msg('submit')}) }}
-            {{ form_end(form) }}
+                {{ form_row(form._token) }}
+            {{ form_end(form, {'render_rest': false}) }}
         {% endset %}
         {{
             layout.eventAccordion(

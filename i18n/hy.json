@@ -1,4 +1,6 @@
 {
+	"all": "Բոլորը",
+	"close": "Փակել",
 	"documentation": "Ձեռնարկ",
 	"logout": "Դուրս գալ",
 	"num-days": "{{PLURAL:$1|օր}}",

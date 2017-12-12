@@ -1,4 +1,5 @@
 {
+	"close": "बन्द गर्नुहोस्",
 	"feedback": "प्रतिक्रिया",
 	"logout": "निर्गमन (लग आउट)",
 	"num-days": "{{PLURAL: $1|day|days}}",

@@ -1,4 +1,6 @@
 {
+	"all": "Totes",
+	"close": "Tampar",
 	"documentation": "Documentacion",
 	"feedback": "Vejaires",
 	"num-days": "{{PLURAL: $1|jorn|jorns}}",
