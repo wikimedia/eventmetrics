@@ -39,11 +39,7 @@
             {% endstylesheets %}
         {% endblock %}
     </head>
-    <body class="{{ getControllerName() }} {{ getControllerName() }}-{{ getActionName() }}{% if isRTL() %} rtl{% endif %}"
-        {% if backgroundUrl is defined %}
-            style="background-image:url('{{ backgroundUrl }}'); background-size:cover"
-        {% endif %}
-    >
+    <body class="{{ getControllerName() }} {{ getControllerName() }}-{{ getActionName() }}{% if isRTL() %} rtl{% endif %}">
         <header class="app-header navbar navbar-default" role="navigation">
             <div class="container-fluid">
                 <span class="navbar-left">
@@ -102,5 +98,6 @@
             {% endblock %}
         </main>
         {{ include('_footer.html.twig') }}
+        {% include('_attribution.html.twig') %}
     </body>
 </html>
