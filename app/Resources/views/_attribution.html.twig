@@ -1,0 +1,53 @@
+<div class="modal fade" id="image_attribution" tabindex="-1" role="dialog" aria-labelledby="image-attribution-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="image-attribution-label">
+                        {{ msg('attribution') }}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        {% set commonsLink %}
+                            <a target="_blank" id="background_commons_link" href="#"></a>.
+                        {% endset %}
+                        {{ msg('attribution-background', [commonsLink]) }}
+                    </p>
+                    <p>
+                        {% set openSans %}
+                            <a target="_blank" href="https://fonts.google.com/specimen/Open+Sans">Open Sans</a>
+                        {% endset %}
+                        {% set apache %}
+                            <a target="_blank" href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>
+                        {% endset %}
+                        {% set steve %}
+                            <a target="_blank" href="https://twitter.com/SteveMatteson1">Steve Matteson</a>.
+                        {% endset %}
+                        {{ msg('attribution-font', [openSans, apache, steve]) }}
+                    </p>
+                    <p>
+                        {% set fontAwesome %}
+                            <a target="_blank" href="http://fontawesome.io/">Font Awesome</a>
+                        {% endset %}
+                        {% set openFont %}
+                            <a target="_blank" href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL">Open Font License</a>
+                        {% endset %}
+                        {% set dave %}
+                            <a target="_blank" href="https://twitter.com/davegandy">Dave Gandy</a>.
+                        {% endset %}
+                        {{ msg('attribution-font-awesome', [fontAwesome, openFont, dave]) }}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {{ msg('close') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

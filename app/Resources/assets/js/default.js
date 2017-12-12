@@ -4,7 +4,12 @@ $(function () {
         return;
     }
 
-    $.get('/api/background/' + $(window).outerWidth()).done(function (url) {
-        $('body.default-index').attr('style', 'background-image:url(' + url + ');');
+    $.get('/api/background/' + $(window).outerWidth()).done(function (imageInfo) {
+        $('body.default-index').attr(
+            'style',
+            'background-image:url(' + imageInfo.thumburl + ');'
+        );
+        $('#background_commons_link').text(imageInfo.canonicaltitle)
+            .prop('href', imageInfo.descriptionurl);
     });
 });

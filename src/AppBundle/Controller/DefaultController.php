@@ -7,6 +7,7 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -32,15 +33,22 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('default/index.html.twig', [
-            'backgroundUrl' => $this->getBackgroundImageUrl(),
-        ]);
+        return $this->render('default/index.html.twig');
     }
 
     /**
      * Get the URL of a random background image.
+     * @Route("/api/background/{windowSize}", name="BackgroundImage")
+     * @Route("/api/background/{windowSize}/", name="BackgroundImageSlash")
+     * @param int $windowSize Device's screen size, so that we don't
+     *                        download imagery larger than what's necessary.
+     *
+     * This requires access to the API, and while we have a MediaWiki install
+     * with the continuous integration build, we don't want to bother with
+     * uploading images to test this just-for-fun method.
+     * @codeCoverageIgnore
      */
-    private function getBackgroundImageUrl()
+    public function backgroundImageAction($windowSize = null)
     {
         /** @var string[] List of titles of files on Commons. */
         $files = $this->container->getParameter('picture_of_the_day');
@@ -53,10 +61,15 @@ class DefaultController extends Controller
             'action' => 'query',
             'prop' => 'imageinfo',
             'iiprop' => 'url|size|canonicaltitle',
+            'iiurlwidth' => 300,
             'titles' => $file,
             'format' => 'json',
             'formatversion' => 2,
         ];
+
+        if (isset($windowSize)) {
+            $params['iiurlwidth'] = $windowSize;
+        }
 
         /** @var GuzzleClient $client */
         $client = $this->get('guzzle.client.commons');
@@ -65,10 +78,11 @@ class DefaultController extends Controller
             ->getBody()
             ->getContents();
 
-        return json_decode($res)->query
+        $imageinfo = (array)json_decode($res)->query
             ->pages[0]
-            ->imageinfo[0]
-            ->url;
+            ->imageinfo[0];
+
+        return new JsonResponse($imageinfo);
     }
 
     /**
