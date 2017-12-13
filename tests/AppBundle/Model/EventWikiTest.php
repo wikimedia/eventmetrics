@@ -13,7 +13,7 @@ use AppBundle\Model\Organizer;
 use InvalidArgumentException;
 
 /**
- * Tests for the EventStat class.
+ * Tests for the EventWiki class.
  */
 class EventWikiTest extends PHPUnit_Framework_TestCase
 {
@@ -32,11 +32,11 @@ class EventWikiTest extends PHPUnit_Framework_TestCase
             'America/New_York'
         );
 
-        $wiki = new EventWiki($event, 'testwiki_p');
+        $wiki = new EventWiki($event, 'test.wikipedia');
 
         // Basic getters.
         $this->assertEquals($event, $wiki->getEvent());
-        $this->assertEquals('testwiki_p', $wiki->getDbName());
+        $this->assertEquals('test.wikipedia', $wiki->getDomain());
 
         // Make sure the association was made on the Event object, too.
         $this->assertEquals($wiki, $event->getWikis()[0]);

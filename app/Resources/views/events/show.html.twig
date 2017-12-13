@@ -50,7 +50,7 @@
                 <td>
                     {% if event.wikis|length > 0 %}
                         {% for wiki in event.wikis %}
-                            {{ wiki.dbName }}
+                            {{ wiki.domain }}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
                     {% else %}

@@ -15,10 +15,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     name="event_wiki",
  *     indexes={
  *         @ORM\Index(name="ew_event", columns={"ew_event_id"}),
- *         @ORM\Index(name="ew_wiki", columns={"ew_dbname"})
+ *         @ORM\Index(name="ew_domain", columns={"ew_domain"}),
+ *         @ORM\Index(name="ew_event_domain", columns={"ew_event_id", "ew_domain"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="ew_event_wiki", columns={"ew_event_id", "ew_dbname"})
+ *         @ORM\UniqueConstraint(name="ew_event_wiki", columns={"ew_event_id", "ew_domain"})
  *     },
  *     options={"engine":"InnoDB"}
  * )
@@ -43,22 +44,22 @@ class EventWiki
     protected $event;
 
     /**
-     * @ORM\Column(name="ew_dbname", type="string", length=32, nullable=false)
+     * @ORM\Column(name="ew_domain", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="")
-     * @var string Database name of the wiki. Corresponds to `dbname` in `meta`.`wiki`.
+     * @var string Domain of the wiki, without the .org.
      */
-    protected $dbName;
+    protected $domain;
 
     /**
      * Event constructor.
      * @param Event $event Event that this EventWiki belongs to.
-     * @param string $dbName Database name of the wiki. Corresponds to `dbname` in `meta`.`wiki`.
+     * @param string $domain Domain name of the wiki, without the .org.
      */
-    public function __construct(Event $event, $dbName = null)
+    public function __construct(Event $event, $domain = null)
     {
         $this->event = $event;
         $this->event->addWiki($this);
-        $this->dbName = $dbName;
+        $this->domain = $domain;
     }
 
     /**
@@ -70,10 +71,10 @@ class EventWiki
     }
 
     /**
-     * Get the database name.
+     * Get the domain name.
      */
-    public function getDbName()
+    public function getDomain()
     {
-        return $this->dbName;
+        return $this->domain;
     }
 }

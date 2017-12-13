@@ -168,7 +168,7 @@ class EventController extends Controller
                 'title' => $event->getProgram()->getTitle(),
             ]);
         } elseif ($form->isSubmitted() && !$form->isValid()) {
-            $this->handleEvenetWikiErrors($form);
+            $this->handleEventWikiErrors($form);
         }
 
         return $form;
@@ -178,7 +178,7 @@ class EventController extends Controller
      * Consolidate errors of wikis associated with the event.
      * @param  Form $form
      */
-    private function handleEvenetWikiErrors(Form $form)
+    private function handleEventWikiErrors(Form $form)
     {
         $numWikiErrors = count($form['wikis']->getErrors(true));
         if ($numWikiErrors > 0) {
@@ -263,11 +263,11 @@ class EventController extends Controller
             function ($wikiObjects) {
                 $wikis = $wikiObjects->toArray();
                 return array_map(function ($wiki) {
-                    return $wiki->getDbName();
+                    return $wiki->getDomain();
                 }, $wikis);
             },
-            function ($dbNames) use ($event, $eventWikiRepo) {
-                return $this->normalizeEventWikis($dbNames, $event, $eventWikiRepo);
+            function ($wikis) use ($event, $eventWikiRepo) {
+                return $this->normalizeEventWikis($wikis, $event, $eventWikiRepo);
             }
         );
     }
@@ -284,14 +284,14 @@ class EventController extends Controller
     private function normalizeEventWikis($wikis, Event $event, EventWikiRepository $eventWikiRepo)
     {
         return array_map(function ($wiki) use ($event, $eventWikiRepo) {
-            $normalized = $eventWikiRepo->getDbNameFromEventWikiInput($wiki);
+            $domain = $eventWikiRepo->getDomainFromEventWikiInput($wiki);
             $eventWiki = $eventWikiRepo->findOneBy([
                 'event' => $event,
-                'dbName' => $normalized,
+                'domain' => $domain,
             ]);
 
             if ($eventWiki === null) {
-                $eventWiki = new EventWiki($event, $normalized);
+                $eventWiki = new EventWiki($event, $domain);
             }
 
             return $eventWiki;
