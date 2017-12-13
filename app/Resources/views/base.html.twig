@@ -17,28 +17,28 @@
             {# For $.i18n, loaded in application.js #}
             i18nLang = "{{ lang() }}";
             i18nPath = "{{ asset('i18n/' ~ lang() ~ '.json') }}";
+            i18nEnPath = "{{ asset('i18n/en.json') }}";
         </script>
 
         {% block javascripts %}
-            {% javascripts '@jquery_js' %}
-                <script type="text/javascript" src="{{ asset_url }}"></script>
-            {% endjavascripts %}
-            {% javascripts '@jquery_i18n' %}
-                <script type="text/javascript" src="{{ asset_url }}"></script>
-            {% endjavascripts %}
-            {% javascripts '@bootstrap_js' %}
-                <script type="text/javascript" src="{{ asset_url }}"></script>
-            {% endjavascripts %}
-            {% javascripts '%kernel.root_dir%/Resources/assets/js/*' %}
-                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% javascripts
+                '@jquery_js'
+                '@jquery_i18n'
+                '%kernel.root_dir%/Resources/assets/js/*'
+                output='js/application.js'
+            %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+            <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
             {% endjavascripts %}
         {% endblock %}
         {% block stylesheets %}
-            {% stylesheets '%kernel.root_dir%/Resources/assets/css/*' filter='cssrewrite' %}
-                <link rel="stylesheet" href="{{ asset_url }}" />
-            {% endstylesheets %}
-            {% stylesheets '@bootstrap_css' %}
-                <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+            <link rel="stylesheet" type="text/css" media="screen" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+            <link rel="stylesheet" type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
+            {% stylesheets '%kernel.root_dir%/Resources/assets/css/*'
+                 filter='scssphp,cssrewrite'
+                 output='css/application.css'
+            %}
+            <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
             {% endstylesheets %}
         {% endblock %}
     </head>

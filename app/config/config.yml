@@ -58,38 +58,6 @@ assetic:
         jquery_i18n:
             inputs:
                 - %kernel.root_dir%/../app/Resources/assets/js/jquery.i18n.dist.js
-        bootstrap_css:
-            inputs:
-                - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/css/bootstrap.css
-                - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/css/bootstrap-theme.css
-            filters: [cssrewrite]
-        bootstrap_js:
-            inputs:
-                - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/js/bootstrap.js
-        bootstrap_glyphicons_ttf:
-            inputs:
-                - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf
-            output: "fonts/glyphicons-halflings-regular.ttf"
-        bootstrap_glyphicons_woff:
-            inputs:
-                - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/fonts/glyphicons-halflings-regular.woff
-            output: "fonts/glyphicons-halflings-regular.woff"
-        bootstrap_glyphicons_woff2:
-            inputs:
-                - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2
-            output: "fonts/glyphicons-halflings-regular.woff2"
-        bootstrap_glyphicons_svg:
-            inputs:
-                - %kernel.root_dir%/../vendor/twbs/bootstrap/dist/fonts/glyphicons-halflings-regular.svg
-            output: "fonts/glyphicons-halflings-regular.svg"
-        opensans_ttf:
-            inputs:
-                - %kernel.root_dir%/../app/Resources/fonts/OpenSans-Regular.ttf
-            output: "fonts/OpenSans-Regular.ttf"
-        fontawesome_ttf:
-            inputs:
-                - %kernel.root_dir%/../app/Resources/fonts/fontawesome-webfont.ttf
-            output: "fonts/fontawesome-webfont.ttf"
 
 # Doctrine Configuration
 doctrine:

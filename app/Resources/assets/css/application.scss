@@ -1,17 +1,16 @@
 @import 'mixins';
+@import url('https://tools-static.wmflabs.org/fontcdn/css?family=Open+Sans');
 
 html {
     height: 100%;
 }
 
 @font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-Regular.ttf');
-}
-
-@font-face {
     font-family: 'FontAwesome';
-    src: url('fonts/fontawesome-webfont.ttf');
+    src: url('https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'),
+        url('https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'),
+        url('https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf') format('truetype'),
+        url('https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.svg') format('svg');
 }
 
 .font-awesome {
