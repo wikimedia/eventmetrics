@@ -36,6 +36,8 @@ Local CSS and JavaScript live in [app/Resources/assets](https://github.com/wikim
 
 Ultimately all compiled assets are copied to the web/ directory (publicly accessible). This should happen automatically, but if not try dumping the assets with `php bin/console assetic:dump`. If you find you have to keep doing this regularly, you can continually watch for changes with `php bin/console assetic:watch`.
 
+When committing new asset changes, be sure to bump the version number in [config.yml](https://github.com/wikimedia/grantmetrics/blob/master/app/config/config.yml) under framework/assets/version. This will force the cache to be invalidated in production so that users download the newest assets.
+
 ## i18n
 
 All messages live in the i18n/ directory.
@@ -96,6 +98,7 @@ The application currently is running on WMF's Toolforge environment at https://t
 You'll need to run deploy cammands in the bash shell for the Kubernetes container:
 
 * `webservice --backend=kubernetes php5.6 shell`
+* `git pull`
 * `composer install`
 * `php bin/console cache:clear --env=prod`
 * `php bin/console assetic:dump --env=prod`
