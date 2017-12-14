@@ -25,6 +25,8 @@
 	"enable-event-times": "Label for checkbox to enable start/end dates for an event.",
 	"end-date": "Label for the end date input field.",
 	"end-time": "Label for the end time input field.",
+	"error-event-title-dup": "Error message shown when creating an event with the same title as an existing event. $1 the title.",
+	"error-invalid": "Generic error message shown next to a field, indicating that it is invalid.",
 	"error-program-title-dup": "Error message shown when creating a program with the same title as an existing program. $1 is the title.",
 	"error-title-reserved": "Error message shown when creating a program or event with a reserved (invalid) title. $1 is a list of the names that the title can't be.",
 	"error-usernames": "Error message shown when invalid usernames are entered. $1 is the number of usernames.",

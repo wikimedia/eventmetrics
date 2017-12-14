@@ -58,21 +58,19 @@
                     {% endif %}
                 </td>
             </tr>
-            {% if event.hasDates %}
-                <tr>
-                    <td>{{ msg('start-date') }}:</td>
-                    <td>
-                        {{ event.start|date('Y-m-d h:m') }}
-                        ({{ event.displayTimezone }})
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ msg('end-date') }}:</td>
-                    <td>
-                        {{ event.end|date('Y-m-d h:m') }}
-                    </td>
-                </tr>
-            {% endif %}
+            <tr>
+                <td>{{ msg('start-date') }}:</td>
+                <td>
+                    {{ event.start|date('Y-m-d h:m') }}
+                    ({{ event.displayTimezone }})
+                </td>
+            </tr>
+            <tr>
+                <td>{{ msg('end-date') }}:</td>
+                <td>
+                    {{ event.end|date('Y-m-d h:m') }}
+                </td>
+            </tr>
         </table>
 
         <div class="row event-stats">

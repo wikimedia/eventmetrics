@@ -214,33 +214,20 @@ class EventController extends Controller
                 'required' => false,
                 'constraints' => [new Valid()],
             ])
-            ->add('enableTime', CheckboxType::class, [
-                'mapped' => false,
-                'required' => false,
-                'data' => $event->hasDates(),
-            ])
             ->add('start', DateTimeType::class, [
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
                 'required' => false,
+                'constraints' => [new Valid()],
             ])
             ->add('end', DateTimeType::class, [
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
                 'required' => false,
+                'constraints' => [new Valid()],
             ])
             ->add('timezone', TimezoneType::class)
-            ->add('submit', SubmitType::class)
-            ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $formEvent) {
-                $event = $formEvent->getData();
-                $form = $formEvent->getForm();
-
-                if (!isset($event['enableTime'])) {
-                    unset($event['start']);
-                    unset($event['end']);
-                    $formEvent->setData($event);
-                }
-            });
+            ->add('submit', SubmitType::class);
 
         $builder->get('wikis')
             ->addModelTransformer($this->getWikiCallbackTransformer($event));

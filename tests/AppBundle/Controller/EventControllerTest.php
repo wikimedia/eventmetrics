@@ -81,7 +81,6 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $form = $this->crawler->selectButton('Submit')->form();
         $form['form[title]'] = ' The Lion King ';
         $form['form[wikis][0]'] = 'enwiki';
-        $form['form[enableTime]']->tick();
         $form['form[start][date]'] = '2017-01-01 18:00';
         $form['form[start][time]'] = '18:00';
         $form['form[end][date]'] = '2017-02-01';
@@ -127,7 +126,6 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         $form['form[title]'] = 'Pinocchio';
         $form['form[wikis][0]'] = 'de.wikipedia';
-        $form['form[enableTime]']->untick();
         $this->crawler = $this->client->submit($form);
 
         $event = $this->entityManager
@@ -144,8 +142,6 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             ->findOneBy(['title' => 'Pinocchio']);
         $this->entityManager->refresh($event);
         $this->assertNotNull($event);
-        $this->assertNull($event->getStart());
-        $this->assertNull($event->getEnd());
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['event' => $event]);

@@ -86,13 +86,17 @@ class Event
     protected $title;
 
     /**
-     * @ORM\Column(name="event_start", type="datetime", nullable=true)
+     * @ORM\Column(name="event_start", type="datetime", nullable=false)
+     * @Assert\DateTime(message="error-invalid", payload={"0"="start-date"})
+     * @Assert\NotNull(message="error-invalid", payload={"0"="start-date"})
      * @var DateTime The start date and time of the event.
      */
     protected $start;
 
     /**
-     * @ORM\Column(name="event_end", type="datetime", nullable=true)
+     * @ORM\Column(name="event_end", type="datetime", nullable=false)
+     * @Assert\DateTime(message="error-invalid", payload={"0"="end-date"})
+     * @Assert\NotNull(message="error-invalid", payload={"0"="end-date"})
      * @var DateTime The end date and time of the event.
      */
     protected $end;
@@ -219,15 +223,6 @@ class Event
         } else {
             $this->{$key} = null;
         }
-    }
-
-    /**
-     * Have dates been set on this Event?
-     * @return bool
-     */
-    public function hasDates()
-    {
-        return isset($this->start) && isset($this->end);
     }
 
     /**

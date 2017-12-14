@@ -11,21 +11,8 @@
         }
     }
 
-    .event__time.disabled {
-        opacity: 0.5;
-        pointer-events: none;
-    }
-
-    .enable-time__label {
-        display: inline-block;
-    }
-
     .event__time-selector .form-group {
         margin-bottom: 0;
-    }
-
-    .enable-time label::after {
-        content: '';
     }
 
     .event-metadata td {
