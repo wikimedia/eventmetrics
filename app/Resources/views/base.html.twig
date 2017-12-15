@@ -28,12 +28,15 @@
                 output='js/application.js'
             %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
-            <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
             {% endjavascripts %}
+            <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.19.4/moment.min.js"></script>
+            <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-daterangepicker/2.1.27/daterangepicker.min.js"></script>
         {% endblock %}
         {% block stylesheets %}
             <link rel="stylesheet" type="text/css" media="screen" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
             <link rel="stylesheet" type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
+            <link rel="stylesheet" type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-daterangepicker/2.1.27/daterangepicker.min.css">
             {% stylesheets '%kernel.root_dir%/Resources/assets/css/*'
                  filter='scssphp,cssrewrite'
                  output='css/application.css'

@@ -214,16 +214,21 @@ class EventController extends Controller
                 'required' => false,
                 'constraints' => [new Valid()],
             ])
+            ->add('time', TextType::class, [
+                'mapped' => false,
+            ])
             ->add('start', DateTimeType::class, [
-                'date_widget' => 'single_text',
-                'time_widget' => 'single_text',
+                'widget' => 'single_text',
                 'required' => false,
+                'html5' => false,
+                'view_timezone' => 'UTC',
                 'constraints' => [new Valid()],
             ])
             ->add('end', DateTimeType::class, [
-                'date_widget' => 'single_text',
-                'time_widget' => 'single_text',
+                'widget' => 'single_text',
                 'required' => false,
+                'html5' => false,
+                'view_timezone' => 'UTC',
                 'constraints' => [new Valid()],
             ])
             ->add('timezone', TimezoneType::class)

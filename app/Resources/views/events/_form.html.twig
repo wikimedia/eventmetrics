@@ -47,33 +47,26 @@
 </div>
 
 <fieldset class="event__time">
-    <div class="form-group">
+    <div class="form-group{% if form_errors(form.start) or form_errors(form.end) %} has-error{% endif %}">
         <div class="col-sm-2 text-right">
             <label class="control-label">{% spaceless %}
                 {{ msg('time') }}
             {% endspaceless %}</label>
         </div>
-        <div class="col-sm-2{% if form_errors(form.start) %} has-error{% endif %}">
-            {{ form_label(form.start.date, msg('start-date')) }}
-            {{ form_widget(form.start.date) }}
+        <div class="col-sm-8">
+            {{ form_widget(form.time) }}
         </div>
-        <div class="col-sm-2{% if form_errors(form.start) %} has-error{% endif %}">
-            {{ form_label(form.start.time, msg('start-time')) }}
-            {{ form_widget(form.start.time) }}
-        </div>
-        <div class="col-sm-4{% if form_errors(form.timezone) %} has-error{% endif %}">
-            {{ form_label(form.timezone, msg('timezone')) }}
-            {{ form_widget(form.timezone) }}
+        <div class="hidden">
+            {{ form_widget(form.start) }}
+            {{ form_widget(form.end) }}
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-sm-2 col-sm-offset-2{% if form_errors(form.end) %} has-error{% endif %}">
-            {{ form_label(form.end.date, msg('end-date')) }}
-            {{ form_widget(form.end.date) }}
+    <div class="form-group{% if form_errors(form.timezone) %} has-error{% endif %}">
+        <div class="col-sm-2 text-right">
+            {{ form_label(form.timezone, msg('timezone')) }}
         </div>
-        <div class="col-sm-2{% if form_errors(form.end) %} has-error{% endif %}">
-            {{ form_label(form.end.time, msg('end-time')) }}
-            {{ form_widget(form.end.time) }}
+        <div class="col-sm-8">
+            {{ form_widget(form.timezone) }}
         </div>
     </div>
 </fieldset>

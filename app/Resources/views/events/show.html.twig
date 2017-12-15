@@ -35,10 +35,10 @@
             </button>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="#">Export totals as wiki table</a>
+                    <a href="#">{{ msg('export-totals-wiki-table') }}</a>
                 </li>
                 <li>
-                    <a href="#">Export raw data as CSV</a>
+                    <a href="#">{{ msg('export-raw-data-csv') }}</a>
                 </li>
             </ul>
         </div>
@@ -50,8 +50,7 @@
                 <td>
                     {% if event.wikis|length > 0 %}
                         {% for wiki in event.wikis %}
-                            {{ wiki.domain }}
-                            {% if not loop.last %},{% endif %}
+                            {{ wiki.domain }}{% if not loop.last %},{% endif %}
                         {% endfor %}
                     {% else %}
                         {{ msg('all') }}
@@ -61,14 +60,14 @@
             <tr>
                 <td>{{ msg('start-date') }}:</td>
                 <td>
-                    {{ event.start|date('Y-m-d h:m') }}
+                    {{ event.start|date_format }}
                     ({{ event.displayTimezone }})
                 </td>
             </tr>
             <tr>
                 <td>{{ msg('end-date') }}:</td>
                 <td>
-                    {{ event.end|date('Y-m-d h:m') }}
+                    {{ event.end|date_format }}
                 </td>
             </tr>
         </table>

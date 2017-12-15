@@ -81,10 +81,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $form = $this->crawler->selectButton('Submit')->form();
         $form['form[title]'] = ' The Lion King ';
         $form['form[wikis][0]'] = 'enwiki';
-        $form['form[start][date]'] = '2017-01-01 18:00';
-        $form['form[start][time]'] = '18:00';
-        $form['form[end][date]'] = '2017-02-01';
-        $form['form[end][time]'] = '21:00';
+        $form['form[start]'] = '2017-01-01 18:00';
+        $form['form[end]'] = '2017-02-01 21:00';
         $form['form[timezone]'] = 'America/New_York';
         $this->crawler = $this->client->submit($form);
 
