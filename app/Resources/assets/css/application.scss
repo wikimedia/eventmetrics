@@ -31,7 +31,16 @@ body {
 }
 
 .table th {
-    font-weight: normal;
+    font-weight: bold;
+    max-width: 250px;
+}
+
+.table td {
+    max-width: 250px;
+}
+
+.center-align-cell {
+    text-align: center;
 }
 
 .form-horizontal label {
