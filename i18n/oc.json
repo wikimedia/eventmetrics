@@ -5,6 +5,7 @@
 	"close": "Tampar",
 	"documentation": "Documentacion",
 	"feedback": "Vejaires",
+	"no-results": "Cap de resultat pas trobat",
 	"num-days": "{{PLURAL: $1|jorn|jorns}}",
 	"num-hours": "{{PLURAL:$1|ora|oras}}",
 	"num-minutes": "{{PLURAL:$1|minuta|minutas}}",

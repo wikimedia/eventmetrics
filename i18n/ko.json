@@ -7,6 +7,7 @@
 	"feedback": "피드백",
 	"help-translate": "변역 돕기",
 	"logout": "로그아웃",
+	"no-results": "결과가 없습니다",
 	"num-days": "{{PLURAL: $1|일}}",
 	"num-hours": "{{PLURAL: $1|시간}}",
 	"num-minutes": "{{PLURAL: $1|분}}",

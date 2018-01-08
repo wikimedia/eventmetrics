@@ -7,6 +7,7 @@
 	"feedback": "Повратне информације",
 	"help-translate": "Преведи",
 	"logout": "Одјава",
+	"no-results": "Нема резултата",
 	"num-days": "{{PLURAL:$1|дан|дана|дана}}",
 	"num-hours": "{{PLURAL:$1|сат|сата|сати}}",
 	"num-minutes": "{{PLURAL:$1|минут|минута|минута}}",

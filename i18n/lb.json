@@ -7,6 +7,7 @@
 	"feedback": "Feedback",
 	"help-translate": "Hëlleft iwwersetzen",
 	"logout": "Ausloggen",
+	"no-results": "Näischt fonnt",
 	"num-days": "{{PLURAL: $1|Dag|Deeg}}",
 	"num-hours": "{{PLURAL: $1|Stonn|Stonnen}}",
 	"num-minutes": "{{PLURAL: $1|Minutt|Minutten}}",

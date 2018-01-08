@@ -7,6 +7,7 @@
 	"feedback": "Tilbagemelding",
 	"help-translate": "Hjælp til med at oversætte",
 	"logout": "Log ud",
+	"no-results": "Ingen resultater blev fundet",
 	"num-days": "{{PLURAL: $1|dag|dage}}",
 	"num-hours": "{{PLURAL: $1|time|timer}}",
 	"num-minutes": "{{PLURAL: $1|minut|minutter}}",

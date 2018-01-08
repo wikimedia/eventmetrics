@@ -7,6 +7,7 @@
 	"feedback": "প্রতিক্রিয়া",
 	"help-translate": "অনুবাদে সাহায্য করুন",
 	"logout": "প্রস্থান",
+	"no-results": "কোনো ফলাফল পাওয়া যায়নি",
 	"num-days": "{{PLURAL:$1|দিন}}",
 	"num-hours": "{{PLURAL: $1|ঘণ্টা}}",
 	"num-minutes": "{{PLURAL: $1|মিনিট}}",

@@ -48,6 +48,7 @@
 	"logout": "Label for Log out button\n{{Identical|Log out}}",
 	"my-programs": "Heading for the 'My Programs' page, which list all the programs an organizer has created.",
 	"new-editors": "Heading for the column listing the number of new editors that participated in a program, shown in the 'My Programs' table.",
+	"no-results": "Notice telling the user that no results were found",
 	"num-days": "Conditional PLURAL form of 'day'. $1 is the number.\n{{Identical|Day}}",
 	"num-hours": "Conditional PLURAL form of 'hour'. $1 is the number.\n{{Identical|Hour}}",
 	"num-minutes": "Conditional PLURAL form of 'minute'. $1 is the number.\n{{Identical|Minute}}",

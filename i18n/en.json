@@ -48,6 +48,7 @@
 	"logout": "Log out",
 	"my-programs": "My programs",
 	"new-editors": "New editors",
+	"no-results": "No results found",
 	"num-days": "{{PLURAL:$1|day|days}}",
 	"num-hours": "{{PLURAL:$1|hour|hours}}",
 	"num-minutes": "{{PLURAL:$1|minute|minutes}}",

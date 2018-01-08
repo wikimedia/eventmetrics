@@ -5,6 +5,7 @@
 	"documentation": "เอกสาร",
 	"help-translate": "ช่วยแปลภาษา",
 	"logout": "ออกจากระบบ",
+	"no-results": "ไม่พบผลลัพธ์",
 	"num-days": "{{PLURAL: $1|วัน|วัน}}",
 	"num-hours": "{{PLURAL: $1|ชั่วโมง|ชั่วโมง}}",
 	"num-minutes": "{{PLURAL: $1|นาที|นาที}}",

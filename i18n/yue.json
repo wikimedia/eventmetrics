@@ -2,6 +2,7 @@
 	"all": "全部",
 	"apply": "套用",
 	"cancel": "取消",
+	"no-results": "搵唔到",
 	"report-issue": "報告問題",
 	"view-source": "睇原始碼"
 }

@@ -23,7 +23,7 @@
                 <small class="text-muted">({{ msg('optional')|lower }})</small>
             </div>
             <div class="col-sm-8">
-                {{ form_widget(wiki) }}
+                {{ form_widget(wiki, {'attr': {'class': 'event-wiki-input', 'autocomplete': 'off'}}) }}
                 {% if invalidWiki %}
                     <span class="font-awesome invalid-input">&#xf071;</span>
                 {% endif %}
