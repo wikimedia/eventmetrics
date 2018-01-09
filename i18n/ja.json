@@ -6,6 +6,7 @@
 	"documentation": "説明書",
 	"feedback": "フィードバック",
 	"logout": "ログアウト",
+	"no-results": "該当するものはありません",
 	"num-days": "{{PLURAL: $1|日}}",
 	"num-hours": "{{PLURAL: $1|時間}}",
 	"num-minutes": "{{PLURAL: $1|分}}",

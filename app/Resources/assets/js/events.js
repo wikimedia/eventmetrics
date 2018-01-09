@@ -46,4 +46,54 @@ $(function () {
         $('#form_start').val(start.format('YYYY-MM-DDTHH:mm:00Z'));
         $('#form_end').val(end.format('YYYY-MM-DDTHH:mm:00Z'));
     });
+
+    populateValidWikis().then(function (validWikis) {
+        $('.event__wikis').on('focus', '.event-wiki-input', function () {
+            if ($(this).data().typeahead) {
+                return;
+            }
+
+            $(this).typeahead({
+                source: validWikis
+            });
+        });
+    });
 });
+
+/**
+ * Makes an API request to the sitematrix API, returning a promise
+ * that resolves with the shortened domain names of all the Wikipedias.
+ * @return {Deferred}
+ */
+function populateValidWikis()
+{
+    var dfd = $.Deferred();
+
+    $.ajax({
+        url: 'https://meta.wikimedia.org/w/api.php?action=sitematrix&' +
+            'formatversion=2&smsiteprop=url&smlangprop=site&format=json',
+        dataType: 'jsonp'
+    }).then(function (ret) {
+        delete ret.sitematrix.count;
+        var validWikis = [];
+
+        for (var lang in ret.sitematrix) {
+            var family = ret.sitematrix[lang];
+            if (!family.site) {
+                continue;
+            }
+
+            family.site.forEach(function (site) {
+                if (!site.closed && site.url.indexOf('.wikipedia.org') !== -1) {
+                    validWikis.push(
+                        site.url.replace(/\.org$/, '').replace(/^https?:\/\//, '')
+                    );
+                }
+            })
+        }
+
+        dfd.resolve(validWikis);
+    });
+
+    return dfd;
+}

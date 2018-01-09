@@ -7,6 +7,7 @@
 	"feedback": "Comentarios",
 	"help-translate": "Ayúdanos a traducir",
 	"logout": "Salir",
+	"no-results": "No se han encontrado resultados",
 	"num-days": "{{PLURAL: $1|día|días}}",
 	"num-hours": "{{PLURAL: $1|hora|horas}}",
 	"num-minutes": "{{PLURAL: $1|minuto|minutos}}",

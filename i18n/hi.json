@@ -7,6 +7,7 @@
 	"feedback": "आपके सुझाव",
 	"help-translate": "अनुवाद में सहायता करें",
 	"logout": "सत्रान्त",
+	"no-results": "कोई परिणाम नहीं मिले",
 	"num-days": "{{PLURAL: $1|दिन|दिनों}}",
 	"num-hours": "{{PLURAL: $1|घण्टा|घण्टों}}",
 	"num-minutes": "{{PLURAL: $1|मिनट|मिनटों}}",

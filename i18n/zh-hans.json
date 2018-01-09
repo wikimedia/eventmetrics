@@ -7,6 +7,7 @@
 	"feedback": "反馈",
 	"help-translate": "帮助翻译",
 	"logout": "退出",
+	"no-results": "没有找到结果",
 	"num-days": "{{PLURAL:$1|天}}",
 	"num-hours": "{{PLURAL:$1|小时}}",
 	"num-minutes": "{{PLURAL:$1|分钟}}",

@@ -5,6 +5,7 @@
 	"documentation": "توثيق",
 	"help-translate": "المساهمة في الترجمة",
 	"logout": "تسجيل الخروج",
+	"no-results": "لم يتم العثور على نتائج",
 	"num-days": "{{PLURAL:$1|يوم|يوماً}}",
 	"num-hours": "{{PLURAL:$1|ساعة|ساعات}}",
 	"num-minutes": "{{PLURAL:$1|دقيقة|دقائق}}",

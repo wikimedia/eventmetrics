@@ -5,6 +5,7 @@
 	"documentation": "Documentație",
 	"help-translate": "Ajutați cu traducerea",
 	"logout": "Închide sesiunea",
+	"no-results": "Niciun rezultat găsit",
 	"num-days": "{{PLURAL:$1|zi|zile|de zile}}",
 	"num-hours": "{{PLURAL:$1|oră|ore|de ore}}",
 	"num-minutes": "{{PLURAL:$1|minut|minute|de minute}}",

@@ -5,6 +5,7 @@
 	"documentation": "Tài liệu",
 	"help-translate": "Giúp biên dịch",
 	"logout": "Đăng xuất",
+	"no-results": "Không tìm thấy kết quả",
 	"num-days": "{{PLURAL:$1|ngày|ngày}}",
 	"num-hours": "{{PLURAL:$1|giờ|giờ}}",
 	"num-minutes": "{{PLURAL:$1|phút|phút}}",

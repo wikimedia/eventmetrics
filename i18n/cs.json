@@ -6,6 +6,7 @@
 	"feedback": "Zpětná vazba",
 	"help-translate": "Pomozte s překladem",
 	"logout": "Odhlásit se",
+	"no-results": "Nenalezeny žádné výsledky",
 	"num-days": "{{PLURAL:$1|den|dny|dní}}",
 	"num-hours": "{{PLURAL:$1|hodina|hodiny|hodin}}",
 	"num-minutes": "{{PLURAL:$1|minuta|minuty|minut}}",

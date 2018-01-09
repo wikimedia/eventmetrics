@@ -5,6 +5,7 @@
 	"close": "Փակել",
 	"documentation": "Ձեռնարկ",
 	"logout": "Դուրս գալ",
+	"no-results": "Ոչինչ չի գտնվել",
 	"num-days": "{{PLURAL:$1|օր}}",
 	"num-hours": "{{PLURAL:$1|ժամ}}",
 	"num-minutes": "{{PLURAL:$1|րոպե}}",
