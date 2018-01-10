@@ -31,6 +31,7 @@ use AppBundle\Model\Traits\TitleUserTrait;
  * )
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("title", message="error-event-title-dup")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EventRepository")
  */
 class Event
 {
@@ -154,6 +155,15 @@ class Event
     public function getUserClassName()
     {
         return 'Participant';
+    }
+
+    /**
+     * Get the ID of the event;
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /***********
@@ -287,6 +297,25 @@ class Event
             return;
         }
         $this->stats->removeElement($eventStat);
+    }
+
+    /**
+     * Get the date of the last time the EventStat's were refreshed.
+     * @return DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Set the 'update' attribute, to be set after EventStats
+     * have been refreshed.
+     * @param DateTime $datestamp
+     */
+    public function setUpdated($datestamp)
+    {
+        $this->updated = $datestamp;
     }
 
     /****************

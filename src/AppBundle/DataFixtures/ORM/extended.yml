@@ -1,0 +1,30 @@
+AppBundle\Model\Organizer:
+    organizer1:
+        __construct: ['MusikAnimal']
+AppBundle\Model\Program:
+    program1:
+        __construct: ['@organizer1']
+        title: 'My_fun_program'
+AppBundle\Model\Event:
+    event1:
+        __construct: ['@program1']
+        title: 'Oliver and Company'
+        start: '2014-01-15'
+        end: '2015-01-25'
+AppBundle\Model\EventWiki:
+    enwiki:
+        __construct: ['@event1']
+        domain: 'en.wikipedia'
+    frwiki:
+        __construct: ['@event1']
+        domain: 'fr.wikipedia'
+    dewiki:
+        __construct: ['@event1']
+        domain: 'de.wikipedia'
+AppBundle\Model\Participant:
+    MusikAnimal:
+        __construct: ['@event1']
+        userId: 10584730
+    NiharikaKohli:
+        __construct: ['@event1']
+        userId: 30393229

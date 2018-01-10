@@ -1,86 +1,45 @@
 <mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="en">
 <siteinfo>
-<sitename>Wikipedia</sitename>
-<dbname>enwiki_p</dbname>
-<namespaces>
-<namespace key="-2" case="first-letter">Media</namespace>
-<namespace key="-1" case="first-letter">Special</namespace>
-<namespace key="0" case="first-letter"/>
-<namespace key="1" case="first-letter">Talk</namespace>
-<namespace key="2" case="first-letter">User</namespace>
-<namespace key="3" case="first-letter">User talk</namespace>
-<namespace key="4" case="first-letter">Wikipedia</namespace>
-<namespace key="5" case="first-letter">Wikipedia talk</namespace>
-<namespace key="6" case="first-letter">File</namespace>
-<namespace key="7" case="first-letter">File talk</namespace>
-<namespace key="8" case="first-letter">MediaWiki</namespace>
-<namespace key="9" case="first-letter">MediaWiki talk</namespace>
-<namespace key="10" case="first-letter">Template</namespace>
-<namespace key="11" case="first-letter">Template talk</namespace>
-<namespace key="12" case="first-letter">Help</namespace>
-<namespace key="13" case="first-letter">Help talk</namespace>
-<namespace key="14" case="first-letter">Category</namespace>
-<namespace key="15" case="first-letter">Category talk</namespace>
-<namespace key="90" case="first-letter">Thread</namespace>
-<namespace key="91" case="first-letter">Thread talk</namespace>
-<namespace key="92" case="first-letter">Summary</namespace>
-<namespace key="93" case="first-letter">Summary talk</namespace>
-<namespace key="100" case="first-letter">Test namespace 1</namespace>
-<namespace key="101" case="first-letter">Test namespace 1 talk</namespace>
-<namespace key="102" case="first-letter">Test namespace 2</namespace>
-<namespace key="103" case="first-letter">Test namespace 2 talk</namespace>
-<namespace key="460" case="case-sensitive">Campaign</namespace>
-<namespace key="461" case="case-sensitive">Campaign talk</namespace>
-<namespace key="710" case="first-letter">TimedText</namespace>
-<namespace key="711" case="first-letter">TimedText talk</namespace>
-<namespace key="828" case="first-letter">Module</namespace>
-<namespace key="829" case="first-letter">Module talk</namespace>
-<namespace key="830" case="first-letter">SecurePoll</namespace>
-<namespace key="831" case="first-letter">SecurePoll talk</namespace>
-<namespace key="866" case="first-letter">CNBanner</namespace>
-<namespace key="867" case="first-letter">CNBanner talk</namespace>
-<namespace key="1198" case="first-letter">Translations</namespace>
-<namespace key="1199" case="first-letter">Translations talk</namespace>
-<namespace key="2300" case="first-letter">Gadget</namespace>
-<namespace key="2301" case="first-letter">Gadget talk</namespace>
-<namespace key="2302" case="case-sensitive">Gadget definition</namespace>
-<namespace key="2303" case="case-sensitive">Gadget definition talk</namespace>
-<namespace key="2600" case="first-letter">Topic</namespace>
-<namespace key="5500" case="first-letter">Newsletter</namespace>
-<namespace key="5501" case="first-letter">Newsletter talk</namespace>
-</namespaces>
+    <sitename>Wikipedia</sitename>
+    <dbname>enwiki_p</dbname>
+    <namespaces>
+        <namespace key="-2" case="first-letter">Media</namespace>
+        <namespace key="-1" case="first-letter">Special</namespace>
+        <namespace key="0" case="first-letter"/>
+        <namespace key="1" case="first-letter">Talk</namespace>
+        <namespace key="6" case="first-letter">File</namespace>
+        <namespace key="7" case="first-letter">File talk</namespace>
+    </namespaces>
 </siteinfo>
 <page>
-<title>Test page</title>
-<ns>0</ns>
-<id>5</id>
-<revision>
-<id>1</id>
-<timestamp>2017-01-23T18:41:03Z</timestamp>
-<contributor>
-<username>MusikAnimal</username>
-<id>50</id>
-</contributor>
-<comment>test summary</comment>
-<model>wikitext</model>
-<format>text/x-wiki</format>
-<text xml:space="preserve" bytes="7">testing</text>
-<sha1>pr0s8e18148pxhgjfa0gjrvpy8fiyxc</sha1>
-</revision>
-<revision>
-<id>2</id>
-<parentid>1</parentid>
-<timestamp>2017-05-08T16:07:48Z</timestamp>
-<contributor>
-<username>NiharikaKohli</username>
-<id>51</id>
-</contributor>
-<model>wikitext</model>
-<format>text/x-wiki</format>
-<text xml:space="preserve" bytes="27">
-This is some test content
-</text>
-<sha1>f242lcvbjl36q4b34dz80h8akfioavm</sha1>
-</revision>
+    <title>Test page</title>
+    <ns>0</ns>
+    <id>5</id>
+    <revision>
+        <id>1</id>
+        <timestamp>2014-01-10T18:41:03Z</timestamp>
+        <contributor>
+            <username>MusikAnimal</username>
+            <id>50</id>
+        </contributor>
+        <comment>test summary</comment>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="7">testing</text>
+        <sha1>pr0s8e18148pxhgjfa0gjrvpy8fiyxc</sha1>
+    </revision>
+    <revision>
+        <id>2</id>
+        <parentid>1</parentid>
+        <timestamp>2014-01-20T16:07:48Z</timestamp>
+        <contributor>
+            <username>NiharikaKohli</username>
+            <id>51</id>
+        </contributor>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="27">This is some test content</text>
+        <sha1>f242lcvbjl36q4b34dz80h8akfioavm</sha1>
+    </revision>
 </page>
 </mediawiki>

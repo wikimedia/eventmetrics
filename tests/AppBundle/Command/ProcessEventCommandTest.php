@@ -1,0 +1,133 @@
+<?php
+
+namespace Tests\AppBundle\Command;
+
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use AppBundle\DataFixtures\ORM\LoadFixtures;
+use AppBundle\Command\ProcessEventCommand;
+use AppBundle\Model\Event;
+use AppBundle\Model\EventStat;
+
+/**
+ * Tests for the ProcessEventCommand.
+ */
+class ProcessEventCommandTest extends KernelTestCase
+{
+    /**
+     * @var ORMExecutor
+     */
+    private $fixtureExecutor;
+
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * @var ContainerAwareLoader
+     */
+    private $fixtureLoader;
+
+    /**
+     * @var CommandTester
+     */
+    private $commandTester;
+
+    /**
+     * Event created in the fixtures.
+     * @var Event
+     */
+    private $event;
+
+    public function setUp()
+    {
+        self::bootKernel();
+
+        /** @var \Doctrine\ORM\EntityManager $entityManager */
+        $this->entityManager = self::$kernel->getContainer()->get('doctrine')->getManager();
+
+        $this->fixtureExecutor = new ORMExecutor(
+            $this->entityManager,
+            new ORMPurger($this->entityManager)
+        );
+
+        $this->getFixtureLoader()->addFixture(new LoadFixtures('extended'));
+        $this->fixtureExecutor->execute($this->getFixtureLoader()->getFixtures());
+
+        // We need the event created in the fixtures.
+        $this->event = $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Oliver_and_Company']);
+
+        $application = new Application(self::$kernel);
+        $application->add(new ProcessEventCommand(self::$kernel->getContainer()));
+        $command = $application->find('app:process-event');
+        $this->commandTester = new CommandTester($command);
+    }
+
+    /**
+     * @return ContainerAwareLoader
+     */
+    private function getFixtureLoader()
+    {
+        if (!$this->fixtureLoader) {
+            $this->fixtureLoader = new ContainerAwareLoader(self::$kernel->getContainer());
+        }
+        return $this->fixtureLoader;
+    }
+
+    /**
+     * Start of test suite, run the command and make the assertions.
+     */
+    public function testProcess()
+    {
+        $this->nonexistentSpec();
+
+        $this->commandTester->execute(['eventId' => $this->event->getId()]);
+        $this->assertEquals(0, $this->commandTester->getStatusCode());
+
+        $this->numEventStatsSpec();
+
+        // Test each individual EventStat.
+        $this->newEditorsSpec();
+    }
+
+    /**
+     * Event that doesn't exist.
+     */
+    private function nonexistentSpec()
+    {
+        $this->commandTester->execute(['eventId' => 12345]);
+        $this->assertEquals(1, $this->commandTester->getStatusCode());
+    }
+
+    /**
+     * Number of EventStat's created.
+     */
+    private function numEventStatsSpec()
+    {
+        $eventStats = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findAll(['event' => $this->event]);
+        $this->assertEquals(1, count($eventStats));
+    }
+
+    /**
+     * Number of new editors.
+     */
+    private function newEditorsSpec()
+    {
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'new-editors'
+            ]);
+        $this->assertEquals(1, $eventStat->getValue());
+    }
+}

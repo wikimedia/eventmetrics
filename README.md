@@ -78,7 +78,7 @@ Then you can run the individual commands:
 * CodeSniffer (linting) - `./vendor/bin/phpcs -s .`
 * phpDocumentor (validate doc blocks) - `php phpDocumentor.phar -d src -t docs/api --template='checkstyle'`
 
-The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM/fixtures.yml`.
+The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM`. This data, along with what is populated in [install-mediawiki.sh](https://github.com/wikimedia/grantmetrics/blob/master/build/ci/install-mediawiki.sh), are intended to mimic production data so that you can run the tests locally against the replicas and get the same results as the test MediaWiki installation that is used for the CI build. The [basic fixture set](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/DataFixtures/ORM/basic.yml) is loaded by default. The [extended set](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/DataFixtures/ORM/extended.yml) supplies a lot more test data, and is meant for testing beyond the workflow of creating events, etc., such as statistics generation.
 
 Repository classes should not need tests. Add `@codeCoverageIgnore` to the bottom of the class summary so that coverage statistics are not affected.
 

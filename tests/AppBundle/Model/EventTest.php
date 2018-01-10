@@ -12,6 +12,7 @@ use AppBundle\Model\EventWiki;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use AppBundle\Model\Participant;
+use DateTime;
 
 /**
  * Tests for the Event class.
@@ -38,6 +39,7 @@ class EventTest extends KernelTestCase
             new \DateTime('2017-03-01'),
             'America/New_York'
         );
+        $this->assertNull($event->getId());
 
         $this->assertEquals($this->program, $event->getProgram());
         $this->assertEquals('My_program', $event->getTitle());
@@ -115,6 +117,11 @@ class EventTest extends KernelTestCase
 
         // Double-remove shouldn't error out.
         $event->removeStatistic($eventStat);
+
+        // Changing the 'updated' attribute.
+        $datetime = new DateTime('2017-01-01');
+        $event->setUpdated($datetime);
+        $this->assertEquals($datetime, $event->getUpdated());
     }
 
     /**

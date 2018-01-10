@@ -26,6 +26,7 @@ use InvalidArgumentException;
 class EventStat
 {
     const METRIC_TYPES = [
+        'new-editors',
         'retention',
         'pages-created',
         'pages-improved',
@@ -49,7 +50,7 @@ class EventStat
 
     /**
      * @ORM\Column(name="es_metric", type="string", length=32)
-     * @var string Name of the event metric, such 'retention', 'pages-created', 'pages-improved'.
+     * @var string Name of the event metric, such as 'retention', 'pages-created', 'pages-improved'.
      */
     protected $metric;
 
@@ -69,16 +70,16 @@ class EventStat
     {
         $this->event = $event;
         $this->event->addStatistic($this);
-        $this->assignMetric($metric, $value);
+        $this->setMetric($metric);
+        $this->value = $value;
     }
 
     /**
-     * Assign a metric and value to the class, throwing an exception
+     * Assign the metric to the class instance, throwing an exception
      * if it is of an unknown type.
-     * @param  string $metric
-     * @param  mixed $value
+     * @param string $metric
      */
-    private function assignMetric($metric, $value)
+    private function setMetric($metric)
     {
         if (!in_array($metric, self::METRIC_TYPES)) {
             throw new InvalidArgumentException(
@@ -86,6 +87,14 @@ class EventStat
             );
         }
         $this->metric = $metric;
+    }
+
+    /**
+     * Update the value associated with the EventStat.
+     * @param mixed $value
+     */
+    public function setValue($value)
+    {
         $this->value = $value;
     }
 

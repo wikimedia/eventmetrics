@@ -29,12 +29,18 @@ composer install
 mysql -e 'CREATE DATABASE enwiki_p;'
 php maintenance/install.php --dbtype mysql --dbuser root --dbname enwiki_p --dbpath $(pwd) --pass CIPass Wikipedia CIUser
 php maintenance/createAndPromote.php MusikAnimal 1234abcd --wiki enwiki_p
+php maintenance/createAndPromote.php NiharikaKohli 1234abcd --wiki enwiki_p
+php maintenance/createAndPromote.php Samwilson 1234abcd --wiki enwiki_p
 mysql -e 'CREATE DATABASE frwiki_p;'
 php maintenance/install.php --dbtype mysql --dbuser root --dbname frwiki_p --dbpath $(pwd) --pass CIPass Wikipédia CIUser
+php maintenance/createAndPromote.php MusikAnimal 1234abcd --wiki frwiki_p
+php maintenance/createAndPromote.php NiharikaKohli 1234abcd --wiki frwiki_p
 mysql -e 'CREATE DATABASE dewiki_p;'
 php maintenance/install.php --dbtype mysql --dbuser root --dbname dewiki_p --dbpath $(pwd) --pass CIPass Wikipedia CIUser
+php maintenance/createAndPromote.php MusikAnimal 1234abcd --wiki dewiki_p
 
 php maintenance/importDump.php --conf LocalSettings.php $originalDirectory/src/AppBundle/DataFixtures/MediaWiki/enwiki_p.xml --wiki enwiki_p
+php maintenance/importDump.php --conf LocalSettings.php $originalDirectory/src/AppBundle/DataFixtures/MediaWiki/frwiki_p.xml --wiki frwiki_p
 
 echo '
 require_once "$IP/extensions/CentralAuth/CentralAuth.php";
@@ -115,16 +121,6 @@ mysql -u root -e "CREATE DATABASE centralauth_p; USE centralauth_p; SOURCE centr
 php maintenance/migratePass0.php
 php maintenance/migratePass1.php
 
-echo '
-CREATE TABLE wiki (
-    dbname VARCHAR(32),
-    lang VARCHAR(12),
-    url TEXT
-);
-INSERT INTO wiki VALUES("enwiki", "en", "https://en.wikipedia.org");
-INSERT INTO wiki VALUES("dewiki", "de", "https://de.wikipedia.org");
-INSERT INTO wiki VALUES("frwiki", "fr", "https://fr.wikipedia.org");
-' >> meta_database.sql
-mysql -u root -e "CREATE DATABASE meta_p; USE meta_p; SOURCE meta_database.sql; GRANT all on meta_p.* to 'root'@'localhost';"
+mysql -u root -e "SOURCE $originalDirectory/src/AppBundle/DataFixtures/MediaWiki/post-install.sql"
 
 cd $originalDirectory
