@@ -46,7 +46,7 @@
                 </thead>
                 <tbody>
                     {% for event in program.events %}
-                        <tr class="event-entry text-center text-nowrap">
+                        <tr class="event-entry text-center">
                             <td>
                                 <a href="{{ path('Event', {'programTitle': program.title, 'title': event.title}) }}">{{ event.displayTitle }}</a>
                             </td>

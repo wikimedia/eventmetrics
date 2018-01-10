@@ -30,20 +30,18 @@
             </thead>
             <tbody>
                 {% for program in programs %}
-                    <tr class="program-entry text-nowrap">
+                    <tr class="program-entry">
                         <td>
                             <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
                         </td>
                         <td class="text-center text-nowrap">
                             <a href="{{ path('EditProgram', {'title': program.title}) }}"
-                                class="program-action program-action__edit text-muted"
-                            >
+                               class="program-action program-action__edit text-muted">
                                 <span class="glyphicon glyphicon-cog"></span>
                             </a>
                             <a href="{{ path('DeleteProgram', {'title': program.title}) }}"
-                                class="program-action program-action__delete text-danger"
-                                data-title="{{ program.displayTitle }}"
-                            >
+                               class="program-action program-action__delete text-danger"
+                               data-title="{{ program.displayTitle }}">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
                         </td>
