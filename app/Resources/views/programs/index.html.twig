@@ -30,7 +30,7 @@
             </thead>
             <tbody>
                 {% for program in programs %}
-                    <tr class="program-entry text-nowrap">
+                    <tr class="program-entry">
                         <td>
                             <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
                         </td>
