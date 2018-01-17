@@ -9,18 +9,12 @@ AppBundle\Model\Event:
     event1:
         __construct: ['@program1']
         title: 'Oliver and Company'
-        start: '2014-01-15'
-        end: '2015-01-25'
+        start: '2014-01-12'
+        end: '2014-02-20'
 AppBundle\Model\EventWiki:
     enwiki:
         __construct: ['@event1']
         domain: 'en.wikipedia'
-    frwiki:
-        __construct: ['@event1']
-        domain: 'fr.wikipedia'
-    dewiki:
-        __construct: ['@event1']
-        domain: 'de.wikipedia'
 AppBundle\Model\Participant:
     MusikAnimal:
         __construct: ['@event1']
@@ -28,3 +22,6 @@ AppBundle\Model\Participant:
     NiharikaKohli:
         __construct: ['@event1']
         userId: 30393229
+    Samwilson:
+        __construct: ['@event1']
+        userId: 6398

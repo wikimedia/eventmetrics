@@ -211,4 +211,31 @@ abstract class Repository extends EntityRepository
         $ret = $this->getUsernamesFromIds([$userId]);
         return isset($ret[0]['user_name']) ? $ret[0]['user_name'] : null;
     }
+
+    /**
+     * Get the table name for use when querying the replicas. This automatically
+     * appends _userindex if the 'database_replica_is_wikimedia' config option is set.
+     * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
+     * @param string $name Name of table.
+     * @param string $suffix Suffix to use instead of _userindex.
+     * @return string
+     */
+    protected function getTableName($name, $suffix = null)
+    {
+        $isWikimedia = (bool)$this->container
+            ->getParameter('database_replica_is_wikimedia');
+
+        if ($isWikimedia && $suffix !== null) {
+            return $name.'_'.$suffix;
+        }
+
+        // For 'revision' and 'logging' tables (actually views) on the WMF replicas,
+        // use the indexed versions (that have some rows hidden, e.g. for revdeleted users).
+        $isLoggingOrRevision = in_array($name, ['revision', 'logging', 'archive']);
+        if ($isWikimedia && $isLoggingOrRevision) {
+            $name = $name.'_userindex';
+        }
+
+        return $name;
+    }
 }

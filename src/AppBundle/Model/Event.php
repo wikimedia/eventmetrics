@@ -185,7 +185,7 @@ class Event
 
     /**
      * Get the start date of this Event.
-     * @return string
+     * @return DateTime
      */
     public function getStart()
     {
@@ -203,7 +203,7 @@ class Event
 
     /**
      * Get the end date of this Event.
-     * @return string
+     * @return DateTime
      */
     public function getEnd()
     {
@@ -377,7 +377,7 @@ class Event
 
     /**
      * Get the usernames of the Participants of this Event.
-     * @return ArrayCollection|string[]
+     * @return string[]
      */
     public function getParticipantNames()
     {

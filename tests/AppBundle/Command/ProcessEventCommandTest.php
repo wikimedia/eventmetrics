@@ -44,9 +44,19 @@ class ProcessEventCommandTest extends KernelTestCase
      */
     private $event;
 
+    /**
+     * Whether or not we're testing against the Wikimedia replicas.
+     * @var bool
+     */
+    private $isWikimedia;
+
     public function setUp()
     {
         self::bootKernel();
+
+        $this->isWikimedia = (bool)self::$kernel
+            ->getContainer()
+            ->getParameter('database_replica_is_wikimedia');
 
         /** @var \Doctrine\ORM\EntityManager $entityManager */
         $this->entityManager = self::$kernel->getContainer()->get('doctrine')->getManager();
@@ -95,6 +105,8 @@ class ProcessEventCommandTest extends KernelTestCase
 
         // Test each individual EventStat.
         $this->newEditorsSpec();
+        $this->pagesCreatedSpec();
+        $this->pagesImprovedSpec();
     }
 
     /**
@@ -114,7 +126,7 @@ class ProcessEventCommandTest extends KernelTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findAll(['event' => $this->event]);
-        $this->assertEquals(1, count($eventStats));
+        $this->assertEquals(3, count($eventStats));
     }
 
     /**
@@ -129,5 +141,33 @@ class ProcessEventCommandTest extends KernelTestCase
                 'metric' => 'new-editors'
             ]);
         $this->assertEquals(1, $eventStat->getValue());
+    }
+
+    /**
+     * Number of pages created.
+     */
+    private function pagesCreatedSpec()
+    {
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'pages-created'
+            ]);
+        $this->assertEquals($this->isWikimedia ? 6 : 2, $eventStat->getValue());
+    }
+
+    /**
+     * Number of pages improved.
+     */
+    private function pagesImprovedSpec()
+    {
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'pages-improved'
+            ]);
+        $this->assertEquals($this->isWikimedia ? 1267 : 4, $eventStat->getValue());
     }
 }

@@ -30,7 +30,6 @@ $(function () {
     $('#form_time').daterangepicker({
         timePicker: true,
         timePicker24Hour: is24HourFormat(),
-        minDate: moment.min(startDate, moment().startOf('day')),
         startDate: startDate,
         endDate: endDate,
         locale: {

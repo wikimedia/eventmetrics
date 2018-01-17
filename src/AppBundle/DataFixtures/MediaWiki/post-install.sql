@@ -16,6 +16,9 @@ CREATE TABLE wiki (
     url TEXT
 );
 INSERT INTO wiki VALUES("enwiki", "en", "https://en.wikipedia.org");
+
+-- This is used only for some integration tests.
+-- There is not actually a dewiki installed on the CI build.
 INSERT INTO wiki VALUES("dewiki", "de", "https://de.wikipedia.org");
-INSERT INTO wiki VALUES("frwiki", "fr", "https://fr.wikipedia.org");
+
 GRANT all on meta_p.* to 'root'@'localhost';

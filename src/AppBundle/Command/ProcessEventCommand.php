@@ -13,6 +13,7 @@ use Psr\Container\ContainerInterface;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Repository\EventRepository;
+use AppBundle\Repository\EventWikiRepository;
 use DateTime;
 
 /**
@@ -87,6 +88,7 @@ class ProcessEventCommand extends Command
 
         // Generate and persist each type of EventStat.
         $this->setNewEditors();
+        $this->setPagesEdited();
 
         // Save the EventStat's to the database.
         $this->flush();
@@ -101,6 +103,39 @@ class ProcessEventCommand extends Command
         $numNewEditors = $this->eventRepo->getNumNewEditors($this->event);
         $this->createOrUpdateEventStat('new-editors', $numNewEditors);
         $this->output->writeln(">> <info>New editors: $numNewEditors</info>");
+    }
+
+    /**
+     * Compute and persist a new EventStat for the number of pages created.
+     */
+    private function setPagesEdited()
+    {
+        $this->output->writeln("\nFetching number of pages created...");
+
+        $dbNames = $this->eventRepo->getDbNames($this->event);
+        $start = $this->event->getStart();
+        $end = $this->event->getEnd();
+        $usernames = $this->event->getParticipantNames();
+
+        $pagesImproved = 0;
+        $pagesCreated = 0;
+
+        foreach ($dbNames as $dbName) {
+            $ret = $this->eventRepo->getNumPagesEdited(
+                $dbName,
+                $start,
+                $end,
+                $usernames
+            );
+            $pagesImproved += $ret['edited'];
+            $pagesCreated += $ret['created'];
+        }
+
+        $this->createOrUpdateEventStat('pages-created', $pagesCreated);
+        $this->createOrUpdateEventStat('pages-improved', $pagesImproved);
+
+        $this->output->writeln(">> <info>Pages created: $pagesCreated</info>");
+        $this->output->writeln(">> <info>Pages improved: $pagesImproved</info>");
     }
 
     /**

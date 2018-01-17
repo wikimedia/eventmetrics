@@ -31,16 +31,11 @@ php maintenance/install.php --dbtype mysql --dbuser root --dbname enwiki_p --dbp
 php maintenance/createAndPromote.php MusikAnimal 1234abcd --wiki enwiki_p
 php maintenance/createAndPromote.php NiharikaKohli 1234abcd --wiki enwiki_p
 php maintenance/createAndPromote.php Samwilson 1234abcd --wiki enwiki_p
-mysql -e 'CREATE DATABASE frwiki_p;'
-php maintenance/install.php --dbtype mysql --dbuser root --dbname frwiki_p --dbpath $(pwd) --pass CIPass Wikipédia CIUser
-php maintenance/createAndPromote.php MusikAnimal 1234abcd --wiki frwiki_p
-php maintenance/createAndPromote.php NiharikaKohli 1234abcd --wiki frwiki_p
-mysql -e 'CREATE DATABASE dewiki_p;'
-php maintenance/install.php --dbtype mysql --dbuser root --dbname dewiki_p --dbpath $(pwd) --pass CIPass Wikipedia CIUser
-php maintenance/createAndPromote.php MusikAnimal 1234abcd --wiki dewiki_p
+
+# Installing multiple installations of MediaWiki takes a long time,
+# so we'll use just one wiki (enwiki_p) in our tests, for now...
 
 php maintenance/importDump.php --conf LocalSettings.php $originalDirectory/src/AppBundle/DataFixtures/MediaWiki/enwiki_p.xml --wiki enwiki_p
-php maintenance/importDump.php --conf LocalSettings.php $originalDirectory/src/AppBundle/DataFixtures/MediaWiki/frwiki_p.xml --wiki frwiki_p
 
 echo '
 require_once "$IP/extensions/CentralAuth/CentralAuth.php";
@@ -54,8 +49,6 @@ $wgCentralAuthDryRun = false;
 $wgConf = new SiteConfiguration;
 $wgLocalDatabases = [
     "enwiki_p",
-    "dewiki_p",
-    "frwiki_p",
 ];
 $wgConf->wikis = $wgLocalDatabases;
 $wgConf->suffixes = ["wiki_p"];
@@ -73,14 +66,10 @@ $wgConf->settings = [
 
     "wgScriptPath" => [
         "enwiki_p" => "/enwiki",
-        "dewiki_p" => "/dewiki",
-        "frwiki_p" => "/frwiki",
     ],
 
     "wgArticlePath" => [
         "enwiki_p" => "/enwiki/\$1", //for short urls
-        "dewiki_p" => "/dewiki/\$1",
-        "frwiki_p" => "/frwiki/\$1",
     ],
 
     "wgLanguageCode" => [

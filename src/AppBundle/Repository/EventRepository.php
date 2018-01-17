@@ -8,6 +8,8 @@ namespace AppBundle\Repository;
 use AppBundle\Model\Event;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\Expr\Join;
+use DateTime;
 
 /**
  * This class supplies and fetches data for the EventWiki class.
@@ -51,26 +53,59 @@ class EventRepository extends Repository
         return $stmt->fetchColumn(0);
     }
 
-    // public function getNumPagesCreated(Event $event)
-    // {
-    //     // TODO: Here we need to get the usernames
+    /**
+     * Get the database names of the EventWiki's belonging to the Event.
+     * @param  Event $event
+     * @return string[]
+     */
+    public function getDbNames(Event $event)
+    {
+        $projectUrls = array_map(function ($eventWiki) {
+            return 'https://'.$eventWiki->getDomain().'.org';
+        }, $event->getWikis()->toArray());
 
-    //     // $userIds = $event->getParticipantIds();
-    //     $start = $event->getStart()->format('YmdHis');
-    //     $end = $event->getEnd()->format('YmdHis');
+        $conn = $this->getMetaConnection();
+        $rqb = $conn->createQueryBuilder();
+        $rqb->select(["CONCAT(dbname, '_p') AS dbname"])
+            ->from('wiki')
+            ->where('url IN (:projectUrls)')
+            ->setParameter('projectUrls', $projectUrls, Connection::PARAM_STR_ARRAY);
+        $stmt = $rqb->execute();
+        return array_column($stmt->fetchAll(), 'dbname');
+    }
 
-    //     $conn = $this->getCentralAuthConnection();
-    //     $rqb = $conn->createQueryBuilder();
-    //     $rqb->select('COUNT(page_title)')
-    //         ->from('page')
-    //         ->where('page_namespace = 0')
-    //         ->andwhere('rev_parent_id = 0')
-    //         ->andwhere('rev_timestamp BETWEEN :start AND :end')
-    //         ->andwhere('rev_user_text IN ("MusikAnimal")')
-    //         ->setParameter('start', $start)
-    //         ->setParameter('end', $end);
-    //     $stmt = $rqb->execute();
+    /**
+     * Get the number of pages edited and created within the timeframe
+     * and for the given users.
+     * @param  string   $dbName Database name such as 'enwiki_p'.
+     * @param  DateTime $start
+     * @param  DateTime $end
+     * @param  string[] $usernames
+     * @return array With keys 'edited' and 'created'.
+     */
+    public function getNumPagesEdited($dbName, DateTime $start, DateTime $end, $usernames)
+    {
+        $start = $start->format('YmdHis');
+        $end = $end->format('YmdHis');
 
-    //     return $stmt->fetchColumn(0);
-    // }
+        $conn = $this->getReplicaConnection();
+        $rqb = $conn->createQueryBuilder();
+
+        $revisionTable = $this->getTableName('revision');
+
+        $rqb->select([
+                'COUNT(DISTINCT(page_title)) AS edited',
+                'SUM(CASE WHEN rev_parent_id = 0 THEN 1 ELSE 0 END) AS created',
+            ])
+            ->from("$dbName.page")
+            ->join("$dbName.page", "$dbName.$revisionTable", null, 'rev_page = page_id')
+            ->where('page_namespace = 0')
+            ->andwhere('rev_timestamp BETWEEN :start AND :end')
+            ->andwhere('rev_user_text IN (:usernames)')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+
+        return $rqb->execute()->fetch();
+    }
 }

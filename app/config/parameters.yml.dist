@@ -14,6 +14,8 @@ parameters:
     database_test_user: root
     database_test_password: ~
 
+    database_replica_is_wikimedia: 0
+
     database_replica_host: 127.0.0.1
     database_replica_port: ~
     database_replica_name: enwiki_p

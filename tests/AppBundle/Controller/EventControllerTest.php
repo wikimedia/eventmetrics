@@ -92,6 +92,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'The_Lion_King']);
+
         $this->assertNotNull($event);
         $this->assertEquals(
             'My_fun_program',
@@ -130,6 +131,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'The_Lion_King']);
         $this->assertNull($event);
+
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['domain' => 'en.wikipedia']);
@@ -140,10 +142,12 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             ->findOneBy(['title' => 'Pinocchio']);
         $this->entityManager->refresh($event);
         $this->assertNotNull($event);
+
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['event' => $event]);
         $this->assertNotNull($eventWiki);
+
         $this->assertEquals(
             'de.wikipedia',
             $eventWiki->getDomain()
