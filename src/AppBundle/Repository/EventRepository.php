@@ -12,7 +12,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use DateTime;
 
 /**
- * This class supplies and fetches data for the EventWiki class.
+ * This class supplies and fetches data for the Event class.
  * @codeCoverageIgnore
  */
 class EventRepository extends Repository
@@ -107,5 +107,51 @@ class EventRepository extends Repository
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
 
         return $rqb->execute()->fetch();
+    }
+
+    /**
+     * Get database names of wikis attached to the global accounts
+     * with the given usernames.
+     * @param  string[] $usernames
+     * @return string[]
+     */
+    public function getCommonWikis($usernames)
+    {
+        $conn = $this->getCentralAuthConnection();
+        $rqb = $conn->createQueryBuilder();
+        $rqb->select("DISTINCT(CONCAT(lu_wiki, '_p')) AS dbname")
+            ->from('localuser')
+            ->where('lu_name IN (:usernames)')
+            ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+        $stmt = $rqb->execute();
+
+        return array_column($stmt->fetchAll(), 'dbname');
+    }
+
+    /**
+     * Get the usernames of users who met the retention threshold
+     * for the given wiki.
+     * @param string $dbName Database name.
+     * @param DateTime $start Search only from this time moving forward.
+     * @param string[] $usernames
+     * @return string[]
+     */
+    public function getUsersRetained($dbName, DateTime $start, $usernames)
+    {
+        $start = $start->format('YmdHis');
+        $conn = $this->getReplicaConnection();
+        $rqb = $conn->createQueryBuilder();
+
+        $revisionTable = $this->getTableName('revision');
+
+        $rqb->select('DISTINCT(rev_user_text) AS username')
+            ->from("$dbName.$revisionTable")
+            ->where('rev_timestamp > :start')
+            ->andwhere('rev_user_text IN (:usernames)')
+            ->setParameter('start', $start)
+            ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+        $stmt = $rqb->execute();
+
+        return array_column($stmt->fetchAll(), 'username');
     }
 }
