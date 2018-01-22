@@ -7,8 +7,9 @@ namespace AppBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 use Psr\Container\ContainerInterface;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
@@ -89,6 +90,7 @@ class ProcessEventCommand extends Command
         // Generate and persist each type of EventStat.
         $this->setNewEditors();
         $this->setPagesEdited();
+        $this->setRetention();
 
         // Save the EventStat's to the database.
         $this->flush();
@@ -136,6 +138,50 @@ class ProcessEventCommand extends Command
 
         $this->output->writeln(">> <info>Pages created: $pagesCreated</info>");
         $this->output->writeln(">> <info>Pages improved: $pagesImproved</info>");
+    }
+
+    /**
+     * Compute and persist the number of users who met the retention threshold.
+     */
+    private function setRetention()
+    {
+        $this->output->writeln("\nFetching retention...");
+
+        $end = $this->event->getEnd();
+        $usernames = $this->event->getParticipantNames();
+
+        $usersRetained = [];
+
+        // First grab the list of common wikis edited amongst all users,
+        // so we don't unnecessarily query all wikis.
+        $dbNames = $this->eventRepo->getCommonWikis($usernames);
+        sort($dbNames);
+
+        // Create and display progress bar for looping through wikis.
+        $progress = new ProgressBar($this->output, count($dbNames));
+        $progress->setFormatDefinition(
+            'custom',
+            " <comment>%message%</comment>\n".
+            " %current%/%max% [%bar%] %percent:3s%% %elapsed:6s% %memory:6s%\n"
+        );
+        $progress->setFormat('custom');
+        $progress->start();
+
+        foreach ($dbNames as $dbName) {
+            $progress->setMessage($dbName);
+            $progress->advance();
+            $ret = $this->eventRepo->getUsersRetained($dbName, $end, $usernames);
+            $usersRetained = array_unique(array_merge($ret, $usersRetained));
+        }
+
+        $progress->setMessage('');
+        $progress->finish();
+
+        $numUsersRetained = count($usersRetained);
+
+        $this->createOrUpdateEventStat('retention', $numUsersRetained);
+
+        $this->output->writeln(">> <info>Number of users retained: $numUsersRetained</info>");
     }
 
     /**
