@@ -63,7 +63,7 @@
 <page>
     <title>Another awesome article</title>
     <ns>0</ns>
-    <id>10</id>
+    <id>15</id>
     <revision>
         <id>4</id>
         <timestamp>2014-01-18T18:41:03Z</timestamp>
@@ -77,13 +77,26 @@
         <text xml:space="preserve" bytes="7">testing</text>
         <sha1>pr0s8e18148pxhgjfa0gjrvpy8fiyxc</sha1>
     </revision>
+    <revision>
+        <id>5</id>
+        <parentid>4</parentid>
+        <timestamp>2014-03-25T16:07:48Z</timestamp>
+        <contributor>
+            <username>NiharikaKohli</username>
+            <id>51</id>
+        </contributor>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="27">This is should be counted toward retention</text>
+        <sha1>f242lcvbjl36q4b34dz80h8akfioavm</sha1>
+    </revision>
 </page>
 <page>
     <title>Article created by non-participant</title>
     <ns>0</ns>
-    <id>10</id>
+    <id>20</id>
     <revision>
-        <id>5</id>
+        <id>6</id>
         <timestamp>2014-01-19T18:41:03Z</timestamp>
         <contributor>
             <username>CIUser</username>
@@ -96,16 +109,16 @@
         <sha1>pr0s8e18148pxhgjfa0gjrvpy8fiyxc</sha1>
     </revision>
     <revision>
-        <id>2</id>
-        <parentid>1</parentid>
-        <timestamp>2014-01-20T16:07:48Z</timestamp>
+        <id>7</id>
+        <parentid>6</parentid>
+        <timestamp>2014-02-25T16:07:48Z</timestamp>
         <contributor>
             <username>NiharikaKohli</username>
             <id>51</id>
         </contributor>
         <model>wikitext</model>
         <format>text/x-wiki</format>
-        <text xml:space="preserve" bytes="27">This is some test content</text>
+        <text xml:space="preserve" bytes="27">This is should not be counted toward retention</text>
         <sha1>f242lcvbjl36q4b34dz80h8akfioavm</sha1>
     </revision>
 </page>

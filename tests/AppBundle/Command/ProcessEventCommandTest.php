@@ -107,6 +107,7 @@ class ProcessEventCommandTest extends KernelTestCase
         $this->newEditorsSpec();
         $this->pagesCreatedSpec();
         $this->pagesImprovedSpec();
+        $this->retentionSpec();
     }
 
     /**
@@ -168,6 +169,20 @@ class ProcessEventCommandTest extends KernelTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved'
             ]);
-        $this->assertEquals($this->isWikimedia ? 1330 : 4, $eventStat->getValue());
+        $this->assertEquals($this->isWikimedia ? 1330 : 3, $eventStat->getValue());
+    }
+
+    /**
+     * Number of pages improved.
+     */
+    private function retentionSpec()
+    {
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'retention'
+            ]);
+        $this->assertEquals($this->isWikimedia ? 3 : 1, $eventStat->getValue());
     }
 }
