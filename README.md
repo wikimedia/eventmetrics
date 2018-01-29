@@ -13,9 +13,9 @@ A Wikimedia Foundation tool that provides grantees a simple, easy to use interfa
 After cloning the repository, run:
 
 * `composer install`.
-** Use `grantmetrics` as the `database_name`.
-** `database_replica_is_wikimedia` tells the tests to use the fixtures rather than query the replicas. Set this to `0` if you are working locally and are connected to the replicas.
-** Fill out your credentials accordingly.
+    * Use `grantmetrics` as the `database_name`.
+    * `database_replica_is_wikimedia` tells the tests to go off of live replica data when making assertions, rather than the fixtures. Set this to `1` if you are working locally and are connected to the replicas.
+    * Fill out your credentials accordingly.
 * `php bin/console server:start` to start the server.
 * You should be up and running at http://localhost:8000
 
