@@ -147,7 +147,7 @@ class ProcessEventCommand extends Command
     {
         $this->output->writeln("\nFetching retention...");
 
-        $end = $this->event->getEnd();
+        $end = $this->event->getEnd(); //->modify('+30 days');
         $usernames = $this->event->getParticipantNames();
 
         $usersRetained = [];
