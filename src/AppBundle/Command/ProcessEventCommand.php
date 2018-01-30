@@ -92,6 +92,9 @@ class ProcessEventCommand extends Command
         $this->setPagesEdited();
         $this->setRetention();
 
+        // Clear out any existing job records from the queue.
+        $this->removeJobFromQueue();
+
         // Save the EventStat's to the database.
         $this->flush();
     }
@@ -210,6 +213,16 @@ class ProcessEventCommand extends Command
         $this->entityManager->persist($eventStat);
 
         return $eventStat;
+    }
+
+    /**
+     * Remove any existing jobs for the Event from the queue.
+     */
+    private function removeJobFromQueue()
+    {
+        $numJobs = $this->event->getNumJobs();
+        $this->event->removeJobs();
+        $this->output->writeln("\n<comment>$numJobs job(s) removed from the queue.</comment>");
     }
 
     /**
