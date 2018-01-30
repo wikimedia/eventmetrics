@@ -147,7 +147,8 @@ class ProcessEventCommand extends Command
     {
         $this->output->writeln("\nFetching retention...");
 
-        $end = $this->event->getEnd(); //->modify('+30 days');
+        $retentionOffset = (int)$this->container->getParameter('retention_offset');
+        $end = $this->event->getEnd()->modify("+$retentionOffset days");
         $usernames = $this->event->getParticipantNames();
 
         $usersRetained = [];

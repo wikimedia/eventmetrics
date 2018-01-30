@@ -22,6 +22,8 @@ parameters:
     database_replica_user: root
     database_replica_password:
 
+    retention_offset: 7
+
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: ~
