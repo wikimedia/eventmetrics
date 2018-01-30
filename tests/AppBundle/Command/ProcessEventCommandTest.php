@@ -10,6 +10,7 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Command\ProcessEventCommand;
+use AppBundle\Model\Job;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 
@@ -98,6 +99,11 @@ class ProcessEventCommandTest extends KernelTestCase
     {
         $this->nonexistentSpec();
 
+        // Create a Job for the Event and flush it to the database.
+        $job = new Job($this->event);
+        $this->entityManager->persist($job);
+        $this->entityManager->flush();
+
         $this->commandTester->execute(['eventId' => $this->event->getId()]);
         $this->assertEquals(0, $this->commandTester->getStatusCode());
 
@@ -108,6 +114,8 @@ class ProcessEventCommandTest extends KernelTestCase
         $this->pagesCreatedSpec();
         $this->pagesImprovedSpec();
         $this->retentionSpec();
+
+        $this->jobFinishedSpec();
     }
 
     /**
@@ -184,5 +192,18 @@ class ProcessEventCommandTest extends KernelTestCase
                 'metric' => 'retention'
             ]);
         $this->assertEquals($this->isWikimedia ? 3 : 1, $eventStat->getValue());
+    }
+
+    /**
+     * There should be no pending jobs.
+     */
+    private function jobFinishedSpec()
+    {
+        $jobs = $this->entityManager
+            ->getRepository('Model:Job')
+            ->findOneBy([
+                'event' => $this->event,
+            ]);
+        $this->assertEquals(0, count($jobs));
     }
 }

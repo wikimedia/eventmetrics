@@ -61,8 +61,8 @@ class EventStat
     protected $value;
 
     /**
-     * Event constructor.
-     * @param int $event Event the statistic applies to.
+     * EventStat constructor.
+     * @param Event $event Event the statistic applies to.
      * @param string $metric Name of event metric, e.g. 'retention', 'pages-created', 'pages-improved'.
      * @param mixed $value Value of the associated metric.
      */

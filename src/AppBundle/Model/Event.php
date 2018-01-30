@@ -126,6 +126,13 @@ class Event
     protected $valid = true;
 
     /**
+     * One Event has many Jobs.
+     * @ORM\OneToMany(targetEntity="Job", mappedBy="event", orphanRemoval=true)
+     * @var ArrayCollection|Job[] Jobs for this Event.
+     */
+    protected $jobs;
+
+    /**
      * Event constructor.
      * @param Program $program Program that this event belongs to.
      * @param string $title Title of the event. This should be unique for the program.
@@ -144,6 +151,7 @@ class Event
         $this->participants = new ArrayCollection();
         $this->stats = new ArrayCollection();
         $this->wikis = new ArrayCollection();
+        $this->jobs = new ArrayCollection();
     }
 
     /**
@@ -276,7 +284,7 @@ class Event
     }
 
     /**
-     * Add an EventStat to this Program.
+     * Add an EventStat to this Event.
      * @param EventStat $eventStat
      */
     public function addStatistic(EventStat $eventStat)
@@ -288,7 +296,7 @@ class Event
     }
 
     /**
-     * Remove an eventStat from this Program.
+     * Remove an eventStat from this Event.
      * @param EventStat $eventStat
      */
     public function removeStatistic(EventStat $eventStat)
@@ -421,5 +429,39 @@ class Event
             return;
         }
         $this->wikis->removeElement($wiki);
+    }
+
+    /********
+     * JOBS *
+     ********/
+
+    /**
+     * Add a Job for this Event.
+     * @param Job $job
+     */
+    public function addJob(Job $job)
+    {
+        if ($this->jobs->contains($job)) {
+            return;
+        }
+        $this->jobs->add($job);
+    }
+
+    /**
+     * Get the number of jobs associated with this Event.
+     * (Ideally there'd only be one, but this is here just in case.)
+     * @return int
+     */
+    public function getNumJobs()
+    {
+        return count($this->jobs);
+    }
+
+    /**
+     * Remove all Jobs from this Event.
+     */
+    public function removeJobs()
+    {
+        $this->jobs->clear();
     }
 }
