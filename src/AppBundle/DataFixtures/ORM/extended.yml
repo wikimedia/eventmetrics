@@ -5,15 +5,26 @@ AppBundle\Model\Program:
     program1:
         __construct: ['@organizer1']
         title: 'My_fun_program'
+    program2:
+        __construct: ['@organizer1']
+        title: 'Foo_bar'
 AppBundle\Model\Event:
     event1:
         __construct: ['@program1']
         title: 'Oliver and Company'
         start: '2014-01-12'
         end: '2014-02-20'
+    event2:
+        __construct: ['@program2']
+        title: 'The Lion King'
+        start: '2014-01-12'
+        end: '2020-04-20'
 AppBundle\Model\EventWiki:
-    enwiki:
+    eventwiki1:
         __construct: ['@event1']
+        domain: 'en.wikipedia'
+    eventwiki2:
+        __construct: ['@event2']
         domain: 'en.wikipedia'
 AppBundle\Model\Participant:
     MusikAnimal:
@@ -24,4 +35,13 @@ AppBundle\Model\Participant:
         userId: 30393229
     Samwilson:
         __construct: ['@event1']
+        userId: 6398
+    MusikAnimal2:
+        __construct: ['@event2']
+        userId: 10584730
+    NiharikaKohli2:
+        __construct: ['@event2']
+        userId: 30393229
+    Samwilson2:
+        __construct: ['@event2']
         userId: 6398

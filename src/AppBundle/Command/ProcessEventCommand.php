@@ -154,12 +154,32 @@ class ProcessEventCommand extends Command
         $end = $this->event->getEnd()->modify("+$retentionOffset days");
         $usernames = $this->event->getParticipantNames();
 
-        $usersRetained = [];
+        if ((new DateTime()) < $end) {
+            $numUsersRetained = count($usernames);
+        } else {
+            // First grab the list of common wikis edited amongst all users,
+            // so we don't unnecessarily query all wikis.
+            $dbNames = $this->eventRepo->getCommonWikis($usernames);
+            sort($dbNames);
 
-        // First grab the list of common wikis edited amongst all users,
-        // so we don't unnecessarily query all wikis.
-        $dbNames = $this->eventRepo->getCommonWikis($usernames);
-        sort($dbNames);
+            $numUsersRetained = $this->getNumUsersRetained($dbNames, $end, $usernames);
+        }
+
+        $this->createOrUpdateEventStat('retention', $numUsersRetained);
+
+        $this->output->writeln(">> <info>Number of users retained: $numUsersRetained</info>");
+    }
+
+    /**
+     * Loop through the wikis and get the number of users retained.
+     * @param  string[] $dbNames Database names of the wikis to loop through.
+     * @param  DateTime $end Search from this day onward.
+     * @param  string[] $usernames Usernames to search for.
+     * @return int
+     */
+    private function getNumUsersRetained($dbNames, $end, $usernames)
+    {
+        $usersRetained = [];
 
         // Create and display progress bar for looping through wikis.
         $progress = new ProgressBar($this->output, count($dbNames));
@@ -181,11 +201,7 @@ class ProcessEventCommand extends Command
         $progress->setMessage('');
         $progress->finish();
 
-        $numUsersRetained = count($usersRetained);
-
-        $this->createOrUpdateEventStat('retention', $numUsersRetained);
-
-        $this->output->writeln(">> <info>Number of users retained: $numUsersRetained</info>");
+        return count($usersRetained);
     }
 
     /**
