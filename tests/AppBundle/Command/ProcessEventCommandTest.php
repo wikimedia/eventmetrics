@@ -169,7 +169,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved'
             ]);
-        $this->assertEquals($this->isWikimedia ? 1330 : 4, $eventStat->getValue());
+        $this->assertEquals($this->isWikimedia ? 1330 : 3, $eventStat->getValue());
     }
 
     /**
