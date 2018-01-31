@@ -72,27 +72,18 @@
             </tr>
         </table>
 
+        {% set colSize = 12 // (event.statistics|length + 1) %}
         <div class="row event-stats">
-            <div class="col-sm-2 col-sm-offset-1 text-center">
+            <div class="col-sm-{{ colSize }} text-center{% if colSize is even %} col-sm-offset-1{% endif %}">
                 <h4>{{ msg('participants') }}</h4>
-                <h3>{{ event.numParticipants }}</h3>
+                <h3>{{ event.numParticipants|num_format }}</h3>
             </div>
-            <div class="col-sm-2 text-center">
-                <h4>{{ msg('new-editors') }}</h4>
-                <h3>0</h3>
-            </div>
-            <div class="col-sm-2 text-center">
-                <h4>{{ msg('day-retention', [30]) }}</h4>
-                <h3>0</h3>
-            </div>
-            <div class="col-sm-2 text-center">
-                <h4>{{ msg('pages-created') }}</h4>
-                <h3>0</h3>
-            </div>
-            <div class="col-sm-2 text-center">
-                <h4>{{ msg('pages-improved') }}</h4>
-                <h3>0</h3>
-            </div>
+            {% for stat in event.statistics %}
+                <div class="col-sm-{{ colSize }} text-center">
+                    <h4>{{ msg(stat.metric, [stat.offset]) }}</h4>
+                    <h3>{{ stat.value|num_format }}</h3>
+                </div>
+            {% endfor %}
         </div>
 
         {% set content %}

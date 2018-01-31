@@ -165,7 +165,7 @@ class ProcessEventCommand extends Command
             $numUsersRetained = $this->getNumUsersRetained($dbNames, $end, $usernames);
         }
 
-        $this->createOrUpdateEventStat('retention', $numUsersRetained);
+        $this->createOrUpdateEventStat('retention', $numUsersRetained, $retentionOffset);
 
         $this->output->writeln(">> <info>Number of users retained: $numUsersRetained</info>");
     }
@@ -209,9 +209,11 @@ class ProcessEventCommand extends Command
      * existing one, if present.
      * @param  string $metric
      * @param  mixed $value
+     * @param  int $offset Offset value associated with the metric,
+     *   such as the number of days in evaluating retention.
      * @return EventStat
      */
-    private function createOrUpdateEventStat($metric, $value)
+    private function createOrUpdateEventStat($metric, $value, $offset = null)
     {
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
@@ -221,7 +223,7 @@ class ProcessEventCommand extends Command
             ]);
 
         if ($eventStat === null) {
-            $eventStat = new EventStat($this->event, $metric, $value);
+            $eventStat = new EventStat($this->event, $metric, $value, $offset);
         } else {
             $eventStat->setValue($value);
         }
