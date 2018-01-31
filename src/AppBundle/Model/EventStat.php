@@ -51,8 +51,16 @@ class EventStat
     /**
      * @ORM\Column(name="es_metric", type="string", length=32)
      * @var string Name of the event metric, such as 'retention', 'pages-created', 'pages-improved'.
+     *   This should correspond with an i18n message.
      */
     protected $metric;
+
+    /**
+     * @ORM\Column(name="es_metric_offset", type="integer", nullable=true)
+     * @var int Offset value for the metric, if applicable (e.g. num days retention).
+     *   The logic for how this is used lives in ProcessEventCommand.
+     */
+    protected $offset;
 
     /**
      * @ORM\Column(name="es_value", type="integer", options={"default":0})
@@ -65,13 +73,15 @@ class EventStat
      * @param Event $event Event the statistic applies to.
      * @param string $metric Name of event metric, e.g. 'retention', 'pages-created', 'pages-improved'.
      * @param mixed $value Value of the associated metric.
+     * @param int $offset Offset value associated with the metric, such as number of days retention.
      */
-    public function __construct(Event $event, $metric, $value)
+    public function __construct(Event $event, $metric, $value, $offset = null)
     {
         $this->event = $event;
         $this->event->addStatistic($this);
         $this->setMetric($metric);
         $this->value = $value;
+        $this->offset = $offset;
     }
 
     /**
@@ -114,6 +124,16 @@ class EventStat
     public function getMetric()
     {
         return $this->metric;
+    }
+
+    /**
+     * Get the metric offset for this EventStat,
+     * such as the number of days for the retention.
+     * @return int
+     */
+    public function getOffset()
+    {
+        return $this->offset;
     }
 
     /**
