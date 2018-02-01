@@ -19,6 +19,13 @@ After cloning the repository, run:
 * `php bin/console server:start` to start the server.
 * You should be up and running at http://localhost:8000
 
+## Usage
+
+The web interface is hopefully straightforward to use. However developers can also do some functionality via the console. In the same directory as the application:
+
+* `php bin/console app:process-event <eventId>` - will generate [`EventStat`](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/Model/EventStat.php)s for the Event with the ID `<eventId>`.
+* `php bin/console app:spawn-jobs` - queries the [Job queue](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/Model/Job.php) and runs `app:process-event` for Events that are in the queue. There is a limit on the number of concurrent jobs to ensure the database quota on the replicas is not exceeded.
+
 ## PHP and framework
 
 There is one internal [Symfony bundle](https://symfony.com/doc/current/bundles.html), called `AppBundle`. It contains a separate directory for the controllers, models, respositories, Twig helpers, and fixtures.
