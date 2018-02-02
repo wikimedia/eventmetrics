@@ -7,6 +7,7 @@ namespace Tests\AppBundle\Controller;
 
 use AppBundle\DataFixtures\ORM\LoadFixtures;
 use DateTime;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Integration/functional tests for the EventController.
@@ -47,6 +48,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->updateSpec();
         $this->showSpec();
         $this->participantsSpec();
+        $this->statsSpec();
         $this->deleteSpec();
     }
 
@@ -80,7 +82,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     {
         $form = $this->crawler->selectButton('Submit')->form();
         $form['form[title]'] = ' The Lion King ';
-        $form['form[wikis][0]'] = 'enwiki';
+        $form['form[wikis][0]'] = 'dewiki';
         $form['form[start]'] = '2017-01-01 18:00';
         $form['form[end]'] = '2017-02-01 21:00';
         $form['form[timezone]'] = 'America/New_York';
@@ -108,7 +110,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             ->findOneBy(['event' => $event]);
         $this->assertNotNull($eventWiki);
         $this->assertEquals(
-            'en.wikipedia',
+            'de.wikipedia',
             $eventWiki->getDomain()
         );
     }
@@ -124,7 +126,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $form = $this->crawler->selectButton('Submit')->form();
 
         $form['form[title]'] = 'Pinocchio';
-        $form['form[wikis][0]'] = 'de.wikipedia';
+        $form['form[wikis][0]'] = 'en.wikipedia';
         $this->crawler = $this->client->submit($form);
 
         $event = $this->entityManager
@@ -134,7 +136,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
-            ->findOneBy(['domain' => 'en.wikipedia']);
+            ->findOneBy(['domain' => 'de.wikipedia']);
         $this->assertNull($eventWiki);
 
         $event = $this->entityManager
@@ -149,7 +151,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->assertNotNull($eventWiki);
 
         $this->assertEquals(
-            'de.wikipedia',
+            'en.wikipedia',
             $eventWiki->getDomain()
         );
     }
@@ -217,6 +219,57 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             ['MusikAnimal'],
             $event->getParticipantNames()
         );
+    }
+
+    /**
+     * Generating statistics.
+     */
+    private function statsSpec()
+    {
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Pinocchio']);
+
+        // Without the XMLHttpRequest header (not AJAX).
+        $this->crawler = $this->client->request('GET', '/events/process/'.$event->getId());
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(403, $this->response->getStatusCode());
+
+        // Nonexistent Event.
+        $this->crawler = $this->client->request(
+            'GET',
+            '/events/process/12345',
+            [],
+            [],
+            ['HTTP_X-Requested-With' => 'XMLHttpRequest']
+        );
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(404, $this->response->getStatusCode());
+
+        $this->crawler = $this->client->request(
+            'GET',
+            '/events/process/'.$event->getId(),
+            [],
+            [],
+            ['HTTP_X-Requested-With' => 'XMLHttpRequest']
+        );
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(200, $this->response->getStatusCode());
+
+        // Quick assertion to make sure proper JSON is returned.
+        // The actual statistics are tested in the EventProcessorTest.
+        $ret = json_decode($this->response->getContent(), true);
+        $this->assertEquals('complete', $ret['status']);
+        $this->assertEquals(
+            ['new-editors', 'pages-created', 'pages-improved', 'retention'],
+            array_keys($ret['data'])
+        );
+
+        // Make sure the stats were saved.
+        $eventStats = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findBy(['event' => $event]);
+        $this->assertEquals(4, count($eventStats));
     }
 
     /**

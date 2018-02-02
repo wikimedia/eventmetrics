@@ -11,38 +11,31 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Psr\Container\ContainerInterface;
 use AppBundle\Model\Job;
+use AppBundle\Service\JobHandler;
 use DateTime;
 
 /**
- * The SpawnJobsCommand will query the jobs table and run the ProcessEventCommand
+ * The SpawnJobsCommand will query the jobs table and run the JobHandler
  * for any job that hasn't started. This is ran via a cron, but can also
- * be called manually via the console with `php bin/console app:process-events`.
+ * be called manually via the console with `php bin/console app:spawn-jobs`.
  */
 class SpawnJobsCommand extends Command
 {
-    // Max number of open connections allowed. We intentionally
-    // set this lower to allow for wiggle room for queries in the main
-    // application, unrelated to processing jobs.
-    const DATABASE_QUOTA = 5;
-
-    /** @var ContainerInterface The application's container interface. */
-    private $container;
-
-    /** @var OutputInterface The output of the process. */
-    private $output;
+    /** @var JobHandler Handles the job queue system. */
+    private $jobHandler;
 
     /** @var \Doctrine\ORM\EntityManager The Doctrine EntityManager. */
-    protected $entityManager;
+    private $entityManager;
 
     /**
      * Constructor for SpawnJobsCommand.
      * @param ContainerInterface $container
+     * @param JobHandler $jobHandler
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, JobHandler $jobHandler)
     {
-        $this->container = $container;
         $this->entityManager = $container->get('doctrine')->getManager();
-
+        $this->jobHandler = $jobHandler;
         parent::__construct();
     }
 
@@ -52,12 +45,14 @@ class SpawnJobsCommand extends Command
     protected function configure()
     {
         $this->setName('app:spawn-jobs')
-            ->setDescription('Spawn jobs to process all events that are in the queue.')
+            ->setDescription(
+                'Spawn jobs to process all events that are in the queue, respecting database quota.'
+            )
             ->addOption(
-                'dry',
+                'id',
                 null,
-                InputOption::VALUE_NONE,
-                'Manipulate job queue without actually spawning jobs'
+                InputOption::VALUE_REQUIRED,
+                'Spawn only the job with the given ID, if there is enough quota.'
             );
     }
 
@@ -65,88 +60,32 @@ class SpawnJobsCommand extends Command
      * Called when the command is executed.
      * @param InputInterface  $input
      * @param OutputInterface $output
+     * @return null
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = $output;
-
-        $this->output->writeln([
+        $output->writeln([
             "\nJob queue processor",
             '===================',
             '',
         ]);
 
-        $jobs = $this->getQueuedJobs();
-        $numJobs = count($jobs);
+        $jobId = $input->getOption('id');
 
-        if ($numJobs === 0) {
-            return $this->output->writeln(
-                "<comment>No jobs found in the queue.</comment>\n"
-            );
+        if (!$jobId) {
+            $this->jobHandler->spawnAll($output);
+            return null;
         }
 
-        $this->output->writeln("\nSpawning $numJobs unstarted job(s)...");
-
-        $this->processJobs($jobs, $input->getOption('dry'));
-
-        $this->entityManager->flush();
-        $this->output->writeln("\n<info>$numJobs job(s) started successfully.</info>\n");
-    }
-
-    /**
-     * Start a process for each given Job.
-     * Each Job will also be flagged as having been started.
-     * @param Job[] $jobs
-     * @param bool $dryRun If set, process won't actually be started.
-     */
-    private function processJobs($jobs, $dryRun = false)
-    {
-        foreach ($jobs as $job) {
-            // Get the associated event ID.
-            $eventId = $job->getEvent()->getId();
-
-            /**
-             * @codeCoverageIgnore
-             */
-            if ($dryRun === false) {
-                // Run a new process for the event asynchronously.
-                $process = new Process("php bin/console app:process-event $eventId");
-                $process->start();
-            }
-
-            // Flag the job as started.
-            $job->setStarted();
-        }
-    }
-
-    /**
-     * Get any unstarted Jobs, returning no more than the difference of
-     * self::DATABASE_QUOTA and the current number of open connections.
-     * @return Job[]
-     */
-    private function getQueuedJobs()
-    {
-        /** @var int Number of jobs to fire. This shouldn't be a negative number :) */
-        $limit = max([self::DATABASE_QUOTA - $this->getNumOpenConnections(), 0]);
-
-        return $this->entityManager
+        $job = $this->entityManager
             ->getRepository('Model:Job')
-            ->findBy(['started' => false], [], $limit);
-    }
+            ->findOneBy(['id' => (int)$jobId]);
 
-    /**
-     * Get the number of open connections to the replicas database.
-     * @return int
-     */
-    private function getNumOpenConnections()
-    {
-        $conn = $this->container
-            ->get('doctrine')
-            ->getManager('replicas')
-            ->getConnection();
-
-        return (int)$conn->query(
-            'SELECT COUNT(*) FROM information_schema.PROCESSLIST'
-        )->fetchColumn(0);
+        if ($job === null) {
+            $output->writeln("<error>No job found with ID $jobId</error>");
+            return 1;
+        } else {
+            $this->jobHandler->spawn($job, $output);
+        }
     }
 }

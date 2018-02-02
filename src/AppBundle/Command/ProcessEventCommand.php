@@ -8,14 +8,9 @@ namespace AppBundle\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Psr\Container\ContainerInterface;
-use AppBundle\Model\Event;
-use AppBundle\Model\EventStat;
-use AppBundle\Repository\EventRepository;
-use AppBundle\Repository\EventWikiRepository;
-use DateTime;
+use AppBundle\Service\EventProcessor;
 
 /**
  * The ProcessEventCommand handles the core logic of calculating statistics for an event.
@@ -28,23 +23,21 @@ class ProcessEventCommand extends Command
     /** @var OutputInterface The output of the process. */
     private $output;
 
-    /** @var \Doctrine\ORM\EntityManager The Doctrine EntityManager. */
-    protected $entityManager;
-
-    /** @var Event The event we're generating stats for. */
-    protected $event;
-
-    /** @var EventRepository The repository for the Event. */
-    protected $eventRepo;
+    /** @var EventProcessor Handles processing of a single event. */
+    private $eventProcessor;
 
     /**
      * Constructor for the ProcessEventCommand.
      * @param ContainerInterface $container
+     * @param EventProcessor $eventProcessor
      */
-    public function __construct(ContainerInterface $container)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        EventProcessor $eventProcessor
+    ) {
         $this->container = $container;
         $this->entityManager = $container->get('doctrine')->getManager();
+        $this->eventProcessor = $eventProcessor;
 
         parent::__construct();
     }
@@ -66,193 +59,21 @@ class ProcessEventCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = $output;
-
         $eventId = $input->getArgument('eventId');
-        $this->eventRepo = $this->entityManager->getRepository('Model:Event');
-        $this->eventRepo->setContainer($this->container);
-        $this->event = $this->eventRepo->findOneBy(['id' => $eventId]);
+        $eventRepo = $this->entityManager->getRepository('Model:Event');
+        $event = $eventRepo->findOneBy(['id' => $eventId]);
 
-        if ($this->event === null) {
-            $this->output->writeln("<error>Event with ID $eventId not found.</error>");
+        if ($event === null) {
+            $output->writeln("<error>Event with ID $eventId not found.</error>");
             return 1;
         }
 
-        $this->output->writeln([
+        $output->writeln([
             "\nEvent processor",
             '===============',
             '',
         ]);
 
-        $this->output->writeln('Event title: '.$this->event->getTitle());
-        $this->output->writeln('Event ID: '.$eventId);
-
-        // Generate and persist each type of EventStat.
-        $this->setNewEditors();
-        $this->setPagesEdited();
-        $this->setRetention();
-
-        // Clear out any existing job records from the queue.
-        $this->removeJobFromQueue();
-
-        // Save the EventStat's to the database.
-        $this->flush();
-    }
-
-    /**
-     * Compute and persist a new EventStat for the number of new editors.
-     */
-    private function setNewEditors()
-    {
-        $this->output->writeln("\nFetching number of new editors...");
-        $numNewEditors = $this->eventRepo->getNumNewEditors($this->event);
-        $this->createOrUpdateEventStat('new-editors', $numNewEditors);
-        $this->output->writeln(">> <info>New editors: $numNewEditors</info>");
-    }
-
-    /**
-     * Compute and persist a new EventStat for the number of pages created.
-     */
-    private function setPagesEdited()
-    {
-        $this->output->writeln("\nFetching number of pages created...");
-
-        $dbNames = $this->eventRepo->getDbNames($this->event);
-        $start = $this->event->getStart();
-        $end = $this->event->getEnd();
-        $usernames = $this->event->getParticipantNames();
-
-        $pagesImproved = 0;
-        $pagesCreated = 0;
-
-        foreach ($dbNames as $dbName) {
-            $ret = $this->eventRepo->getNumPagesEdited(
-                $dbName,
-                $start,
-                $end,
-                $usernames
-            );
-            $pagesImproved += $ret['edited'];
-            $pagesCreated += $ret['created'];
-        }
-
-        $this->createOrUpdateEventStat('pages-created', $pagesCreated);
-        $this->createOrUpdateEventStat('pages-improved', $pagesImproved);
-
-        $this->output->writeln(">> <info>Pages created: $pagesCreated</info>");
-        $this->output->writeln(">> <info>Pages improved: $pagesImproved</info>");
-    }
-
-    /**
-     * Compute and persist the number of users who met the retention threshold.
-     */
-    private function setRetention()
-    {
-        $this->output->writeln("\nFetching retention...");
-
-        $retentionOffset = (int)$this->container->getParameter('retention_offset');
-        $end = $this->event->getEnd()->modify("+$retentionOffset days");
-        $usernames = $this->event->getParticipantNames();
-
-        if ((new DateTime()) < $end) {
-            $numUsersRetained = count($usernames);
-        } else {
-            // First grab the list of common wikis edited amongst all users,
-            // so we don't unnecessarily query all wikis.
-            $dbNames = $this->eventRepo->getCommonWikis($usernames);
-            sort($dbNames);
-
-            $numUsersRetained = $this->getNumUsersRetained($dbNames, $end, $usernames);
-        }
-
-        $this->createOrUpdateEventStat('retention', $numUsersRetained, $retentionOffset);
-
-        $this->output->writeln(">> <info>Number of users retained: $numUsersRetained</info>");
-    }
-
-    /**
-     * Loop through the wikis and get the number of users retained.
-     * @param  string[] $dbNames Database names of the wikis to loop through.
-     * @param  DateTime $end Search from this day onward.
-     * @param  string[] $usernames Usernames to search for.
-     * @return int
-     */
-    private function getNumUsersRetained($dbNames, $end, $usernames)
-    {
-        $usersRetained = [];
-
-        // Create and display progress bar for looping through wikis.
-        $progress = new ProgressBar($this->output, count($dbNames));
-        $progress->setFormatDefinition(
-            'custom',
-            " <comment>%message%</comment>\n".
-            " %current%/%max% [%bar%] %percent:3s%% %elapsed:6s% %memory:6s%\n"
-        );
-        $progress->setFormat('custom');
-        $progress->start();
-
-        foreach ($dbNames as $dbName) {
-            $progress->setMessage($dbName);
-            $progress->advance();
-            $ret = $this->eventRepo->getUsersRetained($dbName, $end, $usernames);
-            $usersRetained = array_unique(array_merge($ret, $usersRetained));
-        }
-
-        $progress->setMessage('');
-        $progress->finish();
-
-        return count($usersRetained);
-    }
-
-    /**
-     * Persist an EventStat with given metric and value, or update the
-     * existing one, if present.
-     * @param  string $metric
-     * @param  mixed $value
-     * @param  int $offset Offset value associated with the metric,
-     *   such as the number of days in evaluating retention.
-     * @return EventStat
-     */
-    private function createOrUpdateEventStat($metric, $value, $offset = null)
-    {
-        $eventStat = $this->entityManager
-            ->getRepository('Model:EventStat')
-            ->findOneBy([
-                'event' => $this->event,
-                'metric' => $metric,
-            ]);
-
-        if ($eventStat === null) {
-            $eventStat = new EventStat($this->event, $metric, $value, $offset);
-        } else {
-            $eventStat->setValue($value);
-        }
-
-        $this->entityManager->persist($eventStat);
-
-        return $eventStat;
-    }
-
-    /**
-     * Remove any existing jobs for the Event from the queue.
-     */
-    private function removeJobFromQueue()
-    {
-        $numJobs = $this->event->getNumJobs();
-        $this->event->removeJobs();
-        $this->output->writeln("\n<comment>$numJobs job(s) removed from the queue.</comment>");
-    }
-
-    /**
-     * Save the persisted EventStat's to the database.
-     */
-    private function flush()
-    {
-        // Update the 'updated' attribute.
-        $this->event->setUpdated(new DateTime());
-        $this->entityManager->persist($this->event);
-
-        $this->entityManager->flush();
-        $this->output->writeln("\n<info>Event statistics successfully saved.</info>\n");
+        $this->eventProcessor->process($event, $output);
     }
 }

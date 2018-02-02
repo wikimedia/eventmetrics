@@ -12,6 +12,7 @@ use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Command\SpawnJobsCommand;
 use AppBundle\Model\Event;
 use AppBundle\Model\Job;
+use AppBundle\Service\JobHandler;
 use DateTime;
 
 /**
@@ -72,7 +73,10 @@ class SpawnJobsCommandTest extends KernelTestCase
             ->findOneBy(['title' => 'Oliver_and_Company']);
 
         $application = new Application(self::$kernel);
-        $application->add(new SpawnJobsCommand(self::$kernel->getContainer()));
+        $application->add(new SpawnJobsCommand(
+            self::$kernel->getContainer(),
+            self::$kernel->getContainer()->get('AppBundle\Service\JobHandler')
+        ));
         $command = $application->find('app:spawn-jobs');
         $this->commandTester = new CommandTester($command);
     }
@@ -104,6 +108,13 @@ class SpawnJobsCommandTest extends KernelTestCase
         $this->jobSpec($job);
 
         $this->spawnSpec($job);
+
+        // Revive the job and run once more.
+        $job->setStarted(false);
+        $this->entityManager->persist($job);
+        $this->entityManager->flush();
+
+        $this->spawnOneSpec($job);
     }
 
     /**
@@ -134,18 +145,34 @@ class SpawnJobsCommandTest extends KernelTestCase
     }
 
     /**
-     * Spawning a new job. This is ran in dry mode so that calculations aren't
-     * actually ran, since those assertions are made in ProcessEventCommandTest.
+     * Spawning all jobs.
      * @param Job $job
      */
     private function spawnSpec(Job $job)
     {
-        $this->commandTester->execute(['--dry' => true]);
-        $this->assertEquals(0, $this->commandTester->getStatusCode());
-
-        $output = $this->commandTester->getDisplay();
-        $this->assertContains('1 job(s) started successfully', $output);
-
+        $this->commandTester->execute([]);
         $this->assertTrue($job->getStarted());
+        $output = $this->commandTester->getDisplay();
+        $this->assertContains('Event statistics successfully saved', $output);
+        $this->assertEquals(0, $this->commandTester->getStatusCode());
+    }
+
+    /**
+     * Spawning a single job.
+     * @param Job $job
+     */
+    private function spawnOneSpec(Job $job)
+    {
+        // First try bogus job ID.
+        $this->commandTester->execute(['--id' => 12345]);
+        $output = $this->commandTester->getDisplay();
+        $this->assertContains('No job found', $output);
+        $this->assertEquals(1, $this->commandTester->getStatusCode());
+
+        $this->commandTester->execute(['--id' => $job->getId()]);
+        $this->assertTrue($job->getStarted());
+        $output = $this->commandTester->getDisplay();
+        $this->assertContains('Event statistics successfully saved', $output);
+        $this->assertEquals(0, $this->commandTester->getStatusCode());
     }
 }

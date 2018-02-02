@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
+use AppBundle\Model\Job;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use AppBundle\Model\Participant;
@@ -212,5 +213,27 @@ class EventTest extends KernelTestCase
             'error-title-reserved',
             $errors->get(0)->getMessage()
         );
+    }
+
+    /**
+     * Jobs associated with the Event.
+     */
+    public function testJobs()
+    {
+        $event = new Event(
+            $this->program,
+            '  My program  ',
+            '2017-01-01',
+            new \DateTime('2017-03-01'),
+            'America/New_York'
+        );
+        $job = new Job($event);
+
+        $this->assertTrue($event->hasJob());
+        $this->assertEquals(1, $event->getNumJobs());
+        $this->assertEquals($job, $event->getJobs()[0]);
+        $event->removeJobs();
+        $this->assertFalse($event->hasJob());
+        $this->assertEquals(0, $event->getNumJobs());
     }
 }

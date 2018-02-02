@@ -7,8 +7,6 @@ namespace AppBundle\Repository;
 
 use AppBundle\Model\Event;
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query\Expr\Join;
 use DateTime;
 
 /**

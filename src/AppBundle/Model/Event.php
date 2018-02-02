@@ -448,6 +448,15 @@ class Event
     }
 
     /**
+     * Get jobs associated with this Event (in theory there should be only one).
+     * @return Job[]
+     */
+    public function getJobs()
+    {
+        return $this->jobs;
+    }
+
+    /**
      * Get the number of jobs associated with this Event.
      * (Ideally there'd only be one, but this is here just in case.)
      * @return int
@@ -455,6 +464,15 @@ class Event
     public function getNumJobs()
     {
         return count($this->jobs);
+    }
+
+    /**
+     * Is there a job associated with this Event?
+     * @return boolean
+     */
+    public function hasJob()
+    {
+        return $this->getNumJobs() > 0;
     }
 
     /**

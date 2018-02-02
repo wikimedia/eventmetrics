@@ -71,22 +71,12 @@ In JavaScript, we use [jquery.i18n](https://github.com/wikimedia/jquery.i18n). T
 
 ## Tests
 
-Use `composer test` to run the full test suite. It will download all necessary components and run migrations as necessary.
+Use `composer test` to run the full test suite. The individual commands that it runs are as follows:
 
-Otherwise, first make sure your test schema is up-to-date:
-
-* `php bin/console doctrine:database:create --env=test --if-not-exists`
-* `php bin/console doctrine:migrations:migrate --env=test` to run the migrations.
-
-and that you have downloaded the necessary version of [phpDocumentor](https://www.phpdoc.org/):
-
-* `curl -L https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.0/phpDocumentor.phar --output phpDocumentor.phar`
-
-Then you can run the individual commands:
-
-* PHPUnit (unit/integration) - `./vendor/bin/simple-phpunit tests/`
-* CodeSniffer (linting) - `./vendor/bin/phpcs -s .`
-* phpDocumentor (validate doc blocks) - `php phpDocumentor.phar -d src -t docs/api --template='checkstyle'`
+* `composer migrate-test` – Creates and migrates the test database.
+* `composer lint` – Runs CodeSniffer that will test the PHP for linting errors.
+* `composer docs` – Validates PHP block-level documentation. If [phpDocumentor](https://www.phpdoc.org/) is not already installed, it will automatically be downloaded into the root of the repo, and will be ingored via .gitignore.
+* `composer unit` – Runs unit and integration tests with [PHPUnit](https://phpunit.de/).
 
 The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM`. This data, along with what is populated in [install-mediawiki.sh](https://github.com/wikimedia/grantmetrics/blob/master/build/ci/install-mediawiki.sh), are intended to mimic production data so that you can run the tests locally against the replicas and get the same results as the test MediaWiki installation that is used for the CI build. The [basic fixture set](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/DataFixtures/ORM/basic.yml) is loaded by default. The [extended set](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/DataFixtures/ORM/extended.yml) supplies a lot more test data, and is meant for testing beyond the workflow of creating events, etc., such as statistics generation.
 

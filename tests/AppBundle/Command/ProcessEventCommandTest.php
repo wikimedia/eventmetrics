@@ -1,4 +1,7 @@
 <?php
+/**
+ * This file contains only the ProcessEventCommandTest class.
+ */
 
 namespace Tests\AppBundle\Command;
 
@@ -13,6 +16,8 @@ use AppBundle\Command\ProcessEventCommand;
 use AppBundle\Model\Job;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
+use AppBundle\Service\EventProcessor;
+use Psr\Log\LoggerInterface;
 
 /**
  * Tests for the ProcessEventCommand.
@@ -55,12 +60,12 @@ class ProcessEventCommandTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $this->isWikimedia = (bool)self::$kernel
-            ->getContainer()
-            ->getParameter('database_replica_is_wikimedia');
+        $container = self::$kernel->getContainer();
+
+        $this->isWikimedia = (bool)$container->getParameter('database_replica_is_wikimedia');
 
         /** @var \Doctrine\ORM\EntityManager $entityManager */
-        $this->entityManager = self::$kernel->getContainer()->get('doctrine')->getManager();
+        $this->entityManager = $container->get('doctrine')->getManager();
 
         $this->fixtureExecutor = new ORMExecutor(
             $this->entityManager,
@@ -76,7 +81,10 @@ class ProcessEventCommandTest extends KernelTestCase
             ->findOneBy(['title' => 'Oliver_and_Company']);
 
         $application = new Application(self::$kernel);
-        $application->add(new ProcessEventCommand(self::$kernel->getContainer()));
+        $application->add(new ProcessEventCommand(
+            $container,
+            $container->get('AppBundle\Service\EventProcessor')
+        ));
         $command = $application->find('app:process-event');
         $this->commandTester = new CommandTester($command);
     }
