@@ -28,6 +28,7 @@ class EventTest extends KernelTestCase
         $organizer = new Organizer(50);
         $this->program = new Program($organizer);
     }
+
     /**
      * Tests constructor and basic getters.
      */
@@ -99,13 +100,11 @@ class EventTest extends KernelTestCase
             new \DateTime('2017-03-01'),
             'America/New_York'
         );
-
         $this->assertEquals(0, count($event->getStatistics()));
 
         // Add an EventStat.
         $eventStat = new EventStat($event, 'retention', 50);
         $event->addStatistic($eventStat);
-
         $this->assertEquals($eventStat, $event->getStatistics()[0]);
 
         // Try adding the same one, which shouldn't duplicate.
@@ -235,5 +234,22 @@ class EventTest extends KernelTestCase
         $event->removeJobs();
         $this->assertFalse($event->hasJob());
         $this->assertEquals(0, $event->getNumJobs());
+    }
+
+    /**
+     * Changing the 'updated' attribute.
+     */
+    public function testUpdatedAt()
+    {
+        $event = new Event(
+            $this->program,
+            '  My program  ',
+            '2017-01-01',
+            new \DateTime('2017-03-01'),
+            'America/New_York'
+        );
+        $datetime = new DateTime('2017-01-01');
+        $event->setUpdated($datetime);
+        $this->assertEquals($datetime, $event->getUpdated());
     }
 }

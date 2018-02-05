@@ -180,13 +180,23 @@ class ProcessEventCommandTest extends KernelTestCase
      */
     private function pagesCreatedSpec()
     {
+        // As an EventStat...
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findOneBy([
                 'event' => $this->event,
-                'metric' => 'pages-created'
+                'metric' => 'pages-created',
             ]);
         $this->assertEquals($this->isWikimedia ? 7 : 2, $eventStat->getValue());
+
+        // As an EventWikiStat...
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikis()[0],
+                'metric' => 'pages-created',
+            ]);
+        $this->assertEquals($this->isWikimedia ? 7 : 2, $eventWikiStat->getValue());
     }
 
     /**
@@ -194,13 +204,22 @@ class ProcessEventCommandTest extends KernelTestCase
      */
     private function pagesImprovedSpec()
     {
+        // As an EventStat...
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findOneBy([
                 'event' => $this->event,
-                'metric' => 'pages-improved'
+                'metric' => 'pages-improved',
             ]);
         $this->assertEquals($this->isWikimedia ? 1330 : 3, $eventStat->getValue());
+
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikis()[0],
+                'metric' => 'pages-improved',
+            ]);
+        $this->assertEquals($this->isWikimedia ? 1330 : 3, $eventWikiStat->getValue());
     }
 
     /**

@@ -294,7 +294,6 @@ class Event
         }
         $this->stats->add($eventStat);
     }
-
     /**
      * Remove an eventStat from this Event.
      * @param EventStat $eventStat

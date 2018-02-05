@@ -1,21 +1,22 @@
 <?php
 /**
- * This file contains only the EventStatTest class.
+ * This file contains only the EventWikiStatTest class.
  */
 
 namespace Tests\AppBundle\Model;
 
 use PHPUnit_Framework_TestCase;
 use AppBundle\Model\Event;
-use AppBundle\Model\EventStat;
+use AppBundle\Model\EventWiki;
+use AppBundle\Model\EventWikiStat;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use InvalidArgumentException;
 
 /**
- * Tests for the EventStat class.
+ * Tests for the EventWikiStat class.
  */
-class EventStatTest extends PHPUnit_Framework_TestCase
+class EventWikiStatTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Tests constructor and basic getters.
@@ -31,20 +32,22 @@ class EventStatTest extends PHPUnit_Framework_TestCase
             new \DateTime('2017-03-01'),
             'America/New_York'
         );
+        $eventWiki = new EventWiki($event);
 
-        $eventStat = new EventStat($event, 'retention', 50, 10);
+        $ews = new EventWikiStat($eventWiki, 'pages-created', 50);
 
         // Getters.
-        $this->assertEquals($event, $eventStat->getEvent());
-        $this->assertEquals('retention', $eventStat->getMetric());
-        $this->assertEquals(50, $eventStat->getValue());
-        $this->assertEquals(10, $eventStat->getOffset());
+        $this->assertEquals($event, $ews->getEvent());
+        $this->assertEquals($eventWiki, $ews->getWiki());
+        $this->assertEquals('pages-created', $ews->getMetric());
+        $this->assertEquals(50, $ews->getValue());
+        $this->assertEquals(null, $ews->getOffset());
 
         // Make sure the association was made on the Event object, too.
-        $this->assertEquals($eventStat, $event->getStatistics()[0]);
+        $this->assertEquals($ews, $eventWiki->getStatistics()[0]);
 
         // Invalid metric.
         $this->expectException(InvalidArgumentException::class);
-        $eventStat = new EventStat($event, 'invalid', 30);
+        $ews = new EventWikiStat($eventWiki, 'invalid', 30);
     }
 }
