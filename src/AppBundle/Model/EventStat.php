@@ -5,31 +5,37 @@
 
 namespace AppBundle\Model;
 
+use AppBundle\Model\Traits\StatTrait;
 use Doctrine\ORM\Mapping as ORM;
-use InvalidArgumentException;
 
 /**
- * An EventStat is a user who organizes a program.
+ * An EventStat is a statistic about a specific event.
  * @ORM\Entity
  * @ORM\Table(
  *     name="event_stat",
  *     indexes={
- *         @ORM\Index(name="es_metrics", columns={"es_event_id"}),
- *         @ORM\Index(name="es_event", columns={"es_event_id", "es_metric"})
+ *         @ORM\Index(name="es_event", columns={"es_event_id"}),
+ *         @ORM\Index(name="es_metric", columns={"es_event_id", "es_metric"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="es_event_metric", columns={"es_event_id", "es_metric"})
+ *         @ORM\UniqueConstraint(
+ *             name="es_event_metric",
+ *             columns={"es_event_id", "es_metric"}
+ *         )
  *     },
  *     options={"engine":"InnoDB"}
  * )
  */
 class EventStat
 {
+    /**
+     * Shared methods between EventStat and EventWikiStat models.
+     */
+    use StatTrait;
+
     const METRIC_TYPES = [
         'new-editors',
         'retention',
-        'pages-created',
-        'pages-improved',
     ];
 
     /**
@@ -85,74 +91,11 @@ class EventStat
     }
 
     /**
-     * Assign the metric to the class instance, throwing an exception
-     * if it is of an unknown type.
-     * @param string $metric
-     */
-    private function setMetric($metric)
-    {
-        if (!in_array($metric, self::METRIC_TYPES)) {
-            throw new InvalidArgumentException(
-                "'metric' must be of type: ".implode(', ', self::METRIC_TYPES)
-            );
-        }
-        $this->metric = $metric;
-    }
-
-    /**
-     * Update the value associated with the EventStat.
-     * @param mixed $value
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-    }
-
-    /**
      * Get the Event this EventStat applies to.
      * @return Event
      */
     public function getEvent()
     {
         return $this->event;
-    }
-
-    /**
-     * Get the metric type of this EventStat.
-     * @return string
-     */
-    public function getMetric()
-    {
-        return $this->metric;
-    }
-
-    /**
-     * Get the metric offset for this EventStat,
-     * such as the number of days for the retention.
-     * @return int
-     */
-    public function getOffset()
-    {
-        return $this->offset;
-    }
-
-    /**
-     * Get the value of the EventStat.
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Get valid types of metrics.
-     * @static
-     * @return string[]
-     * @codeCoverageIgnore
-     */
-    public static function getMetricTypes()
-    {
-        return self::METRIC_TYPES;
     }
 }

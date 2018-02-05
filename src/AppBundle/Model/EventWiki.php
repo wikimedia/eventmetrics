@@ -5,11 +5,13 @@
 
 namespace AppBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * An EventWiki belongs to an Event.
+ * An EventWiki belongs to an Event, and also connects an EventStat
+ * to a specific wiki and event.
  * @ORM\Entity
  * @ORM\Table(
  *     name="event_wiki",
@@ -51,6 +53,13 @@ class EventWiki
     protected $domain;
 
     /**
+     * One EventWiki has many EventStats.
+     * @ORM\OneToMany(targetEntity="EventStat", mappedBy="event_wiki", orphanRemoval=true)
+     * @var ArrayCollection|EventStat[] Statistics for this EventWiki.
+     */
+    protected $stats;
+
+    /**
      * Event constructor.
      * @param Event $event Event that this EventWiki belongs to.
      * @param string $domain Domain name of the wiki, without the .org.
@@ -60,10 +69,11 @@ class EventWiki
         $this->event = $event;
         $this->event->addWiki($this);
         $this->domain = $domain;
+        $this->stats = new ArrayCollection();
     }
 
     /**
-     * Get the Event the Participant is participating in.
+     * Get the Event this EventWiki belongs to.
      */
     public function getEvent()
     {
@@ -76,5 +86,42 @@ class EventWiki
     public function getDomain()
     {
         return $this->domain;
+    }
+
+    /**************
+     * STATISTICS *
+     **************/
+
+    /**
+     * Get statistics about this EventWiki.
+     * @return ArrayCollection|EventWikiStat[]
+     */
+    public function getStatistics()
+    {
+        return $this->stats;
+    }
+
+    /**
+     * Add an EventWikiStat to this EventWiki.
+     * @param EventWikiStat $eventWikiStat
+     */
+    public function addStatistic(EventWikiStat $eventWikiStat)
+    {
+        if ($this->stats->contains($eventWikiStat)) {
+            return;
+        }
+        $this->stats->add($eventWikiStat);
+    }
+
+    /**
+     * Remove an EventWikiStat from this EventWiki.
+     * @param EventWikiStat $eventStat
+     */
+    public function removeStatistic(EventWikiStat $eventWikiStat)
+    {
+        if (!$this->stats->contains($eventWikiStat)) {
+            return;
+        }
+        $this->stats->removeElement($eventWikiStat);
     }
 }
