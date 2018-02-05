@@ -115,7 +115,7 @@ class EventWiki
 
     /**
      * Remove an EventWikiStat from this EventWiki.
-     * @param EventWikiStat $eventStat
+     * @param EventWikiStat $eventWikiStat
      */
     public function removeStatistic(EventWikiStat $eventWikiStat)
     {

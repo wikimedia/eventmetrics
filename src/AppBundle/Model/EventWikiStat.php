@@ -76,7 +76,7 @@ class EventWikiStat
 
     /**
      * EventWikiStat constructor.
-     * @param EventWiki $event EventWiki the statistic applies to.
+     * @param EventWiki $eventWiki EventWiki the statistic applies to.
      * @param string $metric Name of event metric, e.g. 'retention', 'pages-created', 'pages-improved'.
      * @param mixed $value Value of the associated metric.
      * @param int $offset Offset value associated with the metric, such as number of days retention.

@@ -7,6 +7,7 @@ namespace AppBundle\Service;
 
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
+use AppBundle\Model\EventWikiStat;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -68,9 +69,9 @@ class EventProcessor
 
         $this->log('Processing event '.$event->getId());
 
-        // Generate and persist each type of EventStat.
+        // Generate and persist each type of EventStat/EventWikiStat.
         $this->setNewEditors();
-        $this->setPagesEdited();
+        // $this->setPagesEdited();
         $this->setRetention();
 
         // Clear out any existing job records from the queue.
@@ -100,7 +101,7 @@ class EventProcessor
     }
 
     /**
-     * Compute and persist a new EventStat for the number of pages created.
+     * Compute and persist a new EventWikiStat for the number of pages created.
      */
     private function setPagesEdited()
     {
@@ -168,7 +169,6 @@ class EventProcessor
      */
     private function getNumUsersRetained($dbNames, $end, $usernames)
     {
-
         // Create and display progress bar for looping through wikis.
         if ($this->output !== null) {
             $progress = new ProgressBar($this->output, count($dbNames));
