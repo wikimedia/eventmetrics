@@ -48,7 +48,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->updateSpec();
         $this->showSpec();
         $this->participantsSpec();
-        // $this->statsSpec();
+        $this->statsSpec();
         $this->deleteSpec();
     }
 
@@ -261,7 +261,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $ret = json_decode($this->response->getContent(), true);
         $this->assertEquals('complete', $ret['status']);
         $this->assertEquals(
-            ['new-editors', 'pages-created', 'pages-improved', 'retention'],
+            ['new-editors', 'wikis', 'pages-created', 'pages-improved', 'retention'],
             array_keys($ret['data'])
         );
 

@@ -52,27 +52,6 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get the database names of the EventWiki's belonging to the Event.
-     * @param  Event $event
-     * @return string[]
-     */
-    public function getDbNames(Event $event)
-    {
-        $projectUrls = array_map(function ($eventWiki) {
-            return 'https://'.$eventWiki->getDomain().'.org';
-        }, $event->getWikis()->toArray());
-
-        $conn = $this->getMetaConnection();
-        $rqb = $conn->createQueryBuilder();
-        $rqb->select(["CONCAT(dbname, '_p') AS dbname"])
-            ->from('wiki')
-            ->where('url IN (:projectUrls)')
-            ->setParameter('projectUrls', $projectUrls, Connection::PARAM_STR_ARRAY);
-        $stmt = $rqb->execute();
-        return array_column($stmt->fetchAll(), 'dbname');
-    }
-
-    /**
      * Get the number of pages edited and created within the timeframe
      * and for the given users.
      * @param  string   $dbName Database name such as 'enwiki_p'.

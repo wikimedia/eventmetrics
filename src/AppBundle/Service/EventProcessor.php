@@ -7,6 +7,7 @@ namespace AppBundle\Service;
 
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
+use AppBundle\Model\EventWiki;
 use AppBundle\Model\EventWikiStat;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -58,6 +59,8 @@ class EventProcessor
      * @param OutputInterface|null &$output Used by Commands so that the output
      *   can be controlled by the parent process. If this is null,
      *   a local LoggerInterface is used instead.
+     * @return array Statistics, keyed by metric, along with 'wikis' which
+     *   is a similar array of statistics, but keyed by the wiki's domain.
      */
     public function process(Event $event, OutputInterface &$output = null)
     {
@@ -71,7 +74,7 @@ class EventProcessor
 
         // Generate and persist each type of EventStat/EventWikiStat.
         $this->setNewEditors();
-        // $this->setPagesEdited();
+        $this->setPagesEdited();
         $this->setRetention();
 
         // Clear out any existing job records from the queue.
@@ -101,13 +104,13 @@ class EventProcessor
     }
 
     /**
-     * Compute and persist a new EventWikiStat for the number of pages created.
+     * Compute and persist a new EventStat and EventWikiStats
+     * for the number of pages created/improved.
      */
     private function setPagesEdited()
     {
         $this->log("\nFetching number of pages created...");
 
-        $dbNames = $this->eventRepo->getDbNames($this->event);
         $start = $this->event->getStart();
         $end = $this->event->getEnd();
         $usernames = $this->event->getParticipantNames();
@@ -115,7 +118,11 @@ class EventProcessor
         $pagesImproved = 0;
         $pagesCreated = 0;
 
-        foreach ($dbNames as $dbName) {
+        $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
+        $ewRepo->setContainer($this->container);
+
+        foreach ($this->event->getWikis() as $wiki) {
+            $dbName = $ewRepo->getDbName($wiki);
             $ret = $this->eventRepo->getNumPagesEdited(
                 $dbName,
                 $start,
@@ -124,6 +131,9 @@ class EventProcessor
             );
             $pagesImproved += $ret['edited'];
             $pagesCreated += $ret['created'];
+
+            $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $pagesCreated);
+            $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $pagesImproved);
         }
 
         $this->createOrUpdateEventStat('pages-created', $pagesCreated);
@@ -250,7 +260,7 @@ class EventProcessor
 
         // Create or update an EventStat.
         $eventStat = $this->entityManager
-            ->getRepository('Model:EventStat')
+            ->getRepository("Model:EventStat")
             ->findOneBy([
                 'event' => $this->event,
                 'metric' => $metric,
@@ -265,6 +275,47 @@ class EventProcessor
         $this->entityManager->persist($eventStat);
 
         return $eventStat;
+    }
+
+    /**
+     * Persist an EventWikiStat with given metric and value, or update the
+     * existing one, if present.
+     * @param  string $metric
+     * @param  mixed $value
+     * @param  int $offset Offset value associated with the metric,
+     *   such as the number of days in evaluating retention.
+     * @return EventWikiStat
+     */
+    private function createOrUpdateEventWikiStat(EventWiki $wiki, $metric, $value, $offset = null)
+    {
+        $domain = $wiki->getDomain();
+
+        // Update class property.
+        if (!isset($this->stats['wikis'][$domain])) {
+            $this->stats['wikis'][$domain] = [];
+        }
+        $this->stats['wikis'][$domain][$metric] = [
+            'value' => $value,
+            'offset' => $offset
+        ];
+
+        // Create or update an EventStat.
+        $eventWikiStat = $this->entityManager
+            ->getRepository("Model:EventWikiStat")
+            ->findOneBy([
+                'wiki' => $wiki,
+                'metric' => $metric,
+            ]);
+
+        if ($eventWikiStat === null) {
+            $eventWikiStat = new EventWikiStat($wiki, $metric, $value, $offset);
+        } else {
+            $eventWikiStat->setValue($value);
+        }
+
+        $this->entityManager->persist($eventWikiStat);
+
+        return $eventWikiStat;
     }
 
     /**

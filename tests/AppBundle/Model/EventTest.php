@@ -101,18 +101,23 @@ class EventTest extends KernelTestCase
             'America/New_York'
         );
         $this->assertEquals(0, count($event->getStatistics()));
+
         // Add an EventStat.
         $eventStat = new EventStat($event, 'retention', 50);
         $event->addStatistic($eventStat);
         $this->assertEquals($eventStat, $event->getStatistics()[0]);
+
         // Try adding the same one, which shouldn't duplicate.
         $event->addStatistic($eventStat);
         $this->assertEquals(1, count($event->getStatistics()));
+
         // Removing the statistic.
         $event->removeStatistic($eventStat);
         $this->assertEquals(0, count($event->getStatistics()));
+
         // Double-remove shouldn't error out.
         $event->removeStatistic($eventStat);
+
         // Changing the 'updated' attribute.
         $datetime = new DateTime('2017-01-01');
         $event->setUpdated($datetime);

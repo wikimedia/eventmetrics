@@ -52,4 +52,23 @@ class EventWikiRepository extends Repository
 
         return $domain;
     }
+
+    /**
+     * Get the database name of the given EventWiki.
+     * @param  EventWiki $wiki
+     * @return string[]
+     */
+    public function getDbName(EventWiki $wiki)
+    {
+        $projectUrl = 'https://'.$wiki->getDomain().'.org';
+
+        $conn = $this->getMetaConnection();
+        $rqb = $conn->createQueryBuilder();
+        $rqb->select(["CONCAT(dbname, '_p') AS dbname"])
+            ->from('wiki')
+            ->where('url = :projectUrl')
+            ->setParameter('projectUrl', $projectUrl);
+        $stmt = $rqb->execute();
+        return $stmt->fetch()['dbname'];
+    }
 }

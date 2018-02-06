@@ -32,6 +32,10 @@ class EventStat
     const METRIC_TYPES = [
         'new-editors',
         'retention',
+
+        // These are also stored on a per-wiki basis as a EventWikiStat
+        'pages-created',
+        'pages-improved'
     ];
 
     /**
