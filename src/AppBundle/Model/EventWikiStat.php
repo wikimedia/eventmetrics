@@ -14,12 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="event_wiki_stat",
  *     indexes={
- *         @ORM\Index(name="ews_event_wiki", columns={"ews_event_wiki_id"}),
- *         @ORM\Index(name="ews_metrics", columns={"ews_event_wiki_id", "ews_metric"})
+ *         @ORM\Index(name="ews_event_wiki", columns={"ews_event_wiki_id"})
  *     },
  *     uniqueConstraints={
  *         @ORM\UniqueConstraint(
- *             name="ews_event_wiki_metric",
+ *             name="ews_metrics",
  *             columns={"ews_event_wiki_id", "ews_metric"}
  *         )
  *     },
