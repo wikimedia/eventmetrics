@@ -7,6 +7,7 @@ A Wikimedia Foundation tool that provides grantees a simple, easy to use interfa
 [![Build Status](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/build.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/build-status/master)
 [![Code Coverage](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/?branch=master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 ## Installation
 
