@@ -38,7 +38,7 @@ class EventWikiStatTest extends PHPUnit_Framework_TestCase
 
         // Getters.
         $this->assertEquals($event, $ews->getEvent());
-        $this->assertEquals($eventWiki, $ews->getEventWiki());
+        $this->assertEquals($eventWiki, $ews->getWiki());
         $this->assertEquals('pages-created', $ews->getMetric());
         $this->assertEquals(50, $ews->getValue());
         $this->assertEquals(null, $ews->getOffset());

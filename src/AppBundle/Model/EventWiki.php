@@ -54,7 +54,7 @@ class EventWiki
 
     /**
      * One EventWiki has many EventStats.
-     * @ORM\OneToMany(targetEntity="EventStat", mappedBy="event_wiki", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="EventWikiStat", mappedBy="wiki", orphanRemoval=true)
      * @var ArrayCollection|EventStat[] Statistics for this EventWiki.
      */
     protected $stats;

@@ -52,7 +52,7 @@ class EventWikiStat
      * @ORM\JoinColumn(name="ews_event_wiki_id", referencedColumnName="ew_id", nullable=false)
      * @var EventWiki EventWiki this EventWikiStat applies to.
      */
-    protected $eventWiki;
+    protected $wiki;
 
     /**
      * @ORM\Column(name="ews_metric", type="string", length=32)
@@ -76,15 +76,15 @@ class EventWikiStat
 
     /**
      * EventWikiStat constructor.
-     * @param EventWiki $eventWiki EventWiki the statistic applies to.
+     * @param EventWiki $wiki EventWiki the statistic applies to.
      * @param string $metric Name of event metric, e.g. 'retention', 'pages-created', 'pages-improved'.
      * @param mixed $value Value of the associated metric.
      * @param int $offset Offset value associated with the metric, such as number of days retention.
      */
-    public function __construct(EventWiki $eventWiki, $metric, $value, $offset = null)
+    public function __construct(EventWiki $wiki, $metric, $value, $offset = null)
     {
-        $this->eventWiki = $eventWiki;
-        $this->eventWiki->addStatistic($this);
+        $this->wiki = $wiki;
+        $this->wiki->addStatistic($this);
         $this->setMetric($metric);
         $this->value = $value;
         $this->offset = $offset;
@@ -96,15 +96,15 @@ class EventWikiStat
      */
     public function getEvent()
     {
-        return $this->eventWiki->getEvent();
+        return $this->wiki->getEvent();
     }
 
     /**
      * Get the EventWiki this EventWikiStat applies to.
      * @return EventWiki
      */
-    public function getEventWiki()
+    public function getWiki()
     {
-        return $this->eventWiki;
+        return $this->wiki;
     }
 }
