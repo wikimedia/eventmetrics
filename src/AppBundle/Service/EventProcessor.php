@@ -280,9 +280,10 @@ class EventProcessor
     /**
      * Persist an EventWikiStat with given metric and value, or update the
      * existing one, if present.
-     * @param  string $metric
-     * @param  mixed $value
-     * @param  int $offset Offset value associated with the metric,
+     * @param EventWikiStat $wiki
+     * @param string $metric
+     * @param mixed $value
+     * @param int $offset Offset value associated with the metric,
      *   such as the number of days in evaluating retention.
      * @return EventWikiStat
      */

@@ -78,12 +78,12 @@
                 <h4>{{ msg('participants') }}</h4>
                 <h3>{{ event.numParticipants|num_format }}</h3>
             </div>
-            {# {% for stat in event.statistics %}
+            {% for stat in event.statistics %}
                 <div class="col-sm-{{ colSize }} text-center">
                     <h4>{{ msg(stat.metric, [stat.offset]) }}</h4>
                     <h3>{{ stat.value|num_format }}</h3>
                 </div>
-            {% endfor %} #}
+            {% endfor %}
         </div>
 
         {% set content %}
