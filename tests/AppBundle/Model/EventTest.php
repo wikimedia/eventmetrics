@@ -106,6 +106,7 @@ class EventTest extends KernelTestCase
         $eventStat = new EventStat($event, 'retention', 50);
         $event->addStatistic($eventStat);
         $this->assertEquals($eventStat, $event->getStatistics()[0]);
+        $this->assertEquals($eventStat, $event->getStatistic('retention'));
 
         // Try adding the same one, which shouldn't duplicate.
         $event->addStatistic($eventStat);

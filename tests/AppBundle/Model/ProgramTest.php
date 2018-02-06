@@ -105,6 +105,9 @@ class ProgramTest extends KernelTestCase
         $this->assertEquals($event, $program->getEvents()[0]);
         $this->assertEquals(1, $program->getNumEvents());
 
+        // Should be null, since we're aren't actually flushing to the db.
+        $this->assertEquals([null], $program->getEventIds());
+
         // Try adding the same one, which shouldn't duplicate.
         $program->addEvent($event);
         $this->assertEquals(1, count($program->getEvents()));

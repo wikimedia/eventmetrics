@@ -71,6 +71,7 @@ class EventWikiTest extends PHPUnit_Framework_TestCase
         $wiki->addStatistic($ews);
 
         $this->assertEquals($ews, $wiki->getStatistics()[0]);
+        $this->assertEquals($ews, $wiki->getStatistic('pages-improved'));
 
         // Try adding the same one, which shouldn't duplicate.
         $wiki->addStatistic($ews);

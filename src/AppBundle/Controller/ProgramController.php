@@ -18,11 +18,8 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Model\Program;
-use AppBundle\Repository\ProgramRepository;
 use AppBundle\Model\Organizer;
-use AppBundle\Repository\OrganizerRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 /**
@@ -38,11 +35,16 @@ class ProgramController extends Controller
      */
     public function indexAction()
     {
+        $em = $this->container->get('doctrine')->getManager();
         $organizer = $this->getOrganizer();
+        $organizerRepo = $em->getRepository(Organizer::class);
+        $organizerRepo->setContainer($this->container);
 
         return $this->render('programs/index.html.twig', [
             'programs' => $organizer->getPrograms(),
             'gmTitle' => 'my-programs',
+            'retentionThreshold' => $this->container->getParameter('retention_offset'),
+            'metrics' => $organizerRepo->getUniqueMetrics($organizer),
         ]);
     }
 
@@ -143,11 +145,14 @@ class ProgramController extends Controller
     public function showAction($title)
     {
         $em = $this->container->get('doctrine')->getManager();
-        $program = $em->getRepository(Program::class)
-            ->findOneBy(['title' => $title]);
+        $programRepo = $em->getRepository(Program::class);
+        $programRepo->setContainer($this->container);
+        $program = $programRepo->findOneBy(['title' => $title]);
 
         return $this->render('programs/show.html.twig', [
             'program' => $program,
+            'retentionThreshold' => $this->container->getParameter('retention_offset'),
+            'metrics' => $programRepo->getUniqueMetrics($program),
         ]);
     }
 
@@ -158,7 +163,7 @@ class ProgramController extends Controller
     private function getOrganizer()
     {
         $em = $this->container->get('doctrine')->getManager();
-        $organizerRepo = new OrganizerRepository($em);
+        $organizerRepo = $em->getRepository(Organizer::class);
         $organizerRepo->setContainer($this->container);
         return $organizerRepo->getOrganizerByUsername(
             $this->get('session')->get('logged_in_user')->username
@@ -233,7 +238,7 @@ class ProgramController extends Controller
             function ($organizerNames) {
                 return array_map(function ($organizerName) {
                     $em = $this->container->get('doctrine')->getManager();
-                    $organizerRepo = new OrganizerRepository($em);
+                    $organizerRepo = $em->getRepository(Organizer::class);
                     $organizerRepo->setContainer($this->container);
                     return $organizerRepo->getOrganizerByUsername($organizerName);
                 }, $organizerNames);

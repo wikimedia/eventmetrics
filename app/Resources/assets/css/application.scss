@@ -147,6 +147,13 @@ body {
     }
 }
 
+.gm-table {
+    td:not(:first-child),
+    th:not(:first-child) {
+        text-align: center;
+    }
+}
+
 @media (max-width: $bootstrap-sm) {
     .footer-links {
         display: block;

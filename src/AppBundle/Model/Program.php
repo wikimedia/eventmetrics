@@ -232,6 +232,17 @@ class Program
     }
 
     /**
+     * Get the events IDs of all the Events of this Program.
+     * @return int[]
+     */
+    public function getEventIds()
+    {
+        return array_map(function ($event) {
+            return $event->getId();
+        }, $this->events->toArray());
+    }
+
+    /**
      * Get the number of Events belonging to this Program.
      * @return int
      */

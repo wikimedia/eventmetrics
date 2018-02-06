@@ -27,22 +27,31 @@
             </h1>
         </div>
 
-        <div class="btn-group pull-right event-export">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="glyphicon glyphicon-export"></span>
-                {{ msg('export') }}
-                <span class="caret"></span>
+        <div class="pull-right text-right">
+            <button class="btn btn-default event-process-btn" data-event-id="{{ event.id }}">
+                {{ msg('update-data') }}
             </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="#">{{ msg('export-totals-wiki-table') }}</a>
-                </li>
-                <li>
-                    <a href="#">{{ msg('export-raw-data-csv') }}</a>
-                </li>
-            </ul>
+            <div class="btn-group event-export">
+                <button type="button" class="btn btn-default dropdown-toggle event-export-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-export"></span>
+                    {{ msg('export') }}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#">{{ msg('export-totals-wiki-table') }}</a>
+                    </li>
+                    <li>
+                        <a href="#">{{ msg('export-raw-data-csv') }}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="event-stats-status">
+                {% if event.updated != null %}
+                    {{ msg('last-updated', [event.updated|date_format]) }}
+                {% endif %}
+            </div>
         </div>
-        <a href="#" class="btn btn-default pull-right">{{ msg('calculate-totals') }}</a>
 
         <table class="event-metadata">
             <tr>
@@ -73,18 +82,61 @@
         </table>
 
         {% set colSize = 12 // (event.statistics|length + 1) %}
-        <div class="row event-stats">
-            <div class="col-sm-{{ colSize }} text-center{% if colSize is even %} col-sm-offset-1{% endif %}">
-                <h4>{{ msg('participants') }}</h4>
-                <h3>{{ event.numParticipants|num_format }}</h3>
-            </div>
-            {% for stat in event.statistics %}
-                <div class="col-sm-{{ colSize }} text-center">
-                    <h4>{{ msg(stat.metric, [stat.offset]) }}</h4>
-                    <h3>{{ stat.value|num_format }}</h3>
+        {% if event.wikis|length > 1 %}
+            {% set metricOrder = [] %}
+            <table class="table gm-table event-wiki-stats">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{{ msg('participants') }}</th>
+                        {% for stat in event.statistics %}
+                            {% set metricOrder = metricOrder|merge([stat.metric]) %}
+                            <th>{{ msg(stat.metric, [stat.offset]) }}</th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th>{{ msg('totals') }}</th>
+                        <th>{{ event.numParticipants }}</th>
+                        {% for stat in event.statistics %}
+                            <th>{{ stat.value|num_format }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="event-wiki-stats-summary">
+                    </tr>
+                    {% for wiki in event.wikis %}
+                        <tr>
+                            <td>{{ wiki.domain }}</td>
+                            <td>&mdash;</td>
+                            {% for metric in metricOrder %}
+                                {% set stat = wiki.statistic(metric) %}
+                                <td>
+                                    {% if stat != null %}
+                                        {{ stat.value|num_format }}
+                                    {% else %}
+                                        &mdash;
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="row event-stats">
+                <div class="col-sm-{{ colSize }} text-center{% if colSize is even %} col-sm-offset-1{% endif %}">
+                    <h4>{{ msg('participants') }}</h4>
+                    <h3>{{ event.numParticipants|num_format }}</h3>
                 </div>
-            {% endfor %}
-        </div>
+                {% for stat in event.statistics %}
+                    <div class="col-sm-{{ colSize }} text-center">
+                        <h4>{{ msg(stat.metric, [stat.offset]) }}</h4>
+                        <h3>{{ stat.value|num_format }}</h3>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
         {% set content %}
             {{ form_errors(form) }}

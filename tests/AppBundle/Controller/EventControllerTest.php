@@ -59,7 +59,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     {
         // 'My_fun_program' was already created via fixtures.
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(200, $this->response->getStatusCode());
     }
 
     /**

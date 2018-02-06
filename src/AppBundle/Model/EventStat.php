@@ -35,7 +35,7 @@ class EventStat
 
         // These are also stored on a per-wiki basis as a EventWikiStat
         'pages-created',
-        'pages-improved'
+        'pages-improved',
     ];
 
     /**

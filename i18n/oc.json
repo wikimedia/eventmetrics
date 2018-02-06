@@ -12,5 +12,6 @@
 	"num-seconds": "{{PLURAL:$1|segonda|segondas}}",
 	"optional": "Facultatiu",
 	"report-issue": "Senhalar un problèma",
+	"totals": "Totals",
 	"view-source": "Afichar la font"
 }

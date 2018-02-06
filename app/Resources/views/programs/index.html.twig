@@ -19,13 +19,12 @@
             <thead>
                 <tr>
                     <th>{{ msg('program') }}</th>
-                    <th class="text-center text-nowrap"></th>
-                    <th class="text-center text-nowrap">{{ msg('events') }}</th>
-                    <th class="text-center text-nowrap">{{ msg('participants') }}</th>
-                    <th class="text-center text-nowrap">{{ msg('new-editors') }}</th>
-                    <th class="text-center text-nowrap">{{ msg('day-retention', [30]) }}</th>
-                    <th class="text-center text-nowrap">{{ msg('pages-created') }}</th>
-                    <th class="text-center text-nowrap">{{ msg('pages-improved') }}</th>
+                    <th class="text-nowrap"></th>
+                    <th class="text-nowrap">{{ msg('events') }}</th>
+                    <th class="text-nowrap">{{ msg('participants') }}</th>
+                    {% for metric, offset in metrics %}
+                        <th class="text-nowrap">{{ msg(metric, [offset]) }}</th>
+                    {% endfor %}
                 </tr>
             </thead>
             <tbody>
@@ -34,7 +33,7 @@
                         <td>
                             <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
                         </td>
-                        <td class="text-center text-nowrap">
+                        <td class="text-nowrap">
                             <a href="{{ path('EditProgram', {'title': program.title}) }}"
                                class="program-action program-action__edit text-muted">
                                 <span class="glyphicon glyphicon-cog"></span>
@@ -45,12 +44,15 @@
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
                         </td>
-                        <td class="text-center text-nowrap">{{ program.numEvents }}</td>
-                        <td class="text-center text-nowrap">0</td>
-                        <td class="text-center text-nowrap">0</td>
-                        <td class="text-center text-nowrap">0</td>
-                        <td class="text-center text-nowrap">0</td>
-                        <td class="text-center text-nowrap">0</td>
+                        <td class="text-nowrap">{{ program.numEvents }}</td>
+                        <td class="text-nowrap">
+                            {# {{ program.numParticipants }} #}
+                        </td>
+                        {% for metric in metrics|keys %}
+                            <td class="text-nowrap">
+                                {# {{ program.statistic(metric).value }} #}
+                            </td>
+                        {% endfor %}
                     </tr>
                 {% endfor %}
             </tbody>

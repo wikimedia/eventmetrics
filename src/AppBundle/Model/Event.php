@@ -284,6 +284,19 @@ class Event
     }
 
     /**
+     * Get the statistic about this Event with the given metric.
+     * @param string $metric Name of metric, one of EventStat::METRIC_TYPES.
+     * @return EventStat|null Null if no EventStat with given metric was found.
+     */
+    public function getStatistic($metric)
+    {
+        $ewStats = $this->stats->filter(function ($stat) use ($metric) {
+            return $stat->getMetric() === $metric;
+        });
+        return $ewStats->count() > 0 ? $ewStats->first() : null;
+    }
+
+    /**
      * Add an EventStat to this Event.
      * @param EventStat $eventStat
      */
@@ -294,6 +307,7 @@ class Event
         }
         $this->stats->add($eventStat);
     }
+
     /**
      * Remove an eventStat from this Event.
      * @param EventStat $eventStat

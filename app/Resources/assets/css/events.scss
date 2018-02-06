@@ -23,7 +23,8 @@
         }
     }
 
-    .event-stats {
+    .event-stats,
+    .event-wiki-stats {
         margin: 36px 0;
     }
 
@@ -35,6 +36,10 @@
             position: relative;
             top: 2px;
         }
+    }
+
+    .event-stats-status {
+        margin-top: 8px;
     }
 
     .event-section {

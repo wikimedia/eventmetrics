@@ -55,6 +55,7 @@ class AppExtension extends Extension
             new \Twig_SimpleFunction('hash', [$this, 'gitHash']),
             new \Twig_SimpleFunction('formatDuration', [$this, 'formatDuration']),
             new \Twig_SimpleFunction('numberFormat', [$this, 'numberFormat']),
+            new \Twig_SimpleFunction('metricOrder', [$this, 'metricOrder']),
         ];
     }
 
@@ -347,4 +348,21 @@ class AppExtension extends Extension
 
         return [$val, $key];
     }
+
+    // /**
+    //  * List of EventStat/EventWikiStat metrics, as they should appear in
+    //  * the interface. Eventually individual Events or Programs may only
+    //  * show specific EventStats. For now, it is hard-coded here.
+    //  * @return string[]
+    //  */
+    // public function metricOrder()
+    // {
+    //     return [
+    //         'participants',
+    //         'new-editors',
+    //         'retention',
+    //         'pages-created',
+    //         'pages-improved',
+    //     ];
+    // }
 }

@@ -9,8 +9,9 @@ use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\EventWikiStat;
-use Psr\Container\ContainerInterface;
+use AppBundle\Repository\EventRepository;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use DateTime;
@@ -260,7 +261,7 @@ class EventProcessor
 
         // Create or update an EventStat.
         $eventStat = $this->entityManager
-            ->getRepository("Model:EventStat")
+            ->getRepository('Model:EventStat')
             ->findOneBy([
                 'event' => $this->event,
                 'metric' => $metric,

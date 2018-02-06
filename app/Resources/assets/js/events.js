@@ -57,6 +57,28 @@ $(function () {
             });
         });
     });
+
+    /**
+     * Listener for calculate statistics button, which hits the
+     * process event endpoint, firing off a job.
+     */
+    $('.event-process-btn').on('click', function () {
+        document.activeElement.blur();
+
+        $(this).addClass('disabled').text($.i18n('updating'));
+        $('.event-export-btn').addClass('disabled');
+        $('.event-stats-status').text($.i18n('updating-desc'));
+
+        $.get(baseUrl + 'events/process/' + $(this).data('event-id')).done(function (data) {
+            $(this).removeClass('disabled').text($.i18n('update-data'));
+            $('.event-export-btn').removeClass('disabled');
+            $('.event-stats-status').text('');
+
+            // TODO: Make controller return HTML and update view with
+            // rendered Twig template, rather than having to refresh.
+            window.location.reload(true);
+        }.bind(this));
+    });
 });
 
 /**

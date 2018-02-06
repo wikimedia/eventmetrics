@@ -102,6 +102,19 @@ class EventWiki
     }
 
     /**
+     * Get the statistic about this EventWiki with the given metric.
+     * @param string $metric Name of metric, one of EventWikiStat::METRIC_TYPES.
+     * @return EventWikiStat|null Null if no EventWikiStat with given metric was found.
+     */
+    public function getStatistic($metric)
+    {
+        $ewStats = array_filter($this->stats->toArray(), function ($stat) use ($metric) {
+            return $stat->getMetric() === $metric;
+        });
+        return count($ewStats) > 0 ? reset($ewStats) : null;
+    }
+
+    /**
      * Add an EventWikiStat to this EventWiki.
      * @param EventWikiStat $eventWikiStat
      */

@@ -50,4 +50,28 @@ class OrganizerRepository extends Repository
 
         return $organizer;
     }
+
+    /**
+     * Get unique metrics for all Programs created by this Organizer.
+     * @param  Organizer $organizer
+     * @return string[]
+     */
+    public function getUniqueMetrics(Organizer $organizer)
+    {
+        $programRepo = new ProgramRepository($this->em);
+        $programRepo->setContainer($this->container);
+
+        $metrics = [];
+        foreach ($organizer->getPrograms() as $program) {
+            $programMetrics = $programRepo->getUniqueMetrics($program);
+
+            foreach ($programMetrics as $metric => $offset) {
+                if (!isset($metrics[$metric])) {
+                    $metrics[$metric] = $offset;
+                }
+            }
+        }
+
+        return $metrics;
+    }
 }

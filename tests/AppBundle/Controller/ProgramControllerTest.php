@@ -45,7 +45,8 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     private function indexSpec()
     {
         $this->crawler = $this->client->request('GET', '/programs');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(200, $this->response->getStatusCode());
     }
 
     /**
