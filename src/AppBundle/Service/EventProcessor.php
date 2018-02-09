@@ -133,8 +133,8 @@ class EventProcessor
             $pagesImproved += $ret['edited'];
             $pagesCreated += $ret['created'];
 
-            $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $pagesCreated);
-            $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $pagesImproved);
+            $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $ret['created']);
+            $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $ret['edited']);
         }
 
         $this->createOrUpdateEventStat('pages-created', $pagesCreated);
@@ -303,7 +303,7 @@ class EventProcessor
 
         // Create or update an EventStat.
         $eventWikiStat = $this->entityManager
-            ->getRepository("Model:EventWikiStat")
+            ->getRepository('Model:EventWikiStat')
             ->findOneBy([
                 'wiki' => $wiki,
                 'metric' => $metric,

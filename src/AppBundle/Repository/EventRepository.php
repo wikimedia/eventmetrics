@@ -72,7 +72,7 @@ class EventRepository extends Repository
 
         $rqb->select([
                 'COUNT(DISTINCT(page_title)) AS edited',
-                'SUM(CASE WHEN rev_parent_id = 0 THEN 1 ELSE 0 END) AS created',
+                'IFNULL(SUM(CASE WHEN rev_parent_id = 0 THEN 1 ELSE 0 END), 0) AS created',
             ])
             ->from("$dbName.page")
             ->join("$dbName.page", "$dbName.$revisionTable", null, 'rev_page = page_id')
