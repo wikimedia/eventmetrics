@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import 'macros/layout.html.twig' as layout %}
 
 {% block breadcrumb %}
     <ol class="breadcrumb">
@@ -50,19 +51,11 @@
                                 <a href="{{ path('Event', {'programTitle': program.title, 'title': event.title}) }}">{{ event.displayTitle }}</a>
                             </td>
                             <td class="text-nowrap">
-                                <a href="{{ path('EditEvent', {'programTitle': program.title, 'title': event.title}) }}"
-                                   class="event-action event-action__edit text-muted">
-                                    <span class="glyphicon glyphicon-cog"></span>
-                                </a>
-                                <a href="{{ path('DeleteEvent', {'programTitle': program.title, 'title': event.title}) }}"
-                                   class="event-action event-action__delete text-danger"
-                                   data-title="{{ event.displayTitle }}">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                </a>
+                                {{ layout.actionButtons('Event', event, {'programTitle': program.title, 'title': event.title}) }}
                             </td>
-                            <td class="text-nowrap">{{ event.numParticipants }}</td>
+                            <td class="text-nowrap">{{ event.numParticipants|num_format }}</td>
                             {% for metric in metrics|keys %}
-                                <td class="text-nowrap">{{ event.statistic(metric).value }}</td>
+                                <td class="text-nowrap">{{ event.statistic(metric).value|num_format }}</td>
                             {% endfor %}
                         </tr>
                     {% endfor %}

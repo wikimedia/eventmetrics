@@ -73,6 +73,12 @@ class Program
     protected $organizers;
 
     /**
+     * Hash of combined statistics across all Events in this Program.
+     * @var array Keyed by metric.
+     */
+    private $statistics;
+
+    /**
      * Program constructor.
      * @param Organizer $organizer Original organizer of the program.
      */
@@ -273,5 +279,47 @@ class Program
             return;
         }
         $this->events->removeElement($event);
+    }
+
+    /**************
+     * STATISTICS *
+     **************/
+
+    /**
+     * Get combined statistics about all Events that make up this Program.
+     * @return array Keyed by metric.
+     */
+    public function getStatistics()
+    {
+        if (isset($this->statistics)) {
+            return $this->statistics;
+        }
+
+        $this->statistics = [];
+
+        foreach ($this->events->toArray() as $event) {
+            foreach ($event->getStatistics()->toArray() as $eventStat) {
+                $metric = $eventStat->getMetric();
+
+                if (!isset($this->statistics[$metric])) {
+                    $this->statistics[$metric] = $eventStat->getValue();
+                } else {
+                    $this->statistics[$metric] += $eventStat->getValue();
+                }
+            }
+        }
+
+        return $this->statistics;
+    }
+
+    /**
+     * Get a combined statistic about all Events in this Program with the given metric.
+     * @param string $metric Name of metric, one of EventStat::METRIC_TYPES.
+     * @return int Will be 0 if metric was not found.
+     */
+    public function getStatistic($metric)
+    {
+        $stats = $this->getStatistics();
+        return isset($stats[$metric]) ? $stats[$metric] : 0;
     }
 }

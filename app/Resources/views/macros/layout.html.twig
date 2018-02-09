@@ -28,3 +28,15 @@
         </div>
     </section>
 {% endmacro %}
+
+{% macro actionButtons(model, object, params) %}
+    <a href="{{ path('Edit' ~ model, params) }}"
+       class="{{ model|lower }}-action {{ model|lower }}-action__edit text-muted">{#-
+        -#}<span class="glyphicon glyphicon-cog"></span>{#-
+    -#}</a>
+    <a href="{{ path('Delete' ~ model, params) }}"
+       class="{{ model|lower }}-action {{ model|lower }}-action__delete text-danger"
+       data-title="{{ object.displayTitle }}">{#-
+        -#}<span class="glyphicon glyphicon-trash"></span>{#-
+    -#}</a>
+{% endmacro %}
