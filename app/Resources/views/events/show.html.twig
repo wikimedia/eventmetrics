@@ -142,11 +142,6 @@
             {{ form_errors(form) }}
 
             {{ form_start(form, {'method': 'post', 'attr': {'class': 'form-horizontal'}}) }}
-                <span class="pull-right">
-                    {{ form_widget(form.submit, {'label': msg('save-participants')}) }}
-                    {{ form_row(form._token) }}
-                </span>
-
                 {% for participant in form.participants %}
                     {% set invalidParticipant = false %}
                     {% if form_errors(participant)|length > 0 %}
@@ -166,6 +161,11 @@
                                 {{ msg('remove') }}
                             </button>
                         </div>
+                        {% if loop.index == 1 %}
+                            <div class="col-sm-6">
+                                {{ form_widget(form.submit, {'label': msg('save-participants')}) }}
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
 
@@ -173,6 +173,8 @@
                     {{ msg('add-more-participants') }}
                 </label>
                 {{ form_widget(form.new_participants, {'attr': {'class': 'event-new-participants', 'rows': 10}}) }}
+
+                {{ form_row(form._token) }}
             {{ form_end(form, {'render_rest': false}) }}
         {% endset %}
         {{
