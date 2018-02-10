@@ -190,7 +190,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     private function participantsSpec()
     {
-        $form = $this->crawler->selectButton('Submit')->form();
+        $form = $this->crawler->selectButton('Save participants')->form();
 
         $form['form[new_participants]'] = "  MusikAnimal  \r\nInvalid_user";
         $this->crawler = $this->client->submit($form);
@@ -200,7 +200,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             $this->crawler->filter('.alert-danger')->text()
         );
 
-        $form = $this->crawler->selectButton('Submit')->form();
+        $form = $this->crawler->selectButton('Save participants')->form();
 
         $this->assertEquals('Invalid user', $form['form[participants][0]']->getValue());
         $this->assertEquals('MusikAnimal', $form['form[participants][1]']->getValue());
