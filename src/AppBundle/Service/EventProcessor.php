@@ -207,7 +207,7 @@ class EventProcessor
             return count($usernames);
         }
 
-        return count($usersRetained);
+        return $usersRetained;
     }
 
     /**

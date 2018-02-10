@@ -29,13 +29,17 @@ class EventStat
      */
     use StatTrait;
 
+    // Allowed metric types, that also serve as the defaults when no EventStats
+    // are associated with an Event. The order here is important. It should
+    // match whatever order things are processed in EventProcessor.
     const METRIC_TYPES = [
         'new-editors',
-        'retention',
 
         // These are also stored on a per-wiki basis as a EventWikiStat
         'pages-created',
         'pages-improved',
+
+        'retention',
     ];
 
     /**

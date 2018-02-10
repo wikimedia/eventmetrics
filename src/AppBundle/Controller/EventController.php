@@ -29,6 +29,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
 use AppBundle\Model\Event;
+use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Job;
 use AppBundle\Model\Participant;
@@ -340,7 +341,29 @@ class EventController extends Controller
             'form' => $form->createView(),
             'program' => $program,
             'event' => $event,
+            'stats' => $this->getEventStats($event),
         ]);
+    }
+
+    /**
+     * Get EventStats from the given Event. If there are none, empty EventStats
+     * are returned for each metric type specified by self::METRIC_TYPES.
+     * This way we can show placeholders in the view.
+     * @param Event $event
+     * @return EventStat[]
+     */
+    private function getEventStats(Event $event)
+    {
+        if (count($event->getStatistics()) > 0) {
+            return $event->getStatistics();
+        }
+
+        return array_map(function ($metric) use ($event) {
+            $offset = $metric === 'retention'
+                ? $this->container->getParameter('retention_offset')
+                : null;
+            return new EventStat($event, $metric, null, $offset);
+        }, EventStat::getMetricTypes());
     }
 
     /**

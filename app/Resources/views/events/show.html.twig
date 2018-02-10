@@ -29,7 +29,11 @@
 
         <div class="pull-right text-right">
             <button class="btn btn-default event-process-btn" data-event-id="{{ event.id }}">
-                {{ msg('update-data') }}
+                {% if event.updated == null %}
+                    {{ msg('calculate-totals') }}
+                {% else %}
+                    {{ msg('update-data') }}
+                {% endif %}
             </button>
             <div class="btn-group event-export">
                 <button type="button" class="btn btn-default dropdown-toggle event-export-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -82,7 +86,7 @@
         </table>
 
         {% set colSize = 12 // (event.statistics|length + 1) %}
-        {% if event.wikis|length > 1 %}
+        {% if event.wikis|length > 1 and event.numParticipants > 0 %}
             {% set metricOrder = [] %}
             <table class="table gm-table event-wiki-stats">
                 <thead>
@@ -125,14 +129,20 @@
             </table>
         {% else %}
             <div class="row event-stats">
-                <div class="col-sm-{{ colSize }} text-center{% if colSize is even %} col-sm-offset-1{% endif %}">
+                <div class="col-sm-{{ colSize }} text-center{% if colSize is even and colSize < 12 %} col-sm-offset-1{% endif %}">
                     <h4>{{ msg('participants') }}</h4>
                     <h3>{{ event.numParticipants|num_format }}</h3>
                 </div>
-                {% for stat in event.statistics %}
+                {% for stat in stats %}
                     <div class="col-sm-{{ colSize }} text-center">
                         <h4>{{ msg(stat.metric, [stat.offset]) }}</h4>
-                        <h3>{{ stat.value|num_format }}</h3>
+                        <h3>
+                            {% if stat.value is null %}
+                                &ndash;
+                            {% else %}
+                                {{ stat.value|num_format }}
+                            {% endif %}
+                        </h3>
                     </div>
                 {% endfor %}
             </div>
@@ -169,10 +179,17 @@
                     </div>
                 {% endfor %}
 
-                <label class="event-add-participants" for="add_participants">
-                    {{ msg('add-more-participants') }}
-                </label>
-                {{ form_widget(form.new_participants, {'attr': {'class': 'event-new-participants', 'rows': 10}}) }}
+                <div class="form-group col-sm-6 event-add-participants">
+                    <label for="add_participants">
+                        {{ msg('add-more-participants') }}
+                    </label>
+                    {{ form_widget(form.new_participants, {'attr': {'class': 'event-new-participants', 'rows': 10}}) }}
+                </div>
+                {% if form.participants|length == 0 %}
+                    <div class="col-sm-6">
+                        {{ form_widget(form.submit, {'label': msg('save-participants')}) }}
+                    </div>
+                {% endif %}
 
                 {{ form_row(form._token) }}
             {{ form_end(form, {'render_rest': false}) }}

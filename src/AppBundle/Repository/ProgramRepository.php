@@ -85,4 +85,23 @@ class ProgramRepository extends Repository
             ->execute()
             ->fetchAll(\PDO::FETCH_NUM);
     }
+
+    /**
+     * Get the number of participants of Events belonging to the Program.
+     * @param Program $program
+     * @return int
+     */
+    public function getNumParticipants(Program $program)
+    {
+        $rqb = $this->getGrantmetricsConnection()->createQueryBuilder();
+
+        $eventIds = $program->getEventIds();
+
+        return $rqb->select(['COUNT(DISTINCT(par_user_id))'])
+            ->from('participant')
+            ->where('par_event_id IN (:eventIds)')
+            ->setParameter('eventIds', $eventIds, Connection::PARAM_INT_ARRAY)
+            ->execute()
+            ->fetchColumn();
+    }
 }

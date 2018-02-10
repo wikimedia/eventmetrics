@@ -5,6 +5,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Model\Program;
+use AppBundle\Model\Organizer;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,9 +21,6 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
-use AppBundle\Model\Program;
-use AppBundle\Model\Organizer;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 /**
  * The ProgramController handles listing, creating and editing programs.
@@ -36,12 +36,19 @@ class ProgramController extends Controller
     public function indexAction()
     {
         $em = $this->container->get('doctrine')->getManager();
+
+        // FIXME: workaround to avoid calling the UserSubscriber
+        //   when Participant objects are loaded.
+        $programRepo = $em->getRepository(Program::class);
+        $programRepo->setContainer($this->container);
+
         $organizer = $this->getOrganizer();
         $organizerRepo = $em->getRepository(Organizer::class);
         $organizerRepo->setContainer($this->container);
 
         return $this->render('programs/index.html.twig', [
             'programs' => $organizer->getPrograms(),
+            'programRepo' => $programRepo,
             'gmTitle' => 'my-programs',
             'retentionThreshold' => $this->container->getParameter('retention_offset'),
             'metrics' => $organizerRepo->getUniqueMetrics($organizer),

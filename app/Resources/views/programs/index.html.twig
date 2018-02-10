@@ -39,7 +39,7 @@
                         </td>
                         <td class="text-nowrap">{{ program.numEvents|num_format }}</td>
                         <td class="text-nowrap">
-                            {# {{ program.numParticipants|num_format }} #}
+                            {{ programRepo.numParticipants(program)|num_format }}
                         </td>
                         {% for metric in metrics|keys %}
                             <td class="text-nowrap">

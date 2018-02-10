@@ -32,7 +32,7 @@ class UserSubscriber
     /**
      * This is automatically called by Doctrine when loading an entity,
      * or directly with EventManager::dispatchEvent().
-     * @param  LifecycleEventArgs $event Doctrine lifecycle event arguments.
+     * @param LifecycleEventArgs $event Doctrine lifecycle event arguments.
      */
     public function postLoad(LifecycleEventArgs $event)
     {

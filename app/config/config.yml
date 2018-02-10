@@ -54,10 +54,10 @@ assetic:
     assets:
         jquery_js:
             inputs:
-                - %kernel.root_dir%/../vendor/components/jquery/jquery.js
+                - '%kernel.root_dir%/../vendor/components/jquery/jquery.js'
         jquery_i18n:
             inputs:
-                - %kernel.root_dir%/../app/Resources/assets/js/jquery.i18n.dist.js
+                - '%kernel.root_dir%/../app/Resources/assets/js/jquery.i18n.dist.js'
 
 # Doctrine Configuration
 doctrine:
