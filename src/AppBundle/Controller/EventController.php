@@ -340,7 +340,6 @@ class EventController extends Controller
             'form' => $form->createView(),
             'program' => $program,
             'event' => $event,
-            // 'errors' => $errors,
         ]);
     }
 

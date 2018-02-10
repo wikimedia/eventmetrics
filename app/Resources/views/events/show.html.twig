@@ -142,6 +142,11 @@
             {{ form_errors(form) }}
 
             {{ form_start(form, {'method': 'post', 'attr': {'class': 'form-horizontal'}}) }}
+                <span class="pull-right">
+                    {{ form_widget(form.submit, {'label': msg('save-participants')}) }}
+                    {{ form_row(form._token) }}
+                </span>
+
                 {% for participant in form.participants %}
                     {% set invalidParticipant = false %}
                     {% if form_errors(participant)|length > 0 %}
@@ -152,6 +157,8 @@
                             {{ form_widget(participant) }}
                             {% if invalidParticipant %}
                                 <span class="font-awesome invalid-input">&#xf071;</span>
+                            {% else %}
+                                <span class="font-awesome valid-input">&#xf05d;</span>
                             {% endif %}
                         </div>
                         <div class="col-sm-2">
@@ -166,9 +173,6 @@
                     {{ msg('add-more-participants') }}
                 </label>
                 {{ form_widget(form.new_participants, {'attr': {'class': 'event-new-participants', 'rows': 10}}) }}
-
-                {{ form_widget(form.submit, {'label': msg('submit')}) }}
-                {{ form_row(form._token) }}
             {{ form_end(form, {'render_rest': false}) }}
         {% endset %}
         {{

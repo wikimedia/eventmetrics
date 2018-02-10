@@ -138,6 +138,14 @@ body {
         content: ':';
     }
 
+    .valid-input {
+        color: $bootstrap-success-text;
+        font-size: 18px;
+        position: absolute;
+        right: 24px;
+        top: 6px;
+    }
+
     .invalid-input {
         color: $bootstrap-danger-text;
         font-size: 18px;
