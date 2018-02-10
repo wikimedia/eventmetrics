@@ -3,7 +3,10 @@
 	"apply": "Anvend",
 	"cancel": "Afbryd",
 	"close": "Luk",
+	"date": "Dato",
+	"diff": "Forskel",
 	"documentation": "Dokumentation",
+	"edit-summary": "Kommentar",
 	"feedback": "Tilbagemelding",
 	"help-translate": "Hjælp til med at oversætte",
 	"logout": "Log ud",
@@ -13,8 +16,12 @@
 	"num-minutes": "{{PLURAL: $1|minut|minutter}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekunder}}",
 	"optional": "valgfri",
+	"page": "Side",
+	"pager-newer-n": "{{PLURAL:$1|1 nyere|$1 nyere}}",
+	"pager-older-n": "{{PLURAL:$1|1 ældre|$1 ældre}}",
 	"report-issue": "Rapporter et problem",
 	"submit": "Udfør",
 	"totals": "I alt",
+	"username": "Brugernavn",
 	"view-source": "Vis kildekode"
 }

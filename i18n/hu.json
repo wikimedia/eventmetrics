@@ -3,11 +3,18 @@
 	"apply": "Alkalmaz",
 	"cancel": "Mégse",
 	"close": "Bezárás",
+	"date": "Dátum",
+	"diff": "Diff",
 	"documentation": "dokumentációt",
+	"edit-summary": "Szerkesztési összefoglaló",
 	"feedback": "Visszajelzés",
 	"help-translate": "Segíts fordítani",
 	"no-results": "Nincs találat",
+	"page": "Lap",
+	"pager-newer-n": "{{PLURAL:$1|1 újabb|$1 újabb}}",
+	"pager-older-n": "{{PLURAL:$1|1 régebbi|$1 régebbi}}",
 	"report-issue": "Hibabejelentés",
 	"totals": "Összesen",
+	"username": "Felhasználói név",
 	"view-source": "Forráskód megtekintése"
 }

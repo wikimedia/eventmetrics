@@ -1,10 +1,16 @@
 {
 	"all": "ټول",
 	"cancel": "ناگارل",
+	"diff": "توپير",
+	"edit-summary": "د سمون لنډيز",
 	"help-translate": "په ژباړلو کې مرسته وکړئ",
 	"no-results": "کومې پايلې و نه موندل شوې",
 	"optional": "ستاسې په خوښه",
+	"page": "مخ",
+	"pager-newer-n": "{{PLURAL:$1|نوی 1|نوي $1}}",
+	"pager-older-n": "{{PLURAL:$1|زوړ 1|زاړه $1}}",
 	"report-issue": "د يوې ستونزې راپور ورکړئ",
 	"totals": "ټولټال",
+	"username": "کارن نوم",
 	"view-source": "سرچينه کتل"
 }

@@ -3,7 +3,10 @@
 	"apply": "Aplicar",
 	"cancel": "Anullar",
 	"close": "Tampar",
+	"date": "Data",
+	"diff": "Dif",
 	"documentation": "Documentacion",
+	"edit-summary": "Resumit de las modificacions",
 	"feedback": "Vejaires",
 	"no-results": "Cap de resultat pas trobat",
 	"num-days": "{{PLURAL: $1|jorn|jorns}}",
@@ -11,7 +14,11 @@
 	"num-minutes": "{{PLURAL:$1|minuta|minutas}}",
 	"num-seconds": "{{PLURAL:$1|segonda|segondas}}",
 	"optional": "Facultatiu",
+	"page": "Pagina",
+	"pager-newer-n": "{{PLURAL:$1|1 mai recenta|$1 mai recentas}}",
+	"pager-older-n": "{{PLURAL:$1|1 mai anciana|$1 mai ancianas}}",
 	"report-issue": "Senhalar un problèma",
 	"totals": "Totals",
+	"username": "Nom d'utilizaire",
 	"view-source": "Afichar la font"
 }

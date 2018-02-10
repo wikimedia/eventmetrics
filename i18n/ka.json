@@ -3,7 +3,9 @@
 	"apply": "გამოყენება",
 	"cancel": "გაუქმება",
 	"close": "დახურვა",
+	"date": "თარიღი",
 	"documentation": "დოკუმენტაცია",
+	"edit-summary": "კომენტარი",
 	"feedback": "გამოხმაურება",
 	"help-translate": "დაგვეხმარეთ თარგმნაში",
 	"logout": "გასვლა",
@@ -13,8 +15,12 @@
 	"num-minutes": "{{PLURAL:$1|წუთი|წუთი}}",
 	"num-seconds": "{{PLURAL: $1|წამი|წამი}}",
 	"optional": "არასავალდებულო",
+	"page": "გვერდი",
+	"pager-newer-n": "{{PLURAL:$1|უახლესი 1|უახლესი $1}}",
+	"pager-older-n": "{{PLURAL:$1|უფრო ძველი 1|უფრო ძველი $1}}",
 	"report-issue": "პრობლემის შეტყობინება",
 	"submit": "მიღება",
 	"totals": "სულ",
+	"username": "მომხმარებლის სახელი",
 	"view-source": "წყაროს ხილვა"
 }

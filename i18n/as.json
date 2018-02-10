@@ -2,8 +2,12 @@
 	"all": "সকলো",
 	"apply": "প্রয়োগ",
 	"cancel": "বাতিল",
+	"date": "তাৰিখ",
 	"help-translate": "অনুবাদ কৰাত সহায় কৰক",
 	"no-results": "কোনো ফলাফল নাই",
+	"page": "পৃষ্ঠা",
+	"pager-newer-n": "{{PLURAL:$1|নতুনতৰ ১টি|নতুনতৰ $1টি}}",
+	"pager-older-n": "{{PLURAL:$1|পুৰণতৰ ১|পুৰণতৰ $1}}",
 	"report-issue": "অভিযোগ দাখিল কৰক",
 	"totals": "মুঠ",
 	"view-source": "উৎস চাওক"

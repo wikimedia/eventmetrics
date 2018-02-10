@@ -36,19 +36,10 @@
                 {% endif %}
             </button>
             <div class="btn-group event-export">
-                <button type="button" class="btn btn-default dropdown-toggle event-export-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a href="{{ path('Revisions', {'programTitle': program.title, 'title': event.title}) }}" class="btn btn-default event-export-btn">
                     <span class="glyphicon glyphicon-export"></span>
-                    {{ msg('export') }}
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li>
-                        <a href="#">{{ msg('export-totals-wiki-table') }}</a>
-                    </li>
-                    <li>
-                        <a href="#">{{ msg('export-raw-data-csv') }}</a>
-                    </li>
-                </ul>
+                    {{ msg('view-all-data') }}
+                </a>
             </div>
             <div class="event-stats-status">
                 {% if event.updated != null %}
@@ -57,35 +48,8 @@
             </div>
         </div>
 
-        <table class="event-metadata">
-            <tr>
-                <td>{{ msg('wikis') }}:</td>
-                <td>
-                    {% if event.wikis|length > 0 %}
-                        {% for wiki in event.wikis %}
-                            {{ wiki.domain }}{% if not loop.last %},{% endif %}
-                        {% endfor %}
-                    {% else %}
-                        {{ msg('all') }}
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td>{{ msg('start-date') }}:</td>
-                <td>
-                    {{ event.start|date_format }}
-                    ({{ event.displayTimezone }})
-                </td>
-            </tr>
-            <tr>
-                <td>{{ msg('end-date') }}:</td>
-                <td>
-                    {{ event.end|date_format }}
-                </td>
-            </tr>
-        </table>
+        {% include 'events/_metadata.html.twig' with {'event': event} %}
 
-        {% set colSize = 12 // (event.statistics|length + 1) %}
         {% if event.wikis|length > 1 and event.numParticipants > 0 %}
             {% set metricOrder = [] %}
             <table class="table gm-table event-wiki-stats">
@@ -128,24 +92,7 @@
                 </tbody>
             </table>
         {% else %}
-            <div class="row event-stats">
-                <div class="col-sm-{{ colSize }} text-center{% if colSize is even and colSize < 12 %} col-sm-offset-1{% endif %}">
-                    <h4>{{ msg('participants') }}</h4>
-                    <h3>{{ event.numParticipants|num_format }}</h3>
-                </div>
-                {% for stat in stats %}
-                    <div class="col-sm-{{ colSize }} text-center">
-                        <h4>{{ msg(stat.metric, [stat.offset]) }}</h4>
-                        <h3>
-                            {% if stat.value is null %}
-                                &ndash;
-                            {% else %}
-                                {{ stat.value|num_format }}
-                            {% endif %}
-                        </h3>
-                    </div>
-                {% endfor %}
-            </div>
+            {% include 'events/_stats_summary.html.twig' with {'event': event} %}
         {% endif %}
 
         {% set content %}

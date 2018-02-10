@@ -3,9 +3,13 @@
 	"apply": "Dezge",
 	"cancel": "Bıtexelne",
 	"close": "Racın",
+	"date": "Dem",
 	"feedback": "Peyşınasnayış.",
 	"help-translate": "Destegê tadayışi",
 	"no-results": "Peyniye nêvêniyaya",
+	"page": "Pele",
+	"pager-newer-n": "{{PLURAL:$1|newiyer 1|newiyer $1}}",
+	"pager-older-n": "{{PLURAL:$1|deha kehan 1|deha kehan $1}}",
 	"report-issue": "Problemi rapor ke",
 	"totals": "Pêro piya",
 	"view-source": "Çımey bıvêne"

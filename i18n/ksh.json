@@ -4,6 +4,9 @@
 	"cancel": "Ophühre",
 	"help-translate": "Hellef beim Övversäze",
 	"no-results": "Nix jefonge",
+	"page": "Sigg",
+	"pager-newer-n": "{{PLURAL:$1|aller neuerste|neuer $1}}",
+	"pager-older-n": "{{PLURAL:$1|vörrije|vörrije $1}}",
 	"report-issue": "Donn e Problehm mällde",
 	"totals": "Jesammp",
 	"view-source": "Donn der Quelltäx belooere"

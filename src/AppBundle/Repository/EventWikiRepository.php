@@ -71,4 +71,63 @@ class EventWikiRepository extends Repository
         $stmt = $rqb->execute();
         return $stmt->fetch()['dbname'];
     }
+
+    /**
+     * Public static method to convert wikitext to HTML, can be used on any arbitrary string.
+     * Does NOT support section links unless you specify a page.
+     * @param string $wikitext
+     * @param string $domain The project domain such as en.wikipedia
+     * @param string $pageTitle The title of the page, including namespace.
+     * @return string
+     * @static
+     */
+    public static function wikifyString($wikitext, $domain, $pageTitle = null)
+    {
+        $wikitext = htmlspecialchars($wikitext, ENT_NOQUOTES);
+        $sectionMatch = null;
+        $isSection = preg_match_all("/^\/\* (.*?) \*\//", $wikitext, $sectionMatch);
+        $pagePath = "https://$domain.org/wiki/";
+
+        if ($isSection && isset($pageTitle)) {
+            $pageUrl = $pagePath.ucfirst(str_replace(' ', '_', $pageTitle));
+            $sectionTitle = $sectionMatch[1][0];
+
+            // Must have underscores for the link to properly go to the section.
+            $sectionTitleLink = htmlspecialchars(str_replace(' ', '_', $sectionTitle));
+
+            $sectionWikitext = "<a target='_blank' href='$pageUrl#$sectionTitleLink'>&rarr;</a>" .
+                "<em class='text-muted'>".htmlspecialchars($sectionTitle) . ":</em> ";
+            $wikitext = str_replace($sectionMatch[0][0], trim($sectionWikitext), $wikitext);
+        }
+
+        return self::wikifyInternalLinks($wikitext, $domain);
+    }
+
+    /**
+     * Converts internal links in wikitext to HTML.
+     * @param string $wikitext
+     * @param string $domain The project domain such as en.wikipedia
+     * @return string Updated wikitext.
+     * @static
+     */
+    private static function wikifyInternalLinks($wikitext, $domain)
+    {
+        $pagePath = "https://$domain.org/wiki/";
+        $linkMatch = null;
+
+        while (preg_match_all("/\[\[:?(.*?)\]\]/", $wikitext, $linkMatch)) {
+            $wikiLinkParts = explode('|', $linkMatch[1][0]);
+            $wikiLinkPath = htmlspecialchars($wikiLinkParts[0]);
+            $wikiLinkText = htmlspecialchars(
+                isset($wikiLinkParts[1]) ? $wikiLinkParts[1] : $wikiLinkPath
+            );
+
+            // Use normalized page title (underscored, capitalized).
+            $pageUrl = $pagePath.ucfirst(str_replace(' ', '_', $wikiLinkPath));
+            $link = "<a target='_blank' href='$pageUrl'>$wikiLinkText</a>";
+            $wikitext = str_replace($linkMatch[0][0], $link, $wikitext);
+        }
+
+        return $wikitext;
+    }
 }

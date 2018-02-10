@@ -5,6 +5,9 @@
 	"documentation": "Баримтжуулалт",
 	"help-translate": "Орчуулганд тусална уу",
 	"no-results": "Үр дүн олдсонгүй",
+	"page": "Хуудас",
+	"pager-newer-n": "{{PLURAL:$1|илүү шинэ 1|илүү шинэ $1}}",
+	"pager-older-n": "{{PLURAL:$1|илүү хуучин 1|илүү хуучин $1}}",
 	"report-issue": "Алдааг мэдэгдэх",
 	"totals": "Нийт",
 	"view-source": "Эх кодыг үзэх"

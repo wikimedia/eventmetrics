@@ -3,7 +3,10 @@
 	"apply": "Uwenden",
 	"cancel": "Ofbriechen",
 	"close": "Zoumaachen",
+	"date": "Datum",
+	"diff": "Ënnerscheed",
 	"documentation": "Dokumentatioun",
+	"edit-summary": "Resumé änneren",
 	"feedback": "Feedback",
 	"help-translate": "Hëlleft iwwersetzen",
 	"logout": "Ausloggen",
@@ -13,8 +16,12 @@
 	"num-minutes": "{{PLURAL: $1|Minutt|Minutten}}",
 	"num-seconds": "{{PLURAL: $1|Sekonn|Sekonnen}}",
 	"optional": "Fakultativ",
+	"page": "Säit",
+	"pager-newer-n": "{{PLURAL:$1|nächsten|nächst $1}}",
+	"pager-older-n": "{{PLURAL:$1|vireg|vireg $1}}",
 	"report-issue": "E Problem mellen",
 	"submit": "Späicheren",
 	"totals": "Totaler",
+	"username": "Benotzernumm",
 	"view-source": "Quellcode weisen"
 }

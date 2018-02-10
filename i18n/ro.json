@@ -2,7 +2,10 @@
 	"all": "Toate",
 	"apply": "Aplică",
 	"cancel": "Anulare",
+	"date": "Dată",
+	"diff": "Diferență",
 	"documentation": "Documentație",
+	"edit-summary": "Descrierea modificării",
 	"help-translate": "Ajutați cu traducerea",
 	"logout": "Închide sesiunea",
 	"no-results": "Niciun rezultat găsit",
@@ -11,8 +14,12 @@
 	"num-minutes": "{{PLURAL:$1|minut|minute|de minute}}",
 	"num-seconds": "{{PLURAL:$1|secundă|secunde|de secunde}}",
 	"optional": "Opțional",
+	"page": "Pagină",
+	"pager-newer-n": "{{PLURAL:$1|1 mai nou|$1 mai noi}}",
+	"pager-older-n": "{{PLURAL:$1|1|$1}} mai vechi",
 	"report-issue": "Raportează o problemă",
 	"submit": "Trimite",
 	"totals": "Totaluri",
+	"username": "Nume de utilizator",
 	"view-source": "Vizualizare sursă"
 }

@@ -2,7 +2,9 @@
 	"all": "Tất cả",
 	"apply": "Áp dụng",
 	"cancel": "Hủy bỏ",
+	"date": "Ngày tháng",
 	"documentation": "Tài liệu",
+	"edit-summary": "Miêu tả",
 	"help-translate": "Giúp biên dịch",
 	"logout": "Đăng xuất",
 	"no-results": "Không tìm thấy kết quả",
@@ -11,8 +13,12 @@
 	"num-minutes": "{{PLURAL:$1|phút|phút}}",
 	"num-seconds": "{{PLURAL:$1|giây|giây}}",
 	"optional": "tùy chọn",
+	"page": "Trang",
+	"pager-newer-n": "{{PLURAL:$1|1|$1}} mới hơn",
+	"pager-older-n": "{{PLURAL:$1|1|$1}} cũ hơn",
 	"report-issue": "Báo cáo lỗi",
 	"submit": "Gửi",
 	"totals": "Tổng cộng",
+	"username": "Tên người dùng",
 	"view-source": "Xem mã nguồn"
 }

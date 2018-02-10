@@ -205,12 +205,19 @@ class EventTest extends KernelTestCase
         $event->setTitle('delete');
 
         self::bootKernel();
+
         $validator = static::$kernel->getContainer()->get('validator');
-
         $errors = $validator->validate($event);
-
         $this->assertEquals(
             'error-title-reserved',
+            $errors->get(0)->getMessage()
+        );
+
+        $event->setTitle('Foo/bar');
+        $validator = static::$kernel->getContainer()->get('validator');
+        $errors = $validator->validate($event);
+        $this->assertEquals(
+            'error-title-invalid-chars',
             $errors->get(0)->getMessage()
         );
     }

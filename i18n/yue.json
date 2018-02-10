@@ -3,6 +3,8 @@
 	"apply": "套用",
 	"cancel": "取消",
 	"no-results": "搵唔到",
+	"pager-newer-n": "新$1次",
+	"pager-older-n": "舊$1次",
 	"report-issue": "報告問題",
 	"totals": "總數",
 	"view-source": "睇原始碼"

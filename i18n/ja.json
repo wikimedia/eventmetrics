@@ -3,7 +3,10 @@
 	"apply": "適用",
 	"cancel": "キャンセル",
 	"close": "閉じる",
+	"date": "日付",
+	"diff": "差分",
 	"documentation": "説明書",
+	"edit-summary": "編集の要約",
 	"feedback": "フィードバック",
 	"logout": "ログアウト",
 	"no-results": "該当するものはありません",
@@ -12,8 +15,12 @@
 	"num-minutes": "{{PLURAL: $1|分}}",
 	"num-seconds": "{{PLURAL: $1|秒}}",
 	"optional": "省略可能",
+	"page": "ページ",
+	"pager-newer-n": "{{PLURAL:$1|以後の$1件}}",
+	"pager-older-n": "{{PLURAL:$1|以前の$1件}}",
 	"report-issue": "問題の報告",
 	"submit": "送信",
 	"totals": "合計",
+	"username": "利用者名",
 	"view-source": "ソースを閲覧"
 }

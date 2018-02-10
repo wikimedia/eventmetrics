@@ -2,9 +2,13 @@
 	"all": "Tot",
 	"apply": "Aplica",
 	"cancel": "Cancel·la",
+	"date": "Data",
 	"documentation": "Documentació",
 	"help-translate": "Ajudeu a traduir",
 	"no-results": "No s'han trobat resultats.",
+	"page": "Pàgina",
+	"pager-newer-n": "{{PLURAL:$1|1 posterior|$1 posteriors}}",
+	"pager-older-n": "{{PLURAL:$1|anterior|$1 anteriors}}",
 	"report-issue": "Informa d'un problema",
 	"totals": "Totals",
 	"view-source": "Mostra el codi"

@@ -2,7 +2,10 @@
 	"all": "הכול",
 	"apply": "החלה",
 	"cancel": "ביטול",
+	"date": "תאריך",
+	"diff": "השוואה בין גרסאות",
 	"documentation": "תיעוד",
+	"edit-summary": "הערה",
 	"help-translate": "עזור לתרגם",
 	"logout": "יציאה מהחשבון",
 	"no-results": "לא נמצאו תוצאות",
@@ -11,8 +14,12 @@
 	"num-minutes": "{{PLURAL:$1|דקה|דקות}}",
 	"num-seconds": "{{PLURAL:$1|שנייה|שניות}}",
 	"optional": "לא חובה",
+	"page": "דף",
+	"pager-newer-n": "{{PLURAL:$1|הבאה|$1 הבאות}}",
+	"pager-older-n": "{{PLURAL:$1|הקודמת|$1 הקודמות}}",
 	"report-issue": "דיווח בעיה",
 	"submit": "שליחה",
 	"totals": "סה״כ",
+	"username": "שם משתמש",
 	"view-source": "הצגת מקור"
 }

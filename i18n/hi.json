@@ -3,7 +3,9 @@
 	"apply": "लागू करें",
 	"cancel": "रद्द करें",
 	"close": "बंद करें",
+	"date": "दिनांक",
 	"documentation": "प्रलेखन",
+	"edit-summary": "टिप्पणी",
 	"feedback": "आपके सुझाव",
 	"help-translate": "अनुवाद में सहायता करें",
 	"logout": "सत्रान्त",
@@ -13,8 +15,12 @@
 	"num-minutes": "{{PLURAL: $1|मिनट|मिनटों}}",
 	"num-seconds": "{{PLURAL: $1|सेकण्ड|सेकण्ड}}",
 	"optional": "वैकल्पिक",
+	"page": "पृष्ठ",
+	"pager-newer-n": "{{PLURAL:$1|नया|नये}} $1",
+	"pager-older-n": "{{PLURAL:$1|पुराना|पुराने}} $1",
 	"report-issue": "समस्या बताओ",
 	"submit": "जमा करें",
 	"totals": "कुल",
+	"username": "सदस्यनाम",
 	"view-source": "स्रोत देखें"
 }

@@ -4,6 +4,9 @@
 	"cancel": "Futa",
 	"help-translate": "Saidia tafsiri",
 	"no-results": "Hakuna matokeo",
+	"page": "Ukurasa",
+	"pager-newer-n": "{{PLURAL:$1|1 ya karibu zaidi|$1 ya karibu zaidi}}",
+	"pager-older-n": "{{PLURAL:$1|$1 ya zamani zaidi}}",
 	"report-issue": "Toa taarifa juu ya matatizo",
 	"totals": "Idadi ya kuangaliwa kwa kurasa, jumla",
 	"view-source": "Angalia chanzo"

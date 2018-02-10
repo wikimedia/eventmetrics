@@ -4,6 +4,9 @@
 	"cancel": "Қажет емес",
 	"help-translate": "Аударуға көмектесу",
 	"no-results": "Ешбір нәтиже табылмады",
+	"page": "Бет",
+	"pager-newer-n": "{{PLURAL:$1|жаңалау 1|жаңалау $1}}",
+	"pager-older-n": "{{PLURAL:$1|ескілеу 1|ескілеу $1}}",
 	"report-issue": "Қате туралы хабарлау",
 	"totals": "Барлығы",
 	"view-source": "Қайнарын қарау"

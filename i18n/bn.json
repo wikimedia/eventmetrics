@@ -3,7 +3,10 @@
 	"apply": "প্রয়োগ",
 	"cancel": "বাতিল",
 	"close": "বন্ধ করুন",
+	"date": "তারিখ",
+	"diff": "পার্থক্য",
 	"documentation": "নথিপত্র",
+	"edit-summary": "মন্তব্য",
 	"feedback": "প্রতিক্রিয়া",
 	"help-translate": "অনুবাদে সাহায্য করুন",
 	"logout": "প্রস্থান",
@@ -13,8 +16,12 @@
 	"num-minutes": "{{PLURAL: $1|মিনিট}}",
 	"num-seconds": "$1 {{PLURAL:$1|সেকেন্ড}}",
 	"optional": "ঐচ্ছিক",
+	"page": "পাতা",
+	"pager-newer-n": "{{PLURAL:$1|নতুনতর ১টি|নতুনতর $1টি}}",
+	"pager-older-n": "{{PLURAL:$1|আরও পুরনো ১টি|আরও পুরনো $1টি}}",
 	"report-issue": "একটি সমস্যা প্রতিবেদন করুন",
 	"submit": "জমা দিন",
 	"totals": "মোট",
+	"username": "ব্যবহারকারী নাম",
 	"view-source": "উৎস দেখুন"
 }

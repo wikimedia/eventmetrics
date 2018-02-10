@@ -3,7 +3,9 @@
 	"apply": "Կիրառել",
 	"cancel": "Չեղարկել",
 	"close": "Փակել",
+	"date": "Ամսաթիվ",
 	"documentation": "Ձեռնարկ",
+	"edit-summary": "Մեկնաբանություն",
 	"logout": "Դուրս գալ",
 	"no-results": "Ոչինչ չի գտնվել",
 	"num-days": "{{PLURAL:$1|օր}}",
@@ -11,7 +13,11 @@
 	"num-minutes": "{{PLURAL:$1|րոպե}}",
 	"num-seconds": "{{PLURAL:$1|վայրկյան}}",
 	"optional": "ոչ պարտադիր",
+	"page": "Էջ",
+	"pager-newer-n": "{{PLURAL:$1|ավելի թարմ 1|ավելի թարմ $1}}",
+	"pager-older-n": "{{PLURAL:$1|ավելի հին 1|ավելի հին $1}}",
 	"submit": "Հաշվել",
 	"totals": "Ընդամենը",
+	"username": "Մասնակցի անուն՝",
 	"view-source": "Դիտել ելատեքստը"
 }

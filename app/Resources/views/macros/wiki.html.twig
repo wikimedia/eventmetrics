@@ -1,0 +1,12 @@
+{% macro extLink(url, label, overrideLabel) %}{% spaceless %}
+    {% if overrideLabel is not empty %}
+        {% set label = overrideLabel %}
+    {% endif %}
+    <a href='{{ url }}' target='_blank'>{{ label|raw }}</a>
+    {% endspaceless %}
+{% endmacro %}
+
+{% macro pageLink(pageTitle, domain, label = null) %}{% spaceless %}
+    {% from _self import extLink as extLink %}
+    {{ extLink('https://' ~ domain ~ '.org/wiki/' ~ pageTitle, pageTitle, label) }}
+{% endspaceless %}{% endmacro %}

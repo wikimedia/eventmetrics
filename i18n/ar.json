@@ -2,7 +2,10 @@
 	"all": "الكل",
 	"apply": "طبّق",
 	"cancel": "ألغ",
+	"date": "التاريخ",
+	"diff": "فرق",
 	"documentation": "توثيق",
+	"edit-summary": "ملخص التعديل",
 	"help-translate": "المساهمة في الترجمة",
 	"logout": "تسجيل الخروج",
 	"no-results": "لم يتم العثور على نتائج",
@@ -11,8 +14,12 @@
 	"num-minutes": "{{PLURAL:$1|دقيقة|دقائق}}",
 	"num-seconds": "{{PLURAL:$1|ثانية|ثواني}}",
 	"optional": "اختياري",
+	"page": "صفحة",
+	"pager-newer-n": "{{PLURAL:$1|أجدد 1|أجدد $1}}",
+	"pager-older-n": "{{PLURAL:$1|أقدم 1|أقدم $1}}",
 	"report-issue": "أبلغ عن خلل",
 	"submit": "قدّم",
 	"totals": " الإجمالي",
+	"username": "اسم المستخدم",
 	"view-source": "اعرض المصدر"
 }

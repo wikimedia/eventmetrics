@@ -1,0 +1,27 @@
+<table class="event-metadata">
+    <tr>
+        <td>{{ msg('wikis') }}:</td>
+        <td>
+            {% if event.wikis|length > 0 %}
+                {% for wiki in event.wikis %}
+                    {{ wiki.domain }}{% if not loop.last %},{% endif %}
+                {% endfor %}
+            {% else %}
+                {{ msg('all') }}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ msg('start-date') }}:</td>
+        <td>
+            {{ event.start|date_format }}
+            ({{ event.displayTimezone }})
+        </td>
+    </tr>
+    <tr>
+        <td>{{ msg('end-date') }}:</td>
+        <td>
+            {{ event.end|date_format }}
+        </td>
+    </tr>
+</table>

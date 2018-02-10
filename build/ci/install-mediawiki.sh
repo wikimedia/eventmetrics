@@ -104,7 +104,7 @@ function efGetSiteParams($conf, $wiki) {
 }' >> LocalSettings.php
 
 cd extensions
-git clone https://github.com/wikimedia/mediawiki-extensions-CentralAuth.git CentralAuth
+git clone -b REL1_30 https://github.com/wikimedia/mediawiki-extensions-CentralAuth.git CentralAuth
 cd CentralAuth
 mysql -u root -e "CREATE DATABASE centralauth_p; USE centralauth_p; SOURCE central-auth.sql; GRANT all on centralauth_p.* to 'root'@'localhost';"
 php maintenance/migratePass0.php

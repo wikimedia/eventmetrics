@@ -1,9 +1,14 @@
 {
+	"diff": "Erin",
+	"edit-summary": "Resümee",
 	"logout": "Logi välja",
 	"num-days": "{{PLURAL: $1|päev|päeva}}",
 	"num-hours": "{{PLURAL: $1|tund|tundi}}",
 	"num-minutes": "{{PLURAL: $1|minut|minutit}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekundit}}",
 	"optional": "valikuline",
-	"submit": "Saada"
+	"pager-newer-n": "{{PLURAL:$1|uuem 1|uuemad $1}}",
+	"pager-older-n": "{{PLURAL:$1|vanem 1|vanemad $1}}",
+	"submit": "Saada",
+	"username": "Kasutajanimi"
 }

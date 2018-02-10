@@ -15,6 +15,9 @@ use DateTime;
  */
 class EventRepository extends Repository
 {
+    /** @var string Cache of inner revisions SQL, which is called multiple times. */
+    private $revisionsInnerSql;
+
     /**
      * Class name of associated entity.
      * Implements Repository::getEntityClass
@@ -130,5 +133,99 @@ class EventRepository extends Repository
         $stmt = $rqb->execute();
 
         return array_column($stmt->fetchAll(), 'username');
+    }
+
+    /**
+     * Get raw revisions that were part of the given Event.
+     * @param Event $event
+     * @param int $offset Number of rows to offset, used for pagination.
+     * @param int $limit Number of rows to fetch.
+     * @param bool $count Whether to get a COUNT instead of the actual revisions.
+     * @return int|string[] Count of revisions, or string array with keys 'id',
+     *     'timestamp', 'page', 'wiki', 'username', 'summary'.
+     */
+    public function getRevisions(Event $event, $offset = 0, $limit = 50, $count = false)
+    {
+        $conn = $this->getReplicaConnection();
+
+        // Have to do this hackiness because you can't bind PARAM_STR_ARRAY in Doctrine.
+        // The usernames are fetched from CentralAuth, so they are safe from SQL injection.
+        $usernames = '';
+        foreach ($event->getParticipantNames() as $username) {
+            $usernames .= ','.$conn->quote($username, \PDO::PARAM_STR);
+        }
+        $usernames = ltrim($usernames, ',');
+
+        $sql = 'SELECT '.($count ? 'COUNT(id)' : '*').' FROM ('.
+                    $this->getRevisionsInnerSql($event, $usernames)."
+                ) a ";
+        if ($count === false) {
+            $sql .= "ORDER BY timestamp DESC
+                     LIMIT $offset, $limit";
+        }
+
+        $start = $event->getStart()->format('Ymd000000');
+        $end = $event->getEnd()->format('Ymd235959');
+
+        $resultQuery = $conn->prepare($sql);
+        $resultQuery->bindParam('startDate', $start);
+        $resultQuery->bindParam('endDate', $end);
+        $resultQuery->execute();
+
+        if ($count === true) {
+            return (int)$resultQuery->fetchColumn();
+        } else {
+            return $resultQuery->fetchAll();
+        }
+    }
+
+    /**
+     * Get the number of revisions that were part of the given Event.
+     * @param Event $event
+     * @return int
+     */
+    public function getNumRevisions(Event $event)
+    {
+        return $this->getRevisions($event, null, null, true);
+    }
+
+    /**
+     * The inner SQL used when fetching revisions that are part of an Event.
+     * @param  Event $event
+     * @param  string $usernames Quoted and comma-separated.
+     * @return string
+     */
+    private function getRevisionsInnerSql(Event $event, $usernames)
+    {
+        if (isset($this->revisionsInnerSql)) {
+            return $this->revisionsInnerSql;
+        }
+
+        $eventWikiRepo = $this->em->getRepository('Model:EventWiki');
+        $eventWikiRepo->setContainer($this->container);
+        $sqlClauses = [];
+
+        $revisionTable = $this->getTableName('revision');
+        $pageTable = $this->getTableName('page');
+
+        foreach ($event->getWikis() as $wiki) {
+            $dbName = $eventWikiRepo->getDbName($wiki);
+            $domain = $wiki->getDomain();
+
+            $sqlClauses[] = "SELECT rev_id AS 'id',
+                    rev_timestamp AS 'timestamp',
+                    REPLACE(page_title, '_', ' ') AS 'page',
+                    rev_user_text AS 'username',
+                    rev_comment AS 'summary',
+                    '$domain' AS 'wiki'
+                FROM $dbName.$revisionTable
+                JOIN $dbName.$pageTable ON page_id = rev_page
+                WHERE rev_user_text IN ($usernames)
+                AND page_namespace = 0
+                AND rev_timestamp BETWEEN :startDate AND :endDate";
+        }
+
+        $this->revisionsInnerSql = implode(' UNION ', $sqlClauses);
+        return $this->revisionsInnerSql;
     }
 }

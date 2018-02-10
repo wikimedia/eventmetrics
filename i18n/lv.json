@@ -2,8 +2,12 @@
 	"all": "Visas",
 	"apply": "Pielietot",
 	"cancel": "Atcelt",
+	"date": "Datums",
 	"documentation": "Dokumentācija",
 	"help-translate": "Palīdzi iztulkot",
+	"page": "Lapa",
+	"pager-newer-n": "{{PLURAL:$1|$1 jaunākas|$1 jaunāku|$1 jaunākas}}",
+	"pager-older-n": "{{PLURAL:$1|$1 vecākas|$1 vecāku|$1 vecākas}}",
 	"report-issue": "Ziņot par problēmu",
 	"totals": "Kopsummas"
 }
