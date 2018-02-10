@@ -103,5 +103,5 @@ You'll need to run deploy cammands in the bash shell for the Kubernetes containe
 * `webservice --backend=kubernetes php5.6 shell`
 * `git pull`
 * `composer install`
-* `php bin/console cache:clear --env=prod`
+* `php bin/console cache:clear --env=prod --no-warmup`
 * `php bin/console assetic:dump --env=prod`
