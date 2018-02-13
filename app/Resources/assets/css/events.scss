@@ -65,4 +65,14 @@
     .event-new-participants {
         max-width: 458px;
     }
+
+    .save-participants-form {
+        position: relative;
+    }
+
+    .save-participants-btn {
+        left: 0;
+        position: absolute;
+        top: 0;
+    }
 }
