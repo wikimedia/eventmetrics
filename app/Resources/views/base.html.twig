@@ -59,7 +59,7 @@
                     {% if loggedInUser() %}
                         <span class="logged-in">
                             {{ loggedInUser().username }}
-                            (<a href="path('logout')">{{ msg('logout') }}</a>)
+                            (<a href="{{ path('logout') }}">{{ msg('logout') }}</a>)
                         </span>
                     {% endif %}
                     <div class="lang-group btn-group dropdown">

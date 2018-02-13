@@ -33,6 +33,9 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+        if ($this->container->get('session')->get('logged_in_user')) {
+            return $this->redirectToRoute('Programs');
+        }
         return $this->render('default/index.html.twig');
     }
 
