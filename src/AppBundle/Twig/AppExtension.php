@@ -5,9 +5,10 @@
 
 namespace AppBundle\Twig;
 
-use NumberFormatter;
-use IntlDateFormatter;
+use AppBundle\Repository\EventWikiRepository;
 use DateTime;
+use IntlDateFormatter;
+use NumberFormatter;
 
 /**
  * Various Twig functions and filters.
@@ -203,6 +204,7 @@ class AppExtension extends Extension
             new \Twig_SimpleFilter('diff_format', [$this, 'diffFormat'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('num_format', [$this, 'numberFormat']),
             new \Twig_SimpleFilter('date_format', [$this, 'dateFormat']),
+            new \Twig_SimpleFilter('wikify', [$this, 'wikify']),
         ];
     }
 
@@ -349,20 +351,15 @@ class AppExtension extends Extension
         return [$val, $key];
     }
 
-    // /**
-    //  * List of EventStat/EventWikiStat metrics, as they should appear in
-    //  * the interface. Eventually individual Events or Programs may only
-    //  * show specific EventStats. For now, it is hard-coded here.
-    //  * @return string[]
-    //  */
-    // public function metricOrder()
-    // {
-    //     return [
-    //         'participants',
-    //         'new-editors',
-    //         'retention',
-    //         'pages-created',
-    //         'pages-improved',
-    //     ];
-    // }
+    /**
+     * Convert raw wikitext to HTML-formatted string.
+     * @param string $wikitext
+     * @param string $domain Project domain such as en.wikipedia
+     * @param string $pageTitle Page title including namespace.
+     * @return string
+     */
+    public function wikify($wikitext, $domain, $pageTitle = null)
+    {
+        return EventWikiRepository::wikifyString($wikitext, $domain, $pageTitle);
+    }
 }

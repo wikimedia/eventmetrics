@@ -2,6 +2,8 @@
 	"all": "Alle",
 	"apply": "Bruk",
 	"cancel": "Avbryt",
+	"diff": "Diff",
+	"edit-summary": "Kommentar",
 	"feedback": "Tilbakemelding",
 	"help-translate": "Hjelp til med oversetting",
 	"logout": "Logg ut",
@@ -11,8 +13,12 @@
 	"num-minutes": "{{PLURAL: $1|minutt|minutter}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekunder}}",
 	"optional": "valgfritt",
+	"page": "side",
+	"pager-newer-n": "{{PLURAL:$1|1 nyere|$1 nyere}}",
+	"pager-older-n": "{{PLURAL:$1|1 eldre|$1 eldre}}",
 	"report-issue": "Rapporter et problem",
 	"submit": "Send",
 	"totals": "Totalt",
+	"username": "Brukernavn",
 	"view-source": "Vis kode"
 }

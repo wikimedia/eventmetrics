@@ -116,7 +116,6 @@ class DefaultController extends Controller
      * @Route("/oauth_callback", name="OAuthCallback")
      * @param Request $request The HTTP request.
      * @return RedirectResponse
-     * @codeCoverageIgnore
      */
     public function oauthCallbackAction(Request $request)
     {
@@ -124,6 +123,10 @@ class DefaultController extends Controller
         if (!$request->get('oauth_verifier')) {
             throw $this->createNotFoundException('No OAuth verifier given.');
         }
+
+        // From here we don't test because we'd have to
+        // have a fresh OAuth token from MediaWiki.
+        // @codeCoverageIgnoreStart
 
         /** @var Session $session */
         $session = $this->get('session');
@@ -144,6 +147,8 @@ class DefaultController extends Controller
 
         // Send to 'My programs' pages.
         return $this->redirectToRoute('Programs');
+
+        // @codeCoverageIgnoreEnd
     }
 
     /**

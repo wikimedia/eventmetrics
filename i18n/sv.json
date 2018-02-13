@@ -3,7 +3,10 @@
 	"apply": "Verkställ",
 	"cancel": "Avbryt",
 	"close": "Stäng",
+	"date": "Datum",
+	"diff": "Skillnad",
 	"documentation": "Dokumentation",
+	"edit-summary": "Redigeringssammanfattning",
 	"feedback": "Återkoppling",
 	"help-translate": "Hjälp till att översätta",
 	"logout": "Logga ut",
@@ -13,8 +16,12 @@
 	"num-minutes": "{{PLURAL: $1|minut|minuter}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekunder}}",
 	"optional": "valfri",
+	"page": "Sida",
+	"pager-newer-n": "{{PLURAL:$1|1 nyare|$1 nyare}}",
+	"pager-older-n": "{{PLURAL:$1|1 äldre|$1 äldre}}",
 	"report-issue": "Rapportera ett problem",
 	"submit": "Skicka",
 	"totals": "Totalt",
+	"username": "Användarnamn",
 	"view-source": "Visa källkod"
 }

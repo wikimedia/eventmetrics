@@ -1,5 +1,7 @@
 {
 	"close": "बन्द गर्नुहोस्",
+	"diff": "भिन्नता",
+	"edit-summary": "प्रतिक्रिया",
 	"feedback": "प्रतिक्रिया",
 	"logout": "निर्गमन (लग आउट)",
 	"num-days": "{{PLURAL: $1|day|days}}",
@@ -7,6 +9,10 @@
 	"num-minutes": "{{PLURAL: $1|minute|minutes}}",
 	"num-seconds": "{{PLURAL: $1|second|seconds}}",
 	"optional": "वैकल्पिक",
+	"page": "पृष्ठ",
+	"pager-newer-n": "{{PLURAL:$1|नयाँ १|नयाँ $1}}",
+	"pager-older-n": "{{PLURAL:$1|पुरानो १|पुरानो $1}}",
 	"submit": "संग्रह गर्नुहोस्",
-	"totals": "कुल"
+	"totals": "कुल",
+	"username": "प्रयोगकर्ताको नाम"
 }

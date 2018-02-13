@@ -3,12 +3,18 @@
 	"apply": "Käytä",
 	"cancel": "Peruuta",
 	"close": "Sulje",
+	"date": "Päivämäärä",
 	"documentation": "Dokumentaatio",
+	"edit-summary": "Kommentoi",
 	"feedback": "Palaute",
 	"help-translate": "Auta kääntämisessä",
 	"logout": "Kirjaudu ulos",
 	"no-results": "Tuloksia ei löytynyt",
+	"page": "Sivu",
+	"pager-newer-n": "← {{PLURAL:$1|1 uudempi|$1 uudempaa}}",
+	"pager-older-n": "{{PLURAL:$1|1 vanhempi|$1 vanhempaa}} →",
 	"report-issue": "Ilmoita ongelmasta",
 	"totals": "Yhteensä",
+	"username": "Käyttäjänimi",
 	"view-source": "Näytä lähdekoodi"
 }

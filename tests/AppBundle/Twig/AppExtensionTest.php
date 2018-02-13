@@ -159,4 +159,24 @@ class AppExtensionTest extends WebTestCase
         $this->assertEquals('Foo', $this->appExtension->capitalizeFirst('foo'));
         $this->assertEquals('Bar', $this->appExtension->capitalizeFirst('Bar'));
     }
+
+    /**
+     * Wikifying a string.
+     */
+    public function testWikify()
+    {
+        $wikitext = '<script>alert("XSS baby")</script> [[test page]]';
+        $this->assertEquals(
+            "&lt;script&gt;alert(\"XSS baby\")&lt;/script&gt; " .
+                "<a target='_blank' href='https://test.example.org/wiki/Test_page'>test page</a>",
+            $this->appExtension->wikify($wikitext, 'test.example')
+        );
+
+        $wikitext = '/* My section */ Editing a specific section';
+        $this->assertEquals(
+            "<a target='_blank' href='https://test.example.org/wiki/My_fun_page#My_section'>".
+                "&rarr;</a><em class='text-muted'>My section:</em> Editing a specific section",
+            $this->appExtension->wikify($wikitext, 'test.example', 'my fun page')
+        );
+    }
 }

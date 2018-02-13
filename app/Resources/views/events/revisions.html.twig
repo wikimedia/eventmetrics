@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/layout.html.twig' as layout %}
+{% import 'macros/wiki.html.twig' as wiki %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
+        </li>
+        <li>
+            <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
+        </li>
+        <li>
+            <a href="{{ path('Event', {'programTitle': program.title, 'title': event.title}) }}">{{ event.displayTitle }}</a>
+        </li>
+        <li class="active">{{ msg('event-data') }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="page-header">
+            <h1>
+                {{ msg('event-data-for', [event.displayTitle]) }}
+            </h1>
+        </div>
+
+        <div class="pull-right text-right">
+            <div class="btn-group event-export">
+                <button type="button" class="btn btn-default event-export-btn">
+                    <span class="glyphicon glyphicon-export"></span>
+                    {{ msg('download-csv') }}
+                </button>
+            </div>
+            <div class="btn-group event-export">
+                <button type="button" class="btn btn-default event-export-btn">
+                    <span class="glyphicon glyphicon-export"></span>
+                    {{ msg('download-wiki-table') }}
+                </button>
+            </div>
+            <div class="event-stats-status">
+                {% if event.updated != null %}
+                    {{ msg('last-updated', [event.updated|date_format]) }}
+                {% endif %}
+            </div>
+        </div>
+
+        {% include 'events/_metadata.html.twig' with {'event': event} %}
+
+        {% include 'events/_stats_summary.html.twig' with {'event': event} %}
+
+        <section class="event-revisions">
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                    <tr>
+                        {% for column in ['date', 'page', 'wiki', 'username', 'edit-summary'] %}
+                            <th>{{ msg(column) }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rev in revisions %}
+                        <tr class="event-revision">
+                            <td>
+                                ({{ wiki.pageLink('Special:Diff/' ~ rev.id, rev.wiki, msg('diff')|lower) }})
+                                {{ wiki.pageLink('Special:PermaLink/' ~ rev.id, rev.wiki, rev.timestamp|date_format) }}
+                            </td>
+                            <td>
+                                {{ wiki.pageLink(rev.page, rev.wiki) }}
+                            </td>
+                            <td>{{ rev.wiki }}</td>
+                            <td>
+                                {{ wiki.pageLink('User:' ~ rev.username, rev.wiki, rev.username) }}
+                            </td>
+                            <td>{{ rev.summary|wikify(rev.wiki, rev.page)|raw }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {##### PAGINATION #####}
+            {% set numPages = (numRevisions / numResultsPerPage)|round(0, 'ceil') %}
+            {% if numPages > 1 %}
+                {% set hasPrev = offset - 1 >= 0 %}
+                {% set hasNext = offset + 1 < numPages %}
+                {% set pathVars = {'programTitle': program.title, 'title': event.title} %}
+
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li{% if not(hasPrev) %} class="disabled"{% endif %}>
+                            {% if hasPrev %}
+                                <a href="{{ path('Revisions', pathVars|merge({'offset': offset - 1})) }}" aria-label="Previous">
+                            {% endif %}
+                            <span aria-hidden="true">
+                                <span class="glyphicon glyphicon-arrow-left"></span>
+                                {{ msg('pager-older-n', [numResultsPerPage]) }}
+                            </span>
+                            {% if hasPrev %}</a>{% endif %}
+                        </li>
+                        {% for page in 1..numPages %}
+                            {% set active = offset == loop.index0 %}
+                            <li{% if active %} class="active"{% endif %}>
+                                <a href="{{ path('Revisions', pathVars|merge({'offset': loop.index0})) }}">
+                                    {{ page }} {% if active %}<span class="sr-only">(current)</span>{% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        <li{% if not(hasNext) %} class="disabled"{% endif %}>
+                            {% if hasNext %}
+                                <a href="{{ path('Revisions', pathVars|merge({'offset': offset + 1})) }}" aria-label="Next">
+                            {% endif %}
+                            <span aria-hidden="true">
+                                {{ msg('pager-newer-n', [numResultsPerPage]) }}
+                                <span class="glyphicon glyphicon-arrow-right"></span>
+                            </span>
+                            {% if hasNext %}</a>{% endif %}
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}

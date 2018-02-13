@@ -62,10 +62,25 @@ trait TitleUserTrait
      */
     public function validateUnreservedTitle(ExecutionContext $context)
     {
-        if (in_array($this->title, ['edit', 'delete', 'process', 'api'])) {
+        if (in_array($this->title, ['edit', 'new', 'delete', 'process', 'api', 'revisions'])) {
             $context->buildViolation('error-title-reserved')
-                ->setParameter(0, '<code>edit</code>, <code>delete</code>, ' .
-                    '<code>process</code>, <code>api</code>')
+                ->setParameter(0, '<code>edit</code>, <code>delete</code>, '.
+                    '<code>process</code>, <code>api</code>, <code>revisions</code>')
+                ->atPath('title')
+                ->addViolation();
+        }
+    }
+
+    /**
+     * Validates that the title does not contain invalid characters.
+     * @Assert\Callback
+     * @param ExecutionContext $context Supplied by Symfony.
+     */
+    public function validateCharacters(ExecutionContext $context)
+    {
+        if (preg_match('/[\/]/', $this->title) === 1) {
+            $context->buildViolation('error-title-invalid-chars')
+                ->setParameter(0, '<code>/</code>')
                 ->atPath('title')
                 ->addViolation();
         }

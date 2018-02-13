@@ -3,7 +3,10 @@
 	"apply": "Примени",
 	"cancel": "Откажи",
 	"close": "Затвори",
+	"date": "Датум",
+	"diff": "Разл",
 	"documentation": "Документација",
+	"edit-summary": "Опис измене",
 	"feedback": "Повратне информације",
 	"help-translate": "Преведи",
 	"logout": "Одјава",
@@ -13,8 +16,12 @@
 	"num-minutes": "{{PLURAL:$1|минут|минута|минута}}",
 	"num-seconds": "{{PLURAL:$1|секунд|секунда|секунди}}",
 	"optional": "Опционо",
+	"page": "Страница",
+	"pager-newer-n": "{{PLURAL:$1|новији 1|новија $1|новијих $1}}",
+	"pager-older-n": "{{PLURAL:$1|старији 1|старијих $1}}",
 	"report-issue": "Пријави проблем",
 	"submit": "Пошаљи",
 	"totals": "Укупно",
+	"username": "Корисничко име",
 	"view-source": "Погледај извор"
 }

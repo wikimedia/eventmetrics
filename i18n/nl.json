@@ -3,7 +3,10 @@
 	"apply": "Toepassen",
 	"cancel": "Annuleren",
 	"close": "Sluiten",
+	"date": "Datum",
+	"diff": "Wijz",
 	"documentation": "Documentatie",
+	"edit-summary": "Reactie",
 	"feedback": "Terugkoppeling",
 	"help-translate": "Helpen met vertalen",
 	"logout": "Afmelden",
@@ -13,8 +16,12 @@
 	"num-minutes": "{{PLURAL: $1|minuut|minuten}}",
 	"num-seconds": "{{PLURAL: $1|seconde|seconden}}",
 	"optional": "optioneel",
+	"page": "Pagina",
+	"pager-newer-n": "{{PLURAL:$1|1 nieuwere|$1 nieuwere}}",
+	"pager-older-n": "{{PLURAL:$1|1 oudere|$1 oudere}}",
 	"report-issue": "Probleem melden",
 	"submit": "Verzenden",
 	"totals": "Totalen",
+	"username": "Gebruikersnaam",
 	"view-source": "Broncode bekijken"
 }

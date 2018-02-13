@@ -1,5 +1,7 @@
 {
 	"close": "Zarrar",
+	"diff": "Diff",
+	"edit-summary": "Comentariu",
 	"feedback": "La to opinión",
 	"help-translate": "Ayudar a traducir",
 	"logout": "Salir",
@@ -8,5 +10,8 @@
 	"num-minutes": "{{PLURAL: $1|minutu|minutos}}",
 	"num-seconds": "{{PLURAL: $1|segundu|segundos}}",
 	"optional": "opcional",
-	"submit": "Unviar"
+	"pager-newer-n": "{{PLURAL:$1|1 siguiente|$1 siguientes}}",
+	"pager-older-n": "{{PLURAL:$1|1 anterior|$1 anteriores}}",
+	"submit": "Unviar",
+	"username": "Nome d'usuariu"
 }

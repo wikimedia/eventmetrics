@@ -1,0 +1,19 @@
+{% set colSize = 12 // (event.statistics|length + 1) %}
+<div class="row event-stats">
+    <div class="col-sm-{{ colSize }} text-center{% if colSize is even and colSize < 12 %} col-sm-offset-1{% endif %}">
+        <h4>{{ msg('participants') }}</h4>
+        <h3>{{ event.numParticipants|num_format }}</h3>
+    </div>
+    {% for stat in event.statistics %}
+        <div class="col-sm-{{ colSize }} text-center">
+            <h4>{{ msg(stat.metric, [stat.offset]) }}</h4>
+            <h3>
+                {% if stat.value is null %}
+                    &ndash;
+                {% else %}
+                    {{ stat.value|num_format }}
+                {% endif %}
+            </h3>
+        </div>
+    {% endfor %}
+</div>

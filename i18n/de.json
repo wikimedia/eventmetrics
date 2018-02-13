@@ -3,7 +3,10 @@
 	"apply": "Anwenden",
 	"cancel": "Abbrechen",
 	"close": "Schließen",
+	"date": "Datum",
+	"diff": "Unterschied",
 	"documentation": "Dokumentation",
+	"edit-summary": "Kommentar",
 	"feedback": "Rückmeldung",
 	"help-translate": "Hilf beim Übersetzen",
 	"logout": "Abmelden",
@@ -13,8 +16,12 @@
 	"num-minutes": "{{PLURAL: $1|Minute|Minuten}}",
 	"num-seconds": "{{PLURAL: $1|Sekunde|Sekunden}}",
 	"optional": "optional",
+	"page": "Seite",
+	"pager-newer-n": "{{PLURAL:$1|nächster|nächste $1}}",
+	"pager-older-n": "{{PLURAL:$1|vorheriger|vorherige $1}}",
 	"report-issue": "Ein Problem melden",
 	"submit": "Absenden",
 	"totals": "Summen",
+	"username": "Benutzername",
 	"view-source": "Quellcode ansehen"
 }

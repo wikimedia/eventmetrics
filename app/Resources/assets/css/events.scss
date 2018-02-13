@@ -1,4 +1,5 @@
-.event {
+.event,
+.eventdata {
     .wiki-row {
         margin-bottom: 0;
 
@@ -74,5 +75,12 @@
         left: 0;
         position: absolute;
         top: 0;
+
+    .event-revisions {
+        overflow-x: scroll;
+    }
+
+    .event-revision {
+        white-space: nowrap;
     }
 }

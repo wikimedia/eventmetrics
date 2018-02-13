@@ -2,7 +2,9 @@
 	"all": "ทั้งหมด",
 	"apply": "ใช้งาน",
 	"cancel": "ยกเลิก",
+	"date": "วันที่",
 	"documentation": "เอกสาร",
+	"edit-summary": "ความคิดเห็น",
 	"help-translate": "ช่วยแปลภาษา",
 	"logout": "ออกจากระบบ",
 	"no-results": "ไม่พบผลลัพธ์",
@@ -11,8 +13,12 @@
 	"num-minutes": "{{PLURAL: $1|นาที|นาที}}",
 	"num-seconds": "{{PLURAL: $1|วินาที|วินาที}}",
 	"optional": "เลือก",
+	"page": "หน้า",
+	"pager-newer-n": "ใหม่กว่า $1",
+	"pager-older-n": "เก่ากว่า $1",
 	"report-issue": "รายงานผล",
 	"submit": "บันทึก",
 	"totals": "ทั้งหมด",
+	"username": "ชื่อผู้ใช้",
 	"view-source": "ดูโค้ด"
 }

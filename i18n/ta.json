@@ -1,11 +1,17 @@
 {
 	"close": "மூடு",
+	"date": "நாள்",
+	"edit-summary": "கருத்துரை",
 	"feedback": "கருத்து",
 	"logout": "விடுபதிகை",
 	"num-days": "{{PLURAL: $1|நாள்|நாட்கள்}}",
 	"num-hours": "{{PLURAL: $1|மணி|மணிகள்}}",
 	"num-minutes": "{{PLURAL:$1|நிமிடம்|நிமிடங்கள்}}",
 	"num-seconds": "{{PLURAL: $1|வினாடி|வினாடிகள்}}",
+	"page": "பக்கம்",
+	"pager-newer-n": "{{PLURAL:$1|புதிய ஒரு|புதிய $1}}",
+	"pager-older-n": "{{PLURAL:$1|பழைய ஒரு|பழைய $1}}",
 	"submit": "சமர்ப்பிக்கவும்",
-	"totals": "மொத்தம்"
+	"totals": "மொத்தம்",
+	"username": "பயனர் பெயர்"
 }
