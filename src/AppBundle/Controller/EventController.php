@@ -475,7 +475,8 @@ class EventController extends Controller
         } else {
             // Otherwise we need find the one that exists in grantmetrics.
             $participant = $participantRepo->findOneBy([
-                'userId' => $row['user_id']
+                'userId' => $row['user_id'],
+                'event' => $event,
             ]);
 
             if ($participant === null) {
