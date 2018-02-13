@@ -83,7 +83,7 @@ class EventWikiRepository extends Repository
      */
     public static function wikifyString($wikitext, $domain, $pageTitle = null)
     {
-        $wikitext = htmlspecialchars($wikitext, ENT_NOQUOTES);
+        $wikitext = htmlspecialchars(html_entity_decode($wikitext), ENT_NOQUOTES);
         $sectionMatch = null;
         $isSection = preg_match_all("/^\/\* (.*?) \*\//", $wikitext, $sectionMatch);
         $pagePath = "https://$domain.org/wiki/";

@@ -172,10 +172,10 @@ class AppExtensionTest extends WebTestCase
             $this->appExtension->wikify($wikitext, 'test.example')
         );
 
-        $wikitext = '/* My section */ Editing a specific section';
+        $wikitext = '/* My section */ Editing a specific &quot;section&quot;';
         $this->assertEquals(
             "<a target='_blank' href='https://test.example.org/wiki/My_fun_page#My_section'>".
-                "&rarr;</a><em class='text-muted'>My section:</em> Editing a specific section",
+                "&rarr;</a><em class='text-muted'>My section:</em> Editing a specific \"section\"",
             $this->appExtension->wikify($wikitext, 'test.example', 'my fun page')
         );
     }

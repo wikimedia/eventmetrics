@@ -160,7 +160,7 @@ class EventRepository extends Repository
                     $this->getRevisionsInnerSql($event, $usernames)."
                 ) a ";
         if ($count === false) {
-            $sql .= "ORDER BY timestamp DESC
+            $sql .= "ORDER BY timestamp ASC
                      LIMIT $offset, $limit";
         }
 
