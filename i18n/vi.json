@@ -11,6 +11,7 @@
 	"num-days": "{{PLURAL:$1|ngày|ngày}}",
 	"num-hours": "{{PLURAL:$1|giờ|giờ}}",
 	"num-minutes": "{{PLURAL:$1|phút|phút}}",
+	"num-revisions": "{{PLURAL:$1|Phiên bản|Phiên bản}}",
 	"num-seconds": "{{PLURAL:$1|giây|giây}}",
 	"optional": "tùy chọn",
 	"page": "Trang",

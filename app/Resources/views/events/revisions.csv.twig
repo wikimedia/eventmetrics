@@ -1,0 +1,7 @@
+{% for column in ['diff', 'date', 'page', 'wiki', 'username', 'edit-summary'] %}
+{{ msg(column) }}{% if not loop.last %},{% endif %}
+{% endfor %}
+
+{% for rev in revisions %}
+"=HYPERLINK(""https://{{ rev.wiki }}.org/wiki/Special:Diff/{{ rev.id }}"",""{{ msg('diff') }}"")","=HYPERLINK(""https://{{ rev.wiki }}.org/wiki/Special:PermaLink/{{ rev.id }}"",""{{ rev.timestamp|date_format }}"")","=HYPERLINK(""https://{{ rev.wiki }}.org/wiki/{{ rev.page }}"",""{{ rev.page }}"")",{{ rev.wiki }},"=HYPERLINK(""https://{{ rev.wiki }}.org/wiki/User:{{ rev.username }}"",""{{ rev.username }}"")","{{ rev.summary }}"
+{% endfor %}

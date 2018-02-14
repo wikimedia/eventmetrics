@@ -8,6 +8,7 @@ namespace AppBundle\Controller;
 use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use AppBundle\Model\Program;
+use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -39,6 +40,45 @@ class EventDataController extends Controller
      */
     public function revisionsAction(Request $request, $programTitle, $title)
     {
+        list($program, $event, $eventRepo) = $this->getProgramAndEvent($programTitle, $title);
+
+        $ret = [
+            'gmTitle' => $event->getDisplayTitle(),
+            'program' => $program,
+            'event' => $event,
+        ];
+
+        $limit = $offset = null;
+
+        $format = $request->query->get('format', 'html');
+        if ($format === 'html' || $format == '') {
+            // The get() default above doesn't work when the 'format' parameter is blank.
+            $format = 'html';
+
+            $offset = (int)$request->query->get('offset') * $limit;
+            $limit = 50;
+
+            $ret = array_merge([
+                'numRevisions' => $eventRepo->getNumRevisions($event),
+                'numResultsPerPage' => $limit,
+                'offset' => $offset,
+            ], $ret);
+        }
+
+        $ret['revisions'] = $eventRepo->getRevisions($event, $offset, $limit);
+
+        return $this->getFormattedRevisionsResponse($format, $ret);
+    }
+
+    /**
+     * Get a Program, Event and EventRepository given the program title
+     * and event title.
+     * @param  string $programTitle Title of the program.
+     * @param  string $title        Title of the event.
+     * @return array [Program, Event, EventRepository].
+     */
+    private function getProgramAndEvent($programTitle, $title)
+    {
         $em = $this->container->get('doctrine')->getManager();
         $program = $em->getRepository(Program::class)
             ->findOneBy(['title' => $programTitle]);
@@ -49,18 +89,28 @@ class EventDataController extends Controller
                 'title' => $title,
             ]);
 
-        $offset = (int)$request->query->get('offset');
-        $limit = 50;
+        return [$program, $event, $eventRepo];
+    }
 
-        return $this->render('events/revisions.html.twig', [
-            'gmTitle' => $event->getDisplayTitle(),
-            'program' => $program,
-            'event' => $event,
-            'revisions' => $eventRepo->getRevisions($event, $offset * $limit, $limit),
-            'numRevisions' => $eventRepo->getNumRevisions($event),
-            'numResultsPerPage' => $limit,
-            'offset' => $offset,
-        ]);
+    /**
+     * Get the rendered template for the requested format.
+     * @param string $format One of 'html', 'csv' or 'wikitext'
+     * @param array $ret Data that should be passed to the view.
+     * @return Response
+     */
+    private function getFormattedRevisionsResponse($format, array $ret)
+    {
+        $formatMap = [
+            'wikitext' => 'text/plain',
+            'csv' => 'text/csv',
+        ];
+
+        $response = $this->render("events/revisions.$format.twig", $ret);
+
+        $contentType = isset($formatMap[$format]) ? $formatMap[$format] : 'text/html';
+        $response->headers->set('Content-Type', $contentType);
+
+        return $response;
     }
 
     /*************************

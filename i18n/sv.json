@@ -14,6 +14,7 @@
 	"num-days": "{{PLURAL: $1|dag|dagar}}",
 	"num-hours": "{{PLURAL: $1|timme|timmar}}",
 	"num-minutes": "{{PLURAL: $1|minut|minuter}}",
+	"num-revisions": "{{PLURAL:$1|Version|Versioner}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekunder}}",
 	"optional": "valfri",
 	"page": "Sida",

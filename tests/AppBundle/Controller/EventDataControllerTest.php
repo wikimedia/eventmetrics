@@ -37,7 +37,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $this->assertEquals(200, $this->response->getStatusCode());
 
         $this->assertContains(
-            'Samwilson',
+            'MusikAnimal',
             $this->crawler->filter('.event-revisions')->text()
         );
     }

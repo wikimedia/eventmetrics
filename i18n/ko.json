@@ -14,6 +14,7 @@
 	"num-days": "{{PLURAL: $1|일}}",
 	"num-hours": "{{PLURAL: $1|시간}}",
 	"num-minutes": "{{PLURAL: $1|분}}",
+	"num-revisions": "{{PLURAL: $1|개 판}}",
 	"num-seconds": "{{PLURAL: $1|초}}",
 	"optional": "선택 가능",
 	"page": "페이지",

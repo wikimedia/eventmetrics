@@ -14,6 +14,7 @@
 	"num-days": "{{PLURAL: $1|Tag|Tage}}",
 	"num-hours": "{{PLURAL: $1|Stunde|Stunden}}",
 	"num-minutes": "{{PLURAL: $1|Minute|Minuten}}",
+	"num-revisions": "{{PLURAL: $1|Bearbeitung|Bearbeitungen}}",
 	"num-seconds": "{{PLURAL: $1|Sekunde|Sekunden}}",
 	"optional": "optional",
 	"page": "Seite",

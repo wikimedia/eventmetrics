@@ -12,6 +12,7 @@
 	"num-days": "{{PLURAL:$1|ڕۆژ}}",
 	"num-hours": "{{PLURAL:$1|کاتژمێر}}",
 	"num-minutes": "{{PLURAL: $1|خولەک|خولەک}}",
+	"num-revisions": "{{PLURAL:$1|پیاچوونەوە|پیاچوونەوە}}",
 	"num-seconds": "{{PLURAL: $1|چرکە|چرکە}}",
 	"optional": "دڵخوازانە",
 	"page": "پەڕە",

@@ -12,6 +12,7 @@
 	"num-days": "{{PLURAL:$1|יום|ימים}}",
 	"num-hours": "{{PLURAL:$1|שעה|שעות}}",
 	"num-minutes": "{{PLURAL:$1|דקה|דקות}}",
+	"num-revisions": "{{PLURAL:$1|גרסה|גרסאות}}",
 	"num-seconds": "{{PLURAL:$1|שנייה|שניות}}",
 	"optional": "לא חובה",
 	"page": "דף",

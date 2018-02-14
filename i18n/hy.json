@@ -11,6 +11,7 @@
 	"num-days": "{{PLURAL:$1|օր}}",
 	"num-hours": "{{PLURAL:$1|ժամ}}",
 	"num-minutes": "{{PLURAL:$1|րոպե}}",
+	"num-revisions": "{{PLURAL:$1|տարբերակ}}",
 	"num-seconds": "{{PLURAL:$1|վայրկյան}}",
 	"optional": "ոչ պարտադիր",
 	"page": "Էջ",
