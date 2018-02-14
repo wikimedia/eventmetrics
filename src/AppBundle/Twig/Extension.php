@@ -108,4 +108,23 @@ abstract class Extension extends Twig_Extension
         // English as default.
         return 'en';
     }
+
+    /**
+     * Get an i18n message.
+     * @param string|array $message
+     * @param array $vars
+     * @return mixed|null|string
+     */
+    public function intuitionMessage($message = '', $vars = [])
+    {
+        if (is_array($message)) {
+            $vars = $message;
+            $message = $message[0];
+            $vars = array_slice($vars, 1);
+        }
+        return $this->getIntuition()->msg($message, [
+            'domain' => 'grantmetrics',
+            'variables' => $vars
+        ]);
+    }
 }

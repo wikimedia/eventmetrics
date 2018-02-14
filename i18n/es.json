@@ -14,6 +14,7 @@
 	"num-days": "{{PLURAL: $1|día|días}}",
 	"num-hours": "{{PLURAL: $1|hora|horas}}",
 	"num-minutes": "{{PLURAL: $1|minuto|minutos}}",
+	"num-revisions": "{{PLURAL: $1|Revisión|Revisiones}}",
 	"num-seconds": "{{PLURAL: $1|segundo|segundos}}",
 	"optional": "opcional",
 	"page": "Página",

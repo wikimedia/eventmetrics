@@ -8,6 +8,7 @@
 	"num-days": "{{PLURAL: $1|día|díes}}",
 	"num-hours": "{{PLURAL: $1|hora|hores}}",
 	"num-minutes": "{{PLURAL: $1|minutu|minutos}}",
+	"num-revisions": "{{PLURAL: $1|Revisión|Revisiones}}",
 	"num-seconds": "{{PLURAL: $1|segundu|segundos}}",
 	"optional": "opcional",
 	"pager-newer-n": "{{PLURAL:$1|1 siguiente|$1 siguientes}}",

@@ -14,6 +14,7 @@
 	"num-days": "{{PLURAL: $1|Dag|Deeg}}",
 	"num-hours": "{{PLURAL: $1|Stonn|Stonnen}}",
 	"num-minutes": "{{PLURAL: $1|Minutt|Minutten}}",
+	"num-revisions": "{{PLURAL:$1|Versioun|Versiounen}}",
 	"num-seconds": "{{PLURAL: $1|Sekonn|Sekonnen}}",
 	"optional": "Fakultativ",
 	"page": "Säit",

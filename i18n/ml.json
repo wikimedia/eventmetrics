@@ -4,6 +4,7 @@
 	"num-days": "{{PLURAL:$1| ദിവസം}}",
 	"num-hours": "({{PLURAL:$1| മണിക്കൂർ}})",
 	"num-minutes": "{{PLURAL:$1|മിനിറ്റ്}}",
+	"num-revisions": "{{PLURAL:$1|നാൾപ്പതിപ്പ്}}",
 	"num-seconds": "{{PLURAL:$1|സെക്കന്റ്}}",
 	"optional": "നിർബന്ധമില്ല",
 	"pager-newer-n": "{{PLURAL:$1|പുതിയ 1|പുതിയ $1}}",

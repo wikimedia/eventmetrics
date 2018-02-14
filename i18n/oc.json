@@ -12,6 +12,7 @@
 	"num-days": "{{PLURAL: $1|jorn|jorns}}",
 	"num-hours": "{{PLURAL:$1|ora|oras}}",
 	"num-minutes": "{{PLURAL:$1|minuta|minutas}}",
+	"num-revisions": "{{PLURAL:$1|revision|revisions}}",
 	"num-seconds": "{{PLURAL:$1|segonda|segondas}}",
 	"optional": "Facultatiu",
 	"page": "Pagina",

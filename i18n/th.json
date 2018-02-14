@@ -11,6 +11,7 @@
 	"num-days": "{{PLURAL: $1|วัน|วัน}}",
 	"num-hours": "{{PLURAL: $1|ชั่วโมง|ชั่วโมง}}",
 	"num-minutes": "{{PLURAL: $1|นาที|นาที}}",
+	"num-revisions": "{{PLURAL: $1|รุ่นการแก้ไข|รุ่นการแก้ไข}}",
 	"num-seconds": "{{PLURAL: $1|วินาที|วินาที}}",
 	"optional": "เลือก",
 	"page": "หน้า",

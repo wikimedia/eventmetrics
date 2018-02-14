@@ -43,7 +43,7 @@
             </div>
             <div class="event-stats-status">
                 {% if event.updated != null %}
-                    {{ msg('last-updated', [event.updated|date_format]) }}
+                    {{ msg('last-updated', [event.updated|date_localize]) }}
                 {% endif %}
             </div>
         </div>

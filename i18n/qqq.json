@@ -59,6 +59,7 @@
 	"num-hours": "Conditional PLURAL form of 'hour'. $1 is the number.\n{{Identical|Hour}}",
 	"num-minutes": "Conditional PLURAL form of 'minute'. $1 is the number.\n{{Identical|Minute}}",
 	"num-participants": "Conditional PLURAL form of 'participant'. $1 is the number.",
+	"num-revisions": "Conditional PLURAL form of 'revisions'. $1 is the number.\n{{Identical|Revision}}",
 	"num-seconds": "Conditional PLURAL form of 'second'. $1 is the number.\n{{Identical|Second}}",
 	"num-wikis": "Conditional PLURAL form of 'wiki'. $1 is the number.\n{{Identical|Wiki}}",
 	"optional": "General term for 'optional', such as a form field.\n{{Identical|Optional}}",

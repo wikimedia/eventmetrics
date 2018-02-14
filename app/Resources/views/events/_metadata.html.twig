@@ -14,14 +14,14 @@
     <tr>
         <td>{{ msg('start-date') }}:</td>
         <td>
-            {{ event.start|date_format }}
+            {{ event.start|date_localize }}
             ({{ event.displayTimezone }})
         </td>
     </tr>
     <tr>
         <td>{{ msg('end-date') }}:</td>
         <td>
-            {{ event.end|date_format }}
+            {{ event.end|date_localize }}
         </td>
     </tr>
 </table>

@@ -14,6 +14,7 @@
 	"num-days": "{{PLURAL:$1|dan|dana}}",
 	"num-hours": "{{PLURAL:$1|sat|sata|sati}}",
 	"num-minutes": "{{PLURAL:$1|minut|minute|minuta}}",
+	"num-revisions": "{{PLURAL:$1|izmjena|izmjene|izmjena}}",
 	"num-seconds": "{{PLURAL:$1|sekunda|sekunde|sekundi}}",
 	"optional": "Neobavezno",
 	"page": "Stranica",
