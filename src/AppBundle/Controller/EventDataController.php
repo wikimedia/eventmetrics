@@ -59,11 +59,11 @@ class EventDataController extends Controller
             // The pagination number, where page 1 starts with row 0.
             $page = (int)$request->query->get('offset', 1);
 
+            // Number of rows per page.
+            $limit = 100;
+
             // Actual row OFFSET used in the query.
             $offset = max($page - 1, 0) * $limit;
-
-            // Number of rows per page.
-            $limit = 50;
 
             $ret = array_merge([
                 'numRevisions' => $eventRepo->getNumRevisions($event),
