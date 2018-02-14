@@ -60,7 +60,7 @@ class EventDataController extends Controller
             $page = (int)$request->query->get('offset', 1);
 
             // Number of rows per page.
-            $limit = 100;
+            $limit = $this->container->getParameter('app.revisions_per_page');
 
             // Actual row OFFSET used in the query.
             $offset = max($page - 1, 0) * $limit;

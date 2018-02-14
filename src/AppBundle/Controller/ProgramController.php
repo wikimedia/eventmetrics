@@ -50,7 +50,7 @@ class ProgramController extends Controller
             'programs' => $organizer->getPrograms(),
             'programRepo' => $programRepo,
             'gmTitle' => 'my-programs',
-            'retentionThreshold' => $this->container->getParameter('retention_offset'),
+            'retentionThreshold' => $this->container->getParameter('app.retention_offset'),
             'metrics' => $organizerRepo->getUniqueMetrics($organizer),
         ]);
     }
@@ -158,7 +158,7 @@ class ProgramController extends Controller
 
         return $this->render('programs/show.html.twig', [
             'program' => $program,
-            'retentionThreshold' => $this->container->getParameter('retention_offset'),
+            'retentionThreshold' => $this->container->getParameter('app.retention_offset'),
             'metrics' => $programRepo->getUniqueMetrics($program),
         ]);
     }

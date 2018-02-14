@@ -369,7 +369,7 @@ class EventController extends Controller
 
         return array_map(function ($metric) use ($event) {
             $offset = $metric === 'retention'
-                ? $this->container->getParameter('retention_offset')
+                ? $this->container->getParameter('app.retention_offset')
                 : null;
             return new EventStat($event, $metric, null, $offset);
         }, EventStat::getMetricTypes());

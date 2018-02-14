@@ -65,35 +65,35 @@ doctrine:
         connections:
             grantmetrics:
                 driver:   pdo_mysql
-                host:     "%database_host%"
-                port:     "%database_port%"
-                dbname:   "%database_name%"
-                user:     "%database_user%"
-                password: "%database_password%"
+                host:     "%database.host%"
+                port:     "%database.port%"
+                dbname:   "%database.name%"
+                user:     "%database.user%"
+                password: "%database.password%"
                 charset:  UTF8
             centralauth:
                 driver:   pdo_mysql
-                host:     "%database_replica_host%"
-                port:     "%database_replica_port%"
+                host:     "%database.replica.host%"
+                port:     "%database.replica.port%"
                 dbname:   "centralauth_p"
-                user:     "%database_replica_user%"
-                password: "%database_replica_password%"
+                user:     "%database.replica.user%"
+                password: "%database.replica.password%"
                 charset:  UTF8
             meta:
                 driver:   pdo_mysql
-                host:     "%database_replica_host%"
-                port:     "%database_replica_port%"
+                host:     "%database.replica.host%"
+                port:     "%database.replica.port%"
                 dbname:   "meta_p"
-                user:     "%database_replica_user%"
-                password: "%database_replica_password%"
+                user:     "%database.replica.user%"
+                password: "%database.replica.password%"
                 charset:  UTF8
             replicas:
                 driver:   pdo_mysql
-                host:     "%database_replica_host%"
-                port:     "%database_replica_port%"
-                dbname:   "%database_replica_name%"
-                user:     "%database_replica_user%"
-                password: "%database_replica_password%"
+                host:     "%database.replica.host%"
+                port:     "%database.replica.port%"
+                dbname:   "%database.replica.name%"
+                user:     "%database.replica.user%"
+                password: "%database.replica.password%"
                 charset:  UTF8
 
     orm:
@@ -128,10 +128,10 @@ doctrine_migrations:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: '%mailer_transport%'
-    host: '%mailer_host%'
-    username: '%mailer_user%'
-    password: '%mailer_password%'
+    transport: '%mailer.transport%'
+    host: '%mailer.host%'
+    username: '%mailer.user%'
+    password: '%mailer.password%'
     spool: { type: memory }
 
 guzzle:

@@ -214,7 +214,7 @@ abstract class Repository extends EntityRepository
 
     /**
      * Get the table name for use when querying the replicas. This automatically
-     * appends _userindex if the 'database_replica_is_wikimedia' config option is set.
+     * appends _userindex if the 'database.replica.is_wikimedia' config option is set.
      * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
      * @param string $name Name of table.
      * @param string $suffix Suffix to use instead of _userindex.
@@ -223,7 +223,7 @@ abstract class Repository extends EntityRepository
     protected function getTableName($name, $suffix = null)
     {
         $isWikimedia = (bool)$this->container
-            ->getParameter('database_replica_is_wikimedia');
+            ->getParameter('database.replica.is_wikimedia');
 
         if ($isWikimedia && $suffix !== null) {
             return $name.'_'.$suffix;

@@ -2,37 +2,41 @@
 # Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
 # https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
-    database_host: 127.0.0.1
-    database_port: ~
-    database_name: grantmetrics
-    database_user: root
-    database_password: ~
+    database.host: 127.0.0.1
+    database.port: ~
+    database.name: grantmetrics
+    database.user: root
+    database.password: ~
 
-    database_test_host: 127.0.0.1
-    database_test_port: ~
-    database_test_name: grantmetrics_test
-    database_test_user: root
-    database_test_password: ~
+    database.test.host: 127.0.0.1
+    database.test.port: ~
+    database.test.name: grantmetrics_test
+    database.test.user: root
+    database.test.password: ~
 
-    database_replica_is_wikimedia: 0
+    database.replica.is_wikimedia: 0
 
-    database_replica_host: 127.0.0.1
-    database_replica_port: ~
-    database_replica_name: enwiki_p
-    database_replica_user: root
-    database_replica_password:
+    database.replica.host: 127.0.0.1
+    database.replica.port: ~
+    database.replica.name: enwiki_p
+    database.replica.user: root
+    database.replica.password:
 
-    retention_offset: 7
-
-    mailer_transport: smtp
-    mailer_host: 127.0.0.1
-    mailer_user: ~
-    mailer_password: ~
+    mailer.transport: smtp
+    mailer.host: 127.0.0.1
+    mailer.user: ~
+    mailer.password: ~
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
 
     # Oauth consumer credentials, from https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration
-    oauth_key:                  ~
-    oauth_secret:               ~
-    oauth_callback:             http://localhost/grantmetrics/app_dev.php/oauth_callback
+    oauth.key:                  ~
+    oauth.secret:               ~
+    oauth.callback:             http://localhost/grantmetrics/app_dev.php/oauth_callback
+
+    # Number of days after the event, at which a user is consider to have been retained.
+    app.retention_offset: 7
+
+    # Number of revisions to show per page on the Event Data page.
+    app.revisions_per_page: 100

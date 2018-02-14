@@ -62,7 +62,7 @@ class ProcessEventCommandTest extends KernelTestCase
 
         $container = self::$kernel->getContainer();
 
-        $this->isWikimedia = (bool)$container->getParameter('database_replica_is_wikimedia');
+        $this->isWikimedia = (bool)$container->getParameter('database.replica.is_wikimedia');
 
         /** @var \Doctrine\ORM\EntityManager $entityManager */
         $this->entityManager = $container->get('doctrine')->getManager();

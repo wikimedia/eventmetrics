@@ -21,7 +21,7 @@ doctrine:
             grantmetrics:
                 driver:   pdo_mysql
                 host:     localhost
-                port:     "%database_test_port%"
-                dbname:   "%database_test_name%"
-                user:     "%database_test_user%"
-                password: "%database_test_password%"
+                port:     "%database.test.port%"
+                dbname:   "%database.test.name%"
+                user:     "%database.test.user%"
+                password: "%database.test.password%"
