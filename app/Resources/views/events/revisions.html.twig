@@ -81,15 +81,15 @@
             {##### PAGINATION #####}
             {% set numPages = (numRevisions / numResultsPerPage)|round(0, 'ceil') %}
             {% if numPages > 1 %}
-                {% set hasPrev = offset - 1 >= 0 %}
-                {% set hasNext = offset + 1 < numPages %}
+                {% set hasPrev = offset - 1 >= 1 %}
+                {% set hasNext = offset + 1 < numPages + 1 %}
                 {% set pathVars = {'programTitle': program.title, 'title': event.title} %}
 
                 <nav aria-label="...">
                     <ul class="pagination">
                         <li{% if not(hasPrev) %} class="disabled"{% endif %}>
                             {% if hasPrev %}
-                                <a href="{{ path('Revisions', pathVars|merge({'offset': offset - 1})) }}" aria-label="Previous">
+                                <a href="{{ path('Revisions', pathVars|merge(offset == 2 ? {} : {'offset': offset - 1})) }}" aria-label="Previous">
                             {% endif %}
                             <span aria-hidden="true">
                                 <span class="glyphicon glyphicon-arrow-left"></span>
@@ -98,9 +98,9 @@
                             {% if hasPrev %}</a>{% endif %}
                         </li>
                         {% for page in 1..numPages %}
-                            {% set active = offset == loop.index0 %}
+                            {% set active = offset == loop.index %}
                             <li{% if active %} class="active"{% endif %}>
-                                <a href="{{ path('Revisions', pathVars|merge({'offset': loop.index0})) }}">
+                                <a href="{{ path('Revisions', pathVars|merge(loop.index == 1 ? {} : {'offset': loop.index})) }}">
                                     {{ page }} {% if active %}<span class="sr-only">(current)</span>{% endif %}
                                 </a>
                             </li>

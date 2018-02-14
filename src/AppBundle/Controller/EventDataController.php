@@ -50,18 +50,25 @@ class EventDataController extends Controller
 
         $limit = $offset = null;
 
+        // If the format is not HTML, we show all reivions, and don't need an overall COUNT.
         $format = $request->query->get('format', 'html');
         if ($format === 'html' || $format == '') {
             // The get() default above doesn't work when the 'format' parameter is blank.
             $format = 'html';
 
-            $offset = (int)$request->query->get('offset') * $limit;
+            // The pagination number, where page 1 starts with row 0.
+            $page = (int)$request->query->get('offset', 1);
+
+            // Actual row OFFSET used in the query.
+            $offset = max($page - 1, 0) * $limit;
+
+            // Number of rows per page.
             $limit = 50;
 
             $ret = array_merge([
                 'numRevisions' => $eventRepo->getNumRevisions($event),
                 'numResultsPerPage' => $limit,
-                'offset' => $offset,
+                'offset' => $page,
             ], $ret);
         }
 
