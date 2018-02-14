@@ -14,6 +14,7 @@
 	"num-days": "{{PLURAL:$1|дан|дана|дана}}",
 	"num-hours": "{{PLURAL:$1|сат|сата|сати}}",
 	"num-minutes": "{{PLURAL:$1|минут|минута|минута}}",
+	"num-revisions": "{{PLURAL:$1|измена|измене|измена}}",
 	"num-seconds": "{{PLURAL:$1|секунд|секунда|секунди}}",
 	"optional": "Опционо",
 	"page": "Страница",

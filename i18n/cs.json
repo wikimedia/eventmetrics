@@ -12,6 +12,7 @@
 	"num-days": "{{PLURAL:$1|den|dny|dní}}",
 	"num-hours": "{{PLURAL:$1|hodina|hodiny|hodin}}",
 	"num-minutes": "{{PLURAL:$1|minuta|minuty|minut}}",
+	"num-revisions": "{{PLURAL:$1|revize|revize|revizí}}",
 	"num-seconds": "{{PLURAL: $1|sekunda|sekundy|sekund}}",
 	"optional": "nepovinné",
 	"page": "Stránka",

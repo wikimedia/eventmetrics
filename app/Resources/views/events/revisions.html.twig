@@ -27,20 +27,20 @@
 
         <div class="pull-right text-right">
             <div class="btn-group event-export">
-                <button type="button" class="btn btn-default event-export-btn">
+                <a download="{{ program.displayTitle }} - {{ event.displayTitle }}.csv" href="{{ path('Revisions', {'programTitle': program.title, 'title': event.title, 'format': 'csv'}) }}" class="btn btn-default event-export-btn">
                     <span class="glyphicon glyphicon-export"></span>
                     {{ msg('download-csv') }}
-                </button>
+                </a>
             </div>
             <div class="btn-group event-export">
-                <button type="button" class="btn btn-default event-export-btn">
+                <a target="_blank" href="{{ path('Revisions', {'programTitle': program.title, 'title': event.title, 'format': 'wikitext'}) }}" class="btn btn-default event-export-btn">
                     <span class="glyphicon glyphicon-export"></span>
                     {{ msg('download-wiki-table') }}
-                </button>
+                </a>
             </div>
             <div class="event-stats-status">
                 {% if event.updated != null %}
-                    {{ msg('last-updated', [event.updated|date_format]) }}
+                    {{ msg('last-updated', [event.updated|date_localize]) }}
                 {% endif %}
             </div>
         </div>
@@ -63,7 +63,7 @@
                         <tr class="event-revision">
                             <td>
                                 ({{ wiki.pageLink('Special:Diff/' ~ rev.id, rev.wiki, msg('diff')|lower) }})
-                                {{ wiki.pageLink('Special:PermaLink/' ~ rev.id, rev.wiki, rev.timestamp|date_format) }}
+                                {{ wiki.pageLink('Special:PermaLink/' ~ rev.id, rev.wiki, rev.timestamp|date_localize) }}
                             </td>
                             <td>
                                 {{ wiki.pageLink(rev.page, rev.wiki) }}

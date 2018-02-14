@@ -1,0 +1,33 @@
+== {{ event.displayTitle }} ==
+
+* '''{{ msg('wikis') }}''': {% for wiki in event.wikis %}{{ wiki.domain }}{% if not loop.last %}, {% endif %}{% endfor %}
+
+* '''{{ msg('start-date') }}''': {% verbatim %}{{#dateformat:{% endverbatim %}{{ event.start|date('Y-m-d H:i') }}}} ({{ event.displayTimezone }})
+* '''{{ msg('end-date') }}''': {% verbatim %}{{#dateformat:{% endverbatim %}{{ event.end|date('Y-m-d H:i') }}}}
+
+{| class="wikitable"
+{% for stat in event.statistics %}
+! {{ msg(stat.metric, [stat.offset]) }}
+{% endfor %}
+|-
+{% for stat in event.statistics %}
+| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ stat.value }}}}
+{% endfor %}
+|}
+
+=== {{ revisions|length }} {{ msg('num-revisions', [revisions|length]) }} ===
+
+{| class="wikitable sortable"
+{% for column in ['date', 'page', 'wiki', 'username', 'edit-summary'] %}
+! {{ msg(column) }}
+{% endfor %}
+|-
+{% for rev in revisions %}
+| style="white-space: nowrap;" | ([https://{{ rev.wiki }}.org/wiki/Special:Diff/{{ rev.id }} {{ msg('diff')|lower }}]) [https://{{ rev.wiki }}.org/wiki/Special:PermaLink/{{ rev.id }} {% verbatim %}{{#dateformat:{% endverbatim %}{{ rev.timestamp|date_format|date('Y-m-d H:i') }}}}]
+| [https://{{ rev.wiki }}.org/wiki/{{ rev.page|replace({' ': '_'}) }} {{ rev.page }}]
+| {{ rev.wiki }}
+| [https://{{ rev.wiki }}.org/wiki/User:{{ rev.username|replace({' ': '_'}) }} {{ rev.username }}]
+| ''{{ rev.summary }}''
+|-
+{% endfor %}
+|}

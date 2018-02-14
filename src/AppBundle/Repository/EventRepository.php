@@ -138,8 +138,8 @@ class EventRepository extends Repository
     /**
      * Get raw revisions that were part of the given Event.
      * @param Event $event
-     * @param int $offset Number of rows to offset, used for pagination.
-     * @param int $limit Number of rows to fetch.
+     * @param int|null $offset Number of rows to offset, used for pagination.
+     * @param int|null $limit Number of rows to fetch.
      * @param bool $count Whether to get a COUNT instead of the actual revisions.
      * @return int|string[] Count of revisions, or string array with keys 'id',
      *     'timestamp', 'page', 'wiki', 'username', 'summary'.
@@ -148,20 +148,15 @@ class EventRepository extends Repository
     {
         $conn = $this->getReplicaConnection();
 
-        // Have to do this hackiness because you can't bind PARAM_STR_ARRAY in Doctrine.
-        // The usernames are fetched from CentralAuth, so they are safe from SQL injection.
-        $usernames = '';
-        foreach ($event->getParticipantNames() as $username) {
-            $usernames .= ','.$conn->quote($username, \PDO::PARAM_STR);
-        }
-        $usernames = ltrim($usernames, ',');
-
         $sql = 'SELECT '.($count ? 'COUNT(id)' : '*').' FROM ('.
-                    $this->getRevisionsInnerSql($event, $usernames)."
-                ) a ";
+                    $this->getRevisionsInnerSql($event)."
+                ) a";
+
         if ($count === false) {
-            $sql .= "ORDER BY timestamp ASC
-                     LIMIT $offset, $limit";
+            $sql .= "\nORDER BY timestamp ASC";
+        }
+        if ($offset !== null) {
+            $sql .= "\nLIMIT $offset, $limit";
         }
 
         $start = $event->getStart()->format('Ymd000000');
@@ -191,11 +186,10 @@ class EventRepository extends Repository
 
     /**
      * The inner SQL used when fetching revisions that are part of an Event.
-     * @param  Event $event
-     * @param  string $usernames Quoted and comma-separated.
+     * @param Event $event
      * @return string
      */
-    private function getRevisionsInnerSql(Event $event, $usernames)
+    private function getRevisionsInnerSql(Event $event)
     {
         if (isset($this->revisionsInnerSql)) {
             return $this->revisionsInnerSql;
@@ -207,6 +201,7 @@ class EventRepository extends Repository
 
         $revisionTable = $this->getTableName('revision');
         $pageTable = $this->getTableName('page');
+        $usernames = $this->getUsernamesSql($event);
 
         foreach ($event->getWikis() as $wiki) {
             $dbName = $eventWikiRepo->getDbName($wiki);
@@ -227,5 +222,21 @@ class EventRepository extends Repository
 
         $this->revisionsInnerSql = implode(' UNION ', $sqlClauses);
         return $this->revisionsInnerSql;
+    }
+
+    /**
+     * Get usernames as need for an IN clause in the SQL. Have to do this hackiness
+     * because you can't bind PARAM_STR_ARRAY in Doctrine. The usernames are fetched
+     * from CentralAuth, so they are safe from SQL injection.
+     * @param Event $event
+     */
+    private function getUsernamesSql(Event $event)
+    {
+        $usernames = '';
+        foreach ($event->getParticipantNames() as $username) {
+            $quotedUsername = $this->getReplicaConnection()->quote($username, \PDO::PARAM_STR);
+            $usernames .= ','.$quotedUsername;
+        }
+        return ltrim($usernames, ',');
     }
 }

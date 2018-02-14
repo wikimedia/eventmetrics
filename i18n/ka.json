@@ -13,6 +13,7 @@
 	"num-days": "{{PLURAL:$1|დღე|დღე}}",
 	"num-hours": "{{PLURAL:$1|საათი|საათი}}",
 	"num-minutes": "{{PLURAL:$1|წუთი|წუთი}}",
+	"num-revisions": "{{PLURAL: $1|ვერსია|ვერსია}}",
 	"num-seconds": "{{PLURAL: $1|წამი|წამი}}",
 	"optional": "არასავალდებულო",
 	"page": "გვერდი",

@@ -13,6 +13,7 @@
 	"num-days": "{{PLURAL:$1|dzień|dni}}",
 	"num-hours": "{{PLURAL:$1|godzina|godzin}}",
 	"num-minutes": "{{PLURAL:$1|minuta|minuty|minut}}",
+	"num-revisions": "$1 {{PLURAL:$1|wersja|wersji}}",
 	"num-seconds": "{{PLURAL:$1|sekunda|$1 sekund}}",
 	"optional": "opcjonalne",
 	"page": "Strona",

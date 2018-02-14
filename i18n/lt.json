@@ -10,6 +10,7 @@
 	"feedback": "Atsiliepimai",
 	"help-translate": "Padėti išversti",
 	"no-results": "Rezultatų nerasta",
+	"num-revisions": "{{PLURAL:$1|versija|versijos|versijų}}",
 	"page": "Puslapis",
 	"pager-newer-n": "{{PLURAL:$1|1 naujesnis|$1 naujesni|$1 naujesnių}}",
 	"pager-older-n": "{{PLURAL:$1|1 senesnis|$1 senesni|$1 senesnių}}",

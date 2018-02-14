@@ -10,6 +10,7 @@
 	"feedback": "Atzeraelikadura",
 	"help-translate": "Lagundu euskaratzen",
 	"no-results": "Ez da emaitzarik aurkitu",
+	"num-revisions": "{{PLURAL:$1|berrikuspen 1|$1 berrikuspen}}",
 	"page": "Orrialdea",
 	"pager-newer-n": "{{PLURAL:$1|berriago den 1|berriagoak diren $1}}",
 	"pager-older-n": "{{PLURAL:$1|zaharragoa den 1|zaharragoak diren $1}}",

@@ -12,6 +12,7 @@
 	"num-days": "{{PLURAL:$1|يوم|يوماً}}",
 	"num-hours": "{{PLURAL:$1|ساعة|ساعات}}",
 	"num-minutes": "{{PLURAL:$1|دقيقة|دقائق}}",
+	"num-revisions": "{{PLURAL:$1|مراجعة|مراجعات}}",
 	"num-seconds": "{{PLURAL:$1|ثانية|ثواني}}",
 	"optional": "اختياري",
 	"page": "صفحة",
