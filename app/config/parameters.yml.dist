@@ -35,6 +35,10 @@ parameters:
     oauth.secret:               ~
     oauth.callback:             http://localhost/grantmetrics/app_dev.php/oauth_callback
 
+    # Path from domain to get to the root of the app. On Toolforge for instance this is /grantmetrics
+    # Do not include a trailing slash.
+    app.root_path: ''
+
     # Number of days after the event, at which a user is consider to have been retained.
     app.retention_offset: 7
 
@@ -43,4 +47,5 @@ parameters:
 
     # Admins who can view/edit/delete any program or event.
     app.admins:
-        - MusikAnimal
+        - MusikAnimal (WMF)
+        - NKohli (WMF)

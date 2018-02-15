@@ -7,6 +7,7 @@ namespace Tests\AppBundle\Controller;
 
 use AppBundle\DataFixtures\ORM\LoadFixtures;
 use DateTime;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Integration/functional tests for the EventController.
@@ -87,6 +88,10 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             'edit event',
             $this->crawler->filter('.page-header')->text()
         );
+
+        // Should not be able to edit an event.
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/Oliver_and_Company');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**

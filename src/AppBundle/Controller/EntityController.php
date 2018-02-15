@@ -10,6 +10,7 @@ use AppBundle\Model\Program;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * The EntityController sets class-level properties and
@@ -56,5 +57,20 @@ abstract class EntityController extends Controller
 
         return in_array($username, $this->container->getParameter('app.admins')) ||
             in_array($username, $program->getOrganizerNames());
+    }
+
+    /**
+     * Validates that the logged in user is an organizer of the given Program,
+     * and if not throw an exception (they should never be able to navigate here).
+     * @param  Program $program
+     * @throws AccessDeniedHttpException
+     */
+    protected function validateOrganizer(Program $program)
+    {
+        if (!$this->authUserIsOrganizer($program)) {
+            throw new AccessDeniedHttpException(
+                'You are not an organizer of this program.'
+            );
+        }
     }
 }

@@ -61,6 +61,10 @@ class EventController extends EntityController
     {
         $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $programTitle]);
+
+        // Make sure the viewing user has rights to create Events for this Program.
+        $this->validateOrganizer($program);
+
         $event = new Event($program);
         $eventWiki = new EventWiki($event);
         $event->addWiki($eventWiki);
@@ -95,6 +99,10 @@ class EventController extends EntityController
     {
         $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $programTitle]);
+
+        // Make sure the viewing user has rights to edit this Event.
+        $this->validateOrganizer($program);
+
         $event = $this->em->getRepository(Event::class)
             ->findOneBy([
                 'program' => $program,
@@ -137,6 +145,10 @@ class EventController extends EntityController
     {
         $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $programTitle]);
+
+        // Make sure the viewing user has rights to delete this Event.
+        $this->validateOrganizer($program);
+
         $event = $this->em->getRepository(Event::class)
             ->findOneBy([
                 'program' => $program,

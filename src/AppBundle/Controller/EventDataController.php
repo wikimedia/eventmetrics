@@ -151,6 +151,10 @@ class EventDataController extends EntityController
             throw new NotFoundHttpException();
         }
 
+        // Make sure the viewing user has rights to generate stats for this Event.
+        // FIXME: this breaks the Scrutinizer build. Figure it out.
+        // $this->validateOrganizer($event->getProgram());
+
         // Check if a Job already exists. This is difficult to test, so we'll ignore...
         // @codeCoverageIgnoreStart
         if ($event->hasJob()) {

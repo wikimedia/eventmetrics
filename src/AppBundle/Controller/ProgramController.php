@@ -95,6 +95,9 @@ class ProgramController extends EntityController
         $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $title]);
 
+        // Make sure the viewing user has rights to modify this Program.
+        $this->validateOrganizer($program);
+
         // Handle the Form for the request, and redirect if they submitted.
         $form = $this->handleFormSubmission($request, $program);
         if ($form instanceof RedirectResponse) {
@@ -125,6 +128,9 @@ class ProgramController extends EntityController
     {
         $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $title]);
+
+        // Make sure the viewing user has rights to delete this Program.
+        $this->validateOrganizer($program);
 
         // Flash message will be shown at the top of the page.
         $this->addFlash('danger', /** @scrutinizer ignore-type */ [

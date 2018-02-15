@@ -6,6 +6,7 @@
 namespace AppBundle\EventSubscriber;
 
 use AppBundle\Controller\EntityController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,13 +24,18 @@ class AuthenticationSubscriber implements EventSubscriberInterface
     /** @var SessionInterface Symfony's session interface. */
     protected $session;
 
+    /** @var ContainerInterface Symfony's container interface. */
+    protected $container;
+
     /**
      * Constructor for the AuthenticationSubscriber.
      * @param SessionInterface $session Provided by Symfony dependency injection.
+     * @param ContainerInterface $container Provided by Symfony dependency injection.
      */
-    public function __construct(SessionInterface $session)
+    public function __construct(SessionInterface $session, ContainerInterface $container)
     {
         $this->session = $session;
+        $this->container = $container;
     }
 
     /**
@@ -54,7 +60,8 @@ class AuthenticationSubscriber implements EventSubscriberInterface
 
         // Redirect to /login if they aren't logged in at all.
         if (!$this->session->get('logged_in_user')) {
-            $route = '/login?redirect='.$event->getRequest()->getPathInfo();
+            $rootPath = $this->container->getParameter('app.root_path');
+            $route = $rootPath.'/login?redirect='.$event->getRequest()->getPathInfo();
             $event->setController(function () use ($route) {
                 return new RedirectResponse($route);
             });
