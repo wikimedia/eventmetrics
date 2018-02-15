@@ -106,7 +106,7 @@ class DefaultController extends Controller
         // Save the request token to the session.
         /** @var Session $session */
         $session = $this->get('session');
-        $session->set('oauth_request_token', $token);
+        $session->set('oauth.request_token', $token);
 
         return new RedirectResponse($next);
     }
@@ -133,13 +133,13 @@ class DefaultController extends Controller
 
         // Complete authentication.
         $client = $this->getOauthClient();
-        $token = $session->get('oauth_request_token');
+        $token = $session->get('oauth.request_token');
         $verifier = $request->get('oauth_verifier');
         $accessToken = $client->complete($token, $verifier);
 
         // Store access token, and remove request token.
-        $session->set('oauth_access_token', $accessToken);
-        $session->remove('oauth_request_token');
+        $session->set('oauth.access_token', $accessToken);
+        $session->remove('oauth.request_token');
 
         // Store user identity.
         $ident = $client->identify($accessToken);
@@ -166,8 +166,8 @@ class DefaultController extends Controller
         $endpoint = 'https://meta.wikimedia.org/w/index.php?title=Special:OAuth';
 
         $conf = new ClientConfig($endpoint);
-        $consumerKey = $this->getParameter('oauth_key');
-        $consumerSecret = $this->getParameter('oauth_secret');
+        $consumerKey = $this->getParameter('oauth.key');
+        $consumerSecret = $this->getParameter('oauth.secret');
 
         $conf->setConsumer(new Consumer($consumerKey, $consumerSecret));
         $this->oauthClient = new OAuthClient($conf);
