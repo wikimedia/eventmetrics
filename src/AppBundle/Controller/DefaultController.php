@@ -145,8 +145,9 @@ class DefaultController extends Controller
         $ident = $client->identify($accessToken);
         $session->set('logged_in_user', $ident);
 
-        // Send to 'My programs' pages.
-        return $this->redirectToRoute('Programs');
+        // Send to 'My programs' page, or what was specified as the redirect.
+        $redirect = $request->query->get('redirect', 'Programs');
+        return $this->redirectToRoute($redirect);
 
         // @codeCoverageIgnoreEnd
     }

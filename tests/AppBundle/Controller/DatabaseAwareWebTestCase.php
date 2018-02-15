@@ -11,6 +11,7 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * This ensures fixtures are loaded with every functional test.
@@ -51,12 +52,40 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
      */
     protected $response;
 
+    /**
+     * Runs before each test.
+     */
     public function setUp()
     {
         self::bootKernel();
 
         $this->client = static::createClient();
         $this->container = $this->client->getContainer();
+        $this->session = $this->container->get('session');
+    }
+
+    /**
+     * Add the given username into the session, or default to MusikAnimal.
+     * @param string $username
+     */
+    public function loginUser($username = 'MusikAnimal')
+    {
+        // Create identity mock of user and put it in the session.
+        $identityMock = (object)['username' => $username];
+        $this->session->set('logged_in_user', $identityMock);
+    }
+
+    /**
+     * Invalidate the session, logging out the user.
+     */
+    public function logoutUser()
+    {
+        $this->session->invalidate();
+    }
+
+    public function getLoggedInUser()
+    {
+        return $this->session->get('logged_in_user');
     }
 
     /**

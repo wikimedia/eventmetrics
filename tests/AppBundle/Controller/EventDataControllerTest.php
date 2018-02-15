@@ -12,12 +12,19 @@ use AppBundle\DataFixtures\ORM\LoadFixtures;
  */
 class EventDataControllerTest extends DatabaseAwareWebTestCase
 {
+    /**
+     * Called before each test.
+     */
     public function setup()
     {
         parent::setUp();
 
         $this->addFixture(new LoadFixtures('extended'));
         $this->executeFixtures();
+
+        // Creates a session for a user, which is needed so we don't
+        // get redirected back to /login during the testing suite.
+        $this->loginUser('MusikAnimal');
     }
 
     /**

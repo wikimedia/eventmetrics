@@ -10,7 +10,6 @@ use AppBundle\Model\Organizer;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,13 +18,14 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * The ProgramController handles listing, creating and editing programs.
  */
-class ProgramController extends Controller
+class ProgramController extends EntityController
 {
     /**
      * Display a list of the programs.
@@ -35,15 +35,13 @@ class ProgramController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->container->get('doctrine')->getManager();
-
         // FIXME: workaround to avoid calling the UserSubscriber
         //   when Participant objects are loaded.
-        $programRepo = $em->getRepository(Program::class);
+        $programRepo = $this->em->getRepository(Program::class);
         $programRepo->setContainer($this->container);
 
         $organizer = $this->getOrganizer();
-        $organizerRepo = $em->getRepository(Organizer::class);
+        $organizerRepo = $this->em->getRepository(Organizer::class);
         $organizerRepo->setContainer($this->container);
 
         return $this->render('programs/index.html.twig', [
@@ -94,8 +92,7 @@ class ProgramController extends Controller
      */
     public function editAction(Request $request, $title)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $program = $em->getRepository(Program::class)
+        $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $title]);
 
         // Handle the Form for the request, and redirect if they submitted.
@@ -126,8 +123,7 @@ class ProgramController extends Controller
      */
     public function deleteAction($title)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $program = $em->getRepository(Program::class)
+        $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $title]);
 
         // Flash message will be shown at the top of the page.
@@ -136,8 +132,8 @@ class ProgramController extends Controller
             $program->getDisplayTitle(),
         ]);
 
-        $em->remove($program);
-        $em->flush();
+        $this->em->remove($program);
+        $this->em->flush();
 
         return $this->redirectToRoute('Programs');
     }
@@ -151,8 +147,7 @@ class ProgramController extends Controller
      */
     public function showAction($title)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $programRepo = $em->getRepository(Program::class);
+        $programRepo = $this->em->getRepository(Program::class);
         $programRepo->setContainer($this->container);
         $program = $programRepo->findOneBy(['title' => $title]);
 
@@ -161,20 +156,6 @@ class ProgramController extends Controller
             'retentionThreshold' => $this->container->getParameter('app.retention_offset'),
             'metrics' => $programRepo->getUniqueMetrics($program),
         ]);
-    }
-
-    /**
-     * Get the organizer based on username stored in the session.
-     * @return Organizer
-     */
-    private function getOrganizer()
-    {
-        $em = $this->container->get('doctrine')->getManager();
-        $organizerRepo = $em->getRepository(Organizer::class);
-        $organizerRepo->setContainer($this->container);
-        return $organizerRepo->getOrganizerByUsername(
-            $this->get('session')->get('logged_in_user')->username
-        );
     }
 
     /**
@@ -190,9 +171,8 @@ class ProgramController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $program = $form->getData();
-            $em = $this->container->get('doctrine')->getManager();
-            $em->persist($program);
-            $em->flush();
+            $this->em->persist($program);
+            $this->em->flush();
 
             return $this->redirectToRoute('Programs');
         }
@@ -244,8 +224,7 @@ class ProgramController extends Controller
             },
             function ($organizerNames) {
                 return array_map(function ($organizerName) {
-                    $em = $this->container->get('doctrine')->getManager();
-                    $organizerRepo = $em->getRepository(Organizer::class);
+                    $organizerRepo = $this->em->getRepository(Organizer::class);
                     $organizerRepo->setContainer($this->container);
                     return $organizerRepo->getOrganizerByUsername($organizerName);
                 }, $organizerNames);

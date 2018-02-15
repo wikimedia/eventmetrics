@@ -15,10 +15,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         parent::setUp();
 
         $this->executeFixtures();
-
-        // Create identity mock of MusikAnimal and put it in the session.
-        $identityMock = (object)['username' => 'MusikAnimal'];
-        $this->container->get('session')->set('logged_in_user', $identityMock);
+        $this->loginUser();
     }
 
     public function testWorkflow()

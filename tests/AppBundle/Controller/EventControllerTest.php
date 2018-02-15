@@ -13,16 +13,15 @@ use DateTime;
  */
 class EventControllerTest extends DatabaseAwareWebTestCase
 {
+    /**
+     * Called before each test.
+     */
     public function setup()
     {
         parent::setUp();
 
         $this->addFixture(new LoadFixtures());
         $this->executeFixtures();
-
-        // Create identity mock of MusikAnimal and put it in the session.
-        $identityMock = (object)['username' => 'MusikAnimal'];
-        $this->container->get('session')->set('logged_in_user', $identityMock);
     }
 
     /**
@@ -30,6 +29,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     public function testIndex()
     {
+        $this->loginUser();
+
         $this->crawler = $this->client->request('GET', '/events');
         $this->response = $this->client->getResponse();
         $this->assertEquals(302, $this->response->getStatusCode());
@@ -40,6 +41,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     public function testWorkflow()
     {
+        $this->loginUser();
+
         $this->indexSpec();
         $this->newSpec();
         $this->createSpec();
@@ -48,6 +51,21 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->showSpec();
         $this->participantsSpec();
         $this->deleteSpec();
+
+        $this->logoutUser();
+        $this->loggedOutSpec();
+    }
+
+    private function loggedOutSpec()
+    {
+        // 'My_fun_program' was already created via fixtures.
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(302, $this->response->getStatusCode());
+        $this->assertEquals(
+            '/login?redirect=/programs/My_fun_program',
+            $this->response->getTargetUrl()
+        );
     }
 
     /**

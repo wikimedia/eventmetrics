@@ -54,6 +54,7 @@
 	"my-programs": "My programs",
 	"new-editors": "New editors",
 	"no-events": "No events in this program yet!",
+	"no-programs": "You have not created any programs.",
 	"no-results": "No results found",
 	"num-days": "{{PLURAL:$1|day|days}}",
 	"num-hours": "{{PLURAL:$1|hour|hours}}",

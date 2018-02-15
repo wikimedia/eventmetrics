@@ -12,7 +12,6 @@ use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * The EventDataController handles the event data page, export options,
  * and statistics generation.
  */
-class EventDataController extends Controller
+class EventDataController extends EntityController
 {
     /**********************
      * BROWSING REVISIONS *
@@ -86,10 +85,9 @@ class EventDataController extends Controller
      */
     private function getProgramAndEvent($programTitle, $title)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $program = $em->getRepository(Program::class)
+        $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $programTitle]);
-        $eventRepo = $em->getRepository(Event::class);
+        $eventRepo = $this->em->getRepository(Event::class);
         $eventRepo->setContainer($this->container);
         $event = $eventRepo->findOneBy([
                 'program' => $program,
@@ -144,10 +142,8 @@ class EventDataController extends Controller
             throw new AccessDeniedHttpException();
         }
 
-        $em = $this->container->get('doctrine')->getManager();
-
         // Find the Event.
-        $event = $em->getRepository(Event::class)
+        $event = $this->em->getRepository(Event::class)
             ->findOneBy(['id' => $eventId]);
 
         if ($event === null) {
@@ -170,25 +166,24 @@ class EventDataController extends Controller
         }
         // @codeCoverageIgnoreEnd
 
-        return $this->createJobAndGetResponse($jobHandler, $em, $event);
+        return $this->createJobAndGetResponse($jobHandler, $event);
     }
 
     /**
      * Create a Job for the given Event, and return the JSON response.
      * @param  JobHandler $jobHandler The job handler service.
-     * @param  EntityManager $em The Doctrine EntityManager.
      * @param  Event $event
      * @return JsonResponse
      * Coverage done on the ProcessEventCommand itself to avoid overhead of the request stack,
      * and also because this action can only be called via AJAX.
      * @codeCoverageIgnore
      */
-    private function createJobAndGetResponse(JobHandler $jobHandler, EntityManager $em, Event $event)
+    private function createJobAndGetResponse(JobHandler $jobHandler, Event $event)
     {
         // Create a new Job for the Event, and flush to the database.
         $job = new Job($event);
-        $em->persist($job);
-        $em->flush();
+        $this->em->persist($job);
+        $this->em->flush();
 
         $stats = $jobHandler->spawn($job);
 

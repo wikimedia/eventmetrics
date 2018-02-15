@@ -7,7 +7,6 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,7 +36,7 @@ use AppBundle\Repository\ParticipantRepository;
 /**
  * The EventController handles showing, creating and editing events.
  */
-class EventController extends Controller
+class EventController extends EntityController
 {
     /**
      * There is no list of events without a program to go with it.
@@ -60,8 +59,7 @@ class EventController extends Controller
      */
     public function newAction(Request $request, $programTitle)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $program = $em->getRepository(Program::class)
+        $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $programTitle]);
         $event = new Event($program);
         $eventWiki = new EventWiki($event);
@@ -95,10 +93,9 @@ class EventController extends Controller
      */
     public function editAction(Request $request, $programTitle, $title)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $program = $em->getRepository(Program::class)
+        $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $programTitle]);
-        $event = $em->getRepository(Event::class)
+        $event = $this->em->getRepository(Event::class)
             ->findOneBy([
                 'program' => $program,
                 'title' => $title,
@@ -138,10 +135,9 @@ class EventController extends Controller
      */
     public function deleteAction($programTitle, $title)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $program = $em->getRepository(Program::class)
+        $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $programTitle]);
-        $event = $em->getRepository(Event::class)
+        $event = $this->em->getRepository(Event::class)
             ->findOneBy([
                 'program' => $program,
                 'title' => $title,
@@ -153,8 +149,8 @@ class EventController extends Controller
             $event->getDisplayTitle(),
         ]);
 
-        $em->remove($event);
-        $em->flush();
+        $this->em->remove($event);
+        $this->em->flush();
 
         return $this->redirectToRoute('Program', [
             'title' => $event->getProgram()->getTitle(),
@@ -174,9 +170,8 @@ class EventController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event = $form->getData();
-            $em = $this->container->get('doctrine')->getManager();
-            $em->persist($event);
-            $em->flush();
+            $this->em->persist($event);
+            $this->em->flush();
 
             return $this->redirectToRoute('Program', [
                 'title' => $event->getProgram()->getTitle(),
@@ -261,8 +256,7 @@ class EventController extends Controller
      */
     private function getWikiCallbackTransformer(Event $event)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $eventWikiRepo = new EventWikiRepository($em);
+        $eventWikiRepo = new EventWikiRepository($this->em);
         $eventWikiRepo->setContainer($this->container);
 
         return new CallbackTransformer(
@@ -325,10 +319,9 @@ class EventController extends Controller
      */
     public function showAction(Request $request, $programTitle, $title)
     {
-        $em = $this->container->get('doctrine')->getManager();
-        $program = $em->getRepository(Program::class)
+        $program = $this->em->getRepository(Program::class)
             ->findOneBy(['title' => $programTitle]);
-        $event = $em->getRepository(Event::class)
+        $event = $this->em->getRepository(Event::class)
             ->findOneBy([
                 'program' => $program,
                 'title' => $title,
@@ -388,9 +381,8 @@ class EventController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event = $form->getData();
-            $em = $this->container->get('doctrine')->getManager();
-            $em->persist($event);
-            $em->flush();
+            $this->em->persist($event);
+            $this->em->flush();
 
             return $this->redirectToRoute('Event', [
                 'programTitle' => $event->getProgram()->getTitle(),
@@ -518,10 +510,9 @@ class EventController extends Controller
                 }, $participantObjects->toArray());
             },
             function ($participantNames) use ($event) {
-                $em = $this->container->get('doctrine')->getManager();
 
                 /** @var ParticipantRepository Repo for a Participant */
-                $participantRepo = $em->getRepository(Participant::class);
+                $participantRepo = $this->em->getRepository(Participant::class);
                 $participantRepo->setContainer($this->container);
 
                 // Get the rows for each requested username.

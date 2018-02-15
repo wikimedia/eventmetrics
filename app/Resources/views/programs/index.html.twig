@@ -16,39 +16,43 @@
             <h1>{{ msg('my-programs') }}</h1>
         </div>
 
-        <table class="table gm-table programs-list">
-            <thead>
-                <tr>
-                    <th>{{ msg('program') }}</th>
-                    <th class="text-nowrap"></th>
-                    <th class="text-nowrap">{{ msg('events') }}</th>
-                    <th class="text-nowrap">{{ msg('participants') }}</th>
-                    {% for metric, offset in metrics %}
-                        <th class="text-nowrap">{{ msg(metric, [offset]) }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for program in programs %}
-                    <tr class="program-entry">
-                        <td>
-                            <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
-                        </td>
-                        <td class="text-nowrap">
-                            {{ layout.actionButtons('Program', program, {'title': program.title}) }}
-                        </td>
-                        <td class="text-nowrap">{{ program.numEvents|num_format }}</td>
-                        <td class="text-nowrap">
-                            {{ programRepo.numParticipants(program)|num_format }}
-                        </td>
-                        {% for metric in metrics|keys %}
-                            <td class="text-nowrap">
-                                {{ program.statistic(metric)|num_format }}
-                            </td>
+        {% if programs|length < 1 %}
+            <div class="text-center">{{  msg('no-programs') }}</div>
+        {% else %}
+            <table class="table gm-table programs-list">
+                <thead>
+                    <tr>
+                        <th>{{ msg('program') }}</th>
+                        <th class="text-nowrap"></th>
+                        <th class="text-nowrap">{{ msg('events') }}</th>
+                        <th class="text-nowrap">{{ msg('participants') }}</th>
+                        {% for metric, offset in metrics %}
+                            <th class="text-nowrap">{{ msg(metric, [offset]) }}</th>
                         {% endfor %}
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for program in programs %}
+                        <tr class="program-entry">
+                            <td>
+                                <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
+                            </td>
+                            <td class="text-nowrap">
+                                {{ layout.actionButtons('Program', program, {'title': program.title}) }}
+                            </td>
+                            <td class="text-nowrap">{{ program.numEvents|num_format }}</td>
+                            <td class="text-nowrap">
+                                {{ programRepo.numParticipants(program)|num_format }}
+                            </td>
+                            {% for metric in metrics|keys %}
+                                <td class="text-nowrap">
+                                    {{ program.statistic(metric)|num_format }}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </div>
 {% endblock %}
