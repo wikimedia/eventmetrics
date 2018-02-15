@@ -19,9 +19,6 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     public function setup()
     {
         parent::setUp();
-
-        $this->addFixture(new LoadFixtures());
-        $this->executeFixtures();
     }
 
     /**
@@ -29,8 +26,6 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     public function testIndex()
     {
-        $this->loginUser();
-
         $this->crawler = $this->client->request('GET', '/events');
         $this->response = $this->client->getResponse();
         $this->assertEquals(302, $this->response->getStatusCode());
@@ -41,6 +36,10 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     public function testWorkflow()
     {
+        // Load basic fixtures.
+        $this->addFixture(new LoadFixtures());
+        $this->executeFixtures();
+
         $this->loginUser();
 
         $this->indexSpec();
@@ -51,12 +50,12 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->showSpec();
         $this->participantsSpec();
         $this->deleteSpec();
-
-        $this->logoutUser();
-        $this->loggedOutSpec();
     }
 
-    private function loggedOutSpec()
+    /**
+     * Attempting to browse to /programs when not logged in at all.
+     */
+    public function testLoggedOut()
     {
         // 'My_fun_program' was already created via fixtures.
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
@@ -65,6 +64,28 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->assertEquals(
             '/login?redirect=/programs/My_fun_program',
             $this->response->getTargetUrl()
+        );
+    }
+
+    /**
+     * Test while logged in as a non-organizer, ensuring edit options aren't available.
+     */
+    public function testNonOrganizer()
+    {
+        // Load more test events.
+        $this->addFixture(new LoadFixtures('extended'));
+        $this->executeFixtures();
+
+        $this->loginUser('Not an organizer');
+
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Oliver_and_Company');
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(200, $this->response->getStatusCode());
+
+        // Should see the 'edit event', since we are logged in and are one of the organizers.
+        $this->assertNotContains(
+            'edit event',
+            $this->crawler->filter('.page-header')->text()
         );
     }
 
@@ -199,6 +220,12 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Pinocchio');
         $this->response = $this->client->getResponse();
         $this->assertEquals(200, $this->response->getStatusCode());
+
+        // Should see the 'edit event', since we are logged in and are one of the organizers.
+        $this->assertContains(
+            'edit event',
+            $this->crawler->filter('.page-header')->text()
+        );
     }
 
     /**

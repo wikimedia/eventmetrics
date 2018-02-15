@@ -344,6 +344,7 @@ class EventController extends EntityController
             'program' => $program,
             'event' => $event,
             'stats' => $this->getEventStats($event),
+            'isOrganizer' => $this->authUserIsOrganizer($program),
         ]);
     }
 

@@ -155,6 +155,7 @@ class ProgramController extends EntityController
             'program' => $program,
             'retentionThreshold' => $this->container->getParameter('app.retention_offset'),
             'metrics' => $programRepo->getUniqueMetrics($program),
+            'isOrganizer' => $this->authUserIsOrganizer($program),
         ]);
     }
 

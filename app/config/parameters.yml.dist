@@ -40,3 +40,7 @@ parameters:
 
     # Number of revisions to show per page on the Event Data page.
     app.revisions_per_page: 100
+
+    # Admins who can view/edit/delete any program or event.
+    app.admins:
+        - MusikAnimal

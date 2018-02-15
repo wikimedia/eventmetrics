@@ -5,6 +5,8 @@
 
 namespace Tests\AppBundle\Controller;
 
+use AppBundle\DataFixtures\ORM\LoadFixtures;
+
 /**
  * Integration/functional tests for the ProgramController.
  */
@@ -13,13 +15,17 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     public function setup()
     {
         parent::setUp();
-
-        $this->executeFixtures();
-        $this->loginUser();
     }
 
+    /**
+     * Workflow, including creating, updating and deleting programs.
+     */
     public function testWorkflow()
     {
+        $this->executeFixtures();
+
+        $this->loginUser();
+
         $this->indexSpec();
         $this->newSpec();
         $this->createSpec();
@@ -34,6 +40,28 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->showSpec();
 
         $this->deleteSpec();
+    }
+
+    /**
+     * Test while logged in as a non-organizer, ensuring edit options aren't available.
+     */
+    public function testNonOrganizer()
+    {
+        // Load basic fixtures, including a test program.
+        $this->addFixture(new LoadFixtures());
+        $this->executeFixtures();
+
+        $this->loginUser('Not an organizer');
+
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(200, $this->response->getStatusCode());
+
+        // Should see the 'edit program', since we are logged in and are one of the organizers.
+        $this->assertNotContains(
+            'edit program',
+            $this->crawler->filter('.page-header')->text()
+        );
     }
 
     /**
@@ -114,6 +142,12 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->assertContains(
             'MusikAnimal',
             $this->crawler->filter('.programs-organizers')->text()
+        );
+
+        // Should see the 'edit program', since we are logged in and are one of the organizers.
+        $this->assertContains(
+            'edit program',
+            $this->crawler->filter('.page-header')->text()
         );
     }
 

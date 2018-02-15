@@ -4,9 +4,11 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb">
-        <li>
-            <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
-        </li>
+        {% if isOrganizer %}
+            <li>
+                <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
+            </li>
+        {% endif %}
         <li>
             <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
         </li>
