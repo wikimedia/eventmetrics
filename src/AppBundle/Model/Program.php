@@ -193,9 +193,13 @@ class Program
             return strnatcmp($a->getUsername(), $b->getUsername());
         });
 
-        $this->organizers = new ArrayCollection(
-            array_merge([$primaryOrg], $nonPrimaryOrgs)
-        );
+        // $primary could be a non-organizer if say someone is viewing
+        // someone else's programs.
+        if ($primaryOrg !== null) {
+            $this->organizers = new ArrayCollection(
+                array_merge([$primaryOrg], $nonPrimaryOrgs)
+            );
+        }
     }
 
     /**

@@ -52,6 +52,16 @@
                     <span class="home-link">
                         {{ msg('grant-metrics') }}
                     </span>
+                    {##
+                     # When viewing a program/event that you don't organizer, the link to 'My Programs'
+                     # appears separate from the breadcrumbs, so that it doesn't look like it's one of
+                     # their programs.
+                     #}
+                    {% if isOrganizer is defined and isOrganizer == false %}
+                        <span class="home-link">
+                            <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
+                        </span>
+                    {% endif %}
                     {% block breadcrumb %}
                     {% endblock %}
                 </span>

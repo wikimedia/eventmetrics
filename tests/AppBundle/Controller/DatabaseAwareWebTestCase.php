@@ -39,6 +39,9 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
     /** @var Client The Symfony client. */
     protected $client;
 
+    /** @var SessionInterface The session. */
+    protected $session;
+
     /**
      * The web crawler used for browsing and capturing elements on the page.
      * @var Symfony\Component\DomCrawler\Crawler
@@ -65,7 +68,8 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
     }
 
     /**
-     * Add the given username into the session, or default to MusikAnimal.
+     * Add the given username into the session, or default to MusikAnimal
+     * who is an organizer of programs created via the fixtures.
      * @param string $username
      */
     public function loginUser($username = 'MusikAnimal')

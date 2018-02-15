@@ -3,9 +3,11 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb">
-        <li>
-            <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
-        </li>
+        {% if isOrganizer %}
+            <li>
+                <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
+            </li>
+        {% endif %}
         <li class="active">{{ program.displayTitle }}</li>
     </ol>
 {% endblock %}
@@ -13,14 +15,18 @@
 {% block body %}
     <div class="container">
         <div class="page-header">
-            <a href="{{ path('NewEvent', {'programTitle': program.title}) }}" class="btn btn-default pull-right">
-                {{ msg('create-new-event') }}
-            </a>
+            {% if isOrganizer %}
+                <a href="{{ path('NewEvent', {'programTitle': program.title}) }}" class="btn btn-default pull-right">
+                    {{ msg('create-new-event') }}
+                </a>
+            {% endif %}
             <h1>
                 {{ program.displayTitle }}
-                <small>
-                    (<a href="{{ path('EditProgram', {'title': program.title}) }}">{{ msg('edit-program')|lower }}</a>)
-                </small>
+                {% if isOrganizer %}
+                    <small>
+                        (<a href="{{ path('EditProgram', {'title': program.title}) }}">{{ msg('edit-program')|lower }}</a>)
+                    </small>
+                {% endif %}
             </h1>
             <div class="programs-organizers">
                 {{ msg('organizers') }}:
@@ -37,7 +43,9 @@
                 <thead>
                     <tr>
                         <th>{{ msg('event') }}</th>
-                        <th class="text-nowrap"></th>
+                        {% if isOrganizer %}
+                            <th class="text-nowrap"></th>
+                        {% endif %}
                         <th class="text-nowrap">{{ msg('participants') }}</th>
                         {% for metric, offset in metrics %}
                             <th class="text-nowrap">{{ msg(metric, [offset]) }}</th>
@@ -50,9 +58,11 @@
                             <td>
                                 <a href="{{ path('Event', {'programTitle': program.title, 'title': event.title}) }}">{{ event.displayTitle }}</a>
                             </td>
-                            <td class="text-nowrap">
-                                {{ layout.actionButtons('Event', event, {'programTitle': program.title, 'title': event.title}) }}
-                            </td>
+                            {% if isOrganizer %}
+                                <td class="text-nowrap">
+                                    {{ layout.actionButtons('Event', event, {'programTitle': program.title, 'title': event.title}) }}
+                                </td>
+                            {% endif %}
                             <td class="text-nowrap">{{ event.numParticipants|num_format }}</td>
                             {% for metric in metrics|keys %}
                                 <td class="text-nowrap">

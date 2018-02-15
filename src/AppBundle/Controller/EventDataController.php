@@ -45,6 +45,7 @@ class EventDataController extends EntityController
             'gmTitle' => $event->getDisplayTitle(),
             'program' => $program,
             'event' => $event,
+            'isOrganizer' => $this->authUserIsOrganizer($program),
         ];
 
         $limit = $offset = null;

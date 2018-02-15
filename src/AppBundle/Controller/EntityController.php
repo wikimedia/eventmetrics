@@ -6,6 +6,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Model\Organizer;
+use AppBundle\Model\Program;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -41,5 +42,19 @@ abstract class EntityController extends Controller
         return $organizerRepo->getOrganizerByUsername(
             $this->get('session')->get('logged_in_user')->username
         );
+    }
+
+    /**
+     * Is the logged in user an organizer of the given Program? This returns
+     * true for admins, who are defined with the app.admins config parameter.
+     * @param  Program $program
+     * @return bool
+     */
+    protected function authUserIsOrganizer(Program $program)
+    {
+        $username = $this->get('session')->get('logged_in_user')->username;
+
+        return in_array($username, $this->container->getParameter('app.admins')) ||
+            in_array($username, $program->getOrganizerNames());
     }
 }
