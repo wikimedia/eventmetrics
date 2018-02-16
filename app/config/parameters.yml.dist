@@ -33,7 +33,6 @@ parameters:
     # Oauth consumer credentials, from https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration
     oauth.key:                  ~
     oauth.secret:               ~
-    oauth.callback:             http://localhost/grantmetrics/app_dev.php/oauth_callback
 
     # Path from domain to get to the root of the app. On Toolforge for instance this is /grantmetrics
     # Do not include a trailing slash.

@@ -91,14 +91,17 @@ class DefaultController extends Controller
     /**
      * Redirect to Meta for Oauth authentication.
      * @Route("/login", name="login")
+     * @param Request $request The HTTP request.
      * @return RedirectResponse
      * @throws Exception If initialization fails.
      * @codeCoverageIgnore
      */
-    public function loginAction()
+    public function loginAction(Request $request)
     {
+        $redirect = $request->query->get('redirect');
+
         try {
-            list($next, $token) = $this->getOauthClient()->initiate();
+            list($next, $token) = $this->getOauthClient($redirect)->initiate();
         } catch (Exception $oauthException) {
             throw $oauthException;
         }
@@ -146,8 +149,13 @@ class DefaultController extends Controller
         $session->set('logged_in_user', $ident);
 
         // Send to 'My programs' page, or what was specified as the redirect.
-        $redirect = $request->query->get('redirect', 'Programs');
-        return $this->redirectToRoute($redirect);
+        if ($redirect = $request->query->get('redirect')) {
+            return $this->redirect(
+                $this->container->getParameter('app.root_path').$redirect
+            );
+        } else {
+            return $this->redirectToRoute('Programs');
+        }
 
         // @codeCoverageIgnoreEnd
     }
@@ -155,10 +163,11 @@ class DefaultController extends Controller
     /**
      * Get an OAuth client, configured to the default project.
      * (This shouldn't really be in this class, but oh well.)
+     * @param string $redirect Relative path to redirect to.
      * @return OAuthClient
      * @codeCoverageIgnore
      */
-    protected function getOauthClient()
+    protected function getOauthClient($redirect = null)
     {
         if ($this->oauthClient instanceof OAuthClient) {
             return $this->oauthClient;
@@ -173,8 +182,12 @@ class DefaultController extends Controller
         $conf->setConsumer(new Consumer($consumerKey, $consumerSecret));
         $this->oauthClient = new OAuthClient($conf);
 
-        // Use 'oob' as the callback is hardcoded in the consumer registration.
-        $this->oauthClient->setCallback('oob');
+        $callback = $this->container->getParameter('app.root_path').'/oauth_callback';
+        if (isset($redirect)) {
+            $callback .= '?redirect='.$redirect;
+        }
+
+        $this->oauthClient->setCallback($callback);
 
         return $this->oauthClient;
     }
