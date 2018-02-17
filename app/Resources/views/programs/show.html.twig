@@ -24,7 +24,7 @@
                 {{ program.displayTitle }}
                 {% if isOrganizer %}
                     <small>
-                        (<a href="{{ path('EditProgram', {'title': program.title}) }}">{{ msg('edit-program')|lower }}</a>)
+                        (<a href="{{ path('EditProgram', {'programTitle': program.title}) }}">{{ msg('edit-program')|lower }}</a>)
                     </small>
                 {% endif %}
             </h1>
@@ -56,11 +56,11 @@
                     {% for event in program.events %}
                         <tr class="event-entry">
                             <td>
-                                <a href="{{ path('Event', {'programTitle': program.title, 'title': event.title}) }}">{{ event.displayTitle }}</a>
+                                <a href="{{ path('Event', {'programTitle': program.title, 'eventTitle': event.title}) }}">{{ event.displayTitle }}</a>
                             </td>
                             {% if isOrganizer %}
                                 <td class="text-nowrap">
-                                    {{ layout.actionButtons('Event', event, {'programTitle': program.title, 'title': event.title}) }}
+                                    {{ layout.actionButtons('Event', event, {'programTitle': program.title, 'eventTitle': event.title}) }}
                                 </td>
                             {% endif %}
                             <td class="text-nowrap">{{ event.numParticipants|num_format }}</td>

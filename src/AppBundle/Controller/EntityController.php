@@ -5,12 +5,16 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Model\Event;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * The EntityController sets class-level properties and
@@ -20,16 +24,47 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 abstract class EntityController extends Controller
 {
-    /** @var EntityManager The Doctrine entity manager. */
+    /** @var EntityManagerInterface The Doctrine entity manager. */
     protected $em;
+
+    /** @var Request The request object. */
+    protected $request;
+
+    /** @var Program The Program being requested. */
+    protected $program;
+
+    /** @var Event The Event being requested. */
+    protected $event;
 
     /**
      * Constructor for the abstract EntityController.
-     * @param ContainerInterface $container
+     * @param RequestStack $requestStack
+     * @param EntityManagerInterface $em
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(RequestStack $requestStack, EntityManagerInterface $em)
     {
-        $this->em = $container->get('doctrine')->getManager();
+        $this->em = $em;
+        $this->request = $requestStack->getCurrentRequest();
+        $this->setProgramAndEvent();
+    }
+
+    /**
+     * Check the request and if there are parameters for eventTitle or programTitle,
+     * find and set class properties for the corresponding entity.
+     */
+    private function setProgramAndEvent()
+    {
+        if ($programTitle = $this->request->get('programTitle')) {
+            $this->program = $this->em->getRepository(Program::class)
+                ->findOneBy(['title' => $programTitle]);
+        }
+        if ($eventTitle = $this->request->get('eventTitle')) {
+            $this->event = $this->em->getRepository(Event::class)
+                ->findOneBy([
+                    'program' => $this->program,
+                    'title' => $eventTitle,
+                ]);
+        }
     }
 
     /**

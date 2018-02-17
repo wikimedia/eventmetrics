@@ -35,10 +35,10 @@
                     {% for program in programs %}
                         <tr class="program-entry">
                             <td>
-                                <a href="{{ path('Program', {'title': program.title}) }}">{{ program.displayTitle }}</a>
+                                <a href="{{ path('Program', {'programTitle': program.title}) }}">{{ program.displayTitle }}</a>
                             </td>
                             <td class="text-nowrap">
-                                {{ layout.actionButtons('Program', program, {'title': program.title}) }}
+                                {{ layout.actionButtons('Program', program, {'programTitle': program.title}) }}
                             </td>
                             <td class="text-nowrap">{{ program.numEvents|num_format }}</td>
                             <td class="text-nowrap">
