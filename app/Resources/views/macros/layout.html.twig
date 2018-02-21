@@ -29,14 +29,14 @@
     </section>
 {% endmacro %}
 
-{% macro actionButtons(model, object, params) %}
+{% macro actionButtons(model, object, params, deletable = true) %}
     <a href="{{ path('Edit' ~ model, params) }}"
        class="{{ model|lower }}-action {{ model|lower }}-action__edit text-muted">{#-
         -#}<span class="glyphicon glyphicon-cog"></span>{#-
     -#}</a>
-    <a href="{{ path('Delete' ~ model, params) }}"
-       class="{{ model|lower }}-action {{ model|lower }}-action__delete text-danger"
-       data-title="{{ object.displayTitle }}">{#-
+    <a href="{% if deletable or isAdmin() %}{{ path('Delete' ~ model, params) }}{% endif %}"
+       class="{{ model|lower }}-action {{ model|lower }}-action__delete{% if not(deletable) and not(isAdmin()) %} disabled{% endif %} text-danger"
+       data-title="{{ object.displayTitle }}" data-model="{{ model|lower }}">{#-
         -#}<span class="glyphicon glyphicon-trash"></span>{#-
     -#}</a>
 {% endmacro %}

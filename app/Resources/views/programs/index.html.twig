@@ -38,7 +38,7 @@
                                 <a href="{{ path('Program', {'programTitle': program.title}) }}">{{ program.displayTitle }}</a>
                             </td>
                             <td class="text-nowrap">
-                                {{ layout.actionButtons('Program', program, {'programTitle': program.title}) }}
+                                {{ layout.actionButtons('Program', program, {'programTitle': program.title}, program.numEvents == 0) }}
                             </td>
                             <td class="text-nowrap">{{ program.numEvents|num_format }}</td>
                             <td class="text-nowrap">

@@ -45,6 +45,7 @@ class AppExtension extends Extension
         $options = ['is_safe' => ['html']];
         return [
             new \Twig_SimpleFunction('loggedInUser', [$this, 'loggedInUser']),
+            new \Twig_SimpleFunction('isAdmin', [$this, 'isAdmin']),
             new \Twig_SimpleFunction('msg', [$this, 'msg'], $options),
             new \Twig_SimpleFunction('msgExists', [$this, 'msgExists', $options]),
             new \Twig_SimpleFunction('msgIfExists', [$this, 'msgIfExists'], $options),
@@ -65,6 +66,21 @@ class AppExtension extends Extension
     public function loggedInUser()
     {
         return $this->container->get('session')->get('logged_in_user');
+    }
+
+    /**
+     * Is the logged in user an admin?
+     * @return boolean
+     * This is tested via EventControllerTest, validating delete buttons have the correct CSS
+     * class, but for some reason the clover system doesn't detect that this bit of code was ran.
+     * @codeCoverageIgnore
+     */
+    public function isAdmin()
+    {
+        return in_array(
+            $this->container->get('session')->get('logged_in_user')->username,
+            $this->container->getParameter('app.admins')
+        );
     }
 
     /**

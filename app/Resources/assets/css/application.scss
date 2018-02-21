@@ -162,6 +162,11 @@ body {
     }
 }
 
+a.disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
 @media (max-width: $bootstrap-sm) {
     .footer-links {
         display: block;
