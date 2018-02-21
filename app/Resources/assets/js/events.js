@@ -14,12 +14,6 @@ $(function () {
         setupAddRemove('event', 'participant');
     }
 
-    $('.event-action__delete').on('click', function () {
-        return window.confirm(
-            $.i18n('confirm-deletion', $(this).data('title'))
-        );
-    });
-
     var startDate = moment($('#form_start').val()),
         endDate = moment($('#form_end').val());
 

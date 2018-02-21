@@ -161,6 +161,19 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             'de.wikipedia',
             $eventWiki->getDomain()
         );
+
+        $this->crawler = $this->client->followRedirect();
+
+        $this->assertContains(
+            'The Lion King',
+            $this->crawler->filter('.events-list')->text()
+        );
+
+        // Should be deletable.
+        $this->assertNotContains(
+            'disabled',
+            $this->crawler->filter('.event-action__delete')->attr('class')
+        );
     }
 
     /**
