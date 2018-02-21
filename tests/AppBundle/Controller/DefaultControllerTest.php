@@ -26,7 +26,7 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
      */
     public function testLoggedIn()
     {
-        $this->createIdentityMock();
+        $this->loginUser();
 
         $this->crawler = $this->client->request('GET', '/');
         $this->response = $this->client->getResponse();
@@ -38,7 +38,7 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
      */
     public function testLogout()
     {
-        $this->createIdentityMock();
+        $this->loginUser();
 
         $this->crawler = $this->client->request('GET', '/logout');
         $this->response = $this->client->getResponse();
@@ -58,14 +58,5 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
 
         // Callback should 404 since we didn't give it anything.
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
-    }
-
-    /**
-     * Create identity mock of MusikAnimal and put it in the session.
-     */
-    private function createIdentityMock()
-    {
-        $identityMock = (object) ['username' => 'MusikAnimal'];
-        $this->container->get('session')->set('logged_in_user', $identityMock);
     }
 }

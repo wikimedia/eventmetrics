@@ -10,11 +10,13 @@ use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * The EntityController sets class-level properties and
@@ -24,11 +26,17 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 abstract class EntityController extends Controller
 {
-    /** @var EntityManagerInterface The Doctrine entity manager. */
-    protected $em;
+    /** @var ContainerInterface Symfony's container interface. */
+    protected $container;
 
     /** @var Request The request object. */
     protected $request;
+
+    /** @var SessionInterface Symfony's session interface. */
+    protected $session;
+
+    /** @var EntityManagerInterface The Doctrine entity manager. */
+    protected $em;
 
     /** @var Program The Program being requested. */
     protected $program;
@@ -39,13 +47,24 @@ abstract class EntityController extends Controller
     /**
      * Constructor for the abstract EntityController.
      * @param RequestStack $requestStack
+     * @param ContainerInterface $container
+     * @param SessionInterface $session
      * @param EntityManagerInterface $em
      */
-    public function __construct(RequestStack $requestStack, EntityManagerInterface $em)
-    {
-        $this->em = $em;
+    public function __construct(
+        RequestStack $requestStack,
+        ContainerInterface $container,
+        SessionInterface $session,
+        EntityManagerInterface $em
+    ) {
         $this->request = $requestStack->getCurrentRequest();
+        $this->container = $container;
+        $this->em = $em;
+        $this->session = $session;
+
+        $this->validateUser();
         $this->setProgramAndEvent();
+        $this->validateOrganizer();
     }
 
     /**
@@ -58,6 +77,7 @@ abstract class EntityController extends Controller
             $this->program = $this->em->getRepository(Program::class)
                 ->findOneBy(['title' => $programTitle]);
         }
+
         if ($eventTitle = $this->request->get('eventTitle')) {
             $this->event = $this->em->getRepository(Event::class)
                 ->findOneBy([
@@ -88,24 +108,43 @@ abstract class EntityController extends Controller
      */
     protected function authUserIsOrganizer(Program $program)
     {
-        $username = $this->get('session')->get('logged_in_user')->username;
+        $username = $this->session->get('logged_in_user')->username;
 
         return in_array($username, $this->container->getParameter('app.admins')) ||
             in_array($username, $program->getOrganizerNames());
     }
 
     /**
-     * Validates that the logged in user is an organizer of the given Program,
+     * Validates that the logged in user is an organizer of the requested Program,
      * and if not throw an exception (they should never be able to navigate here).
-     * @param  Program $program
      * @throws AccessDeniedHttpException
      */
-    protected function validateOrganizer(Program $program)
+    private function validateOrganizer()
     {
-        if (!$this->authUserIsOrganizer($program)) {
+        if (isset($this->program) && !$this->authUserIsOrganizer($this->program)) {
             throw new AccessDeniedHttpException(
-                'You are not an organizer of this program.'
+                'You are not authorized to view this program because you are not an organizer.'
             );
         }
+    }
+
+    /**
+     * Redirect to /login if the user is logged out.
+     * @throws HttpException
+     */
+    private function validateUser()
+    {
+        if ($this->session->get('logged_in_user') != '') {
+            return;
+        }
+
+        $rootPath = $this->container->getParameter('app.root_path');
+
+        throw new HttpException(
+            Response::HTTP_TEMPORARY_REDIRECT,
+            null,
+            null,
+            ['Location' => "$rootPath/login"]
+        );
     }
 }

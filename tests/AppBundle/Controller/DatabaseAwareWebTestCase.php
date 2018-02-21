@@ -42,6 +42,9 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
     /** @var SessionInterface The session. */
     protected $session;
 
+    /** @var bool Whether to hide error output from the response. */
+    protected $suppressErrors = false;
+
     /**
      * The web crawler used for browsing and capturing elements on the page.
      * @var Symfony\Component\DomCrawler\Crawler
@@ -57,6 +60,7 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
 
     /**
      * Runs before each test.
+     * @param bool $suppressErrors Whether to hide error output from the response.
      */
     public function setUp()
     {
@@ -65,6 +69,11 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
         $this->client = static::createClient();
         $this->container = $this->client->getContainer();
         $this->session = $this->container->get('session');
+    }
+
+    public function suppressErrors()
+    {
+        $this->suppressErrors = true;
     }
 
     /**
@@ -100,7 +109,7 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
      */
     public function tearDown()
     {
-        if (isset($this->response) && !$this->response->isSuccessful()) {
+        if (isset($this->response) && !$this->response->isSuccessful() && $this->suppressErrors === false) {
             $stacktrace = $this->crawler->filter('.stacktrace');
             if ($stacktrace->count()) {
                 echo "\n\n".$stacktrace->text();

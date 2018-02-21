@@ -57,9 +57,6 @@ class EventController extends EntityController
      */
     public function newAction()
     {
-        // Make sure the viewing user has rights to create Events for this Program.
-        $this->validateOrganizer($this->program);
-
         $event = new Event($this->program);
         $eventWiki = new EventWiki($event);
         $event->addWiki($eventWiki);
@@ -89,9 +86,6 @@ class EventController extends EntityController
      */
     public function editAction()
     {
-        // Make sure the viewing user has rights to edit this Event.
-        $this->validateOrganizer($this->program);
-
         // Add blank EventWiki in the form if one doesn't already exist.
         if (count($this->event->getWikis()) === 0) {
             $eventWiki = new EventWiki($this->event);
@@ -124,9 +118,6 @@ class EventController extends EntityController
      */
     public function deleteAction()
     {
-        // Make sure the viewing user has rights to delete this Event.
-        $this->validateOrganizer($this->program);
-
         // Flash message will be shown at the top of the page.
         $this->addFlash('danger', /** @scrutinizer ignore-type */ [
             'event-deleted',

@@ -89,9 +89,6 @@ class ProgramController extends EntityController
      */
     public function editAction()
     {
-        // Make sure the viewing user has rights to modify this Program.
-        $this->validateOrganizer($this->program);
-
         // Handle the Form for the request, and redirect if they submitted.
         $form = $this->handleFormSubmission($this->program);
         if ($form instanceof RedirectResponse) {
@@ -119,9 +116,6 @@ class ProgramController extends EntityController
      */
     public function deleteAction()
     {
-        // Make sure the viewing user has rights to delete this Program.
-        $this->validateOrganizer($this->program);
-
         // Flash message will be shown at the top of the page.
         $this->addFlash('danger', /** @scrutinizer ignore-type */ [
             'program-deleted',
