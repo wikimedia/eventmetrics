@@ -74,6 +74,7 @@
 	"pages-created": "Heading for the column listing the number of pages created during a program, shown in the 'My Programs' table.",
 	"pages-improved": "Heading for the column listing the number of pages improved during a program, shown in the 'My Programs' table.",
 	"participants": "Heading for the column listing the number of participants of a program in the 'My Programs' table.",
+	"please-login": "Error message saying the user needs to login in order to continue.",
 	"program": "Heading for the column listing program titles in the 'My Programs' table.\n{{Identical|Program}}",
 	"program-created": "Message saying a program was created. $1 is the name of the program.",
 	"program-deleted": "Message saying a program was deleted. $1 is the name of the program.",

@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>
-            {% if gmTitle is defined %}{{ msgIfExists(gmTitle) }} - {% else %}{{ msg('fatal-error') }} - {% endif %}
+            {% if gmTitle is defined %}{{ msgIfExists(gmTitle) }} - {% elseif exception is defined %}{{ msg('fatal-error') }} - {% endif %}
             {{ msg('grant-metrics') }}
         </title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -99,7 +99,7 @@
         </header>
         <main class="app-body">
             <div class="alert-container container">
-                {% if app.session.flashBag.peekAll %}
+                {% if app.session.flashBag.peekAll and exception is not defined and getControllerName() != 'default' %}
                     {% for level, messages in app.session.flashBag.all %}
                         {% set level = level == 'notice' ? 'danger' : level %}
                         <div class="alert alert-{{ level }} alert-dismissible" role="alert">

@@ -162,13 +162,17 @@ abstract class EntityController extends Controller
             return;
         }
 
+        $this->addFlash('danger', /** @scrutinizer ignore-type */ [
+            'please-login',
+        ]);
+
         $rootPath = $this->container->getParameter('app.root_path');
 
         throw new HttpException(
             Response::HTTP_TEMPORARY_REDIRECT,
             null,
             null,
-            ['Location' => "$rootPath/login"]
+            ['Location' => $rootPath]
         );
     }
 }

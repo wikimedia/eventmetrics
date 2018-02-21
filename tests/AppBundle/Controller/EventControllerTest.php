@@ -67,7 +67,6 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
         $this->response = $this->client->getResponse();
         $this->assertEquals(307, $this->response->getStatusCode());
-        $this->assertContains('/login', $this->response->headers->get('location'));
     }
 
     /**
