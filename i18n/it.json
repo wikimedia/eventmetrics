@@ -7,6 +7,7 @@
 	"diff": "Diff",
 	"documentation": "Documentazione",
 	"edit-summary": "Commento",
+	"fatal-error": "Errore fatale",
 	"feedback": "Commenti",
 	"help-translate": "Aiuta a tradurre",
 	"logout": "Esci",
@@ -23,6 +24,7 @@
 	"report-issue": "Segnala un problema",
 	"submit": "Invia",
 	"totals": "Totali",
+	"unknown": "Sconosciuto",
 	"username": "Nome utente",
 	"view-source": "Visualizza sorgente"
 }

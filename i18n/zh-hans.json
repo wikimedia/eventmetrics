@@ -7,6 +7,8 @@
 	"diff": "差异",
 	"documentation": "文档",
 	"edit-summary": "编辑摘要",
+	"error-server-message": "服务器报告：$1",
+	"fatal-error": "致命错误",
 	"feedback": "反馈",
 	"help-translate": "帮助翻译",
 	"logout": "退出",
@@ -23,6 +25,7 @@
 	"report-issue": "报告问题",
 	"submit": "提交",
 	"totals": "总计",
+	"unknown": "未知",
 	"username": "用户名",
 	"view-source": "查看源代码"
 }

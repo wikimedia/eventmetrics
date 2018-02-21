@@ -116,7 +116,7 @@ class EventDataController extends EntityController
     {
         // Only responsd to AJAX.
         if (!$this->request->isXmlHttpRequest()) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedHttpException('This endpoint is for internal use only.');
         }
 
         // Find the Event.

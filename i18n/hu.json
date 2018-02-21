@@ -7,6 +7,8 @@
 	"diff": "Diff",
 	"documentation": "dokumentációt",
 	"edit-summary": "Szerkesztési összefoglaló",
+	"error-server-message": "A szerver mondja: $1",
+	"fatal-error": "Végzetes hiba",
 	"feedback": "Visszajelzés",
 	"help-translate": "Segíts fordítani",
 	"no-results": "Nincs találat",
@@ -16,6 +18,7 @@
 	"pager-older-n": "{{PLURAL:$1|1 régebbi|$1 régebbi}}",
 	"report-issue": "Hibabejelentés",
 	"totals": "Összesen",
+	"unknown": "Ismeretlen",
 	"username": "Felhasználói név",
 	"view-source": "Forráskód megtekintése"
 }

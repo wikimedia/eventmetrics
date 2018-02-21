@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
+        </li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    {% if exception is defined and attribute(exception, 'message') is defined and exception.message|length > 0 %}
+        {% set message = exception.message %}
+    {% else %}
+        {% set message = 'unknown' %}
+    {% endif %}
+    {% set knownError = msgExists(message) %}
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="text-danger">
+                {{ status_code }}: {{ status_text }}
+            </h1>
+        </div>
+        <p>
+            {% if knownError %}
+                {{ msg(message) }}
+            {% else %}
+                <p>
+                    {{ msg('error-server-message', ['<code>' ~ msgIfExists(message) ~ '</code>']) }}
+                </p>
+            {% endif %}
+        </p>
+        {% if status_code >= 400 %}
+            <p style="padding-top:20px">
+                <a href="{{ path('Programs') }}">&laquo; {{ msg('return-to-my-programs') }}</a>
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}

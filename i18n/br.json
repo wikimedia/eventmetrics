@@ -5,6 +5,7 @@
 	"close": "Serriñ",
 	"date": "Deiziad",
 	"documentation": "Teuliadur",
+	"fatal-error": "Fazi diremed",
 	"feedback": "Sonjoù",
 	"help-translate": "Sikour da dreiñ",
 	"no-results": "N'eus bet kavet disoc'h ebet",
@@ -13,5 +14,6 @@
 	"pager-older-n": "{{PLURAL:$1|1 koshoc'h|$1 koshoc'h}}",
 	"report-issue": "Titourañ un draen",
 	"totals": "Holladoù",
+	"unknown": "Dianav",
 	"view-source": "Sellet ouzh tarzh an destenn"
 }

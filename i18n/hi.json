@@ -6,6 +6,7 @@
 	"date": "दिनांक",
 	"documentation": "प्रलेखन",
 	"edit-summary": "टिप्पणी",
+	"fatal-error": "घातक भूल",
 	"feedback": "आपके सुझाव",
 	"help-translate": "अनुवाद में सहायता करें",
 	"logout": "सत्रान्त",
@@ -22,6 +23,7 @@
 	"report-issue": "समस्या बताओ",
 	"submit": "जमा करें",
 	"totals": "कुल",
+	"unknown": "अज्ञात",
 	"username": "सदस्यनाम",
 	"view-source": "स्रोत देखें"
 }

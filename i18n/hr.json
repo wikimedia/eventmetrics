@@ -5,6 +5,8 @@
 	"date": "Nadnevak",
 	"diff": "Razl",
 	"documentation": "Dokumentacija",
+	"error-server-message": "Odgovor poslužitelja: $1",
+	"fatal-error": "Fatalna pogrješka",
 	"help-translate": "Pomozite s prijevodima",
 	"no-results": "Nema rezultata",
 	"page": "Stranica",
@@ -12,5 +14,6 @@
 	"pager-older-n": "{{PLURAL:$1|starija $1|starije $1|starijih $1}}",
 	"report-issue": "Prijavi poteškoću",
 	"totals": "Ukupno",
+	"unknown": "Nepoznato",
 	"view-source": "Vidi kôd"
 }

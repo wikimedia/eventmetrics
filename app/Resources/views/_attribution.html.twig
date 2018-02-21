@@ -11,12 +11,14 @@
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <p>
-                        {% set commonsLink %}
-                            <a target="_blank" id="background_commons_link" href="#"></a>.
-                        {% endset %}
-                        {{ msg('attribution-background', [commonsLink]) }}
-                    </p>
+                    {% if exception is not defined and getControllerName() == 'default' %}
+                        <p>
+                            {% set commonsLink %}
+                                <a target="_blank" id="background_commons_link" href="#"></a>.
+                            {% endset %}
+                            {{ msg('attribution-background', [commonsLink]) }}
+                        </p>
+                    {% endif %}
                     <p>
                         {% set openSans %}
                             <a target="_blank" href="https://fonts.google.com/specimen/Open+Sans">Open Sans</a>

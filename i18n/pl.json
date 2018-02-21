@@ -6,6 +6,7 @@
 	"date": "Data",
 	"documentation": "Dokumentacja",
 	"edit-summary": "Komentarz",
+	"fatal-error": "Błąd krytyczny",
 	"feedback": "Opinie",
 	"help-translate": "Pomóż w tłumaczeniu",
 	"logout": "Zakończenie sesji",
@@ -22,6 +23,7 @@
 	"report-issue": "Zgłoś problem",
 	"submit": "Wyślij",
 	"totals": "W sumie",
+	"unknown": "Nieznane",
 	"username": "Nazwa użytkownika",
 	"view-source": "Kod źródłowy"
 }

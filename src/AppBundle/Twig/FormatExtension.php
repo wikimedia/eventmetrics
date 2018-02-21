@@ -185,7 +185,7 @@ class FormatExtension extends Extension
         list($val, $key) = $this->getDurationMessageKey($seconds);
 
         if ($translate) {
-            return $this->numberFormat($val).' '.$this->intuitionMessage("num-$key", [$val]);
+            return $this->numberFormat($val).' '.$this->msg("num-$key", [$val]);
         } else {
             return [$this->numberFormat($val), "num-$key"];
         }

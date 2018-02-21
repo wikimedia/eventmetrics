@@ -2,6 +2,7 @@
 	"close": "Zarrar",
 	"diff": "Diff",
 	"edit-summary": "Comentariu",
+	"error-server-message": "El sirvidor dixo: $1",
 	"feedback": "La to opinión",
 	"help-translate": "Ayudar a traducir",
 	"logout": "Salir",
@@ -14,5 +15,6 @@
 	"pager-newer-n": "{{PLURAL:$1|1 siguiente|$1 siguientes}}",
 	"pager-older-n": "{{PLURAL:$1|1 anterior|$1 anteriores}}",
 	"submit": "Unviar",
+	"unknown": "Desconocíu",
 	"username": "Nome d'usuariu"
 }

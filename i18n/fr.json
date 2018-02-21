@@ -7,6 +7,8 @@
 	"diff": "Différence",
 	"documentation": "Documentation",
 	"edit-summary": "Résumé des modifications",
+	"error-server-message": "Le serveur a répondu : $1",
+	"fatal-error": "Erreur fatale",
 	"feedback": "Avis",
 	"help-translate": "Aider à traduire",
 	"logout": "Déconnexion",
@@ -23,6 +25,7 @@
 	"report-issue": "Signaler un problème",
 	"submit": "Envoyer",
 	"totals": "Totaux",
+	"unknown": "Inconnu",
 	"username": "Nom d'utilisateur",
 	"view-source": "Voir la source"
 }

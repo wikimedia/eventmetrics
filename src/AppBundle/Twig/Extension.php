@@ -115,7 +115,7 @@ abstract class Extension extends Twig_Extension
      * @param array $vars
      * @return mixed|null|string
      */
-    public function intuitionMessage($message = '', $vars = [])
+    public function msg($message = '', $vars = [])
     {
         if (is_array($message)) {
             $vars = $message;

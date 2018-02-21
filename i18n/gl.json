@@ -7,6 +7,8 @@
 	"diff": "Dif",
 	"documentation": "Documentación",
 	"edit-summary": "Comentario",
+	"error-server-message": "O servidor respondeu: $1",
+	"fatal-error": "Erro fatal",
 	"feedback": "Comentarios",
 	"help-translate": "Axudar coas traducións",
 	"logout": "Saír",
@@ -23,6 +25,7 @@
 	"report-issue": "Informar dun problema",
 	"submit": "Enviar",
 	"totals": "Totais",
+	"unknown": "Descoñecido",
 	"username": "Nome de usuario",
 	"view-source": "Ver o código fonte"
 }

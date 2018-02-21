@@ -6,6 +6,8 @@
 	"diff": "Diferență",
 	"documentation": "Documentație",
 	"edit-summary": "Descrierea modificării",
+	"error-server-message": "Serverul a răspuns: $1",
+	"fatal-error": "Eroare fatală",
 	"help-translate": "Ajutați cu traducerea",
 	"logout": "Închide sesiunea",
 	"no-results": "Niciun rezultat găsit",
@@ -21,6 +23,7 @@
 	"report-issue": "Raportează o problemă",
 	"submit": "Trimite",
 	"totals": "Totaluri",
+	"unknown": "Necunoscut",
 	"username": "Nume de utilizator",
 	"view-source": "Vizualizare sursă"
 }

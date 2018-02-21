@@ -41,17 +41,17 @@
                     {% endif %}
                 </button>
             {% endif %}
-            <div class="btn-group event-export">
-                <a href="{{ path('Revisions', {'programTitle': program.title, 'eventTitle': event.title}) }}" class="btn btn-default event-export-btn">
-                    <span class="glyphicon glyphicon-export"></span>
-                    {{ msg('view-all-data') }}
-                </a>
-            </div>
-            <div class="event-stats-status">
-                {% if event.updated != null %}
+            {% if event.updated != null %}
+                <div class="btn-group event-export">
+                    <a href="{{ path('Revisions', {'programTitle': program.title, 'eventTitle': event.title}) }}" class="btn btn-default event-export-btn">
+                        <span class="glyphicon glyphicon-export"></span>
+                        {{ msg('view-all-data') }}
+                    </a>
+                </div>
+                <div class="event-stats-status">
                     {{ msg('last-updated', [event.updated|date_localize]) }}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         </div>
 
         {% include 'events/_metadata.html.twig' with {'event': event} %}

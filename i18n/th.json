@@ -5,6 +5,7 @@
 	"date": "วันที่",
 	"documentation": "เอกสาร",
 	"edit-summary": "ความคิดเห็น",
+	"fatal-error": "การผิดพลาดร้ายแรง",
 	"help-translate": "ช่วยแปลภาษา",
 	"logout": "ออกจากระบบ",
 	"no-results": "ไม่พบผลลัพธ์",
@@ -20,6 +21,7 @@
 	"report-issue": "รายงานผล",
 	"submit": "บันทึก",
 	"totals": "ทั้งหมด",
+	"unknown": "ไม่ทราบ",
 	"username": "ชื่อผู้ใช้",
 	"view-source": "ดูโค้ด"
 }

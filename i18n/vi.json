@@ -5,6 +5,7 @@
 	"date": "Ngày tháng",
 	"documentation": "Tài liệu",
 	"edit-summary": "Miêu tả",
+	"fatal-error": "Lỗi chí tử",
 	"help-translate": "Giúp biên dịch",
 	"logout": "Đăng xuất",
 	"no-results": "Không tìm thấy kết quả",
@@ -20,6 +21,7 @@
 	"report-issue": "Báo cáo lỗi",
 	"submit": "Gửi",
 	"totals": "Tổng cộng",
+	"unknown": "Không rõ",
 	"username": "Tên người dùng",
 	"view-source": "Xem mã nguồn"
 }

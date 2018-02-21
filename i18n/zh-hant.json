@@ -7,6 +7,8 @@
 	"diff": "差異",
 	"documentation": "文件",
 	"edit-summary": "編輯摘要",
+	"error-server-message": "伺服器報告：$1",
+	"fatal-error": "嚴重錯誤",
 	"feedback": "意見回饋",
 	"help-translate": "協助翻譯",
 	"logout": "登出",
@@ -23,6 +25,7 @@
 	"report-issue": "問題回報",
 	"submit": "提交",
 	"totals": "總計",
+	"unknown": "不明",
 	"username": "使用者名稱",
 	"view-source": "查看原始碼"
 }

@@ -4,6 +4,7 @@
 	"cancel": "Avbryt",
 	"diff": "Diff",
 	"edit-summary": "Kommentar",
+	"error-server-message": "Tjeneren sa: $1",
 	"feedback": "Tilbakemelding",
 	"help-translate": "Hjelp til med oversetting",
 	"logout": "Logg ut",
@@ -20,6 +21,7 @@
 	"report-issue": "Rapporter et problem",
 	"submit": "Send",
 	"totals": "Totalt",
+	"unknown": "Ukjent",
 	"username": "Brukernavn",
 	"view-source": "Vis kode"
 }

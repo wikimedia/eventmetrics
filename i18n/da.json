@@ -7,6 +7,8 @@
 	"diff": "Forskel",
 	"documentation": "Dokumentation",
 	"edit-summary": "Kommentar",
+	"error-server-message": "Serveren sagde: $1",
+	"fatal-error": "Fatal fejl",
 	"feedback": "Tilbagemelding",
 	"help-translate": "Hjælp til med at oversætte",
 	"logout": "Log ud",
@@ -23,6 +25,7 @@
 	"report-issue": "Rapporter et problem",
 	"submit": "Udfør",
 	"totals": "I alt",
+	"unknown": "Ukendt",
 	"username": "Brugernavn",
 	"view-source": "Vis kildekode"
 }

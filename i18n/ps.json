@@ -3,6 +3,7 @@
 	"cancel": "ناگارل",
 	"diff": "توپير",
 	"edit-summary": "د سمون لنډيز",
+	"error-server-message": "سرور وايي: $1",
 	"help-translate": "په ژباړلو کې مرسته وکړئ",
 	"no-results": "کومې پايلې و نه موندل شوې",
 	"optional": "ستاسې په خوښه",
@@ -11,6 +12,7 @@
 	"pager-older-n": "{{PLURAL:$1|زوړ 1|زاړه $1}}",
 	"report-issue": "د يوې ستونزې راپور ورکړئ",
 	"totals": "ټولټال",
+	"unknown": "نامعلوم",
 	"username": "کارن نوم",
 	"view-source": "سرچينه کتل"
 }

@@ -10,5 +10,6 @@
 	"pager-newer-n": "{{PLURAL:$1|പുതിയ 1|പുതിയ $1}}",
 	"pager-older-n": "{{PLURAL:$1|പഴയ 1|പഴയ $1}}",
 	"submit": "സമർപ്പിക്കുക",
+	"unknown": "അജ്ഞാതം",
 	"username": "ഉപയോക്തൃനാമം"
 }

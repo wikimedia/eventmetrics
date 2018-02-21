@@ -7,6 +7,8 @@
 	"diff": "Ënnerscheed",
 	"documentation": "Dokumentatioun",
 	"edit-summary": "Resumé änneren",
+	"error-server-message": "Äntwert vum Server: $1",
+	"fatal-error": "Fatale Feeler",
 	"feedback": "Feedback",
 	"help-translate": "Hëlleft iwwersetzen",
 	"logout": "Ausloggen",
@@ -23,6 +25,7 @@
 	"report-issue": "E Problem mellen",
 	"submit": "Späicheren",
 	"totals": "Totaler",
+	"unknown": "Onbekannt",
 	"username": "Benotzernumm",
 	"view-source": "Quellcode weisen"
 }

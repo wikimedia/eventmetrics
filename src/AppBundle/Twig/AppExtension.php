@@ -45,13 +45,14 @@ class AppExtension extends Extension
         $options = ['is_safe' => ['html']];
         return [
             new \Twig_SimpleFunction('loggedInUser', [$this, 'loggedInUser']),
-            new \Twig_SimpleFunction('msg', [$this, 'intuitionMessage'], $options),
-            new \Twig_SimpleFunction('msgIfExists', [$this, 'intuitionMessageIfExists'], $options),
+            new \Twig_SimpleFunction('msg', [$this, 'msg'], $options),
+            new \Twig_SimpleFunction('msgExists', [$this, 'msgExists', $options]),
+            new \Twig_SimpleFunction('msgIfExists', [$this, 'msgIfExists'], $options),
             new \Twig_SimpleFunction('lang', [$this, 'getLang'], $options),
             new \Twig_SimpleFunction('langName', [$this, 'getLangName'], $options),
             new \Twig_SimpleFunction('allLangs', [$this, 'getAllLangs']),
-            new \Twig_SimpleFunction('isRTL', [$this, 'intuitionIsRTL']),
-            new \Twig_SimpleFunction('isRTLLang', [$this, 'intuitionIsRTLLang']),
+            new \Twig_SimpleFunction('isRTL', [$this, 'isRTL']),
+            new \Twig_SimpleFunction('isRTLLang', [$this, 'isRTLLang']),
             new \Twig_SimpleFunction('shortHash', [$this, 'gitShortHash']),
             new \Twig_SimpleFunction('hash', [$this, 'gitHash']),
         ];
@@ -67,19 +68,31 @@ class AppExtension extends Extension
     }
 
     /**
+     * See if a given i18n message exists.
+     * @todo Refactor all intuition stuff so it can be used anywhere.
+     * @param string $message The message.
+     * @param array $vars
+     * @return bool
+     */
+    public function msgExists($message = '', $vars = [])
+    {
+        return $this->getIntuition()->msgExists($message, [
+            'domain' => 'grantmetrics',
+            'variables' => is_array($vars) ? $vars : []
+        ]);
+    }
+
+    /**
      * Get an i18n message if the key exists, otherwise treat as plain text.
      * @param string $message
      * @param array $vars
      * @return mixed|null|string
      */
-    public function intuitionMessageIfExists($message = '', $vars = [])
+    public function msgIfExists($message = '', $vars = [])
     {
-        $exists = $this->getIntuition()->msgExists($message, [
-            'domain' => 'grantmetrics',
-            'variables' => $vars,
-        ]);
+        $exists = $this->msgExists($message, $vars);
         if ($exists) {
-            return $this->intuitionMessage($message, $vars);
+            return $this->msg($message, $vars);
         } else {
             return $message;
         }
@@ -134,7 +147,7 @@ class AppExtension extends Extension
      * Whether the current language is right-to-left.
      * @return bool
      */
-    public function intuitionIsRTL()
+    public function isRTL()
     {
         return $this->getIntuition()->isRTL($this->getIntuition()->getLang());
     }
@@ -144,7 +157,7 @@ class AppExtension extends Extension
      * @param string $lang The language code.
      * @return bool
      */
-    public function intuitionIsRTLLang($lang)
+    public function isRTLLang($lang)
     {
         return $this->getIntuition()->isRTL($lang);
     }

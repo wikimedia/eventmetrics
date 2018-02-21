@@ -6,6 +6,8 @@
 	"diff": "Diferenças",
 	"documentation": "documentação",
 	"edit-summary": "Comentário",
+	"error-server-message": "O servidor respondeu: $1",
+	"fatal-error": "Erro fatal",
 	"help-translate": "Ajude a traduzir",
 	"logout": "Sair",
 	"no-results": "Não foram encontrados resultados",
@@ -21,6 +23,7 @@
 	"report-issue": "Relatar problema",
 	"submit": "Enviar",
 	"totals": "Totais",
+	"unknown": "Desconhecidos",
 	"username": "Nome de utilizador(a)",
 	"view-source": "Ver código-fonte"
 }

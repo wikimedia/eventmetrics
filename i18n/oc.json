@@ -7,6 +7,7 @@
 	"diff": "Dif",
 	"documentation": "Documentacion",
 	"edit-summary": "Resumit de las modificacions",
+	"fatal-error": "Error fatala",
 	"feedback": "Vejaires",
 	"no-results": "Cap de resultat pas trobat",
 	"num-days": "{{PLURAL: $1|jorn|jorns}}",
@@ -20,6 +21,7 @@
 	"pager-older-n": "{{PLURAL:$1|1 mai anciana|$1 mai ancianas}}",
 	"report-issue": "Senhalar un problèma",
 	"totals": "Totals",
+	"unknown": "Desconegut",
 	"username": "Nom d'utilizaire",
 	"view-source": "Afichar la font"
 }

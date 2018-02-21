@@ -4,6 +4,7 @@
 	"cancel": "Prekliči",
 	"date": "Datum",
 	"documentation": "Dokumentacija",
+	"fatal-error": "Usodna napaka",
 	"help-translate": "Pomoč pri prevajanju",
 	"page": "Stran",
 	"pager-newer-n": "{{PLURAL:$1|novejši|novejša|novejši|novejših}} $1",

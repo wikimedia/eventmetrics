@@ -6,6 +6,8 @@
 	"diff": "השוואה בין גרסאות",
 	"documentation": "תיעוד",
 	"edit-summary": "הערה",
+	"error-server-message": "השרת השיב: $1",
+	"fatal-error": "שגיאה קריטית",
 	"help-translate": "עזור לתרגם",
 	"logout": "יציאה מהחשבון",
 	"no-results": "לא נמצאו תוצאות",
@@ -21,6 +23,7 @@
 	"report-issue": "דיווח בעיה",
 	"submit": "שליחה",
 	"totals": "סה״כ",
+	"unknown": "לא ידוע",
 	"username": "שם משתמש",
 	"view-source": "הצגת מקור"
 }

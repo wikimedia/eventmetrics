@@ -6,6 +6,8 @@
 	"diff": "فرق",
 	"documentation": "توثيق",
 	"edit-summary": "ملخص التعديل",
+	"error-server-message": "قال الخادم: $1",
+	"fatal-error": "خطأ فادح",
 	"help-translate": "المساهمة في الترجمة",
 	"logout": "تسجيل الخروج",
 	"no-results": "لم يتم العثور على نتائج",
@@ -21,6 +23,7 @@
 	"report-issue": "أبلغ عن خلل",
 	"submit": "قدّم",
 	"totals": " الإجمالي",
+	"unknown": "غير معروف",
 	"username": "اسم المستخدم",
 	"view-source": "اعرض المصدر"
 }

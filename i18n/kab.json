@@ -7,5 +7,6 @@
 	"page": "Asebter",
 	"pager-newer-n": "{{PLURAL:$1|1 n umaynut| $1 n imaynuten}}",
 	"pager-older-n": "{{PLURAL:$1|1 n ubuṛ|$1 n iqbuṛen}}",
-	"submit": "Azen"
+	"submit": "Azen",
+	"unknown": "Arussin"
 }

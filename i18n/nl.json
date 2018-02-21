@@ -7,6 +7,7 @@
 	"diff": "Wijz",
 	"documentation": "Documentatie",
 	"edit-summary": "Reactie",
+	"fatal-error": "Fatale fout",
 	"feedback": "Terugkoppeling",
 	"help-translate": "Helpen met vertalen",
 	"logout": "Afmelden",
@@ -23,6 +24,7 @@
 	"report-issue": "Probleem melden",
 	"submit": "Verzenden",
 	"totals": "Totalen",
+	"unknown": "Onbekend",
 	"username": "Gebruikersnaam",
 	"view-source": "Broncode bekijken"
 }

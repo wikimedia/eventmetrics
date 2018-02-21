@@ -6,6 +6,7 @@
 	"diff": "جیاوازییەکان",
 	"documentation": "بەڵگەنامە",
 	"edit-summary": "کورتەی دەستکاری",
+	"error-server-message": "سێرڤەرەکە وتی: $1",
 	"help-translate": "یارمەتیی وەرگێڕان",
 	"logout": "چوونە دەرەوە",
 	"no-results": "ھیچ ئەنجامێک نەدۆزرایەوە",
@@ -21,6 +22,7 @@
 	"report-issue": "ڕاپۆرت دان لەسەر کێشەیەک",
 	"submit": "ناردن",
 	"totals": "سەرجەمەکان",
+	"unknown": "نەزانراو",
 	"username": "ناوی بەکارھێنەر",
 	"view-source": "بینینی سەرچاوە"
 }

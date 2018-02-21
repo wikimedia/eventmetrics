@@ -7,6 +7,7 @@
 	"diff": "Razl",
 	"documentation": "Dokumentacija",
 	"edit-summary": "Sažetak izmjene",
+	"fatal-error": "Fatalna greška",
 	"feedback": "Povratne informacije",
 	"help-translate": "Pomozite s prijevodima",
 	"logout": "Odjavi me",
@@ -23,6 +24,7 @@
 	"report-issue": "Prijavi problem",
 	"submit": "Pošalji",
 	"totals": "Ukupno",
+	"unknown": "Nepoznato",
 	"username": "Korisničko ime",
 	"view-source": "Pogledaj izvor"
 }

@@ -7,6 +7,8 @@
 	"diff": "تفاوت",
 	"documentation": "مستندات",
 	"edit-summary": "توضیح",
+	"error-server-message": "پاسخ سرور: $1",
+	"fatal-error": "خطای بحرانی",
 	"feedback": "بازخورد",
 	"help-translate": "کمک به ترجمه",
 	"logout": "خروج از سامانه",
@@ -23,6 +25,7 @@
 	"report-issue": "یک مسئله را گزارش کنید",
 	"submit": "ثبت",
 	"totals": "مجموع",
+	"unknown": "ناشناس",
 	"username": "نام کاربری",
 	"view-source": "نمایش مبدأ"
 }

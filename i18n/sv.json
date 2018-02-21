@@ -7,6 +7,8 @@
 	"diff": "Skillnad",
 	"documentation": "Dokumentation",
 	"edit-summary": "Redigeringssammanfattning",
+	"error-server-message": "Server sade: $1",
+	"fatal-error": "Allvarligt fel",
 	"feedback": "Återkoppling",
 	"help-translate": "Hjälp till att översätta",
 	"logout": "Logga ut",
@@ -23,6 +25,7 @@
 	"report-issue": "Rapportera ett problem",
 	"submit": "Skicka",
 	"totals": "Totalt",
+	"unknown": "Okänt",
 	"username": "Användarnamn",
 	"view-source": "Visa källkod"
 }

@@ -8,5 +8,6 @@
 	"num-seconds": "{{PLURAL:$1|$1 секунт|$1 секунт}}",
 	"optional": "қосымша",
 	"submit": "Жіберу",
+	"unknown": "Белгісіз",
 	"username": "Қатысушы аты"
 }

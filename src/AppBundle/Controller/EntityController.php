@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * The EntityController sets class-level properties and
@@ -73,17 +74,42 @@ abstract class EntityController extends Controller
      */
     private function setProgramAndEvent()
     {
+        $this->setProgram();
+        $this->setEvent();
+    }
+
+    /**
+     * Check the request and if the programTitle is set, find and set
+     * $this->program with the corresponding entity.
+     */
+    private function setProgram()
+    {
         if ($programTitle = $this->request->get('programTitle')) {
             $this->program = $this->em->getRepository(Program::class)
                 ->findOneBy(['title' => $programTitle]);
-        }
 
+            if (!is_a($this->program, Program::class)) {
+                throw new NotFoundHttpException('error-not-found');
+            }
+        }
+    }
+
+    /**
+     * Check the request and if the eventTitle is set, find and set
+     * $this->event with the corresponding entity.
+     */
+    private function setEvent()
+    {
         if ($eventTitle = $this->request->get('eventTitle')) {
             $this->event = $this->em->getRepository(Event::class)
                 ->findOneBy([
                     'program' => $this->program,
                     'title' => $eventTitle,
                 ]);
+
+            if (!is_a($this->event, Event::class)) {
+                throw new NotFoundHttpException('error-not-found');
+            }
         }
     }
 
@@ -122,9 +148,7 @@ abstract class EntityController extends Controller
     private function validateOrganizer()
     {
         if (isset($this->program) && !$this->authUserIsOrganizer($this->program)) {
-            throw new AccessDeniedHttpException(
-                'You are not authorized to view this program because you are not an organizer.'
-            );
+            throw new AccessDeniedHttpException('error-non-organizer');
         }
     }
 

@@ -55,8 +55,8 @@ class AppExtensionTest extends WebTestCase
         $this->assertArraySubset(['es' => 'Español'], $allLangs);
 
         // Testing if the language is RTL.
-        $this->assertFalse($this->appExtension->intuitionIsRTLLang('en'));
-        $this->assertTrue($this->appExtension->intuitionIsRTLLang('ar'));
+        $this->assertFalse($this->appExtension->isRTLLang('en'));
+        $this->assertTrue($this->appExtension->isRTLLang('ar'));
     }
 
     /**

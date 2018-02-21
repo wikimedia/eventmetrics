@@ -8,5 +8,6 @@
 	"num-seconds": "{{PLURAL: $1|秒}}",
 	"optional": "可选",
 	"submit": "提交",
+	"unknown": "未知",
 	"username": "用户名"
 }

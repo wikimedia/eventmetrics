@@ -6,6 +6,7 @@
 	"date": "Päivämäärä",
 	"documentation": "Dokumentaatio",
 	"edit-summary": "Kommentoi",
+	"fatal-error": "Vakava virhe",
 	"feedback": "Palaute",
 	"help-translate": "Auta kääntämisessä",
 	"logout": "Kirjaudu ulos",
@@ -15,6 +16,7 @@
 	"pager-older-n": "{{PLURAL:$1|1 vanhempi|$1 vanhempaa}} →",
 	"report-issue": "Ilmoita ongelmasta",
 	"totals": "Yhteensä",
+	"unknown": "Tuntematon",
 	"username": "Käyttäjänimi",
 	"view-source": "Näytä lähdekoodi"
 }

@@ -7,6 +7,8 @@
 	"diff": "Unterschied",
 	"documentation": "Dokumentation",
 	"edit-summary": "Kommentar",
+	"error-server-message": "Der Server sagte: $1",
+	"fatal-error": "Fataler Fehler",
 	"feedback": "Rückmeldung",
 	"help-translate": "Hilf beim Übersetzen",
 	"logout": "Abmelden",
@@ -23,6 +25,7 @@
 	"report-issue": "Ein Problem melden",
 	"submit": "Absenden",
 	"totals": "Summen",
+	"unknown": "Unbekannt",
 	"username": "Benutzername",
 	"view-source": "Quellcode ansehen"
 }

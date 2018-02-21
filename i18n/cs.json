@@ -5,6 +5,8 @@
 	"close": "Zavřít",
 	"diff": "Rozdíl",
 	"edit-summary": "Komentář",
+	"error-server-message": "Odpověď serveru: $1",
+	"fatal-error": "Kritická chyba",
 	"feedback": "Zpětná vazba",
 	"help-translate": "Pomozte s překladem",
 	"logout": "Odhlásit se",
@@ -21,6 +23,7 @@
 	"report-issue": "Nahlásit problém",
 	"submit": "Odeslat",
 	"totals": "Součty",
+	"unknown": "Neznámý",
 	"username": "Uživatelské jméno",
 	"view-source": "Zobrazit zdrojový kód"
 }

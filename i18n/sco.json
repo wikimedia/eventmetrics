@@ -10,5 +10,6 @@
 	"pager-newer-n": "{{PLURAL:$1|newer 1|newer $1}}",
 	"pager-older-n": "{{PLURAL:$1|aulder 1|aulder $1}}",
 	"submit": "Submit",
+	"unknown": "Unkent",
 	"username": "Uisername"
 }
