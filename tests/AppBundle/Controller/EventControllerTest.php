@@ -20,6 +20,10 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     public function setup()
     {
         parent::setUp();
+
+        // This tests runs code that throws exceptions, and we don't
+        // want that in the test output.
+        $this->suppressErrors();
     }
 
     /**
@@ -27,6 +31,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     public function testIndex()
     {
+        $this->loginUser('Test user');
         $this->crawler = $this->client->request('GET', '/events');
         $this->response = $this->client->getResponse();
         $this->assertEquals(302, $this->response->getStatusCode());
@@ -61,8 +66,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         // 'My_fun_program' was already created via fixtures.
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(302, $this->response->getStatusCode());
-        $this->assertContains('/login', $this->response->getTargetUrl());
+        $this->assertEquals(307, $this->response->getStatusCode());
+        $this->assertContains('/login', $this->response->headers->get('location'));
     }
 
     /**
@@ -78,17 +83,21 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Oliver_and_Company');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(200, $this->response->getStatusCode());
+        $this->assertEquals(403, $this->response->getStatusCode());
 
-        // Should see the 'edit event', since we are logged in and are one of the organizers.
-        $this->assertNotContains(
-            'edit event',
-            $this->crawler->filter('.page-header')->text()
-        );
+        /**
+         * For now, you must be an organizer of an event in order to view it.
+         */
 
-        // Should not be able to edit an event.
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/Oliver_and_Company');
-        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+        // // Should see the 'edit event', since we are logged in and are one of the organizers.
+        // $this->assertNotContains(
+        //     'edit event',
+        //     $this->crawler->filter('.page-header')->text()
+        // );
+
+        // // Should not be able to edit an event.
+        // $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/Oliver_and_Company');
+        // $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**

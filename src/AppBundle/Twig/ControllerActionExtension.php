@@ -48,8 +48,7 @@ class ControllerActionExtension extends Twig_Extension
     }
 
     /**
-     * Get current controller name
-     *
+     * Get current controller name.
      * @return string
      * There is no request stack in unit tests.
      * @codeCoverageIgnore
@@ -68,8 +67,7 @@ class ControllerActionExtension extends Twig_Extension
     }
 
     /**
-     * Get current action name
-     *
+     * Get current action name.
      * @return string
      * There is no request stack in unit tests.
      * @codeCoverageIgnore
