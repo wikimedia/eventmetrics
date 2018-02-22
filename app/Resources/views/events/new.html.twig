@@ -18,7 +18,7 @@
             <h1>{{ msg('create-new-event') }}</h1>
         </div>
 
-        {{ form_start(form, {'method': 'post'}) }}
+        {{ form_start(form, {'method': 'post', 'attr': {'id': 'event_form'}}) }}
             {% include 'events/_form.html.twig' with {'form': form} %}
         {{ form_end(form, {'render_rest': false}) }}
     </div>

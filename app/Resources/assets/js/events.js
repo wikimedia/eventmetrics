@@ -34,10 +34,15 @@ $(function () {
             daysOfWeek: getWeekdayNames(),
             monthNames: getMonthNames()
         }
-    }, function (start, end, label) {
-        // Populate hidden fields with ISO-8601 format.
-        $('#form_start').val(start.format('YYYY-MM-DDTHH:mm:00Z'));
-        $('#form_end').val(end.format('YYYY-MM-DDTHH:mm:00Z'));
+    });
+
+    /**
+     * Populate hidden start/end datetime fields on form submission.
+     */
+    $('#event_form').on('submit', function () {
+        var rangeData = $('#form_time').data();
+        $('#form_start').val(rangeData.startDate.format('YYYY-MM-DDTHH:mm:00Z'));
+        $('#form_end').val(rangeData.endDate.format('YYYY-MM-DDTHH:mm:00Z'));
     });
 
     populateValidWikis().then(function (validWikis) {
