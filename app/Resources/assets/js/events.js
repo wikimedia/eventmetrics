@@ -14,8 +14,8 @@ $(function () {
         setupAddRemove('event', 'participant');
     }
 
-    var startDate = moment($('#form_start').val()),
-        endDate = moment($('#form_end').val());
+    var startDate = moment($('#form_start').val()).utc(),
+        endDate = moment($('#form_end').val()).utc();
 
     // Set defaults if invalid or blank -- next week.
     startDate = startDate.isValid() ? startDate : moment().add(7, 'days').startOf('week');
@@ -40,9 +40,9 @@ $(function () {
      * Populate hidden start/end datetime fields on form submission.
      */
     $('#event_form').on('submit', function () {
-        var rangeData = $('#form_time').data();
-        $('#form_start').val(rangeData.startDate.format('YYYY-MM-DDTHH:mm:00Z'));
-        $('#form_end').val(rangeData.endDate.format('YYYY-MM-DDTHH:mm:00Z'));
+        var rangeData = $('#form_time').data().daterangepicker;
+        $('#form_start').val(rangeData.startDate.format('YYYY-MM-DDTHH:mm:00-00:00'));
+        $('#form_end').val(rangeData.endDate.format('YYYY-MM-DDTHH:mm:00-00:00'));
     });
 
     populateValidWikis().then(function (validWikis) {
