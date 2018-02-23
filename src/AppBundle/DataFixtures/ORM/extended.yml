@@ -12,13 +12,14 @@ AppBundle\Model\Event:
     event1:
         __construct: ['@program1']
         title: 'Oliver and Company'
-        start: '2014-01-12'
-        end: '2014-02-20'
+        timezone: 'America/New_York'
+        start: '2014-02-04T13:30:00Z'
+        end: '2014-02-04T21:00:00Z'
     event2:
         __construct: ['@program2']
         title: 'The Lion King'
-        start: '2014-01-12'
-        end: '2020-04-20'
+        start: '2014-01-12T00:00:00Z'
+        end: '2020-04-20T23:59:59Z'
 AppBundle\Model\EventWiki:
     eventwiki1:
         __construct: ['@event1']

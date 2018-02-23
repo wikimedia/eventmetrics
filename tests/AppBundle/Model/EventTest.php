@@ -25,6 +25,7 @@ class EventTest extends KernelTestCase
 
     public function setUp()
     {
+        date_default_timezone_set('UTC');
         $organizer = new Organizer(50);
         $this->program = new Program($organizer);
     }
@@ -37,8 +38,8 @@ class EventTest extends KernelTestCase
         $event = new Event(
             $this->program,
             '  My program  ',
-            '2017-01-01',
-            new \DateTime('2017-03-01'),
+            '2017-01-01 12:00',
+            new DateTime('2017-03-01 16:00'),
             'America/New_York'
         );
         $this->assertNull($event->getId());
@@ -71,21 +72,24 @@ class EventTest extends KernelTestCase
         $event = new Event(
             $this->program,
             '  My program  ',
-            '2017-01-01',
-            new \DateTime('2017-03-01')
+            '2017-01-01 16:00',
+            new DateTime('2017-03-01 21:00'),
+            'America/New_York'
         );
-        $this->assertEquals(new \DateTime('2017-01-01'), $event->getStart());
-        $this->assertEquals(new \DateTime('2017-03-01'), $event->getEnd());
+        $this->assertEquals(new DateTime('2017-01-01 16:00'), $event->getStart());
+        $this->assertEquals(new DateTime('2017-03-01 21:00'), $event->getEnd());
+        $this->assertEquals(new DateTime('2017-01-01 21:00'), $event->getStartWithTimezone());
+        $this->assertEquals(new DateTime('2017-03-02 02:00'), $event->getEndWithTimezone());
 
         // Date types reversed.
         $event2 = new Event(
             $this->program,
             'My program',
-            new \DateTime('2017-03-01'),
+            new DateTime('2017-03-01'),
             '2017-04-01'
         );
-        $this->assertEquals(new \DateTime('2017-03-01'), $event2->getStart());
-        $this->assertEquals(new \DateTime('2017-04-01'), $event2->getEnd());
+        $this->assertEquals(new DateTime('2017-03-01'), $event2->getStart());
+        $this->assertEquals(new DateTime('2017-04-01'), $event2->getEnd());
     }
 
     /**
@@ -97,7 +101,7 @@ class EventTest extends KernelTestCase
             $this->program,
             '  My program  ',
             '2017-01-01',
-            new \DateTime('2017-03-01'),
+            new DateTime('2017-03-01'),
             'America/New_York'
         );
         $this->assertEquals(0, count($event->getStatistics()));
@@ -134,7 +138,7 @@ class EventTest extends KernelTestCase
             $this->program,
             '  My program  ',
             '2017-01-01',
-            new \DateTime('2017-03-01'),
+            new DateTime('2017-03-01'),
             'America/New_York'
         );
 
@@ -169,7 +173,7 @@ class EventTest extends KernelTestCase
             $this->program,
             '  My program  ',
             '2017-01-01',
-            new \DateTime('2017-03-01'),
+            new DateTime('2017-03-01'),
             'America/New_York'
         );
 
@@ -231,7 +235,7 @@ class EventTest extends KernelTestCase
             $this->program,
             '  My program  ',
             '2017-01-01',
-            new \DateTime('2017-03-01'),
+            new DateTime('2017-03-01'),
             'America/New_York'
         );
         $job = new Job($event);
@@ -253,11 +257,15 @@ class EventTest extends KernelTestCase
             $this->program,
             '  My program  ',
             '2017-01-01',
-            new \DateTime('2017-03-01'),
+            new DateTime('2017-03-01'),
             'America/New_York'
         );
-        $datetime = new DateTime('2017-01-01');
+        $datetime = new DateTime('2017-01-01 17:00');
         $event->setUpdated($datetime);
         $this->assertEquals($datetime, $event->getUpdated());
+        $this->assertEquals(
+            new DateTime('2017-01-01 12:00'),
+            $event->getUpdatedWithTimezone()
+        );
     }
 }

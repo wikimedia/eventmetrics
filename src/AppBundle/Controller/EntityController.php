@@ -101,8 +101,6 @@ abstract class EntityController extends Controller
     private function setEvent()
     {
         if ($eventTitle = $this->request->get('eventTitle')) {
-            date_default_timezone_set('UTC');
-
             $this->event = $this->em->getRepository(Event::class)
                 ->findOneBy([
                     'program' => $this->program,

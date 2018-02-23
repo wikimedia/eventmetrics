@@ -78,6 +78,7 @@ class EventController extends EntityController
             'gmTitle' => 'create-new-program',
         ]);
     }
+
     /**
      * Show a form to edit the given event.
      * @Route("/programs/{programTitle}/edit/{eventTitle}", name="EditEvent")
@@ -139,8 +140,6 @@ class EventController extends EntityController
      */
     private function handleFormSubmission(Event $event)
     {
-        date_default_timezone_set('UTC');
-
         $form = $this->getFormForEvent($event);
         $form->handleRequest($this->request);
 

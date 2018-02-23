@@ -10,11 +10,12 @@ use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\EventWikiStat;
 use AppBundle\Repository\EventRepository;
+use DateTime;
+use DateTimeZone;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
-use DateTime;
 
 /**
  * An EventProcessor handles generating statistics for an Event.
@@ -65,9 +66,7 @@ class EventProcessor
      */
     public function process(Event $event, OutputInterface &$output = null)
     {
-        $this->event = $event;
-        $this->eventRepo = $this->entityManager->getRepository('Model:Event');
-        $this->eventRepo->setContainer($this->container);
+        $this->loadEvent($event);
 
         $this->output = &$output;
 
@@ -94,6 +93,17 @@ class EventProcessor
     }
 
     /**
+     * Load the Event and EventRepository.
+     * @param Event $event
+     */
+    private function loadEvent(Event $event)
+    {
+        $this->event = $event;
+        $this->eventRepo = $this->entityManager->getRepository('Model:Event');
+        $this->eventRepo->setContainer($this->container);
+    }
+
+    /**
      * Compute and persist a new EventStat for the number of new editors.
      */
     private function setNewEditors()
@@ -112,8 +122,8 @@ class EventProcessor
     {
         $this->log("\nFetching number of pages created...");
 
-        $start = $this->event->getStart();
-        $end = $this->event->getEnd();
+        $start = $this->event->getStartWithTimezone();
+        $end = $this->event->getEndWithTimezone();
         $usernames = $this->event->getParticipantNames();
 
         $pagesImproved = 0;
@@ -152,7 +162,7 @@ class EventProcessor
         $this->log("\nFetching retention...");
 
         $retentionOffset = (int)$this->container->getParameter('app.retention_offset');
-        $end = $this->event->getEnd()->modify("+$retentionOffset days");
+        $end = $this->event->getEndWithTimezone()->modify("+$retentionOffset days");
         $usernames = $this->event->getParticipantNames();
 
         if ((new DateTime()) < $end) {

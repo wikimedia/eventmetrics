@@ -5,12 +5,13 @@
 
 namespace AppBundle\Model;
 
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use DateTime;
 use AppBundle\Model\Traits\TitleUserTrait;
 
 /**
@@ -210,12 +211,36 @@ class Event
     }
 
     /**
+     * Get the start date adjusted with the Event's timezone.
+     * @return DateTime
+     */
+    public function getStartWithTimezone()
+    {
+        $dateStr = $this->start->format('YmdHis');
+        $dt = new DateTime($dateStr, new DateTimeZone($this->timezone));
+        $dt->setTimezone(new DateTimeZone('UTC'));
+        return $dt;
+    }
+
+    /**
      * Get the end date of this Event.
      * @return DateTime
      */
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * Get the end date adjusted with the Event's timezone.
+     * @return DateTime
+     */
+    public function getEndWithTimezone()
+    {
+        $dateStr = $this->end->format('YmdHis');
+        $dt = new DateTime($dateStr, new DateTimeZone($this->timezone));
+        $dt->setTimezone(new DateTimeZone('UTC'));
+        return $dt;
     }
 
     /**
@@ -237,7 +262,10 @@ class Event
         if ($value instanceof DateTime) {
             $this->{$key} = $value;
         } elseif (is_string($value)) {
-            $this->{$key} = new DateTime($value);
+            $this->{$key} = new DateTime(
+                $value,
+                new DateTimeZone('UTC')
+            );
         } else {
             $this->{$key} = null;
         }
@@ -327,6 +355,19 @@ class Event
     public function getUpdated()
     {
         return $this->updated;
+    }
+
+    /**
+     * Get the update at value adjusted with the Event's timezone.
+     * @return DateTime
+     */
+    public function getUpdatedWithTimezone()
+    {
+        $this->updated->setTimezone(new DateTimeZone($this->timezone));
+        return new DateTime(
+            $this->updated->format('Y-m-d H:i:s'),
+            new DateTimeZone('UTC')
+        );
     }
 
     /**

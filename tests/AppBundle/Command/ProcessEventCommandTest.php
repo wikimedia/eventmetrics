@@ -187,7 +187,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'event' => $this->event,
                 'metric' => 'pages-created',
             ]);
-        $this->assertEquals($this->isWikimedia ? 7 : 2, $eventStat->getValue());
+        $this->assertEquals($this->isWikimedia ? 1 : 2, $eventStat->getValue());
 
         // As an EventWikiStat...
         $eventWikiStat = $this->entityManager
@@ -196,7 +196,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'wiki' => $this->event->getWikis()[0],
                 'metric' => 'pages-created',
             ]);
-        $this->assertEquals($this->isWikimedia ? 7 : 2, $eventWikiStat->getValue());
+        $this->assertEquals($this->isWikimedia ? 1 : 2, $eventWikiStat->getValue());
     }
 
     /**
@@ -211,7 +211,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved',
             ]);
-        $this->assertEquals($this->isWikimedia ? 1330 : 3, $eventStat->getValue());
+        $this->assertEquals($this->isWikimedia ? 20 : 4, $eventStat->getValue());
 
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
@@ -219,7 +219,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'wiki' => $this->event->getWikis()[0],
                 'metric' => 'pages-improved',
             ]);
-        $this->assertEquals($this->isWikimedia ? 1330 : 3, $eventWikiStat->getValue());
+        $this->assertEquals($this->isWikimedia ? 20 : 4, $eventWikiStat->getValue());
     }
 
     /**
