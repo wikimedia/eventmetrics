@@ -104,7 +104,6 @@ class ProgramController extends EntityController
             'form' => $form->createView(),
             'program' => $this->program,
             'gmTitle' => $this->program->getDisplayTitle(),
-            // 'organizers' => $this->program->getOrganizers(),
         ]);
     }
 
