@@ -215,13 +215,47 @@ class EventController extends EntityController
                 'view_timezone' => 'UTC',
                 'constraints' => [new Valid()],
             ])
-            ->add('timezone', TimezoneType::class)
+            ->add('timezone', TimezoneType::class, [
+                'choices' => $this->getTimezones(),
+                'choice_loader' => null,
+            ])
             ->add('submit', SubmitType::class);
 
         $builder->get('wikis')
             ->addModelTransformer($this->getWikiCallbackTransformer($event));
 
         return $builder->getForm();
+    }
+
+    /**
+     * Get options for the timezone dropdown, grouping by region and
+     * also prefixing each option with the region.
+     * @return string[]
+     */
+    private function getTimezones()
+    {
+        $timezones = [
+            'UTC' => 'UTC',
+        ];
+
+        foreach (\DateTimeZone::listIdentifiers() as $timezone) {
+            $region = str_replace('_', ' ', explode('/', $timezone)[0]);
+            $displayTimezone = str_replace('_', ' ', $timezone);
+
+            if ($region === 'UTC') {
+                continue;
+            }
+
+            if (isset($timezones[$region])) {
+                $timezones[$region][$displayTimezone] = $timezone;
+            } else {
+                $timezones[$region] = [
+                    $displayTimezone => $timezone,
+                ];
+            }
+        }
+
+        return $timezones;
     }
 
     /**
