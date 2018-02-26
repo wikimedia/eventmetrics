@@ -33,7 +33,7 @@
 
         <div class="pull-right text-right">
             {% if isOrganizer %}
-                <button class="btn btn-default event-process-btn" data-event-id="{{ event.id }}">
+                <button type="button" class="btn btn-default event-process-btn" data-event-id="{{ event.id }}">
                     {% if event.updated == null %}
                         {{ msg('calculate-totals') }}
                     {% else %}
@@ -121,7 +121,7 @@
                                 {% endif %}
                             </div>
                             <div class="col-sm-2">
-                                <button class="btn btn-default remove-participant">
+                                <button type="button" class="btn btn-default remove-participant">
                                     {{ msg('remove') }}
                                 </button>
                             </div>
@@ -132,9 +132,7 @@
                     </div>
 
                     <div class="form-group col-sm-6 event-add-participants">
-                        <label for="add_participants">
-                            {{ msg('add-more-participants') }}
-                        </label>
+                        <label for="form_new_participants">{{ msg('add-more-participants') }}</label>
                         {{ form_widget(form.new_participants, {'attr': {'class': 'event-new-participants', 'rows': 10}}) }}
                     </div>
                     {% if form.participants|length == 0 %}

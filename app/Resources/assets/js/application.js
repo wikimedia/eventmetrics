@@ -41,10 +41,9 @@ function setupAddRemove(model, column)
         e.preventDefault();
 
         // Clone the template row and correct CSS classes.
-        var $template = $(rowClass + '__template')
-            .clone()
-            .removeClass('hidden')
-            .removeClass(column + '-row__template')
+        var $template = $("<div class='form-group " + column + "-row'>" +
+            $(rowClass + '__template').html() +
+            "</div>");
 
         // Insert after the last row.
         $(rowClass + ':last').after($template);

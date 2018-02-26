@@ -7,12 +7,12 @@
 </fieldset>
 
 {# This is what gets copied when they add a new organizer row. #}
-<div class="form-group organizer-row organizer-row__template hidden">
+<div class="organizer-row__template hidden">
     <div class="col-sm-8 col-lg-offset-2">
         <input class="form-control">
     </div>
     <div class="col-sm-2">
-        <button class="btn btn-default remove-organizer">
+        <button type="button" class="btn btn-default remove-organizer">
             {{ msg('remove') }}
         </button>
     </div>
@@ -40,7 +40,7 @@
                 {% endif %}
             </div>
             <div class="col-sm-2">
-                <button class="btn btn-default remove-organizer"{% if isViewingOrganizer %} disabled="disabled"{% endif %}>
+                <button type="button" class="btn btn-default remove-organizer"{% if isViewingOrganizer %} disabled="disabled"{% endif %}>
                     {{ msg('remove') }}
                 </button>
             </div>
