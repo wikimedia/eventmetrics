@@ -258,7 +258,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     {
         $form = $this->crawler->selectButton('Save participants')->form();
 
-        $form['form[new_participants]'] = "  MusikAnimal  \r\nInvalid_user";
+        $form['form[new_participants]'] = "  MusikAnimal  \r\nInvalid_user1234";
         $this->crawler = $this->client->submit($form);
 
         $this->assertContains(
@@ -268,7 +268,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         $form = $this->crawler->selectButton('Save participants')->form();
 
-        $this->assertEquals('Invalid user', $form['form[participants][0]']->getValue());
+        $this->assertEquals('Invalid user1234', $form['form[participants][0]']->getValue());
         $this->assertEquals('MusikAnimal', $form['form[participants][1]']->getValue());
 
         // Remove invalid user and submit again.

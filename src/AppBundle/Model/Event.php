@@ -30,7 +30,6 @@ use AppBundle\Model\Traits\TitleUserTrait;
  *     },
  *     options={"engine":"InnoDB"}
  * )
- * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("title", message="error-event-title-dup")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\EventRepository")
  */

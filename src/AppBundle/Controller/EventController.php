@@ -412,7 +412,7 @@ class EventController extends EntityController
                 'required' => false,
             ])
             ->add('submit', SubmitType::class)
-            ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onParticipantPreSetData']);
+            ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onParticipantPreSubmit']);
 
         $builder->get('participants')
             ->addModelTransformer($this->getParticipantCallbackTransformer($event));
@@ -421,10 +421,10 @@ class EventController extends EntityController
     }
 
     /**
-     * Format data before the participant form is rendered (from the 'show' action).
-     * @param  FormEvent $formEvent
+     * Format data before the participant form is submitted.
+     * @param FormEvent $formEvent
      */
-    public function onParticipantPreSetData(FormEvent $formEvent)
+    public function onParticipantPreSubmit(FormEvent $formEvent)
     {
         $event = $formEvent->getData();
         $form = $formEvent->getForm();
@@ -503,9 +503,11 @@ class EventController extends EntityController
     {
         return new CallbackTransformer(
             function ($participantObjects) {
-                return array_map(function ($participant) {
+                $participants = array_map(function ($participant) {
                     return $participant->getUsername();
                 }, $participantObjects->toArray());
+                sort($participants);
+                return $participants;
             },
             function ($participantNames) use ($event) {
 
@@ -523,15 +525,23 @@ class EventController extends EntityController
                 });
 
                 $participants = [];
+                $invalidParticipants = [];
 
                 // Create or get Participants from the usernames.
                 foreach ($rows as $row) {
                     $participant = $this->getParticipantFromRow($event, $row, $participantRepo);
                     $event->addParticipant($participant);
-                    $participants[] = $participant;
+
+                    // Ensure invalid participants are at the top.
+                    if (null === $row['user_id']) {
+                        $invalidParticipants[] = $participant;
+                    } else {
+                        $participants[] = $participant;
+                    }
                 }
 
-                return $participants;
+                // Invalid participants go at the top.
+                return array_merge($invalidParticipants, $participants);
             }
         );
     }
