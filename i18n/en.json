@@ -41,7 +41,7 @@
 	"error-server-message": "The server said: $1",
 	"error-title-invalid-chars": "Title cannot include any of the characters: $1.",
 	"error-title-reserved": "Title cannot be any of: $1.",
-	"error-usernames": "$1 {{PLURAL:$1|username|usernames}} {{PLURAL:$1|is|are}} invalid. Please edit or remove and then re-submit participants to save. Check for incorrect spelling, capitalization and extra formatting.",
+	"error-usernames": "$1 {{PLURAL:$1|username|usernames}} {{PLURAL:$1|is|are}} invalid. Please edit or remove and then re-submit to save. Check for incorrect spelling, capitalization and extra formatting.",
 	"error-wikis": "$1 {{PLURAL:$1|wiki|wikis}} {{PLURAL:$1|is|are}} invalid. Check the spelling.",
 	"event": "Event",
 	"event-created": "The event '$1' was successfully created.",
