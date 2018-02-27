@@ -8,6 +8,7 @@
 	"documentation": "설명서",
 	"edit-summary": "편집 요약",
 	"error-server-message": "서버 응답: $1",
+	"error-service-overload": "Grant Metrics가 현재 다른 요청에 대한 서비스 제공에 과부하가 걸려있습니다. 몇 분 뒤에 다시 시도해 주십시오.",
 	"fatal-error": "치명적인 오류",
 	"feedback": "피드백",
 	"help-translate": "변역 돕기",

@@ -43,8 +43,7 @@ class EventWikiRepository extends Repository
             ->setParameter('project', $value)
             ->setParameter('projectUrl', "https://$value")
             ->setParameter('projectUrl2', "https://$value.org");
-        $stmt = $rqb->execute();
-        $ret = $stmt->fetch();
+        $ret = $this->executeQueryBuilder($rqb)->fetch();
 
         $matches = [];
         preg_match('/^https?\:\/\/(.*)\.org$/', $ret['url'], $matches);
@@ -68,8 +67,9 @@ class EventWikiRepository extends Repository
             ->from('wiki')
             ->where('url = :projectUrl')
             ->setParameter('projectUrl', $projectUrl);
-        $stmt = $rqb->execute();
-        return $stmt->fetch()['dbname'];
+
+        return $this->executeQueryBuilder($rqb)
+            ->fetch()['dbname'];
     }
 
     /**
