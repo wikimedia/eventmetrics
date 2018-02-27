@@ -32,7 +32,7 @@
         </div>
 
         <div class="pull-right text-right">
-            {% if isOrganizer %}
+            {% if isOrganizer and event.numParticipants > 0 %}
                 <button type="button" class="btn btn-default event-process-btn" data-event-id="{{ event.id }}">
                     {% if event.updated == null %}
                         {{ msg('calculate-totals') }}
@@ -48,10 +48,12 @@
                         {{ msg('view-all-data') }}
                     </a>
                 </div>
-                <div class="event-stats-status">
-                    {{ msg('last-updated', [event.updatedWithTimezone|date_localize]) }}
-                </div>
             {% endif %}
+            <div class="event-stats-status">
+                {% if event.updated != null %}
+                    {{ msg('last-updated', [event.updatedWithTimezone|date_localize]) }}
+                {% endif %}
+            </div>
         </div>
 
         {% include 'events/_metadata.html.twig' with {'event': event} %}
@@ -105,28 +107,50 @@
             {% if isOrganizer %}
                 {{ form_errors(form) }}
 
+                {# Valid participants should be shown below invalid ones. #}
+                {% set validParticipants = [] %}
+
                 {{ form_start(form, {'method': 'post', 'attr': {'class': 'form-horizontal save-participants-form'}}) }}
                     {% for participant in form.participants %}
                         {% set invalidParticipant = false %}
-                        {% if form_errors(participant)|length > 0 %}
+                        {% if not(participant.vars.valid) %}
                             {% set invalidParticipant = true %}
                         {% endif %}
-                        <div class="form-group participant-row{% if invalidParticipant %} has-error{% endif %}">
-                            <div class="col-sm-4">
-                                {{ form_widget(participant) }}
-                                {% if invalidParticipant %}
-                                    <span class="font-awesome invalid-input">&#xf071;</span>
-                                {% else %}
-                                    <span class="font-awesome valid-input">&#xf05d;</span>
-                                {% endif %}
+
+                        {% set participantRow %}
+                            <div class="form-group participant-row{% if invalidParticipant %} has-error{% endif %}">
+                                <div class="col-sm-4">
+                                    {{ form_widget(participant) }}
+                                    {% if invalidParticipant %}
+                                        <span class="font-awesome invalid-input">&#xf071;</span>
+                                    {% else %}
+                                        <span class="font-awesome valid-input">&#xf05d;</span>
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-default remove-participant">
+                                        {{ msg('remove') }}
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-sm-2">
-                                <button type="button" class="btn btn-default remove-participant">
-                                    {{ msg('remove') }}
-                                </button>
-                            </div>
-                        </div>
+                        {% endset %}
+
+                        {##
+                         # If invalid, show immediately, otherwise merge into valid ones that
+                         # will show below the invalid ones.
+                         #}
+                        {% if invalidParticipant %}
+                            {{ participantRow }}
+                        {% else %}
+                            {% set validParticipants = validParticipants|merge([participantRow]) %}
+                        {% endif %}
                     {% endfor %}
+
+                    {# Render valid participants. #}
+                    {% for row in validParticipants %}
+                        {{ row }}
+                    {% endfor %}
+
                     <div class="col-sm-6 col-sm-offset-6 save-participants-btn">
                         {{ form_widget(form.submit, {'label': msg('save-participants')}) }}
                     </div>

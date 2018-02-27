@@ -520,44 +520,20 @@ class EventController extends EntityController
                 // Should be in alphabetical order, the same order we'll show it
                 // to the user in the returned form.
                 usort($rows, function ($a, $b) {
-                    return $a['user_name'] < $b['user_name'] ? -1 : 1;
+                    return strnatcmp($a['user_name'], $b['user_name']);
                 });
 
-                return $this->createParticipantsFromRows($event, $participantRepo, $rows);
+                $participants = [];
+
+                // Create or get Participants from the usernames.
+                foreach ($rows as $row) {
+                    $participant = $this->getParticipantFromRow($event, $row, $participantRepo);
+                    $event->addParticipant($participant);
+                    $participants[] = $participant;
+                }
+
+                return $participants;
             }
         );
-    }
-
-    /**
-     * Instantiate Participant objects from the given database rows,
-     * putting invalid Participants at the top.
-     * @param  Event $event
-     * @param  ParticipantRepository $participantRepo
-     * @param  string[] $rows
-     * @return Participant[]
-     */
-    private function createParticipantsFromRows(
-        Event $event,
-        ParticipantRepository $participantRepo,
-        $rows
-    ) {
-        $participants = [];
-        $invalidParticipants = [];
-
-        // Create or get Participants from the usernames.
-        foreach ($rows as $row) {
-            $participant = $this->getParticipantFromRow($event, $row, $participantRepo);
-            $event->addParticipant($participant);
-
-            // Ensure invalid participants are at the top.
-            if (null === $row['user_id']) {
-                $invalidParticipants[] = $participant;
-            } else {
-                $participants[] = $participant;
-            }
-        }
-
-        // Invalid participants go at the top.
-        return array_merge($invalidParticipants, $participants);
     }
 }
