@@ -6,6 +6,7 @@
 	"date": "Data",
 	"documentation": "Dokumentacja",
 	"edit-summary": "Komentarz",
+	"error-service-overload": "Grant Metrics obsługuje obecnie zbyt wiele żądań. Spróbuj ponownie za kilka minut.",
 	"fatal-error": "Błąd krytyczny",
 	"feedback": "Opinie",
 	"help-translate": "Pomóż w tłumaczeniu",

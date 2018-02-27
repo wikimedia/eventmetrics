@@ -8,6 +8,7 @@
 	"documentation": "Документација",
 	"edit-summary": "Опис измене",
 	"error-server-message": "Сервер каже: $1",
+	"error-service-overload": "Grant Metrics је тренутно преоптерећен сервисирањем других захтева. Покушајте поново за неколико минута.",
 	"fatal-error": "Фатална грешка",
 	"feedback": "Повратне информације",
 	"help-translate": "Преведи",

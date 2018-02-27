@@ -6,17 +6,24 @@
 namespace AppBundle\Repository;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\DriverException;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\Stopwatch\Stopwatch;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * A Repository is responsible for retrieving data from wherever it lives
  * (databases, APIs, filesystems, etc.).
+ *
+ * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
+ *
  * @codeCoverageIgnore
  */
 abstract class Repository extends EntityRepository
@@ -94,6 +101,10 @@ abstract class Repository extends EntityRepository
         return $this->container;
     }
 
+    /***************
+     * CONNECTIONS *
+     ***************/
+
     /**
      * Get the database connection for the 'grantmetrics' database.
      * @return Connection
@@ -154,6 +165,10 @@ abstract class Repository extends EntityRepository
         return $this->replicaConnection;
     }
 
+    /*************
+     * USERNAMES *
+     *************/
+
     /**
      * Get the global user IDs for mutiple users,
      * based on the central auth database.
@@ -168,8 +183,7 @@ abstract class Repository extends EntityRepository
             ->from('globaluser')
             ->andWhere('gu_name IN (:usernames)')
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
-        $stmt = $rqb->execute();
-        return $stmt->fetchAll();
+        return $this->executeQueryBuilder($rqb)->fetchAll();
     }
 
     /**
@@ -197,8 +211,7 @@ abstract class Repository extends EntityRepository
             ->from('globaluser')
             ->andWhere('gu_id IN (:userIds)')
             ->setParameter('userIds', $userIds, Connection::PARAM_INT_ARRAY);
-        $stmt = $rqb->execute();
-        return $stmt->fetchAll();
+        return $this->executeQueryBuilder($rqb)->fetchAll();
     }
 
     /**
@@ -211,6 +224,10 @@ abstract class Repository extends EntityRepository
         $ret = $this->getUsernamesFromIds([$userId]);
         return isset($ret[0]['user_name']) ? $ret[0]['user_name'] : null;
     }
+
+    /*****************
+     * QUERY HELPERS *
+     *****************/
 
     /**
      * Get the table name for use when querying the replicas. This automatically
@@ -237,5 +254,82 @@ abstract class Repository extends EntityRepository
         }
 
         return $name;
+    }
+
+    /**
+     * Execute a query using the projects connection, handling certain Exceptions.
+     * @param string $sql
+     * @param array $params Parameters to bound to the prepared query.
+     * @param int|null $timeout Maximum statement time in seconds. null will use the
+     *   default specified by the app.query_timeout config parameter.
+     * @return \Doctrine\DBAL\Driver\Statement
+     */
+    public function executeReplicaQuery($sql, $params = [], $timeout = null)
+    {
+        try {
+            $this->setQueryTimeout($timeout);
+            return $this->getReplicaConnection()->executeQuery($sql, $params);
+        } catch (DriverException $e) {
+            return $this->handleDriverError($e, $timeout);
+        }
+    }
+
+    /**
+     * Execute a query using the projects connection, handling certain Exceptions.
+     * @param QueryBuilder $qb
+     * @param int $timeout Maximum statement time in seconds. null will use the
+     *   default specified by the app.query_timeout config parameter.
+     * @return \Doctrine\DBAL\Driver\Statement
+     */
+    public function executeQueryBuilder(QueryBuilder $qb, $timeout = null)
+    {
+        try {
+            $this->setQueryTimeout($timeout);
+            return $qb->execute();
+        } catch (DriverException $e) {
+            return $this->handleDriverError($e, $timeout);
+        }
+    }
+
+    /**
+     * Special handling of some DriverExceptions, otherwise original Exception is thrown.
+     * @param DriverException $e
+     * @param int $timeout Timeout value, if applicable. This is passed to the i18n message.
+     * @throws ServiceUnavailableHttpException
+     * @throws DriverException
+     */
+    private function handleDriverError(DriverException $e, $timeout)
+    {
+        // If no value was passed for the $timeout, it must be the default.
+        if ($timeout === null) {
+            $timeout = $this->container->getParameter('app.query_timeout');
+        }
+
+        if ($e->getErrorCode() === 1226) {
+            throw new ServiceUnavailableHttpException(30, 'error-service-overload', null, 503);
+        } elseif ($e->getErrorCode() === 1969) {
+            throw new HttpException(504, 'error-query-timeout', null, [], $timeout);
+        } else {
+            throw $e;
+        }
+    }
+
+    /**
+     * Set the maximum statement time on the MySQL engine.
+     * @param int|null $timeout In seconds. null will use the default
+     *   specified by the app.query_timeout config parameter.
+     */
+    public function setQueryTimeout($timeout = null)
+    {
+        // Scrutinizer doesn't use MariaDB, and/or queries might for some reason take really long.
+        if (!(bool)$this->container->getParameter('database.replica.is_wikimedia')) {
+            return;
+        }
+
+        if ($timeout === null) {
+            $timeout = $this->container->getParameter('app.query_timeout');
+        }
+        $sql = "SET max_statement_time = $timeout";
+        $this->getReplicaConnection()->executeQuery($sql);
     }
 }

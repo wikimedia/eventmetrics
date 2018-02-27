@@ -49,3 +49,6 @@ parameters:
     app.admins:
         - MusikAnimal (WMF)
         - NKohli (WMF)
+
+    # Max number of seconds any given query is allowed to run.
+    app.query_timeout: 900

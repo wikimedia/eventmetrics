@@ -49,9 +49,9 @@ class EventRepository extends Repository
             ->setParameter('userIds', $userIds, Connection::PARAM_STR_ARRAY)
             ->setParameter('start', $start)
             ->setParameter('end', $end);
-        $stmt = $rqb->execute();
 
-        return $stmt->fetchColumn(0);
+        return $this->executeQueryBuilder($rqb)
+            ->fetchColumn(0);
     }
 
     /**
@@ -86,7 +86,7 @@ class EventRepository extends Repository
             ->setParameter('end', $end)
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
 
-        return $rqb->execute()->fetch();
+        return $this->executeQueryBuilder($rqb)->fetch();
     }
 
     /**
@@ -103,9 +103,9 @@ class EventRepository extends Repository
             ->from('localuser')
             ->where('lu_name IN (:usernames)')
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
-        $stmt = $rqb->execute();
 
-        return array_column($stmt->fetchAll(), 'dbname');
+        $ret = $this->executeQueryBuilder($rqb)->fetchAll();
+        return array_column($ret, 'dbname');
     }
 
     /**
@@ -130,9 +130,9 @@ class EventRepository extends Repository
             ->andwhere('rev_user_text IN (:usernames)')
             ->setParameter('start', $start)
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
-        $stmt = $rqb->execute();
+        $ret = $this->executeQueryBuilder($rqb)->fetchAll();
 
-        return array_column($stmt->fetchAll(), 'username');
+        return array_column($ret, 'username');
     }
 
     /**
@@ -162,15 +162,15 @@ class EventRepository extends Repository
         $start = $event->getStart()->format('Ymd000000');
         $end = $event->getEnd()->format('Ymd235959');
 
-        $resultQuery = $conn->prepare($sql);
-        $resultQuery->bindParam('startDate', $start);
-        $resultQuery->bindParam('endDate', $end);
-        $resultQuery->execute();
+        $stmt = $this->executeReplicaQuery($sql, [
+            'startDate' => $start,
+            'endDate' => $end,
+        ]);
 
         if ($count === true) {
-            return (int)$resultQuery->fetchColumn();
+            return (int)$stmt->fetchColumn();
         } else {
-            return $resultQuery->fetchAll();
+            return $stmt->fetchAll();
         }
     }
 
