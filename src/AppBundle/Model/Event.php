@@ -75,7 +75,9 @@ class Event
 
     /**
      * One Event has many Participants.
-     * @ORM\OneToMany(targetEntity="Participant", mappedBy="event", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(
+     *     targetEntity="Participant", mappedBy="event", orphanRemoval=true, cascade={"persist"}, fetch="EXTRA_LAZY"
+     * )
      * @var ArrayCollection|Participant[] Participants of this Event.
      */
     protected $participants;

@@ -368,8 +368,8 @@ abstract class Repository extends EntityRepository
      * Execute a query using the projects connection, handling certain Exceptions.
      * @param string $sql
      * @param array $params Parameters to bound to the prepared query.
-     * @param int|null $timeout Maximum statement time in seconds. null will use the
-     *   default specified by the app.query_timeout config parameter.
+     * @param int|null|false $timeout Maximum statement time in seconds. null will use the
+     *   default specified by the app.query_timeout config parameter. false will set no timeout.
      * @return \Doctrine\DBAL\Driver\Statement
      */
     public function executeReplicaQuery($sql, $params = [], $timeout = null)
@@ -385,8 +385,8 @@ abstract class Repository extends EntityRepository
     /**
      * Execute a query using the projects connection, handling certain Exceptions.
      * @param QueryBuilder $qb
-     * @param int $timeout Maximum statement time in seconds. null will use the
-     *   default specified by the app.query_timeout config parameter.
+     * @param int|null|false $timeout Maximum statement time in seconds. null will use the
+     *   default specified by the app.query_timeout config parameter. false will set no timeout.
      * @return \Doctrine\DBAL\Driver\Statement
      */
     public function executeQueryBuilder(QueryBuilder $qb, $timeout = null)
