@@ -46,7 +46,7 @@
                             </td>
                             {% for metric in metrics|keys %}
                                 <td class="text-nowrap">
-                                    {{ program.statistic(metric)|num_format }}
+                                    {{ (program.statistic(metric) ? program.statistic(metric).value|num_format : '&ndash;')|raw }}
                                 </td>
                             {% endfor %}
                         </tr>

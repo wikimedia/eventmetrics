@@ -5,6 +5,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Model\Event;
 use AppBundle\Model\Program;
 use AppBundle\Model\Organizer;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -48,7 +49,7 @@ class ProgramController extends EntityController
             'programs' => $organizer->getPrograms(),
             'programRepo' => $programRepo,
             'gmTitle' => 'my-programs',
-            'retentionThreshold' => $this->container->getParameter('app.retention_offset'),
+            'retentionThreshold' => Event::getAvailableMetrics()['retention'],
             'metrics' => $organizerRepo->getUniqueMetrics($organizer),
         ]);
     }
@@ -140,7 +141,7 @@ class ProgramController extends EntityController
 
         return $this->render('programs/show.html.twig', [
             'program' => $this->program,
-            'retentionThreshold' => $this->container->getParameter('app.retention_offset'),
+            'retentionThreshold' => Event::getAvailableMetrics()['retention'],
             'metrics' => $programRepo->getUniqueMetrics($this->program),
             'isOrganizer' => $this->authUserIsOrganizer($this->program),
         ]);

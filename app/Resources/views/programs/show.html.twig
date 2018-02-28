@@ -64,9 +64,9 @@
                                 </td>
                             {% endif %}
                             <td class="text-nowrap">{{ event.numParticipants|num_format }}</td>
-                            {% for metric in metrics|keys %}
+                            {% for metric in metrics %}
                                 <td class="text-nowrap">
-                                    {{ event.statistic(metric) ? event.statistic(metric).value|num_format : 0 }}
+                                    {{ (event.statistic(metric) ? event.statistic(metric).value|num_format : '&ndash;')|raw }}
                                 </td>
                             {% endfor %}
                         </tr>

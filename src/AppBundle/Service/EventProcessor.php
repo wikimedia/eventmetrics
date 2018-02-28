@@ -161,7 +161,7 @@ class EventProcessor
     {
         $this->log("\nFetching retention...");
 
-        $retentionOffset = (int)$this->container->getParameter('app.retention_offset');
+        $retentionOffset = Event::getAvailableMetrics()['retention'];
         $end = $this->event->getEndWithTimezone()->modify("+$retentionOffset days");
         $usernames = $this->event->getParticipantNames();
 

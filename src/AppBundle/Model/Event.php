@@ -36,6 +36,22 @@ use AppBundle\Model\Traits\TitleUserTrait;
 class Event
 {
     /**
+     * Available metrics type, hard-coded here for accessibility,
+     * while the logic to compute these stats lives in EventProcessor.
+     *
+     * Keys are i18n message keys, values are the 'offset' values.
+     *
+     * @see EventProcessor
+     * @see EventStat
+     */
+    const AVAILABLE_METRICS = [
+        'new-editors' => null,
+        'pages-created' => null,
+        'pages-improved' => null,
+        'retention' => 7,
+    ];
+
+    /**
      * NOTE: Some methods pertaining to titles and Participants
      * live in the TitleUserTrait trait.
      */
@@ -172,6 +188,19 @@ class Event
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get the available metric types and their default offset values.
+     * @return array
+     * @static
+     *
+     * No need to test a hard-coded list.
+     * @codeCoverageIgnore
+     */
+    public static function getAvailableMetrics()
+    {
+        return self::AVAILABLE_METRICS;
     }
 
     /***********
