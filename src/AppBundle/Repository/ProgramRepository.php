@@ -5,6 +5,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
@@ -31,6 +32,8 @@ class ProgramRepository extends Repository
 
     /**
      * Get the unique metrics for this Program, across all Events.
+     * This also combines the configured metrics in Event::getAvailableMetrics(),
+     * regardless if the stats exist on the Program or its Events.
      * @param  Program $program
      * @return string[]
      */
@@ -49,8 +52,11 @@ class ProgramRepository extends Repository
         $eventWikiMetrics = $this->getEventWikiMetrics($rqb, $eventIds);
 
         $metrics = array_merge($eventMetrics, $eventWikiMetrics);
-        $uniqueMetrics = [];
 
+        // Start with available metrics.
+        $uniqueMetrics = Event::getAvailableMetrics();
+
+        // Merge in any differing metrics that exist on the Program.
         foreach ($metrics as $metric) {
             // For each $metric, the first element is the metric name,
             // and the second element is the offset value.
@@ -59,6 +65,7 @@ class ProgramRepository extends Repository
             }
         }
 
+        // Include configured metrics.
         return $uniqueMetrics;
     }
 

@@ -348,7 +348,8 @@ class EventController extends EntityController
 
     /**
      * Get EventStats from the given Event. If there are none, empty EventStats
-     * are returned for each metric type specified by self::METRIC_TYPES.
+     * are returned for each metric type specified by EventStat::METRIC_TYPES,
+     * with the default 'offset' values sepcified by Event::getAvailableMetrics().
      * This way we can show placeholders in the view.
      * @param Event $event
      * @return EventStat[]
@@ -360,9 +361,7 @@ class EventController extends EntityController
         }
 
         return array_map(function ($metric) use ($event) {
-            $offset = $metric === 'retention'
-                ? $this->container->getParameter('app.retention_offset')
-                : null;
+            $offset = Event::getAvailableMetrics()[$metric];
             return new EventStat($event, $metric, null, $offset);
         }, EventStat::getMetricTypes());
     }

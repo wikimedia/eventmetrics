@@ -39,9 +39,6 @@ parameters:
     # Do not include a trailing slash.
     app.root_path: ''
 
-    # Number of days after the event, at which a user is consider to have been retained.
-    app.retention_offset: 7
-
     # Number of revisions to show per page on the Event Data page.
     app.revisions_per_page: 100
 
