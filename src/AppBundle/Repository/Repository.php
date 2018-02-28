@@ -5,6 +5,8 @@
 
 namespace AppBundle\Repository;
 
+use DateInterval;
+use Doctrine\Common\Cache\RedisCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -13,6 +15,7 @@ use Doctrine\ORM\EntityRepository;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
@@ -51,6 +54,9 @@ abstract class Repository extends EntityRepository
 
     /** @var Connection The meta database connection. */
     private $metaConnection;
+
+    /** @var RedisCache The Doctrine Redis connection. */
+    private $redisConnection;
 
     /** @var EntityManager The Doctrine entity manager. */
     protected $em;
@@ -99,6 +105,82 @@ abstract class Repository extends EntityRepository
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /*******************
+     * CACHING HELPERS *
+     *******************/
+
+    /**
+     * Get a unique cache key for the given list of arguments. Assuming each argument of
+     * your function should be accounted for, you can pass in them all with func_get_args:
+     *   $this->getCacheKey(func_get_args(), 'unique key for function');
+     * Arugments that are a model should implement their own getCacheKey() that returns
+     * a unique identifier for an instance of that model. See User::getCacheKey() for example.
+     * @param array|mixed $args Array of arguments or a single argument.
+     * @param string $key Unique key for this function. If omitted the function name itself
+     *   is used, which is determined using `debug_backtrace`.
+     * @return string
+     */
+    public function getCacheKey($args, $key = null)
+    {
+        if ($key === null) {
+            $key = debug_backtrace()[1]['function'];
+        }
+
+        if (!is_array($args)) {
+            $args = [$args];
+        }
+
+        // Start with base key.
+        $cacheKey = $key;
+
+        // Loop through and determine what values to use based on type of object.
+        foreach ($args as $arg) {
+            // Zero is an acceptable value.
+            if ($arg === '' || $arg === null) {
+                continue;
+            }
+
+            $cacheKey .= $this->getCacheKeyFromArg($arg);
+        }
+
+        return $cacheKey;
+    }
+
+    /**
+     * Get a cache-friendly string given an argument.
+     * @param  mixed $arg
+     * @return string
+     */
+    private function getCacheKeyFromArg($arg)
+    {
+        if (method_exists($arg, 'getCacheKey')) {
+            return '.'.$arg->getCacheKey();
+        } elseif (is_array($arg)) {
+            // Assumed to be an array of objects that can be parsed into a string.
+            return '.'.join('', $arg);
+        } else {
+            // Assumed to be a string, number or boolean.
+            return '.'.md5($arg);
+        }
+    }
+
+    /**
+     * Set the cache with given options.
+     * @param string $cacheKey
+     * @param mixed  $value
+     * @param string $duration Valid DateInterval string.
+     * @return mixed The given $value.
+     */
+    public function setCache($cacheKey, $value, $duration = 'PT10M')
+    {
+        $cacheItem = $this->cache
+            ->getItem($cacheKey)
+            ->set($value)
+            ->expiresAfter(new DateInterval($duration));
+        $this->cache->save($cacheItem);
+        return $value;
     }
 
     /***************
@@ -163,6 +245,30 @@ abstract class Repository extends EntityRepository
                 ->getConnection();
         }
         return $this->replicaConnection;
+    }
+
+    /**
+     * Get connection to the redis server.
+     * @return RedisCache|null Null if not configured.
+     */
+    protected function getRedisConnection()
+    {
+        if ($this->redisConnection instanceof RedisCache) {
+            return $this->redisConnection;
+        }
+
+        $dsn = $this->container->getParameter('cache.redis_dsn');
+
+        if (count((string)$dsn) === 0) {
+            return null;
+        }
+
+        $this->redisConnection = new RedisCache();
+        $this->redisConnection->setRedis(
+            RedisAdapter::createConnection($dsn)
+        );
+
+        return $this->redisConnection;
     }
 
     /*************

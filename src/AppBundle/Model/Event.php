@@ -203,6 +203,16 @@ class Event
         return self::AVAILABLE_METRICS;
     }
 
+    /**
+     * Get unique cache key for the Event. This is called by Repository::getCacheKey(),
+     * used when making expensive queries againt the replicas.
+     * @return string
+     */
+    public function getCacheKey()
+    {
+        return (string)$this->id;
+    }
+
     /***********
      * PROGRAM *
      ***********/

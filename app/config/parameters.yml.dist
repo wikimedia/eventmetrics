@@ -22,6 +22,8 @@ parameters:
     database.replica.user: root
     database.replica.password:
 
+    cache.redis_dsn: ''
+
     mailer.transport: smtp
     mailer.host: 127.0.0.1
     mailer.user: ~

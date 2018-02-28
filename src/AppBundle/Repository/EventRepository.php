@@ -136,7 +136,7 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get raw revisions that were part of the given Event.
+     * Get raw revisions that were part of the given Event. Results are cached for 5 minutes.
      * @param Event $event
      * @param int|null $offset Number of rows to offset, used for pagination.
      * @param int|null $limit Number of rows to fetch.
@@ -145,6 +145,42 @@ class EventRepository extends Repository
      *     'timestamp', 'page', 'wiki', 'username', 'summary'.
      */
     public function getRevisions(Event $event, $offset = 0, $limit = 50, $count = false)
+    {
+        /** @var int TTL of cache, in seconds. */
+        $cacheDuration = 300;
+
+        // Check cache and return if it exists, unless the Event was recently updated,
+        // in which case we'll want to invalidate the cache.
+        $shouldUseCache = $event->getUpdated() !== null &&
+            (int)$event->getUpdated()->format('U') < time() - $cacheDuration &&
+            $this->getRedisConnection() !== null;
+        $cacheKey = $this->getCacheKey(func_get_args(), 'revisions');
+        if ($shouldUseCache && $this->getRedisConnection()->contains($cacheKey)) {
+            return $this->getRedisConnection()->fetch($cacheKey);
+        }
+
+        $ret = $this->getRevisionsData($event, $offset, $limit, $count);
+
+        // Cache for 5 minutes.
+        if ($shouldUseCache) {
+            $redis = $this->getRedisConnection();
+            $redis->save($cacheKey, $ret, $cacheDuration);
+        }
+
+        return $ret;
+    }
+
+    /**
+     * Method that actually runs the query to get raw revisions that were part of
+     * the given Event. Called by self::getRevisions().
+     * @param Event $event
+     * @param int|null $offset Number of rows to offset, used for pagination.
+     * @param int|null $limit Number of rows to fetch.
+     * @param bool $count Whether to get a COUNT instead of the actual revisions.
+     * @return int|string[] Count of revisions, or string array with keys 'id',
+     *     'timestamp', 'page', 'wiki', 'username', 'summary'.
+     */
+    private function getRevisionsData(Event $event, $offset, $limit, $count)
     {
         $sql = 'SELECT '.($count ? 'COUNT(id)' : '*').' FROM ('.
                     $this->getRevisionsInnerSql($event)."
