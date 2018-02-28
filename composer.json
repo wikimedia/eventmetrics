@@ -23,7 +23,6 @@
     "require": {
         "php": "^5.6|^7.0",
         "Krinkle/intuition": "^0.6.1",
-        "components/jquery": "^3.2",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.5",
