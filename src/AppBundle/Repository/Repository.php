@@ -317,7 +317,9 @@ abstract class Repository extends EntityRepository
             ->from('globaluser')
             ->andWhere('gu_id IN (:userIds)')
             ->setParameter('userIds', $userIds, Connection::PARAM_INT_ARRAY);
-        return $this->executeQueryBuilder($rqb)->fetchAll();
+        // false means do not set a max query time. Here it's really fast,
+        // and setting the query timeout actually slows it down.
+        return $this->executeQueryBuilder($rqb, false)->fetchAll();
     }
 
     /**
@@ -422,13 +424,14 @@ abstract class Repository extends EntityRepository
 
     /**
      * Set the maximum statement time on the MySQL engine.
-     * @param int|null $timeout In seconds. null will use the default
-     *   specified by the app.query_timeout config parameter.
+     * @param int|null|false $timeout In seconds. null will use the default specified by
+     *     the app.query_timeout config parameter. false will not set a timeout.
      */
     public function setQueryTimeout($timeout = null)
     {
         // Scrutinizer doesn't use MariaDB, and/or queries might for some reason take really long.
-        if (!(bool)$this->container->getParameter('database.replica.is_wikimedia')) {
+        $isWikimedia = (bool)$this->container->getParameter('database.replica.is_wikimedia');
+        if (!$isWikimedia || false === $timeout) {
             return;
         }
 
