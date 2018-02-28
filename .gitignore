@@ -20,6 +20,7 @@
 /web/fonts/
 /output/
 /docs/api/
+/app/Resources/node_modules
 
 *.swp
 .DS_Store

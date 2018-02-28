@@ -23,7 +23,6 @@
     "require": {
         "php": "^5.6|^7.0",
         "Krinkle/intuition": "^0.6.1",
-        "components/jquery": "^3.2",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.5",
@@ -60,11 +59,16 @@
             "php bin/console doctrine:database:create --if-not-exists",
             "php bin/console doctrine:migration:migrate"
         ],
+        "node_scripts": [
+            "npm install --prefix app/Resources/"
+        ],
         "post-install-cmd": [
-            "@symfony-scripts"
+            "@symfony-scripts",
+            "@node_scripts"
         ],
         "post-update-cmd": [
-            "@symfony-scripts"
+            "@symfony-scripts",
+            "@node_scripts"
         ],
         "migrate-test": [
             "php bin/console doctrine:database:create --env=test --if-not-exists",

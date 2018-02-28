@@ -51,10 +51,9 @@ assetic:
             formatter: 'Leafo\ScssPhp\Formatter\Compressed'
             apply_to:  '\.scss$'
         cssrewrite: ~
+        uglifyjs:
+            bin: '%kernel.root_dir%/Resources/node_modules/uglify-es/bin/uglifyjs'
     assets:
-        jquery_js:
-            inputs:
-                - '%kernel.root_dir%/../vendor/components/jquery/jquery.js'
         jquery_i18n:
             inputs:
                 - '%kernel.root_dir%/../app/Resources/assets/js/jquery.i18n.dist.js'

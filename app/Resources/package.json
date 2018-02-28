@@ -1,0 +1,19 @@
+{
+  "name": "grant-metrics",
+  "version": "1.0.0",
+  "description": "A simple, easy to use interface for reporting shared metrics on WMF wikis",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wikimedia/grantmetrics.git"
+  },
+  "author": "MusikAnimal",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/wikimedia/grantmetrics/issues"
+  },
+  "homepage": "https://tools.wmflabs.org/grantmetrics",
+  "dependencies": {
+    "uglify-es": "^3.3.9"
+  }
+}

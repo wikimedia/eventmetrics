@@ -21,10 +21,11 @@
         </script>
 
         {% block javascripts %}
+            <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
             {% javascripts
-                '@jquery_js'
                 '@jquery_i18n'
                 '%kernel.root_dir%/Resources/assets/js/*'
+                filter='uglifyjs'
                 output='js/application.js'
             %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
