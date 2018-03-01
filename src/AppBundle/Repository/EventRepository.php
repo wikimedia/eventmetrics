@@ -266,11 +266,14 @@ class EventRepository extends Repository
      */
     private function getUsernamesSql(Event $event)
     {
-        $usernames = '';
-        foreach ($event->getParticipantNames() as $username) {
-            $quotedUsername = $this->getReplicaConnection()->quote($username, \PDO::PARAM_STR);
-            $usernames .= ','.$quotedUsername;
-        }
-        return ltrim($usernames, ',');
+        $userIds = $event->getParticipantIds();
+        $usernames = array_column($this->getUsernamesFromIds($userIds), 'user_name');
+
+        // Quote for raw SQL string.
+        $usernames = array_map(function ($username) {
+            return $this->getReplicaConnection()->quote($username, \PDO::PARAM_STR);
+        }, $usernames);
+
+        return ltrim(implode(',', $usernames), ',');
     }
 }

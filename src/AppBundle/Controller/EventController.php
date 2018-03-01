@@ -500,13 +500,20 @@ class EventController extends EntityController
     private function getParticipantCallbackTransformer(Event $event)
     {
         return new CallbackTransformer(
-            function ($participantObjects) {
-                $participants = array_map(function ($participant) {
-                    return $participant->getUsername();
+            // Transform to the form.
+            function ($participantObjects) use ($event) {
+                $parIds = array_map(function ($participant) {
+                    return $participant->getUserId();
                 }, $participantObjects->toArray());
-                sort($participants);
-                return $participants;
+
+                $eventRepo = $this->em->getRepository(Event::class);
+                $eventRepo->setContainer($this->container);
+
+                $usernames = array_column($eventRepo->getUsernamesFromIds($parIds), 'user_name');
+                sort($usernames);
+                return $usernames;
             },
+            // Transform from the form.
             function ($participantNames) use ($event) {
 
                 /** @var ParticipantRepository Repo for a Participant */

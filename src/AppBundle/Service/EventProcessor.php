@@ -124,7 +124,7 @@ class EventProcessor
 
         $start = $this->event->getStartWithTimezone();
         $end = $this->event->getEndWithTimezone();
-        $usernames = $this->event->getParticipantNames();
+        $usernames = $this->getParticipantNames();
 
         $pagesImproved = 0;
         $pagesCreated = 0;
@@ -155,6 +155,19 @@ class EventProcessor
     }
 
     /**
+     * Get the usernames of the participants of the Event.
+     * @return string[]
+     */
+    private function getParticipantNames()
+    {
+        $userIds = $this->event->getParticipantIds();
+        return array_column(
+            $this->eventRepo->getUsernamesFromIds($userIds),
+            'user_name'
+        );
+    }
+
+    /**
      * Compute and persist the number of users who met the retention threshold.
      */
     private function setRetention()
@@ -163,7 +176,7 @@ class EventProcessor
 
         $retentionOffset = Event::getAvailableMetrics()['retention'];
         $end = $this->event->getEndWithTimezone()->modify("+$retentionOffset days");
-        $usernames = $this->event->getParticipantNames();
+        $usernames = $this->getParticipantNames();
 
         if ((new DateTime()) < $end) {
             $numUsersRetained = count($usernames);

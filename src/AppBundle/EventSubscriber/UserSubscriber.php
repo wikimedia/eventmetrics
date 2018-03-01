@@ -78,7 +78,9 @@ class UserSubscriber
      */
     private function isUserType($entity)
     {
-        return $entity instanceof Organizer || $entity instanceof Participant;
+        // NOTE: Participant usernames are now loaded with a single query.
+        // We'll at some point do the same for Organizers.
+        return $entity instanceof Organizer;
     }
 
     /**

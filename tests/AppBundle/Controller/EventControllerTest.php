@@ -279,13 +279,12 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
         $this->assertEquals(302, $this->response->getStatusCode());
 
-        $event = $this->entityManager
-            ->getRepository('Model:Event')
-            ->findOneBy(['title' => 'Pinocchio']);
+        $eventRepo = $this->entityManager->getRepository('Model:Event');
+        $event = $eventRepo->findOneBy(['title' => 'Pinocchio']);
 
         $this->assertEquals(
-            ['MusikAnimal'],
-            $event->getParticipantNames()
+            [10584730], // User ID of MusikAnimal.
+            $event->getParticipantIds()
         );
     }
 
