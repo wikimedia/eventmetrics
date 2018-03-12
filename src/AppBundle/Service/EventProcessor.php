@@ -40,6 +40,9 @@ class EventProcessor
     /** @var OutputInterface The output stream, used when calling from a Command. */
     private $output;
 
+    /** @var string[]|null Usernames of the new editors. */
+    private $newEditors;
+
     /** @var array The generated stats, keyed by metric. */
     protected $stats;
 
@@ -109,9 +112,21 @@ class EventProcessor
     private function setNewEditors()
     {
         $this->log("\nFetching number of new editors...");
-        $numNewEditors = (int)$this->eventRepo->getNumNewEditors($this->event);
+        $numNewEditors = count($this->getNewEditors());
         $this->createOrUpdateEventStat('new-editors', $numNewEditors);
         $this->log(">> <info>New editors: $numNewEditors</info>");
+    }
+
+    /**
+     * Get the usernames of the new editors.
+     * @return string[]
+     */
+    private function getNewEditors()
+    {
+        if (!is_array($this->newEditors)) {
+            $this->newEditors = $this->eventRepo->getNewEditors($this->event);
+        }
+        return $this->newEditors;
     }
 
     /**
@@ -176,7 +191,9 @@ class EventProcessor
 
         $retentionOffset = Event::getAvailableMetrics()['retention'];
         $end = $this->event->getEndWithTimezone()->modify("+$retentionOffset days");
-        $usernames = $this->getParticipantNames();
+
+        // Only calculate for new editors.
+        $usernames = $this->getNewEditors();
 
         if ((new DateTime()) < $end) {
             $numUsersRetained = count($usernames);

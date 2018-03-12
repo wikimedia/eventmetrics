@@ -13,8 +13,8 @@ AppBundle\Model\Event:
         __construct: ['@program1']
         title: 'Oliver and Company'
         timezone: 'America/New_York'
-        start: '2014-02-04T13:30:00Z'
-        end: '2014-02-04T21:00:00Z'
+        start: '2014-01-23T13:30:00Z'
+        end: '2014-01-23T21:00:00Z'
     event2:
         __construct: ['@program2']
         title: 'The Lion King'

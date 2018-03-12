@@ -6,8 +6,9 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Model\Event;
-use Doctrine\DBAL\Connection;
+use DateInterval;
 use DateTime;
+use Doctrine\DBAL\Connection;
 
 /**
  * This class supplies and fetches data for the Event class.
@@ -29,30 +30,32 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get the number of participants who are new editors,
+     * Get the usernames of participants who are new editors,
      * relative to the time of the event.
      * @param  Event $event The Event in question.
-     * @return int Number of new editors.
+     * @return string[] Usernames of new editors.
      */
-    public function getNumNewEditors(Event $event)
+    public function getNewEditors(Event $event)
     {
         $userIds = $event->getParticipantIds();
-        $start = $event->getStart()->format('YmdHis');
-        $end = $event->getEnd()->format('YmdHis');
         $offset = Event::getAvailableMetrics()['new-editors'];
+        $start = (new DateTime($event->getStart()->format('YmdHis')))
+            ->sub(new DateInterval('P'.$offset.'D'))
+            ->format('YmdHis');
+        $end = $event->getEnd()->format('YmdHis');
 
         $conn = $this->getCentralAuthConnection();
         $rqb = $conn->createQueryBuilder();
-        $rqb->select('COUNT(gu_id)')
+        $rqb->select('gu_name')
             ->from('globaluser')
             ->where('gu_id IN (:userIds)')
-            ->andwhere("gu_registration BETWEEN DATE_SUB(:start, INTERVAL $offset DAY) AND :end")
+            ->andwhere("gu_registration BETWEEN :start AND :end")
             ->setParameter('userIds', $userIds, Connection::PARAM_STR_ARRAY)
             ->setParameter('start', $start)
             ->setParameter('end', $end);
 
-        return $this->executeQueryBuilder($rqb)
-            ->fetchColumn(0);
+        $ret = $this->executeQueryBuilder($rqb)->fetchAll();
+        return array_column($ret, 'gu_name');
     }
 
     /**
