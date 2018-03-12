@@ -34,7 +34,7 @@
                 <div class="col-sm-2"></div>
             {% endif %}
             <div class="col-sm-8">
-                {{ form_widget(organizer, {'attr': {'readonly': isViewingOrganizer}}) }}
+                {{ form_widget(organizer, {'attr': {'class': 'user-input', 'readonly': isViewingOrganizer}}) }}
                 {% if invalidUsername %}
                     <span class="font-awesome invalid-input">&#xf071;</span>
                 {% endif %}

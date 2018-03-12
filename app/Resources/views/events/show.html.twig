@@ -110,7 +110,7 @@
                 {# Valid participants should be shown below invalid ones. #}
                 {% set validParticipants = [] %}
 
-                {{ form_start(form, {'method': 'post', 'attr': {'class': 'form-horizontal save-participants-form'}}) }}
+                {{ form_start(form, {'method': 'post', 'attr': {'class': 'form-horizontal save-participants-form', 'autocomplete': 'off'}}) }}
                     {% for participant in form.participants %}
                         {% set invalidParticipant = false %}
                         {% if not(participant.vars.valid) %}
@@ -120,7 +120,7 @@
                         {% set participantRow %}
                             <div class="form-group participant-row{% if invalidParticipant %} has-error{% endif %}">
                                 <div class="col-sm-4">
-                                    {{ form_widget(participant) }}
+                                    {{ form_widget(participant, {'attr': {'class': 'user-input'}}) }}
                                     {% if invalidParticipant %}
                                         <span class="font-awesome invalid-input">&#xf071;</span>
                                     {% else %}

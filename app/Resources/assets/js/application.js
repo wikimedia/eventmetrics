@@ -62,5 +62,63 @@ function setupAddRemove(model, column)
         $newRow.find('.remove-' + column).on('click', function () {
             $newRow.remove();
         });
+
+        // Setup autocompletion on the new row (must use a fresh selector).
+        setupAutocompletion($(rowClass + ':last').find('input'));
+    });
+}
+
+/**
+ * Setup autocompletion of pages if a page input field is present.
+ */
+function setupAutocompletion($userInput)
+{
+    if ($userInput === undefined) {
+        var $userInput = $('.user-input');
+    }
+
+    // Make sure typeahead-compatible fields are present.
+    if (!$userInput[0]) {
+        return;
+    }
+
+    // Initialize only on focus, since there can be a ton of usernames.
+    $userInput.one('focus', function () {
+        // Destroy any existing instances.
+        if ($(this).data('typeahead')) {
+            $(this).data('typeahead').destroy();
+        }
+
+        // Defaults for typeahead options. preDispatch and preProcess will be
+        // set accordingly for each typeahead instance.
+        var typeaheadOpts = {
+            url: 'https://meta.wikimedia.org/w/api.php',
+            timeout: 200,
+            triggerLength: 1,
+            method: 'get'
+        };
+
+        $userInput.typeahead({
+            ajax: Object.assign(typeaheadOpts, {
+                preDispatch: function (query) {
+                    query = query.charAt(0).toUpperCase() + query.slice(1);
+                    return {
+                        action: 'query',
+                        list: 'allusers',
+                        format: 'json',
+                        aufrom: query,
+                        origin: '*'
+                    };
+                },
+                preProcess: function (data) {
+                    return data.query.allusers.map(function (elem) {
+                        return elem.name;
+                    });
+                }
+            })
+        });
+
+        // Needed because of https://github.com/bassjobsen/Bootstrap-3-Typeahead/issues/150
+        $(this).trigger('focus');
     });
 }

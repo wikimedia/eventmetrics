@@ -78,6 +78,8 @@ $(function () {
             window.location.reload(true);
         }.bind(this));
     });
+
+    setupAutocompletion();
 });
 
 /**
