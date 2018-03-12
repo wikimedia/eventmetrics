@@ -124,21 +124,6 @@ class ProcessEventCommandTest extends KernelTestCase
         $this->retentionSpec();
 
         $this->jobFinishedSpec();
-
-        // // For another Event with wider date range, in which all
-        // // participants are considered active.
-        // $event2 = $this->entityManager
-        //     ->getRepository('Model:Event')
-        //     ->findOneBy(['title' => 'The_Lion_King']);
-        // $this->commandTester->execute(['eventId' => $event2->getId()]);
-
-        // $eventStat = $this->entityManager
-        //     ->getRepository('Model:EventStat')
-        //     ->findOneBy([
-        //         'event' => $event2,
-        //         'metric' => 'retention'
-        //     ]);
-        // $this->assertEquals(3, $eventStat->getValue());
     }
 
     /**
