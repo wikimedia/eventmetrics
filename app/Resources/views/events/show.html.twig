@@ -67,7 +67,14 @@
                         <th>{{ msg('participants') }}</th>
                         {% for stat in event.statistics %}
                             {% set metricOrder = metricOrder|merge([stat.metric]) %}
-                            <th>{{ msg(stat.metric, [stat.offset]) }}</th>
+                            <th>
+                                <div{% if msgExists(stat.metric ~ '-desc', [stat.offset]) %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}" class="event-metric-desc"{% endif %}>
+                                    {{ msg(stat.metric, [stat.offset]) }}
+                                    {% if msgExists(stat.metric ~ '-desc', [stat.offset]) %}
+                                        <span class="glyphicon glyphicon-info-sign"></span>
+                                    {% endif %}
+                                </div>
+                            </th>
                         {% endfor %}
                     </tr>
                     <tr>

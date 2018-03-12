@@ -31,6 +31,19 @@
     .event-stats,
     .event-wiki-stats {
         margin: 36px 0;
+
+        .glyphicon {
+            color: #6ea8dc;
+            font-size: 14px;
+        }
+    }
+
+    .event-wiki-stats .glyphicon {
+        vertical-align: -1px;
+    }
+
+    .event-metric-desc {
+        cursor: help;
     }
 
     .event-export {

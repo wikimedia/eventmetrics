@@ -39,13 +39,14 @@ class EventRepository extends Repository
         $userIds = $event->getParticipantIds();
         $start = $event->getStart()->format('YmdHis');
         $end = $event->getEnd()->format('YmdHis');
+        $offset = Event::getAvailableMetrics()['new-editors'];
 
         $conn = $this->getCentralAuthConnection();
         $rqb = $conn->createQueryBuilder();
         $rqb->select('COUNT(gu_id)')
             ->from('globaluser')
             ->where('gu_id IN (:userIds)')
-            ->andwhere('gu_registration BETWEEN DATE_SUB(:start, INTERVAL 15 DAY) AND :end')
+            ->andwhere("gu_registration BETWEEN DATE_SUB(:start, INTERVAL $offset DAY) AND :end")
             ->setParameter('userIds', $userIds, Connection::PARAM_STR_ARRAY)
             ->setParameter('start', $start)
             ->setParameter('end', $end);

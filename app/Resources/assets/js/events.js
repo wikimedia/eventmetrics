@@ -80,6 +80,8 @@ $(function () {
     });
 
     setupAutocompletion();
+
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
 /**

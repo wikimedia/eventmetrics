@@ -64,7 +64,9 @@ function setupAddRemove(model, column)
         });
 
         // Setup autocompletion on the new row (must use a fresh selector).
-        setupAutocompletion($(rowClass + ':last').find('input'));
+        if ($newRow.hasClass('user-input')) {
+            setupAutocompletion($(rowClass + ':last').find('input'));
+        }
     });
 }
 

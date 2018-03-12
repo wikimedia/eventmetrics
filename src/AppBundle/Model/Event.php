@@ -45,7 +45,7 @@ class Event
      * @see EventStat
      */
     const AVAILABLE_METRICS = [
-        'new-editors' => null,
+        'new-editors' => 15,
         'pages-created' => null,
         'pages-improved' => null,
         'retention' => 7,
