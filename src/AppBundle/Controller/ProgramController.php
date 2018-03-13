@@ -45,8 +45,14 @@ class ProgramController extends EntityController
         $organizerRepo = $this->em->getRepository(Organizer::class);
         $organizerRepo->setContainer($this->container);
 
+        if ($this->userIsAdmin()) {
+            $programs = $programRepo->findAll();
+        } else {
+            $programs = $organizer->getPrograms();
+        }
+
         return $this->render('programs/index.html.twig', [
-            'programs' => $organizer->getPrograms(),
+            'programs' => $programs,
             'programRepo' => $programRepo,
             'gmTitle' => 'my-programs',
             'retentionThreshold' => Event::getAvailableMetrics()['retention'],

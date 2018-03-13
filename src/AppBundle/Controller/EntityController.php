@@ -141,6 +141,16 @@ abstract class EntityController extends Controller
     }
 
     /**
+     * Is the current user an admin?
+     * @return bool
+     */
+    protected function userIsAdmin()
+    {
+        $username = $this->session->get('logged_in_user')->username;
+        return in_array($username, $this->container->getParameter('app.admins'));
+    }
+
+    /**
      * Validates that the logged in user is an organizer of the requested Program,
      * and if not throw an exception (they should never be able to navigate here).
      * @throws AccessDeniedHttpException
