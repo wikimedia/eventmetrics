@@ -64,15 +64,16 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>{{ msg('participants') }}</th>
+                        <th>
+                            <div>{{ msg('participants') }}</div>
+                        </th>
+                        {% set sortableMetrics = ['pages-created', 'pages-improved'] %}
                         {% for stat in event.statistics %}
                             {% set metricOrder = metricOrder|merge([stat.metric]) %}
+                            {% set hasDesc = msgExists(stat.metric ~ '-desc', [stat.offset]) %}
                             <th>
-                                <div{% if msgExists(stat.metric ~ '-desc', [stat.offset]) %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}" class="event-metric-desc"{% endif %}>
+                                <div class="{% if stat.metric in sortableMetrics %} sort-link sort-link--{{ stat.metric }}{% endif %}{% if hasDesc %} event-metric-desc{% endif %}" {% if hasDesc %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"{% endif %} data-column="{{ stat.metric }}">
                                     {{ msg(stat.metric, [stat.offset]) }}
-                                    {% if msgExists(stat.metric ~ '-desc', [stat.offset]) %}
-                                        <span class="glyphicon glyphicon-info-sign"></span>
-                                    {% endif %}
                                 </div>
                             </th>
                         {% endfor %}
@@ -90,11 +91,13 @@
                     </tr>
                     {% for wiki in event.wikis %}
                         <tr>
-                            <td>{{ wiki.domain }}</td>
+                            <td class="sort-entry--domain" data-value="{{ wiki.domain }}">
+                                {{ wiki.domain }}
+                            </td>
                             <td>&mdash;</td>
                             {% for metric in metricOrder %}
                                 {% set stat = wiki.statistic(metric) %}
-                                <td>
+                                <td class="sort-entry--{{ metric }}" data-value="{{ stat != null ? stat.value : -1 }}">
                                     {% if stat != null %}
                                         {{ stat.value|num_format }}
                                     {% else %}

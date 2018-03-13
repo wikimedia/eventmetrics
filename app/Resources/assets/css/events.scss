@@ -28,6 +28,10 @@
         }
     }
 
+    .event-metric-desc {
+        cursor: help;
+    }
+
     .event-stats,
     .event-wiki-stats {
         margin: 36px 0;
@@ -40,10 +44,6 @@
 
     .event-wiki-stats .glyphicon {
         vertical-align: -1px;
-    }
-
-    .event-metric-desc {
-        cursor: help;
     }
 
     .event-export {

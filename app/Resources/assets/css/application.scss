@@ -164,22 +164,20 @@ body {
 
 .sort-link {
     @include prefix(user-select, none);
-    cursor: pointer;
+    cursor: pointer !important;
 
-    .glyphicon {
-        top: 2px;
-        visibility: hidden;
+    &::after {
+        content: '\f0dc';
+        font-family: 'FontAwesome';
+        font-size: 12px;
     }
 
-    .glyphicon-sort-by-alphabet,
-    .glyphicon-sort-by-alphabet-alt {
-        visibility: visible;
+    &.sort-link--asc::after {
+        content: '\f0dd';
     }
 
-    &:hover {
-        .glyphicon-sort {
-            visibility: visible;
-        }
+    &.sort-link--desc::after {
+        content: '\f0de';
     }
 }
 

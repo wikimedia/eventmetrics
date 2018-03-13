@@ -43,26 +43,23 @@
                 <thead>
                     <tr>
                         <th>
-                            <span class="sort-link sort-link--event" data-column="event">
+                            <div class="sort-link sort-link--event" data-column="event">
                                 {{ msg('event') }}
-                                <span class="glyphicon glyphicon-sort"></span>
-                            </span>
+                            </div>
                         </th>
                         {% if isOrganizer %}
                             <th class="text-nowrap"></th>
                         {% endif %}
                         <th class="text-nowrap">
-                            <span class="sort-link sort-link--participants" data-column="participants">
+                            <div class="sort-link sort-link--participants" data-column="participants">
                                 {{ msg('participants') }}
-                                <span class="glyphicon glyphicon-sort"></span>
-                            </span>
+                            </div>
                         </th>
                         {% for metric, offset in metrics %}
                             <th class="text-nowrap">
-                                <span class="sort-link sort-link--{{ metric }}" data-column="{{ metric }}">
+                                <div class="sort-link sort-link--{{ metric }}" data-column="{{ metric }}">
                                     {{ msg(metric, [offset]) }}
-                                    <span class="glyphicon glyphicon-sort"></span>
-                                </span>
+                                </div>
                             </th>
                         {% endfor %}
                     </tr>

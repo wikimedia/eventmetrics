@@ -136,9 +136,8 @@ function setupColumnSorting()
     $('.sort-link').on('click', function () {
         sortDirection = sortColumn === $(this).data('column') ? -sortDirection : 1;
 
-        $('.sort-link .glyphicon').removeClass('glyphicon-sort-by-alphabet-alt glyphicon-sort-by-alphabet').addClass('glyphicon-sort');
-        var newSortClassName = sortDirection === 1 ? 'glyphicon-sort-by-alphabet-alt' : 'glyphicon-sort-by-alphabet';
-        $(this).find('.glyphicon').addClass(newSortClassName).removeClass('glyphicon-sort');
+        $('.sort-link').removeClass('sort-link--asc sort-link--desc');
+        $(this).addClass(sortDirection === 1 ? 'sort-link--asc' : 'sort-link--desc');
 
         sortColumn = $(this).data('column');
         var $table = $(this).parents('table');
