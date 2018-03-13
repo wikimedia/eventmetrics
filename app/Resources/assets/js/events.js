@@ -80,6 +80,7 @@ $(function () {
     });
 
     setupAutocompletion();
+    setupColumnSorting();
 
     $('[data-toggle="tooltip"]').tooltip();
 });

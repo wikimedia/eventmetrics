@@ -1,3 +1,7 @@
+/**
+ * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
+ */
+
 (function () {
     // Load translations with 'en.json' as a fallback
     var messagesToLoad = {};
@@ -122,5 +126,47 @@ function setupAutocompletion($userInput)
 
         // Needed because of https://github.com/bassjobsen/Bootstrap-3-Typeahead/issues/150
         $(this).trigger('focus');
+    });
+}
+
+function setupColumnSorting()
+{
+    var sortDirection, sortColumn;
+
+    $('.sort-link').on('click', function () {
+        sortDirection = sortColumn === $(this).data('column') ? -sortDirection : 1;
+
+        $('.sort-link .glyphicon').removeClass('glyphicon-sort-by-alphabet-alt glyphicon-sort-by-alphabet').addClass('glyphicon-sort');
+        var newSortClassName = sortDirection === 1 ? 'glyphicon-sort-by-alphabet-alt' : 'glyphicon-sort-by-alphabet';
+        $(this).find('.glyphicon').addClass(newSortClassName).removeClass('glyphicon-sort');
+
+        sortColumn = $(this).data('column');
+        var $table = $(this).parents('table');
+        var entries = $table.find('.sort-entry--' + sortColumn).parent();
+
+        if (!entries.length) {
+            return;
+        }
+
+        entries.sort(function (a, b) {
+            var before = $(a).find('.sort-entry--' + sortColumn).data('value'),
+                after = $(b).find('.sort-entry--' + sortColumn).data('value');
+
+            // test data type, assumed to be string if can't be parsed as float
+            if (!isNaN(parseFloat(before, 10))) {
+                before = parseFloat(before, 10);
+                after = parseFloat(after, 10);
+            }
+
+            if (before < after) {
+                return sortDirection;
+            } else if (before > after) {
+                return -sortDirection;
+            } else {
+                return 0;
+            }
+        });
+
+        $table.find('tbody').html($(entries));
     });
 }

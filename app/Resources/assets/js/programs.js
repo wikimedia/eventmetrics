@@ -14,4 +14,6 @@ $(function () {
             );
         }
     });
+
+    setupColumnSorting();
 });

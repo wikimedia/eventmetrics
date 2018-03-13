@@ -162,6 +162,27 @@ body {
     }
 }
 
+.sort-link {
+    @include prefix(user-select, none);
+    cursor: pointer;
+
+    .glyphicon {
+        top: 2px;
+        visibility: hidden;
+    }
+
+    .glyphicon-sort-by-alphabet,
+    .glyphicon-sort-by-alphabet-alt {
+        visibility: visible;
+    }
+
+    &:hover {
+        .glyphicon-sort {
+            visibility: visible;
+        }
+    }
+}
+
 a.disabled {
     cursor: not-allowed;
     opacity: 0.3;

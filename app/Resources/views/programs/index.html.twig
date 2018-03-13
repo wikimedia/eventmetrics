@@ -22,30 +22,53 @@
             <table class="table gm-table programs-list">
                 <thead>
                     <tr>
-                        <th>{{ msg('program') }}</th>
+                        <th>
+                            <span class="sort-link sort-link--program" data-column="program">
+                                {{ msg('program') }}
+                                <span class="glyphicon glyphicon-sort"></span>
+                            </span>
+                        </th>
                         <th class="text-nowrap"></th>
-                        <th class="text-nowrap">{{ msg('events') }}</th>
-                        <th class="text-nowrap">{{ msg('participants') }}</th>
+                        <th class="text-nowrap">
+                            <span class="sort-link sort-link--events" data-column="events">
+                                {{ msg('events') }}
+                                <span class="glyphicon glyphicon-sort"></span>
+                            </span>
+                        </th>
+                        <th class="text-nowrap">
+                            <span class="sort-link sort-link--participants" data-column="participants">
+                                {{ msg('participants') }}
+                                <span class="glyphicon glyphicon-sort"></span>
+                            </span>
+                        </th>
                         {% for metric, offset in metrics %}
-                            <th class="text-nowrap">{{ msg(metric, [offset]) }}</th>
+                            <th class="text-nowrap">
+                                <span class="sort-link sort-link--{{ metric }}" data-column="{{ metric }}">
+                                    {{ msg(metric, [offset]) }}
+                                    <span class="glyphicon glyphicon-sort"></span>
+                                </span>
+                            </th>
                         {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for program in programs %}
                         <tr class="program-entry">
-                            <td>
+                            <td class="sort-entry--program" data-value="{{ program.title }}">
                                 <a href="{{ path('Program', {'programTitle': program.title}) }}">{{ program.displayTitle }}</a>
                             </td>
-                            <td class="text-nowrap">
+                            <td>
                                 {{ layout.actionButtons('Program', program, {'programTitle': program.title}, program.numEvents == 0) }}
                             </td>
-                            <td class="text-nowrap">{{ program.numEvents|num_format }}</td>
-                            <td class="text-nowrap">
-                                {{ programRepo.numParticipants(program)|num_format }}
+                            <td class="sort-entry--events text-nowrap" data-value="{{ program.numEvents }}">
+                                {{ program.numEvents|num_format }}
+                            </td>
+                            {% set numParticipants = programRepo.numParticipants(program) %}
+                            <td class="sort-entry--participants text-nowrap" data-value="{{ numParticipants }}">
+                                {{ numParticipants|num_format }}
                             </td>
                             {% for metric in metrics|keys %}
-                                <td class="text-nowrap">
+                                <td class="sort-entry--{{ metric }} text-nowrap" data-value="{{ program.statistic(metric) }}">
                                     {{ (program.statistic(metric) ? program.statistic(metric)|num_format : '&ndash;')|raw }}
                                 </td>
                             {% endfor %}

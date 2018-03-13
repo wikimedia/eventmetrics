@@ -42,31 +42,50 @@
             <table class="table gm-table events-list">
                 <thead>
                     <tr>
-                        <th>{{ msg('event') }}</th>
+                        <th>
+                            <span class="sort-link sort-link--event" data-column="event">
+                                {{ msg('event') }}
+                                <span class="glyphicon glyphicon-sort"></span>
+                            </span>
+                        </th>
                         {% if isOrganizer %}
                             <th class="text-nowrap"></th>
                         {% endif %}
-                        <th class="text-nowrap">{{ msg('participants') }}</th>
+                        <th class="text-nowrap">
+                            <span class="sort-link sort-link--participants" data-column="participants">
+                                {{ msg('participants') }}
+                                <span class="glyphicon glyphicon-sort"></span>
+                            </span>
+                        </th>
                         {% for metric, offset in metrics %}
-                            <th class="text-nowrap">{{ msg(metric, [offset]) }}</th>
+                            <th class="text-nowrap">
+                                <span class="sort-link sort-link--{{ metric }}" data-column="{{ metric }}">
+                                    {{ msg(metric, [offset]) }}
+                                    <span class="glyphicon glyphicon-sort"></span>
+                                </span>
+                            </th>
                         {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for event in program.events %}
                         <tr class="event-entry">
-                            <td>
+                            <td class="sort-entry--event" data-value="{{ event.title }}">
                                 <a href="{{ path('Event', {'programTitle': program.title, 'eventTitle': event.title}) }}">{{ event.displayTitle }}</a>
                             </td>
+                            {% set numParticipants = event.numParticipants %}
                             {% if isOrganizer %}
                                 <td class="text-nowrap">
-                                    {{ layout.actionButtons('Event', event, {'programTitle': program.title, 'eventTitle': event.title}, event.numParticipants == 0) }}
+                                    {{ layout.actionButtons('Event', event, {'programTitle': program.title, 'eventTitle': event.title}, numParticipants == 0) }}
                                 </td>
                             {% endif %}
-                            <td class="text-nowrap">{{ event.numParticipants|num_format }}</td>
+                            <td class="text-nowrap sort-entry--participants" data-value="{{ numParticipants }}">
+                                {{ numParticipants|num_format }}
+                            </td>
                             {% for metric, offset in metrics %}
-                                <td class="text-nowrap">
-                                    {{ (event.statistic(metric) ? event.statistic(metric).value|num_format : '&ndash;')|raw }}
+                                {% set stat = event.statistic(metric) %}
+                                <td class="text-nowrap sort-entry--{{ metric }} text-nowrap" data-value="{{ stat ? stat.value : -1 }}">
+                                    {{ (stat ? stat.value|num_format : '&ndash;')|raw }}
                                 </td>
                             {% endfor %}
                         </tr>

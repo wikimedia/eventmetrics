@@ -104,6 +104,11 @@ class ProgramRepository extends Repository
 
         $eventIds = $program->getEventIds();
 
+        // Don't run a query unless you need to.
+        if (count($eventIds) === 0) {
+            return 0;
+        }
+
         return $rqb->select(['COUNT(DISTINCT(par_user_id))'])
             ->from('participant')
             ->where('par_event_id IN (:eventIds)')
