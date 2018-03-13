@@ -51,6 +51,7 @@ class Program
     /**
      * One Program has many Events.
      * @ORM\OneToMany(targetEntity="Event", mappedBy="program", orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"id" = "DESC"})
      * @var ArrayCollection|Event[] Events that belong to this program.
      */
     protected $events;
