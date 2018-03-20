@@ -5,8 +5,6 @@
 
 namespace AppBundle\Twig;
 
-use AppBundle\Repository\EventWikiRepository;
-use DateTime;
 use IntlDateFormatter;
 use NumberFormatter;
 

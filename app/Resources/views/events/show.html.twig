@@ -52,6 +52,7 @@
             <div class="event-stats-status">
                 {% if event.updated != null %}
                     {{ msg('last-updated', [event.updatedWithTimezone|date_localize]) }}
+                    ({{ event.displayTimezone }})
                 {% endif %}
             </div>
         </div>
