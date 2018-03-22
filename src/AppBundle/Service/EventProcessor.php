@@ -113,7 +113,8 @@ class EventProcessor
     {
         $this->log("\nFetching number of new editors...");
         $numNewEditors = count($this->getNewEditors());
-        $this->createOrUpdateEventStat('new-editors', $numNewEditors);
+        $newEditorOffset = Event::getAvailableMetrics()['new-editors'];
+        $this->createOrUpdateEventStat('new-editors', $numNewEditors, $newEditorOffset);
         $this->log(">> <info>New editors: $numNewEditors</info>");
     }
 
