@@ -3,5 +3,5 @@
 {% endfor %}
 
 {% for rev in revisions %}
-"=HYPERLINK(""https://{{ rev.wiki }}.org/wiki/Special:Diff/{{ rev.id }}"",""{{ msg('diff') }}"")","=HYPERLINK(""https://{{ rev.wiki }}.org/wiki/Special:PermaLink/{{ rev.id }}"",""{{ rev.timestamp|date_format }}"")","=HYPERLINK(""https://{{ rev.wiki }}.org/wiki/{{ rev.page }}"",""{{ rev.page }}"")",{{ rev.wiki }},"=HYPERLINK(""https://{{ rev.wiki }}.org/wiki/User:{{ rev.username }}"",""{{ rev.username }}"")","{{ rev.summary }}"
+"https://{{ rev.wiki }}.org/wiki/Special:Diff/{{ rev.id }}",{{ rev.timestamp|date_format }},"{{ rev.page }}",{{ rev.wiki }},"{{ rev.username }}","{{ rev.summary }}"
 {% endfor %}
