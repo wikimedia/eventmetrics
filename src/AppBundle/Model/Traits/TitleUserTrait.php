@@ -51,8 +51,8 @@ trait TitleUserTrait
      */
     public function setTitle($title)
     {
-        // Enforce unicode, and use underscores instead of spaces.
-        $this->title = str_replace(' ', '_', utf8_encode(trim($title)));
+        // Use underscores instead of spaces.
+        $this->title = str_replace(' ', '_', trim($title));
     }
 
     /**
