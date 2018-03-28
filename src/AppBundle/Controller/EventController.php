@@ -5,26 +5,6 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Valid;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
@@ -32,6 +12,27 @@ use AppBundle\Model\Participant;
 use AppBundle\Model\Program;
 use AppBundle\Repository\EventWikiRepository;
 use AppBundle\Repository\ParticipantRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * The EventController handles showing, creating and editing events.
@@ -53,16 +54,21 @@ class EventController extends EntityController
      * Show a form to create a new event.
      * @Route("/programs/{programTitle}/new", name="NewEvent")
      * @Route("/programs/{programTitle}/new/", name="NewEventSlash")
+     * @param Event $event Event to copy.
      * @return Response|RedirectResponse
      */
-    public function newAction()
+    public function newAction($event = null)
     {
-        $event = new Event($this->program);
-        $eventWiki = new EventWiki($event);
-        $event->addWiki($eventWiki);
+        // $event is not null when copying an Event.
+        if ($event === null) {
+            $event = new Event($this->program);
+            $eventWiki = new EventWiki($event);
+            $event->addWiki($eventWiki);
+        }
 
         // Handle the Form for the request, and redirect if they submitted.
         $form = $this->handleFormSubmission($event);
+
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
             $this->addFlash('success', /** @scrutinizer ignore-type */ [
@@ -112,6 +118,32 @@ class EventController extends EntityController
     }
 
     /**
+     * Copy the given Event and redirect to the NewEvent action, clearing out the title,
+     * and getting new instances of associated entities.
+     * @Route("/programs/{programTitle}/copy/{eventTitle}", name="CopyEvent")
+     * @Route("/programs/{programTitle}/copy/{eventTitle}/", name="CopyEventSlash")
+     * @return Response|RedirectResponse
+     */
+    public function copyAction()
+    {
+        $event = new Event(
+            $this->program,
+            null,
+            $this->event->getStart(),
+            $this->event->getEnd(),
+            $this->event->getTimezone()
+        );
+        foreach ($this->event->getParticipants()->toArray() as $participant) {
+            new Participant($event, $participant->getUserId());
+        }
+        foreach ($this->event->getWikis()->toArray() as $wiki) {
+            new EventWiki($event, $wiki->getDomain());
+        }
+
+        return $this->newAction($event);
+    }
+
+    /**
      * Delete an event.
      * @Route("/programs/{programTitle}/delete/{eventTitle}", name="DeleteEvent")
      * @Route("/programs/{programTitle}/delete/{eventTitle}/", name="DeleteEventSlash")
@@ -135,7 +167,7 @@ class EventController extends EntityController
 
     /**
      * Handle creation or updating of an Event on form submission.
-     * @param  Event $event
+     * @param Event $event
      * @return Form|RedirectResponse
      */
     private function handleFormSubmission(Event $event)
@@ -160,7 +192,7 @@ class EventController extends EntityController
 
     /**
      * Consolidate errors of wikis associated with the event.
-     * @param  Form $form
+     * @param Form $form
      */
     private function handleEventWikiErrors(Form $form)
     {
@@ -178,7 +210,7 @@ class EventController extends EntityController
 
     /**
      * Build a form for the given event.
-     * @param  Event $event
+     * @param Event $event
      * @return Form
      */
     private function getFormForEvent(Event $event)

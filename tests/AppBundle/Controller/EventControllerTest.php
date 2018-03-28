@@ -55,6 +55,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->updateSpec();
         $this->showSpec();
         $this->participantsSpec();
+        $this->cloneSpec();
         $this->deleteSpec();
     }
 
@@ -289,12 +290,52 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     }
 
     /**
+     * Cloning an Event.
+     */
+    private function cloneSpec()
+    {
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/copy/Pinocchio');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $form = $this->crawler->selectButton('Submit')->form();
+        $form['form[title]'] = 'Pinocchio II';
+        $this->crawler = $this->client->submit($form);
+
+        $this->response = $this->client->getResponse();
+        $this->assertEquals(302, $this->response->getStatusCode());
+
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Pinocchio_II']);
+
+        $this->assertNotNull($event);
+        $this->assertEquals(
+            new DateTime('2017-01-01 18:00'),
+            $event->getStart()
+        );
+
+        $eventWiki = $this->entityManager
+            ->getRepository('Model:EventWiki')
+            ->findOneBy(['event' => $event]);
+        $this->assertNotNull($eventWiki);
+        $this->assertEquals(
+            'en.wikipedia',
+            $eventWiki->getDomain()
+        );
+
+        $this->assertEquals(
+            [10584730],
+            $event->getParticipantIds()
+        );
+    }
+
+    /**
      * Test event deletion.
      */
     private function deleteSpec()
     {
         $this->assertCount(
-            1,
+            2, // There was a cloned event, see self::cloneSpec()
             $this->entityManager->getRepository('Model:Event')->findAll()
         );
 
@@ -303,7 +344,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->assertEquals(302, $this->response->getStatusCode());
 
         $this->assertCount(
-            0,
+            1,
             $this->entityManager->getRepository('Model:Event')->findAll()
         );
     }

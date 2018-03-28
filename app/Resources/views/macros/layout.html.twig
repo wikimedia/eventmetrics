@@ -31,12 +31,19 @@
 
 {% macro actionButtons(model, object, params, deletable = true) %}
     <a href="{{ path('Edit' ~ model, params) }}"
-       class="{{ model|lower }}-action {{ model|lower }}-action__edit text-muted">{#-
+       class="{{ model|lower }}-action {{ model|lower }}-action__edit text-muted"
+       title="{{ msg('edit-' ~ model|lower) }}">{#-
         -#}<span class="glyphicon glyphicon-cog"></span>{#-
     -#}</a>
+    {% if model == 'Event' %}
+        <a href="{{ path('CopyEvent', params) }}" class="event-action event-action__copy" title="{{ msg('copy') }}">{#-
+            -#}<span class="font-awesome">&#xf24d;</span>{#-
+        -#}</a>
+    {% endif %}
     <a href="{% if deletable or isAdmin() %}{{ path('Delete' ~ model, params) }}{% endif %}"
        class="{{ model|lower }}-action {{ model|lower }}-action__delete{% if not(deletable) and not(isAdmin()) %} disabled{% endif %} text-danger"
-       data-title="{{ object.displayTitle }}" data-model="{{ model|lower }}">{#-
+       data-title="{{ object.displayTitle }}" data-model="{{ model|lower }}"
+       title="{{ msg('delete') }}">{#-
         -#}<span class="glyphicon glyphicon-trash"></span>{#-
     -#}</a>
 {% endmacro %}
