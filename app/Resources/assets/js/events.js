@@ -44,7 +44,8 @@ $(function () {
             if ($("#form_timezone option[value='" + timezone + "']").length) {
                 $('#form_timezone').val(timezone);
             }
-        } catch (_error) {}
+        } catch (_error) {
+        }
     }
 
     /**
