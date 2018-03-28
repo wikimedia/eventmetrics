@@ -36,6 +36,17 @@ $(function () {
         }
     });
 
+    // Attempt to default the timezone to the user's timezone.
+    if ($('body').hasClass('event-new')) {
+        var timezome = 'UTC';
+        try {
+            timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            if ($("#form_timezone option[value='" + timezone + "']").length) {
+                $('#form_timezone').val(timezone);
+            }
+        } catch (_error) {}
+    }
+
     /**
      * Populate hidden start/end datetime fields on form submission.
      */
