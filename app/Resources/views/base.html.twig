@@ -73,6 +73,33 @@
                             (<a href="{{ path('logout') }}">{{ msg('logout') }}</a>)
                         </span>
                     {% endif %}
+                    <div class="btn-group dropdown help-dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                            {{ msg('help') }}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a target="_blank" href="https://meta.wikimedia.org/wiki/Grant_Metrics">
+                                    <span class="font-awesome">&#xf05a;</span>
+                                    {{ msg('documentation') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="https://phabricator.wikimedia.org/maniphest/task/create?projects=grant-metrics">
+                                    <span class="font-awesome">&#xf188;</span>
+                                    {{ msg('report-issue') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="https://meta.wikimedia.org/wiki/Talk:Grant_Metrics">
+                                    <span class="font-awesome">&#xf086;</span>
+                                    {{ msg('feedback') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     {% if exception is not defined %}
                         <div class="lang-group btn-group dropdown">
                             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">

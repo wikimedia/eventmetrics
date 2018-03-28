@@ -6,7 +6,6 @@
 	"error-server-message": "سرور وايي: $1",
 	"help-translate": "په ژباړلو کې مرسته وکړئ",
 	"no-results": "کومې پايلې و نه موندل شوې",
-	"optional": "ستاسې په خوښه",
 	"page": "مخ",
 	"pager-newer-n": "{{PLURAL:$1|نوی 1|نوي $1}}",
 	"pager-older-n": "{{PLURAL:$1|زوړ 1|زاړه $1}}",

@@ -19,8 +19,6 @@
                 {{ form_label(wiki, msg('wikis'),
                     {'attr': {'class': form_errors(form.wikis) ? ' text-danger'}})
                 }}
-                <br/>
-                <small class="text-muted">({{ msg('optional')|lower }})</small>
             </div>
             <div class="col-sm-8">
                 {{ form_widget(wiki, {'attr': {'class': 'event-wiki-input', 'autocomplete': 'off'}}) }}
@@ -72,4 +70,4 @@
 </fieldset>
 
 {{ form_row(form._token) }}
-{{ form_widget(form.submit, {'label': msg('submit')}) }}
+{{ form_widget(form.submit, {'label': msg('submit'), 'attr': {'class': 'btn-primary'}}) }}

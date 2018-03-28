@@ -4,6 +4,7 @@
 	"edit-summary": "கருத்துரை",
 	"fatal-error": "மாபெரும் தவறு",
 	"feedback": "கருத்து",
+	"help": "உதவி",
 	"logout": "விடுபதிகை",
 	"num-days": "{{PLURAL: $1|நாள்|நாட்கள்}}",
 	"num-hours": "{{PLURAL: $1|மணி|மணிகள்}}",

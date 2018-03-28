@@ -12,6 +12,7 @@
 	"error-service-overload": "Grant Metrics orain gainkargatuta dago beste eskaera batzuekin. Mesedez, saia ezazu berriro minutu gutxiren buruan.",
 	"fatal-error": "Fatal error",
 	"feedback": "Atzeraelikadura",
+	"help": "Laguntza",
 	"help-translate": "Lagundu euskaratzen",
 	"no-results": "Ez da emaitzarik aurkitu",
 	"num-revisions": "{{PLURAL:$1|berrikuspen 1|$1 berrikuspen}}",

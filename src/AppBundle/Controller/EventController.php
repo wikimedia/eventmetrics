@@ -227,7 +227,7 @@ class EventController extends EntityController
                 'allow_delete' => true,
                 'delete_empty' => true,
                 'empty_data' => '',
-                'required' => false,
+                'required' => true,
                 'constraints' => [new Valid()],
             ])
             ->add('time', TextType::class, [

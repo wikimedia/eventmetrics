@@ -70,8 +70,14 @@ body {
     }
 }
 
-.logged-in {
-    margin-right: 10px;
+.logged-in,
+.help-dropdown {
+    margin-right: 6px;
+}
+
+.help-dropdown .glyphicon {
+    font-size: 14px;
+    top: 2px;
 }
 
 .lang-group {
@@ -189,6 +195,14 @@ a.disabled {
 .event-action:hover,
 .program-action:hover {
     text-decoration: none;
+}
+
+.glyphicon-trash {
+    color: $bootstrap-gray;
+
+    &:hover {
+        color: inherit;
+    }
 }
 
 @media (max-width: $bootstrap-sm) {

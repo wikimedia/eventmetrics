@@ -12,6 +12,7 @@
 	"error-service-overload": "Šiuo metu Grant Metrics yra perkrautas aptarnaujant kitas užklausas. Prašome pabandyti dar kartą po kelių minučių.",
 	"fatal-error": "Lemtinga klaida",
 	"feedback": "Atsiliepimai",
+	"help": "Pagalba",
 	"help-translate": "Padėti išversti",
 	"no-results": "Rezultatų nerasta",
 	"num-revisions": "{{PLURAL:$1|versija|versijos|versijų}}",

@@ -14,7 +14,6 @@
 	"num-minutes": "{{PLURAL: $1|minutt|minutter}}",
 	"num-revisions": "{{PLURAL: $1|Revisjon|Revisjoner}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekunder}}",
-	"optional": "valgfritt",
 	"page": "side",
 	"pager-newer-n": "{{PLURAL:$1|1 nyere|$1 nyere}}",
 	"pager-older-n": "{{PLURAL:$1|1 eldre|$1 eldre}}",

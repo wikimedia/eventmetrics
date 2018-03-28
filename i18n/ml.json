@@ -6,7 +6,6 @@
 	"num-minutes": "{{PLURAL:$1|മിനിറ്റ്}}",
 	"num-revisions": "{{PLURAL:$1|നാൾപ്പതിപ്പ്}}",
 	"num-seconds": "{{PLURAL:$1|സെക്കന്റ്}}",
-	"optional": "നിർബന്ധമില്ല",
 	"pager-newer-n": "{{PLURAL:$1|പുതിയ 1|പുതിയ $1}}",
 	"pager-older-n": "{{PLURAL:$1|പഴയ 1|പഴയ $1}}",
 	"submit": "സമർപ്പിക്കുക",

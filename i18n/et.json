@@ -7,7 +7,6 @@
 	"num-minutes": "{{PLURAL: $1|minut|minutit}}",
 	"num-revisions": "{{PLURAL:$1|Redaktsioon|Redaktsioonid}}",
 	"num-seconds": "{{PLURAL: $1|sekund|sekundit}}",
-	"optional": "valikuline",
 	"pager-newer-n": "{{PLURAL:$1|uuem 1|uuemad $1}}",
 	"pager-older-n": "{{PLURAL:$1|vanem 1|vanemad $1}}",
 	"submit": "Saada",

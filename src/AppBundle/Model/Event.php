@@ -41,14 +41,16 @@ class Event
      *
      * Keys are i18n message keys, values are the 'offset' values.
      *
+     * The order specified here is also the order it will appear in the interface.
+     *
      * @see EventProcessor
      * @see EventStat
      */
     const AVAILABLE_METRICS = [
         'new-editors' => 15,
+        'retention' => 7,
         'pages-created' => null,
         'pages-improved' => null,
-        'retention' => 7,
     ];
 
     /**

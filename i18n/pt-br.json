@@ -12,6 +12,7 @@
 	"error-service-overload": "O Grant Metrics encontra-se atualmente sobrecarregado, respondendo os outros pedidos. Por favor, tente de novo dentro de alguns minutos.",
 	"fatal-error": "Erro fatal",
 	"feedback": "Feedback",
+	"help": "Ajuda",
 	"help-translate": "Ajude a traduzir",
 	"no-results": "Nenhum resultado encontrado",
 	"num-revisions": "{{PLURAL: $1|Revisão|Revisões}}",

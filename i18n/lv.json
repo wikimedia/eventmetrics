@@ -4,6 +4,7 @@
 	"cancel": "Atcelt",
 	"date": "Datums",
 	"documentation": "Dokumentācija",
+	"help": "Palīdzība",
 	"help-translate": "Palīdzi iztulkot",
 	"page": "Lapa",
 	"pager-newer-n": "{{PLURAL:$1|$1 jaunākas|$1 jaunāku|$1 jaunākas}}",
