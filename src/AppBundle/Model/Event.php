@@ -184,7 +184,7 @@ class Event
     }
 
     /**
-     * Get the ID of the event;
+     * Get the ID of the event.
      * @return int
      */
     public function getId()
@@ -486,6 +486,14 @@ class Event
         return array_map(function ($participant) {
             return $participant->getUsername();
         }, $this->participants->toArray());
+    }
+
+    /**
+     * Remove all Participants.
+     */
+    public function clearParticipants()
+    {
+        $this->participants->clear();
     }
 
     /********

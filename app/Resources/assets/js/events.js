@@ -5,7 +5,7 @@ $(function () {
     }
 
     // Setup the add/remove wiki fields when creating or editing a new event.
-    if ($('body').hasClass('event-new') || $('body').hasClass('event-edit')) {
+    if ($('body').hasClass('event-new') || $('body').hasClass('event-edit') || $('body').hasClass('event-copy')) {
         setupAddRemove('event', 'wiki');
     }
 

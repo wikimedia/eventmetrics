@@ -186,6 +186,11 @@ a.disabled {
     opacity: 0.3;
 }
 
+.event-action:hover,
+.program-action:hover {
+    text-decoration: none;
+}
+
 @media (max-width: $bootstrap-sm) {
     .footer-links {
         display: block;
