@@ -52,3 +52,7 @@ parameters:
 
     # Max number of seconds any given query is allowed to run.
     app.query_timeout: 900
+
+    # Show a notice at the top of the interface, on all pages. The 'style' is the Bootstrap alert type.
+    app.notice.text: ~
+    app.notice.style: danger

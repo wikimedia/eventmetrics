@@ -125,6 +125,15 @@
                 </span>
             </div>
         </header>
+
+        {% if siteNoticeText is not empty %}
+            <div class="site-notice container-full text-center">
+                <div class="alert alert-{{ siteNoticeStyle }} alert-dismissible" role="alert">
+                    {{ siteNoticeText|raw }}
+                </div>
+            </div>
+        {% endif %}
+
         <main class="app-body">
             <div class="alert-container container">
                 {% if app.session.flashBag.peekAll and exception is not defined and getControllerName() != 'default' %}
