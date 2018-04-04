@@ -375,7 +375,7 @@ abstract class Repository extends EntityRepository
     public function executeReplicaQuery($sql, $params = [], $timeout = null)
     {
         try {
-            $this->setQueryTimeout($timeout);
+            $sql = $this->getQueryTimeoutClause($timeout).$sql;
             return $this->getReplicaConnection()->executeQuery($sql, $params);
         } catch (DriverException $e) {
             return $this->handleDriverError($e, $timeout);
@@ -392,8 +392,9 @@ abstract class Repository extends EntityRepository
     public function executeQueryBuilder(QueryBuilder $qb, $timeout = null)
     {
         try {
-            $this->setQueryTimeout($timeout);
-            return $qb->execute();
+            $sql = $this->getQueryTimeoutClause($timeout).$qb->getSQL();
+            return $qb->getConnection()
+                ->executeQuery($sql, $qb->getParameters(), $qb->getParameterTypes());
         } catch (DriverException $e) {
             return $this->handleDriverError($e, $timeout);
         }
@@ -426,19 +427,20 @@ abstract class Repository extends EntityRepository
      * Set the maximum statement time on the MySQL engine.
      * @param int|null|false $timeout In seconds. null will use the default specified by
      *     the app.query_timeout config parameter. false will not set a timeout.
+     * @return string The SQL fragment to prepended to the query.
      */
-    public function setQueryTimeout($timeout = null)
+    public function getQueryTimeoutClause($timeout = null)
     {
         // Scrutinizer doesn't use MariaDB, and/or queries might for some reason take really long.
         $isWikimedia = (bool)$this->container->getParameter('database.replica.is_wikimedia');
         if (!$isWikimedia || false === $timeout) {
-            return;
+            return '';
         }
 
         if ($timeout === null) {
             $timeout = $this->container->getParameter('app.query_timeout');
         }
-        $sql = "SET max_statement_time = $timeout";
-        $this->getReplicaConnection()->executeQuery($sql);
+
+        return "SET STATEMENT max_statement_time = $timeout FOR\n";
     }
 }

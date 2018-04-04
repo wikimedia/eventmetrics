@@ -38,6 +38,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: postLoad }
 
+    AppBundle\EventSubscriber\ExceptionSubscriber:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+        arguments: ['@templating', '@logger', '%kernel.environment%']
+
     AppBundle\Service\EventProcessor:
         public: true
 
