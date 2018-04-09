@@ -49,7 +49,12 @@ class EventWikiRepository extends Repository
         preg_match('/^https?\:\/\/(.*)\.org$/', $ret['url'], $matches);
         $domain = isset($matches[1]) ? str_replace('www.', '', $matches[1]) : null;
 
-        return $domain;
+        if (preg_match(EventWiki::getValidPattern(), $domain)) {
+            return $domain;
+        } else {
+            // Entity will be considered invalid and won't be saved.
+            return null;
+        }
     }
 
     /**

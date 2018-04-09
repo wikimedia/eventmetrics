@@ -30,6 +30,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class EventWiki
 {
     /**
+     * Regex pattern of the supported wikis.
+     */
+    const VALID_WIKI_PATTERN = '/\w+\.wikipedia/';
+
+    /**
      * @ORM\Id
      * @ORM\Column(name="ew_id", type="integer")
      * @ORM\GeneratedValue
@@ -86,6 +91,19 @@ class EventWiki
     public function getDomain()
     {
         return $this->domain;
+    }
+
+    /**
+     * Get the regex pattern for valid wikis.
+     * @return string
+     * @static
+     *
+     * No need to test a hard-coded string.
+     * @codeCoverageIgnore
+     */
+    public static function getValidPattern()
+    {
+        return self::VALID_WIKI_PATTERN;
     }
 
     /**************
