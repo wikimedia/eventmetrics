@@ -94,7 +94,7 @@ class EventController extends EntityController
     public function editAction()
     {
         // Add blank EventWiki in the form if one doesn't already exist.
-        if (count($this->event->getWikis()) === 0) {
+        if ($this->event->getWikis()->isEmpty()) {
             $eventWiki = new EventWiki($this->event);
             $this->event->addWiki($eventWiki);
         }
@@ -225,10 +225,9 @@ class EventController extends EntityController
                 'entry_type' => TextType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'delete_empty' => true,
                 'empty_data' => '',
                 'required' => true,
-                'constraints' => [new Valid()],
+                'constraints' => [new Valid(), new NotBlank()],
             ])
             ->add('time', TextType::class, [
                 'mapped' => false,

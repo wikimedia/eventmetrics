@@ -54,10 +54,11 @@ function setupAddRemove(model, column)
 
         var $newRow = $(rowClass + ':last');
 
-        // Add name attribute to the input of the new row.
+        // Add name attribute to the input of the new row and remove unwanted inner elements.
         $newRow.find('input').prop('name', 'form[' + column + 's][' + rowCount + ']')
             .prop('id', 'form_' + column + 's_' + rowCount)
             .val('');
+        $newRow.find('.invalid-input').remove();
 
         // Increment count so the next added row will have the correct name attribute.
         rowCount++;
