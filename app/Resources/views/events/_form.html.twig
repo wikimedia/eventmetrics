@@ -36,10 +36,15 @@
 </fieldset>
 
 <div class="form-group">
-    <div class="col-sm-2 col-sm-offset-2">
+    <div class="col-sm-8 col-sm-offset-2">
         <a href="#" class="add-wiki">
             <div class="glyphicon glyphicon-plus-sign"></div>
-            {{ msg('add-wiki') }}
+            {{ msg('add-wiki') }}{#-
+        -#}</a>
+        &nbsp;&bull;&nbsp;
+        <a href="#" class="special-wiki" data-value="*.wikipedia">
+            <div class="glyphicon glyphicon-plus-sign"></div>
+            {{ msg('all-wikipedias') }}
         </a>
     </div>
 </div>

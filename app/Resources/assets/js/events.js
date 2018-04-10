@@ -70,6 +70,22 @@ $(function () {
     });
 
     /**
+     * Listener for special wiki options.
+     */
+    $('.special-wiki').on('click', function (e) {
+        e.preventDefault();
+
+        var $lastWiki = $('.event__wikis').find('input').last();
+
+        if ($lastWiki.val().trim() !== '') {
+            $('.add-wiki').trigger('click');
+            $lastWiki = $('.event__wikis').find('input').last();
+        }
+
+        $lastWiki.val($(e.target).data('value'));
+    });
+
+    /**
      * Listener for calculate statistics button, which hits the
      * process event endpoint, firing off a job.
      */
@@ -128,6 +144,9 @@ function populateValidWikis()
                 }
             })
         }
+
+        // 'All Wikipedias' option
+        validWikis.push('*.wikipedia');
 
         dfd.resolve(validWikis);
     });
