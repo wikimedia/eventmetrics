@@ -97,4 +97,16 @@
     .pagination {
         margin-bottom: 0;
     }
+
+    .add-wiki--all-wikipedias {
+        display: inline;
+    }
+
+    .checkbox-label {
+        padding-left: 17px;
+
+        input {
+            margin-left: -17px;
+        }
+    }
 }

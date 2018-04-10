@@ -8,6 +8,7 @@
 	"add-organizer": "Link to add a new organizer to a program.",
 	"add-wiki": "Link to add a wiki (also known as a 'project') to an event.\n{{Identical|Wiki}}",
 	"all": "Label for the wiki when all wikis have been selected.\n{{Identical|All}}",
+	"all-wikipedias": "Label for checkbox to make an Event for all Wikipedias.",
 	"apply": "Label for button\n{{Identical|Apply}}",
 	"attribution": "Text for a link that gives attribution to images and fonts used in the application.\n{{Identical|Attribution}}",
 	"attribution-background": "Text giving credit to the background image (which is variable). $1 is a link to the image on Commons.",
