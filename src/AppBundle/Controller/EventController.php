@@ -136,8 +136,12 @@ class EventController extends EntityController
         foreach ($this->event->getParticipants()->toArray() as $participant) {
             new Participant($event, $participant->getUserId());
         }
+
         foreach ($this->event->getWikis()->toArray() as $wiki) {
-            new EventWiki($event, $wiki->getDomain());
+            // Don't copy child wikis, instead we'll be copying the parent family wiki.
+            if (!$wiki->isChildWiki()) {
+                new EventWiki($event, $wiki->getDomain());
+            }
         }
 
         return $this->newAction($event);
@@ -301,6 +305,7 @@ class EventController extends EntityController
 
         return new CallbackTransformer(
             function ($wikiObjects) {
+                // To domain names for the form, from EventWikis.
                 $wikis = $wikiObjects->toArray();
                 return array_map(function ($wiki) {
                     return $wiki->getDomain();
@@ -314,7 +319,7 @@ class EventController extends EntityController
 
     /**
      * Take the list of wikis provided by the user (enwiki, en.wikipedia, or en.wikipedia.org)
-     * and normalize them to the database name (enwiki). This method also instantiates a new
+     * and normalize them to the database name (enwiki). This method then instantiates a new
      * EventWiki if one did not already exist.
      * @param  string[]            $wikis As retrieved by the form.
      * @param  Event               $event

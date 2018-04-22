@@ -512,7 +512,7 @@ class Event
     }
 
     /**
-     * Add a EventWiki to this Event.
+     * Add an EventWiki to this Event.
      * @param EventWiki $wiki
      */
     public function addWiki(EventWiki $wiki)
@@ -524,7 +524,7 @@ class Event
     }
 
     /**
-     * Remove a EventWiki from this Event.
+     * Remove an EventWiki from this Event.
      * @param EventWiki $wiki
      */
     public function removeWiki(EventWiki $wiki)
@@ -533,6 +533,53 @@ class Event
             return;
         }
         $this->wikis->removeElement($wiki);
+    }
+
+    /***************
+     * WIKI FAMILY *
+     ***************/
+
+    /**
+     * Get all EventWikis belonging to the Event that represent
+     * a wiki family (*.wikipedia, *.wiktionary, etc).
+     * @return EventWiki[]
+     */
+    public function getFamilyWikis()
+    {
+        return $this->wikis->filter(function ($wiki) {
+            return substr($wiki->getDomain(), 0, 2) === '*.';
+        });
+    }
+
+    /**
+     * Get all EventWikis that are not part of a family that has been added
+     * to the Event. For instance, if there is an EventWiki for *.wikipedia
+     * (wikipedia family), a fr.wikipedia EventWiki is not returned, but it
+     * will if there is not a *.wikipedia EventWiki/
+     * @return EventWiki[]
+     */
+    public function getOrphanWikis()
+    {
+        $familyNames = $this->getFamilyWikis()->map(function ($eventWiki) {
+            return $eventWiki->getFamilyName();
+        });
+
+        return $this->wikis->filter(function ($wiki) use ($familyNames) {
+            return !$familyNames->contains(explode('.', $wiki->getDomain())[1]);
+        });
+    }
+
+    /**
+     * Get EventWikis that are represent a wiki family, or an individual wiki
+     * that is not part of a family.
+     * @return EventWiki
+     */
+    public function getOrphanWikisAndFamilies()
+    {
+        return new ArrayCollection(array_merge(
+            $this->getFamilyWikis()->toArray(),
+            $this->getOrphanWikis()->toArray()
+        ));
     }
 
     /********

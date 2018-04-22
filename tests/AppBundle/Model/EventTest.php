@@ -268,4 +268,27 @@ class EventTest extends KernelTestCase
             $event->getUpdatedWithTimezone()
         );
     }
+
+    /**
+     * Test methods involving EventWikis that represent a family.
+     */
+    public function testWikiFamilies()
+    {
+        $event = new Event($this->program);
+
+        $family = new EventWiki($event, '*.wikipedia');
+        $child = new EventWiki($event, 'test.wikipedia');
+        $orphan = new EventWiki($event, 'fr.wiktionary');
+
+        $this->assertEquals([$family], $event->getFamilyWikis()->toArray());
+
+        // Doctrine doesn't reindex the arrays (instead preserving original keys),
+        // so we need to use array_values in our test.
+        $this->assertEquals([$orphan], array_values($event->getOrphanWikis()->toArray()));
+
+        $this->assertEquals(
+            [$family, $orphan],
+            array_values($event->getOrphanWikisAndFamilies()->toArray())
+        );
+    }
 }

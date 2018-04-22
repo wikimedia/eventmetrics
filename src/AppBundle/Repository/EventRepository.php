@@ -113,6 +113,30 @@ class EventRepository extends Repository
     }
 
     /**
+     * Get the domain names of wikis within the given family where all
+     * of the given users have made edits.
+     * @param  string[] $usernames
+     * @param  string $family
+     * @return string[] Domain names in the format of lang.project, e.g. en.wiktionary
+     */
+    public function getCommonLangWikiDomains($usernames, $family)
+    {
+        $conn = $this->getCentralAuthConnection();
+        $rqb = $conn->createQueryBuilder();
+        // The 'lang' column is not always the same as the subdomain, so we use SUBSTRING on the 'url'.
+        $rqb->select('DISTINCT(SUBSTRING(url, 9, LENGTH(url) - 12)) AS domain')
+            ->from('localuser')
+            ->join('localuser', 'meta_p.wiki', null, 'lu_wiki = dbname')
+            ->where('family = :family')
+            ->andWhere('lu_name IN (:usernames)')
+            ->setParameter('family', $family)
+            ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+
+        $ret = $this->executeQueryBuilder($rqb)->fetchAll();
+        return array_column($ret, 'domain');
+    }
+
+    /**
      * Get the usernames of users who met the retention threshold
      * for the given wiki.
      * @param string $dbName Database name.
@@ -242,6 +266,10 @@ class EventRepository extends Repository
         $usernames = $this->getUsernamesSql($event);
 
         foreach ($event->getWikis() as $wiki) {
+            if ($wiki->isFamilyWiki()) {
+                continue;
+            }
+
             $dbName = $eventWikiRepo->getDbName($wiki);
             $domain = $wiki->getDomain();
 

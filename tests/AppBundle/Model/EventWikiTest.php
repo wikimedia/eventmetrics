@@ -23,6 +23,8 @@ class EventWikiTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        date_default_timezone_set('UTC');
+
         $organizer = new Organizer(50);
         $program = new Program($organizer);
         $this->event = new Event(
@@ -88,5 +90,25 @@ class EventWikiTest extends PHPUnit_Framework_TestCase
         $datetime = new \DateTime('2017-01-01');
         $this->event->setUpdated($datetime);
         $this->assertEquals($datetime, $this->event->getUpdated());
+    }
+
+    /**
+     * Test methods involving wiki families.
+     */
+    public function testWikiFamilies()
+    {
+        // Not a wiki family.
+        $wiki = new EventWiki($this->event, 'test.wikipedia');
+        $this->assertFalse($wiki->isFamilyWiki());
+        $this->assertNull($wiki->getFamilyName());
+        $this->assertEquals([], $wiki->getChildWikis());
+        $this->assertFalse($wiki->isChildWiki());
+
+        // Create a *.wikipedia EventWiki, making the above EventWiki a child.
+        $wikiFam = new EventWiki($this->event, '*.wikipedia');
+        $this->assertTrue($wikiFam->isFamilyWiki());
+        $this->assertEquals('wikipedia', $wikiFam->getFamilyName());
+        $this->assertEquals([$wiki], $wikiFam->getChildWikis()->toArray());
+        $this->assertTrue($wiki->isChildWiki());
     }
 }

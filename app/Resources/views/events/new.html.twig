@@ -4,6 +4,9 @@
 {% block breadcrumb %}
     <ol class="breadcrumb">
         <li>
+            <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
+        </li>
+        <li>
             <a href="{{ path('Program', {'programTitle': event.program.title}) }}">{{ event.program.displayTitle }}</a>
         </li>
         <li class="active">
