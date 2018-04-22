@@ -104,7 +104,17 @@ $(function () {
             // TODO: Make controller return HTML and update view with
             // rendered Twig template, rather than having to refresh.
             window.location.reload(true);
-        }.bind(this));
+        }.bind(this)).fail(function (data) {
+            $('.event-process-btn').text($.i18n('error-failed'))
+                .addClass('btn-danger');
+            var feedbackLink = "<a target='_blank' href='https://meta.wikimedia.org/wiki/Talk:Grant_Metrics'>" +
+                'meta:Talk:Grant Metrics</a>';
+            $('.event-stats-status').html(
+                "<strong class='text-danger'>" +
+                $.i18n('error-internal', feedbackLink) +
+                '</strong>'
+            );
+        });
     });
 
     setupAutocompletion();

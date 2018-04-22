@@ -143,7 +143,9 @@ class EventDataController extends EntityController
         }
         // @codeCoverageIgnoreEnd
 
-        return $this->createJobAndGetResponse($jobHandler, $event);
+        $response = $this->createJobAndGetResponse($jobHandler, $event);
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        return $response;
     }
 
     /**

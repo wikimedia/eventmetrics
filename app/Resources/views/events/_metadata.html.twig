@@ -2,8 +2,8 @@
     <tr>
         <td>{{ msg('wikis') }}:</td>
         <td>
-            {% if event.wikis|length > 0 %}
-                {% for wiki in event.wikis %}
+            {% if event.orphanWikisAndFamilies|length > 0 %}
+                {% for wiki in event.orphanWikisAndFamilies %}
                     {{ wiki.domain }}{% if not loop.last %},{% endif %}
                 {% endfor %}
             {% else %}

@@ -46,6 +46,9 @@ class EventProcessor
     /** @var array The generated stats, keyed by metric. */
     protected $stats;
 
+    /** @var string[] Unique wikis where participants have made edits. */
+    protected $commonWikis;
+
     /**
      * Constructor for the EventProcessor.
      * @param LoggerInterface $logger
@@ -77,7 +80,17 @@ class EventProcessor
 
         // Generate and persist each type of EventStat/EventWikiStat.
         $this->setNewEditors();
+
+        // If there is an associated EventWiki that represents a family, we need to first find
+        // the common wikis where participants have edited. From there we will create new EventWikis
+        // if needed, and later remove those that have no statistics so that the UI is clean.
+        $this->createEventWikisFromLang();
+
         $this->setPagesEdited();
+
+        // Remove EventWikis that are part of a family where there are no statistics.
+        $this->removeEventWikisWithNoStats();
+
         $this->setRetention();
 
         // Clear out any existing job records from the queue.
@@ -104,6 +117,64 @@ class EventProcessor
         $this->event = $event;
         $this->eventRepo = $this->entityManager->getRepository('Model:Event');
         $this->eventRepo->setContainer($this->container);
+    }
+
+    /**
+     * Check if there are EventWikis that represent a family (*.wikipedia, *.wiktionary, etc.)
+     * and if so, create EventWikis for the ones where participants have made edits.
+     */
+    private function createEventWikisFromLang()
+    {
+        foreach ($this->event->getFamilyWikis() as $wikiFamily) {
+            $domains = $this->eventRepo->getCommonLangWikiDomains(
+                $this->getParticipantNames(),
+                $wikiFamily->getFamilyName()
+            );
+
+            // Find domains of existing EventWikis.
+            $existingDomains = array_map(function ($eventWiki) {
+                return $eventWiki->getDomain();
+            }, $this->event->getWikis()->toArray());
+
+            // Create new EventWikis for those that don't exist.
+            foreach (array_diff($domains, $existingDomains) as $domain) {
+                // The constructor adds the EventWiki to the associated Event.
+                // We won't persist these yet, because they will get removed if
+                // no statistics exist on that EventWiki.
+                new EventWiki($this->event, $domain);
+            }
+        }
+    }
+
+    /**
+     * After we've created the EventWikiStats from $this->setPagesEdited(),
+     * we want to remove any with zero values that are associated to a family EventWiki.
+     * This is because on the event page, we don't want to show zero values for *every*
+     * language that is part of a wiki family.
+     */
+    private function removeEventWikisWithNoStats()
+    {
+        // Find EventWikis that represent a family, but have no stats, and remove them.
+        foreach ($this->event->getFamilyWikis() as $wikiFamily) {
+            $wikis = $wikiFamily->getChildWikis();
+
+            foreach ($wikis as $wiki) {
+                // Sum all the stats, effectively telling us if there are any stats.
+                $statsSum = array_sum(array_map(function ($stat) {
+                    return $stat->getValue();
+                }, $wiki->getStatistics()->toArray()));
+
+                if ($statsSum === 0) {
+                    // $this->process() returns $this->stats, which gets returned in
+                    // the JSON response, so we need to remove them here.
+                    unset($this->stats['wikis'][$wiki->getDomain()]);
+
+                    // Doctrine wants you to both remove from the Event and from the entity manager.
+                    $this->event->removeWiki($wiki);
+                    $this->entityManager->remove($wiki);
+                }
+            }
+        }
     }
 
     /**
@@ -149,6 +220,11 @@ class EventProcessor
         $ewRepo->setContainer($this->container);
 
         foreach ($this->event->getWikis() as $wiki) {
+            // No stats for EventWikis that represent a family.
+            if ($wiki->isFamilyWiki()) {
+                continue;
+            }
+
             $dbName = $ewRepo->getDbName($wiki);
             $ret = $this->eventRepo->getNumPagesEdited(
                 $dbName,
@@ -156,8 +232,8 @@ class EventProcessor
                 $end,
                 $usernames
             );
-            $pagesImproved += $ret['edited'];
             $pagesCreated += $ret['created'];
+            $pagesImproved += $ret['edited'];
 
             $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $ret['created']);
             $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $ret['edited']);
@@ -201,8 +277,7 @@ class EventProcessor
         } else {
             // First grab the list of common wikis edited amongst all users,
             // so we don't unnecessarily query all wikis.
-            $dbNames = $this->eventRepo->getCommonWikis($usernames);
-            sort($dbNames);
+            $dbNames = $this->getCommonWikis($usernames);
 
             $numUsersRetained = $this->getNumUsersRetained($dbNames, $end, $usernames);
         }
@@ -214,9 +289,9 @@ class EventProcessor
 
     /**
      * Loop through the wikis and get the number of users retained.
-     * @param  string[] $dbNames Database names of the wikis to loop through.
-     * @param  DateTime $end Search from this day onward.
-     * @param  string[] $usernames Usernames to search for.
+     * @param string[] $dbNames Database names of the wikis to loop through.
+     * @param DateTime $end Search from this day onward.
+     * @param string[] $usernames Usernames to search for.
      * @return int
      */
     private function getNumUsersRetained($dbNames, $end, $usernames)
@@ -359,6 +434,24 @@ class EventProcessor
         $this->entityManager->persist($eventWikiStat);
 
         return $eventWikiStat;
+    }
+
+    /**
+     * First grab the list of common wikis edited amongst all users,
+     * so we don't unnecessarily query all wikis.
+     * @param string[] $usernames
+     * @return string[] Database names, ready to be used in a query.
+     */
+    private function getCommonWikis(array $usernames)
+    {
+        if (isset($this->commonWikis)) {
+            return $this->commonWikis;
+        }
+
+        $dbNames = $this->eventRepo->getCommonWikis($usernames);
+        sort($dbNames);
+        $this->commonWikis = $dbNames;
+        return $this->commonWikis;
     }
 
     /**

@@ -91,9 +91,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="event-wiki-stats-summary">
-                    </tr>
-                    {% for wiki in event.wikis %}
+                    {% for wiki in event.wikis if not(wiki.familyWiki) %}
                         <tr>
                             <td class="sort-entry--domain" data-value="{{ wiki.domain }}">
                                 {{ wiki.domain }}

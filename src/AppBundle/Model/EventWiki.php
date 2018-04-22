@@ -59,13 +59,13 @@ class EventWiki
 
     /**
      * One EventWiki has many EventStats.
-     * @ORM\OneToMany(targetEntity="EventWikiStat", mappedBy="wiki", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="EventWikiStat", mappedBy="wiki", orphanRemoval=true, cascade={"persist"})
      * @var ArrayCollection|EventStat[] Statistics for this EventWiki.
      */
     protected $stats;
 
     /**
-     * Event constructor.
+     * EventWiki constructor.
      * @param Event $event Event that this EventWiki belongs to.
      * @param string $domain Domain name of the wiki, without the .org.
      */
@@ -79,6 +79,7 @@ class EventWiki
 
     /**
      * Get the Event this EventWiki belongs to.
+     * @return Event
      */
     public function getEvent()
     {
@@ -87,6 +88,7 @@ class EventWiki
 
     /**
      * Get the domain name.
+     * @return string
      */
     public function getDomain()
     {
@@ -104,6 +106,55 @@ class EventWiki
     public static function getValidPattern()
     {
         return self::VALID_WIKI_PATTERN;
+    }
+
+    /***************
+     * WIKI FAMILY *
+     ***************/
+
+    /**
+     * Does this EventWiki represent a wiki family? e.g. *.wikipedia, *.wiktionary
+     * @return bool
+     */
+    public function isFamilyWiki()
+    {
+        return substr($this->domain, 0, 2) === '*.';
+    }
+
+    /**
+     * If this EventWiki represents a family, return the family name, null otherwise.
+     * @return string|null
+     */
+    public function getFamilyName()
+    {
+        return $this->isFamilyWiki() ? substr($this->domain, 2) : null;
+    }
+
+    /**
+     * If this EventWiki represents a family, return all EventWikis
+     * of the Event that belong to the family.
+     * @return EventWiki[]
+     */
+    public function getChildWikis()
+    {
+        $family = $this->getFamilyName();
+
+        if (null === $family) {
+            return [];
+        }
+
+        return $this->event->getWikis()->filter(function ($wiki) use ($family) {
+            return substr($this->domain, 2) === $family && $wiki->getDomain() !== $this->domain;
+        });
+    }
+
+    /**
+     * Is this EventWiki a child of family EventWiki that belongs to the same Event?
+     * @return bool
+     */
+    public function isChildWiki()
+    {
+        return !$this->isFamilyWiki() && !$this->event->getOrphanWikis()->contains($this);
     }
 
     /**************

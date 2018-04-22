@@ -33,6 +33,11 @@ class EventWikiRepository extends Repository
      */
     public function getDomainFromEventWikiInput($value)
     {
+        if (substr($value, 0, 2) === '*.') {
+            $ret = $this->getWikiFamilyName(substr($value, 2));
+            return $ret !== null ? '*.'.$ret : null;
+        }
+
         $conn = $this->getMetaConnection();
         $rqb = $conn->createQueryBuilder();
         $rqb->select(['dbname, url'])
@@ -55,6 +60,23 @@ class EventWikiRepository extends Repository
             // Entity will be considered invalid and won't be saved.
             return null;
         }
+    }
+
+    /**
+     * This effectively validates the given name as a wiki family
+     * (wikipedia, wiktionary, etc). Null is returned if invalid.
+     * @param  string $value The wiki family name.
+     * @return string|null The wiki family name, or null if invalid.
+     */
+    public function getWikiFamilyName($value)
+    {
+        $conn = $this->getMetaConnection();
+        $rqb = $conn->createQueryBuilder();
+        $rqb->select(['family'])
+            ->from('wiki')
+            ->where($rqb->expr()->eq('family', ':family'))
+            ->setParameter('family', $value);
+        return $this->executeQueryBuilder($rqb)->fetch()['family'];
     }
 
     /**
