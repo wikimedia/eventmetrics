@@ -85,8 +85,8 @@
                     <tr>
                         <th>{{ msg('totals') }}</th>
                         <th>{{ event.numParticipants }}</th>
-                        {% for stat in event.statistics %}
-                            <th>{{ stat.value|num_format }}</th>
+                        {% for metric in metricOrder %}
+                            <th>{{ event.statistic(metric).value|num_format }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
