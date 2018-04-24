@@ -476,7 +476,10 @@ class EventController extends EntityController
         // TODO: Refactor this out, doing the same for Organizers to a Program.
         // Need to somehow hook into a callback in the model layer before validations are ran.
         $event['participants'] = array_map(function ($username) {
-            return ucfirst(trim(str_replace('_', ' ', str_replace("\r", '', $username))));
+            $normalized = trim(str_replace('_', ' ', str_replace("\r", '', $username)));
+
+            // Same as ucfirst but works on all locale settings. This is what MediaWiki wants.
+            return mb_strtoupper(mb_substr($normalized, 0, 1)).mb_substr($normalized, 1);
         }, $event['participants']);
         sort($event['participants']);
 

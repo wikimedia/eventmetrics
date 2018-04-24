@@ -4,21 +4,24 @@
         <h4>{{ msg('participants') }}</h4>
         <h3>{{ event.numParticipants|num_format }}</h3>
     </div>
-    {% for stat in event.statistics %}
-        <div class="col-sm-{{ colSize }} text-center">
-            <h4{% if msgExists(stat.metric ~ '-desc', [stat.offset]) %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}" class="event-metric-desc"{% endif %}>
-                {{ msg(stat.metric, [stat.offset]) }}
-                {% if msgExists(stat.metric ~ '-desc', [stat.offset]) %}
-                    <span class="glyphicon glyphicon-info-sign"></span>
-                {% endif %}
-            </h4>
-            <h3>
-                {% if stat.value is null %}
-                    &ndash;
-                {% else %}
-                    {{ stat.value|num_format }}
-                {% endif %}
-            </h3>
-        </div>
+    {% for metric, offset in event.availableMetrics %}
+        {% set stat = event.getStatistic(metric) %}
+        {% if stat is not empty %}
+            <div class="col-sm-{{ colSize }} text-center">
+                <h4{% if msgExists(stat.metric ~ '-desc', [stat.offset]) %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}" class="event-metric-desc"{% endif %}>
+                    {{ msg(stat.metric, [stat.offset]) }}
+                    {% if msgExists(stat.metric ~ '-desc', [stat.offset]) %}
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    {% endif %}
+                </h4>
+                <h3>
+                    {% if stat.value is null %}
+                        &ndash;
+                    {% else %}
+                        {{ stat.value|num_format }}
+                    {% endif %}
+                </h3>
+            </div>
+        {% endif %}
     {% endfor %}
 </div>

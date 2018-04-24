@@ -99,7 +99,7 @@ class JobHandler
 
     /**
      * Spawn the given Job, but only if there is quota.
-     * @param  Job $job
+     * @param Job $job
      * @param OutputInterface &$output Used by Commands so that the output
      *   can be controlled by the parent process. If this is null,
      *   a local LoggerInterface is used instead.

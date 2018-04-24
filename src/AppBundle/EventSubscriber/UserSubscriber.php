@@ -60,8 +60,10 @@ class UserSubscriber
             return;
         }
 
+        $normalized = trim(str_replace('_', ' ', $entity->getUsername()));
         $entity->setUsername(
-            ucfirst(trim(str_replace('_', ' ', $entity->getUsername())))
+            // Same as ucfirst but works on all locale settings. This is what MediaWiki wants.
+            mb_strtoupper(mb_substr($normalized, 0, 1)).mb_substr($normalized, 1)
         );
 
         // Fetch and set the user ID on the entity.
