@@ -6,6 +6,7 @@
 namespace Tests\AppBundle\Controller;
 
 use AppBundle\DataFixtures\ORM\LoadFixtures;
+use AppBundle\Model\EventWiki;
 use DateTime;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -53,6 +54,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->createSpec();
         $this->validateSpec();
         $this->updateSpec();
+        $this->familyWikiSpec();
         $this->showSpec();
         $this->participantsSpec();
         $this->cloneSpec();
@@ -218,6 +220,47 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         );
     }
 
+    public function familyWikiSpec()
+    {
+        // First create multiple 'orphan' wikis (that don't have an associated family wiki yet).
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Pinocchio']);
+        new EventWiki($event, 'fr.wikipedia');
+        $this->entityManager->persist($event);
+        $this->entityManager->flush();
+
+        $eventWiki = $this->entityManager
+            ->getRepository('Model:EventWiki')
+            ->findOneBy(['domain' => 'fr.wikipedia']);
+        $this->assertNotNull($eventWiki);
+
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/Pinocchio');
+
+        // Make sure the two wikis are in the form.
+        $this->assertEquals('en.wikipedia', $this->crawler->filter('#form_wikis_0')->attr('value'));
+        $this->assertEquals('fr.wikipedia', $this->crawler->filter('#form_wikis_1')->attr('value'));
+
+        // Change one to all Wikipedias, and save.
+        $form = $this->crawler->selectButton('Submit')->form();
+        $form['form[wikis][1]'] = '*.wikipedia';
+        $this->crawler = $this->client->submit($form);
+
+        // Both en.wikipedia and fr.wikipedia should have been deleted.
+        $eventWiki = $this->entityManager
+            ->getRepository('Model:EventWiki')
+            ->findOneBy(['domain' => 'en.wikipedia']);
+        $this->assertNull($eventWiki);
+        $eventWiki = $this->entityManager
+            ->getRepository('Model:EventWiki')
+            ->findOneBy(['domain' => 'fr.wikipedia']);
+        $this->assertNull($eventWiki);
+        $eventWiki = $this->entityManager
+            ->getRepository('Model:EventWiki')
+            ->findOneBy(['event' => $event]);
+        $this->assertEquals('*.wikipedia', $eventWiki->getDomain());
+    }
+
     /**
      * Test relevant errors are shown when updating an event.
      */
@@ -319,7 +362,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             ->findOneBy(['event' => $event]);
         $this->assertNotNull($eventWiki);
         $this->assertEquals(
-            'en.wikipedia',
+            '*.wikipedia',
             $eventWiki->getDomain()
         );
 

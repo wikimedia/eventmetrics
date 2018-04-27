@@ -16,12 +16,13 @@ USE meta_p;
 CREATE TABLE wiki (
     dbname VARCHAR(32),
     lang VARCHAR(12),
-    url TEXT
+    url TEXT,
+    family TEXT
 );
-INSERT INTO wiki VALUES('enwiki', 'en', 'https://en.wikipedia.org');
+INSERT INTO wiki VALUES('enwiki', 'en', 'https://en.wikipedia.org', 'wikipedia');
 
 -- This is used only for some integration tests.
 -- There is not actually a dewiki installed on the CI build.
-INSERT INTO wiki VALUES('dewiki', 'de', 'https://de.wikipedia.org');
+INSERT INTO wiki VALUES('dewiki', 'de', 'https://de.wikipedia.org', 'wikipedia');
 
 GRANT all on meta_p.* to 'root'@'localhost';

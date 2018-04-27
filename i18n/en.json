@@ -55,7 +55,7 @@
 	"event-data": "Event data",
 	"event-data-for": "Event data for \"$1\"",
 	"event-deleted": "The event '$1' was deleted.",
-	"event-updated": "The event '$1' was successfully updated.",
+	"event-updated": "The event '$1' was successfully updated. The statistics may need to be regenerated.",
 	"events": "Events",
 	"fatal-error": "Fatal error",
 	"feedback": "Feedback",

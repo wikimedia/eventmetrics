@@ -127,6 +127,13 @@ class EventTest extends KernelTestCase
         $datetime = new DateTime('2017-01-01');
         $event->setUpdated($datetime);
         $this->assertEquals($datetime, $event->getUpdated());
+
+        // Clearing all statistics.
+        $event->addStatistic($eventStat);
+        $this->assertEquals(1, count($event->getStatistics()));
+        $event->clearStatistics();
+        $this->assertEquals(0, count($event->getStatistics()));
+        $this->assertNull($event->getUpdated());
     }
 
     /**
@@ -290,5 +297,12 @@ class EventTest extends KernelTestCase
             [$family, $orphan],
             array_values($event->getOrphanWikisAndFamilies()->toArray())
         );
+
+        $this->assertEquals([$child], array_values($event->getChildWikis()->toArray()));
+        $event->clearChildWikis();
+        $this->assertEquals(0, $event->getChildWikis()->count());
+
+        // Family EventWiki should still be there.
+        $this->assertEquals([$family], $event->getFamilyWikis()->toArray());
     }
 }
