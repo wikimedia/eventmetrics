@@ -41,6 +41,20 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             '/programs/My_fun_program/Oliver_and_Company/revisions'
         );
         $this->response = $this->client->getResponse();
+
+        // 'Updated' is currently null (not in extended.yml fixture),
+        // so the revision browser should redirect to the event page.
+        $this->assertEquals(302, $this->response->getStatusCode());
+
+        // Set updated attribute then try again.
+        $event->setUpdated(new \DateTime('2014-01-24T00:00:00Z'));
+        $this->entityManager->persist($event);
+        $this->entityManager->flush();
+        $this->crawler = $this->client->request(
+            'GET',
+            '/programs/My_fun_program/Oliver_and_Company/revisions'
+        );
+        $this->response = $this->client->getResponse();
         $this->assertEquals(200, $this->response->getStatusCode());
 
         $this->assertContains(

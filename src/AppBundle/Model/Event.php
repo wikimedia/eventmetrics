@@ -391,6 +391,20 @@ class Event
     }
 
     /**
+     * Clear all associated statistics, including EventWikiStats,
+     * and set the updated attribute to null.
+     */
+    public function clearStatistics()
+    {
+        $this->stats->clear();
+        $this->setUpdated(null);
+
+        foreach ($this->wikis->toArray() as $wiki) {
+            $wiki->clearStatistics();
+        }
+    }
+
+    /**
      * Get the date of the last time the EventStat's were refreshed.
      * @return DateTime
      */
@@ -415,7 +429,7 @@ class Event
     /**
      * Set the 'update' attribute, to be set after EventStats
      * have been refreshed.
-     * @param DateTime $datestamp
+     * @param DateTime|null $datestamp
      */
     public function setUpdated($datestamp)
     {
@@ -549,6 +563,28 @@ class Event
         return $this->wikis->filter(function ($wiki) {
             return substr($wiki->getDomain(), 0, 2) === '*.';
         });
+    }
+
+    /**
+     * Get all associated EventWikis that belong to a family.
+     * @return EventWiki[]
+     */
+    public function getChildWikis()
+    {
+        return $this->wikis->filter(function ($wiki) {
+            return $wiki->isChildWiki();
+        });
+    }
+
+    /**
+     * Remove all associated EventWikis that belong to a family.
+     */
+    public function clearChildWikis()
+    {
+        $children = $this->getChildWikis()->toArray();
+        foreach ($children as $child) {
+            $this->removeWiki($child);
+        }
     }
 
     /**

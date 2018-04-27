@@ -86,10 +86,11 @@ class EventWikiTest extends PHPUnit_Framework_TestCase
         // Double-remove shouldn't error out.
         $wiki->removeStatistic($ews);
 
-        // Changing the 'updated' attribute.
-        $datetime = new \DateTime('2017-01-01');
-        $this->event->setUpdated($datetime);
-        $this->assertEquals($datetime, $this->event->getUpdated());
+        // Clearing statistics.
+        $wiki->addStatistic($ews);
+        $this->assertEquals(1, $wiki->getStatistics()->count());
+        $wiki->clearStatistics();
+        $this->assertEquals(0, $wiki->getStatistics()->count());
     }
 
     /**

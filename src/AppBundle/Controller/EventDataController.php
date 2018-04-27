@@ -36,6 +36,14 @@ class EventDataController extends EntityController
      */
     public function revisionsAction()
     {
+        // Redirect to event page if statistics have not yet been generated.
+        if (null === $this->event->getUpdated()) {
+            return $this->redirectToRoute('Event', [
+                'programTitle' => $this->program->getTitle(),
+                'eventTitle' => $this->event->getTitle(),
+            ]);
+        }
+
         $eventRepo = $this->em->getRepository(Event::class);
         $eventRepo->setContainer($this->container);
 

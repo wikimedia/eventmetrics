@@ -181,6 +181,11 @@ class EventController extends EntityController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event = $form->getData();
+
+            // Clear statistics and child wikis as the data will now be stale.
+            $event->clearStatistics();
+            $event->clearChildWikis();
+
             $this->em->persist($event);
             $this->em->flush();
 
@@ -419,6 +424,11 @@ class EventController extends EntityController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event = $form->getData();
+
+            // Clear statistics and child wikis as the data will now be stale.
+            $event->clearStatistics();
+            $event->clearChildWikis();
+
             $this->em->persist($event);
             $this->em->flush();
 

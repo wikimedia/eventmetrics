@@ -206,4 +206,12 @@ class EventWiki
         }
         $this->stats->removeElement($eventWikiStat);
     }
+
+    /**
+     * Clear all associated statistics.
+     */
+    public function clearStatistics()
+    {
+        $this->stats->clear();
+    }
 }
