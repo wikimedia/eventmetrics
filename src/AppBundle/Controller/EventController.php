@@ -232,6 +232,8 @@ class EventController extends EntityController
                 'empty_data' => '',
                 'required' => true,
                 'constraints' => [new Valid(), new NotBlank()],
+                'data' => $event->getOrphanWikisAndFamilies(),
+                'data_class' => null,
             ])
             ->add('time', TextType::class, [
                 'mapped' => false,
@@ -372,6 +374,8 @@ class EventController extends EntityController
             return $form;
         }
 
+        $eventRepo = $this->em->getRepository(Event::class);
+
         return $this->render('events/show.html.twig', [
             'gmTitle' => $this->event->getDisplayTitle(),
             'form' => $form->createView(),
@@ -379,6 +383,7 @@ class EventController extends EntityController
             'event' => $this->event,
             'stats' => $this->getEventStats($this->event),
             'isOrganizer' => $this->authUserIsOrganizer($this->program),
+            'jobStatus' => $eventRepo->getJobStatus($this->event),
         ]);
     }
 

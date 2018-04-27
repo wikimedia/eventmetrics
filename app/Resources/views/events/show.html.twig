@@ -33,8 +33,12 @@
 
         <div class="pull-right text-right">
             {% if isOrganizer and event.numParticipants > 0 %}
-                <button type="button" class="btn btn-primary event-process-btn" data-event-id="{{ event.id }}">
-                    {% if event.updated == null %}
+                <button type="button" class="btn btn-primary event-process-btn{% if jobStatus is not null %} disabled{% endif %}" data-event-id="{{ event.id }}">
+                    {% if jobStatus == true %}
+                        {{ msg('updating') }}
+                    {% elseif jobStatus is same as(false) %}
+                        {{ msg('queued') }}
+                    {% elseif event.updated == null %}
                         {{ msg('calculate-totals') }}
                     {% else %}
                         {{ msg('update-data') }}
@@ -43,14 +47,18 @@
             {% endif %}
             {% if event.updated != null %}
                 <div class="btn-group event-export">
-                    <a href="{{ path('Revisions', {'programTitle': program.title, 'eventTitle': event.title}) }}" class="btn btn-default event-export-btn">
+                    <a href="{{ path('Revisions', {'programTitle': program.title, 'eventTitle': event.title}) }}" class="btn btn-default event-export-btn{% if jobStatus is not null %} disabled{% endif %}">
                         <span class="glyphicon glyphicon-export"></span>
                         {{ msg('view-all-data') }}
                     </a>
                 </div>
             {% endif %}
             <div class="event-stats-status">
-                {% if event.updated != null %}
+                {% if jobStatus == true %}
+                    {{ msg('updating-desc') }}
+                {% elseif jobStatus is same as(false) %}
+                    {{ msg('queued-desc') }}
+                {% elseif event.updated != null %}
                     {{ msg('last-updated', [event.updatedWithTimezone|date_localize]) }}
                     ({{ event.displayTimezone }})
                 {% endif %}

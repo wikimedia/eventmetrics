@@ -565,7 +565,8 @@ class Event
         });
 
         return $this->wikis->filter(function ($wiki) use ($familyNames) {
-            return !$familyNames->contains(explode('.', $wiki->getDomain())[1]);
+            return null === $wiki->getDomain()
+                || !$familyNames->contains(explode('.', $wiki->getDomain())[1]);
         });
     }
 
