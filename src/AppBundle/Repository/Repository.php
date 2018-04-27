@@ -259,7 +259,7 @@ abstract class Repository extends EntityRepository
 
         $dsn = $this->container->getParameter('cache.redis_dsn');
 
-        if (count((string)$dsn) === 0) {
+        if (strlen((string)$dsn) === 0) {
             return null;
         }
 
