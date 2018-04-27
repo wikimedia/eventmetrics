@@ -92,6 +92,8 @@
 	"program-created": "The program '$1' was successfully created.",
 	"program-deleted": "The program '$1' was deleted.",
 	"program-updated": "The program '$1' was successfully updated.",
+	"queued": "Queued",
+	"queued-desc": "The statistics are waiting to be generated...",
 	"remove": "Remove",
 	"report-issue": "Report an issue",
 	"retention": "$1 day retention",

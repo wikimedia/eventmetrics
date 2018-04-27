@@ -92,6 +92,8 @@
 	"program-created": "Message saying a program was created. $1 is the name of the program.",
 	"program-deleted": "Message saying a program was deleted. $1 is the name of the program.",
 	"program-updated": "Message saying a program was updated. $1 is the name of the program.",
+	"queued": "Text shown on the 'Update stats' button when a job to generate the statistics is queued.\n{{Identical|Queued}}",
+	"queued-desc": "Text shown while statistics are waiting to be generated.",
 	"remove": "Text for button to remove a row from a table.\n{{Identical|Remove}}",
 	"report-issue": "Link to report an issue or bug with the tool",
 	"retention": "Heading for the column listing the N-day retention of participants of a program. Shown in the 'My Programs' table. $1 is the number of days.",

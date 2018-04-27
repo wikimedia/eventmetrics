@@ -308,4 +308,18 @@ class EventRepository extends Repository
 
         return ltrim(implode(',', $usernames), ',');
     }
+
+    public function getJobStatus(Event $event)
+    {
+        $conn = $this->getGrantMetricsConnection();
+        $rqb = $conn->createQueryBuilder();
+        $eventId = $event->getId();
+
+        $rqb->select('job_started')
+            ->from('job')
+            ->where("job_event_id = $eventId");
+
+        $ret = $this->executeQueryBuilder($rqb, false)->fetch();
+        return isset($ret['job_started']) ? (bool)$ret['job_started'] : null;
+    }
 }
