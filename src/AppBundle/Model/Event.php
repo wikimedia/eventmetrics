@@ -549,6 +549,18 @@ class Event
         $this->wikis->removeElement($wiki);
     }
 
+    /**
+     * Does the Event have a wiki with the given domain?
+     * @param  string $domain Must be the normalized form, e.g. en.wikipedia, *.wikipedia
+     * @return bool
+     */
+    public function hasWikiWithDomain($domain)
+    {
+        return $this->wikis->filter(function ($wiki) use ($domain) {
+            return $domain === $wiki->getDomain();
+        })->count() > 0;
+    }
+
     /***************
      * WIKI FAMILY *
      ***************/
