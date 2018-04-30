@@ -319,7 +319,9 @@ class EventController extends EntityController
                 }, $wikis);
             },
             function ($wikis) use ($event, $eventWikiRepo) {
-                return $this->normalizeEventWikis($wikis, $event, $eventWikiRepo);
+                return array_filter(
+                    $this->normalizeEventWikis($wikis, $event, $eventWikiRepo)
+                );
             }
         );
     }
@@ -337,6 +339,11 @@ class EventController extends EntityController
     {
         return array_map(function ($wiki) use ($event, $eventWikiRepo) {
             $domain = $eventWikiRepo->getDomainFromEventWikiInput($wiki);
+
+            if ($event->hasWikiWithDomain($domain)) {
+                return null;
+            }
+
             $eventWiki = $eventWikiRepo->findOneBy([
                 'event' => $event,
                 'domain' => $domain,
