@@ -191,7 +191,6 @@ class EventTest extends KernelTestCase
         $event->addWiki($wiki);
 
         $this->assertEquals($wiki, $event->getWikis()[0]);
-        $this->assertTrue($event->hasWikiWithDomain('testwiki'));
 
         // Try adding the same one, which shouldn't duplicate.
         $event->addWiki($wiki);
@@ -200,7 +199,6 @@ class EventTest extends KernelTestCase
         // Removing the wiki.
         $event->removeWiki($wiki);
         $this->assertEquals(0, count($event->getWikis()));
-        $this->assertFalse($event->hasWikiWithDomain('testwiki'));
 
         // Double-remove shouldn't error out.
         $event->removeWiki($wiki);

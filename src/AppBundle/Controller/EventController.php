@@ -133,6 +133,7 @@ class EventController extends EntityController
             $this->event->getEnd(),
             $this->event->getTimezone()
         );
+
         foreach ($this->event->getParticipants()->toArray() as $participant) {
             new Participant($event, $participant->getUserId());
         }
@@ -261,12 +262,27 @@ class EventController extends EntityController
                 'choices' => $this->getTimezones(),
                 'choice_loader' => null,
             ])
-            ->add('submit', SubmitType::class);
+            ->add('submit', SubmitType::class)
+            ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onEventPreSubmit']);
 
         $builder->get('wikis')
             ->addModelTransformer($this->getWikiCallbackTransformer($event));
 
         return $builder->getForm();
+    }
+
+    /**
+     * Normalize the form data before submitting.
+     * @param FormEvent $formEvent
+     */
+    public function onEventPreSubmit(FormEvent $formEvent)
+    {
+        $event = $formEvent->getData();
+
+        // Remove duplicate and blank wikis.
+        $event['wikis'] = array_filter(array_values(array_unique($formEvent->getData()['wikis'])));
+
+        $formEvent->setData($event);
     }
 
     /**
@@ -328,7 +344,7 @@ class EventController extends EntityController
 
     /**
      * Take the list of wikis provided by the user (enwiki, en.wikipedia, or en.wikipedia.org)
-     * and normalize them to the database name (enwiki). This method then instantiates a new
+     * and normalize them to the domain (en.wikipedia). This method then instantiates a new
      * EventWiki if one did not already exist.
      * @param  string[]            $wikis As retrieved by the form.
      * @param  Event               $event
@@ -339,10 +355,6 @@ class EventController extends EntityController
     {
         return array_map(function ($wiki) use ($event, $eventWikiRepo) {
             $domain = $eventWikiRepo->getDomainFromEventWikiInput($wiki);
-
-            if ($event->hasWikiWithDomain($domain)) {
-                return null;
-            }
 
             $eventWiki = $eventWikiRepo->findOneBy([
                 'event' => $event,
