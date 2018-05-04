@@ -15,5 +15,6 @@ $(function () {
         }
     });
 
+    setupAutocompletion();
     setupColumnSorting();
 });
