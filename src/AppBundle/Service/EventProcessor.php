@@ -8,6 +8,7 @@ namespace AppBundle\Service;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
+use AppBundle\Repository\EventWikiRepository;
 use AppBundle\Model\EventWikiStat;
 use AppBundle\Repository\EventRepository;
 use DateTime;
@@ -209,15 +210,14 @@ class EventProcessor
     {
         $this->log("\nFetching number of pages created...");
 
-        $start = $this->event->getStartWithTimezone();
-        $end = $this->event->getEndWithTimezone();
-        $usernames = $this->getParticipantNames();
-
         $pagesImproved = 0;
         $pagesCreated = 0;
 
         $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
+
+        /** @var bool Whether or not EventWikiStats for pages-created or pages-improved are being saved. */
+        $pageStats = false;
 
         foreach ($this->event->getWikis() as $wiki) {
             // No stats for EventWikis that represent a family.
@@ -225,25 +225,78 @@ class EventProcessor
                 continue;
             }
 
-            $dbName = $ewRepo->getDbName($wiki);
-            $ret = $this->eventRepo->getNumPagesEdited(
-                $dbName,
-                $start,
-                $end,
-                $usernames
-            );
-            $pagesCreated += $ret['created'];
-            $pagesImproved += $ret['edited'];
-
-            $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $ret['created']);
-            $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $ret['edited']);
+            // Different stats based on wiki family.
+            switch ($wiki->getFamilyName()) {
+                case 'wikipedia':
+                    $this->setPagesEditedWikipedias($wiki, $ewRepo, $pagesCreated, $pagesImproved);
+                    $pageStats = true;
+                    break;
+                case 'commons':
+                    $this->setFilesUploadedCommons($wiki);
+                    break;
+            }
         }
 
-        $this->createOrUpdateEventStat('pages-created', $pagesCreated);
-        $this->createOrUpdateEventStat('pages-improved', $pagesImproved);
+        // Only save pages-created and pages-improved as EventStats
+        // if they were also saved as EventWikiStats.
+        if ($pageStats) {
+            $this->createOrUpdateEventStat('pages-created', $pagesCreated);
+            $this->createOrUpdateEventStat('pages-improved', $pagesImproved);
+        }
 
         $this->log(">> <info>Pages created: $pagesCreated</info>");
         $this->log(">> <info>Pages improved: $pagesImproved</info>");
+    }
+
+    /**
+     * Set pages created/improved for the given Wikipedia.
+     * @param EventWiki $wiki
+     * @param EventWikiRepository $ewRepo
+     * @param int &$pagesCreated
+     * @param int &$pagesImproved
+     */
+    private function setPagesEditedWikipedias(
+        EventWiki $wiki,
+        EventWikiRepository $ewRepo,
+        &$pagesCreated,
+        &$pagesImproved
+    ) {
+        $dbName = $ewRepo->getDbName($wiki);
+        $ret = $this->eventRepo->getNumPagesEdited(
+            $dbName,
+            $this->event->getStartWithTimezone(),
+            $this->event->getEndWithTimezone(),
+            $this->getParticipantNames()
+        );
+        $pagesCreated += $ret['created'];
+        $pagesImproved += $ret['edited'];
+
+        $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $ret['created']);
+        $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $ret['edited']);
+    }
+
+    /**
+     * Set the number of files uploaded on Commons.
+     * @param EventWiki $wiki
+     */
+    private function setFilesUploadedCommons(EventWiki $wiki)
+    {
+        $this->log("\n > Fetching files uploaded on Commons and global file usage...");
+
+        $start = $this->event->getStartWithTimezone();
+        $end = $this->event->getEndWithTimezone();
+
+        $ret = $this->eventRepo->getFilesUploadedCommons($start, $end, $this->getParticipantNames());
+        $this->createOrUpdateEventWikiStat($wiki, 'files-uploaded', $ret);
+        $this->createOrUpdateEventStat('files-uploaded', $ret);
+
+        $this->log(">> <info>Files uploaded: $ret</info>");
+
+        $ret = $this->eventRepo->getFileUsage($start, $end, $this->getParticipantNames());
+        $this->createOrUpdateEventWikiStat($wiki, 'file-usage', $ret);
+        $this->createOrUpdateEventStat('file-usage', $ret);
+
+        $this->log(">> <info>Pages where files are used: $ret</info>");
     }
 
     /**
@@ -252,11 +305,18 @@ class EventProcessor
      */
     private function getParticipantNames()
     {
+        // Quick cache.
+        static $parUsernames = null;
+        if ($parUsernames !== null) {
+            return $parUsernames;
+        }
+
         $userIds = $this->event->getParticipantIds();
-        return array_column(
+        $parUsernames = array_column(
             $this->eventRepo->getUsernamesFromIds($userIds),
             'user_name'
         );
+        return $parUsernames;
     }
 
     /**
@@ -294,7 +354,7 @@ class EventProcessor
      * @param string[] $usernames Usernames to search for.
      * @return int
      */
-    private function getNumUsersRetained($dbNames, $end, $usernames)
+    private function getNumUsersRetained(array $dbNames, $end, array $usernames)
     {
         // Create and display progress bar for looping through wikis.
         if ($this->output !== null) {
@@ -336,7 +396,7 @@ class EventProcessor
      * @param  ProgressBar &$progress The progress bar, used when running from a Command.
      * @return int Number of users retained.
      */
-    private function getNumUsersRetainedInner($dbNames, $usernames, $end, &$progress)
+    private function getNumUsersRetainedInner(array $dbNames, array $usernames, $end, &$progress)
     {
         $usersRetained = [];
 

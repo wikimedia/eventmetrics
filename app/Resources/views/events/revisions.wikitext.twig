@@ -1,3 +1,4 @@
+{% import 'macros/wiki.html.twig' as wiki %}
 == {{ event.displayTitle }} ==
 
 * '''{{ msg('wikis') }}''': {% for wiki in event.wikis %}{{ wiki.domain }}{% if not loop.last %}, {% endif %}{% endfor %}
@@ -24,7 +25,7 @@
 |-
 {% for rev in revisions %}
 | style="white-space: nowrap;" | ([https://{{ rev.wiki }}.org/wiki/Special:Diff/{{ rev.id }} {{ msg('diff')|lower }}]) [https://{{ rev.wiki }}.org/wiki/Special:PermaLink/{{ rev.id }} {% verbatim %}{{#dateformat:{% endverbatim %}{{ rev.timestamp|date_format|date('Y-m-d H:i') }}}}]
-| [https://{{ rev.wiki }}.org/wiki/{{ rev.page|replace({' ': '_'}) }} {{ rev.page }}]
+| {{ wiki.pageLink(wiki.pagePath(rev), rev.wiki, null, true) }}
 | {{ rev.wiki }}
 | [https://{{ rev.wiki }}.org/wiki/User:{{ rev.username|replace({' ': '_'}) }} {{ rev.username }}]
 | ''{{ rev.summary }}''

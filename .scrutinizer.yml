@@ -44,7 +44,7 @@ filter:
         - '*.min.js'
 
 build_failure_conditions:
-    - 'elements.rating(<= C).exists'               # No classes/methods with a rating of C or worse
+    - 'elements.rating(< D).exists'                # No classes/methods with a rating of F
 
     - 'patches.label("Doc Comments").exists'       # No doc comments patches allowed
     - 'patches.label("Spacing").new.count > 1'     # More than 1 new spacing patch

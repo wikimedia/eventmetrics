@@ -54,6 +54,7 @@ class AppExtension extends Extension
             new \Twig_SimpleFunction('isRTLLang', [$this, 'isRTLLang']),
             new \Twig_SimpleFunction('shortHash', [$this, 'gitShortHash']),
             new \Twig_SimpleFunction('hash', [$this, 'gitHash']),
+            new \Twig_SimpleFunction('wikiPath', [$this, 'wikiPath']),
         ];
     }
 

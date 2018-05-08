@@ -82,7 +82,7 @@ class EventWikiRepository extends Repository
     /**
      * Get the database name of the given EventWiki.
      * @param  EventWiki $wiki
-     * @return string[]
+     * @return string
      */
     public function getDbName(EventWiki $wiki)
     {

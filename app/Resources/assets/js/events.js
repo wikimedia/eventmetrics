@@ -158,6 +158,9 @@ function populateValidWikis()
         // 'All Wikipedias' option
         validWikis.push('*.wikipedia');
 
+        // Commons.
+        validWikis.push('commons.wikimedia');
+
         dfd.resolve(validWikis);
     });
 

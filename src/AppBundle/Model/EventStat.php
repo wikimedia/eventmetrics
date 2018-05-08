@@ -40,6 +40,10 @@ class EventStat
         'pages-improved',
 
         'retention',
+
+        // For Commons
+        'files-uploaded',
+        'file-usage',
     ];
 
     /**

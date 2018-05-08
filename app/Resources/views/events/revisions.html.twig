@@ -69,7 +69,8 @@
                             {{ wiki.pageLink('Special:PermaLink/' ~ rev.id, rev.wiki, rev.timestamp|date_localize) }}
                         </td>
                         <td>
-                            {{ wiki.pageLink(rev.page, rev.wiki) }}
+                            {# TODO: programatically fetch namespace name from meta API #}
+                            {{ wiki.pageLink(wiki.pagePath(rev), rev.wiki) }}
                         </td>
                         <td class="text-nowrap">{{ rev.wiki }}</td>
                         <td class="text-nowrap">

@@ -35,6 +35,10 @@ class EventWikiStat
     const METRIC_TYPES = [
         'pages-created',
         'pages-improved',
+
+        // For Commons
+        'files-uploaded',
+        'file-usage',
     ];
 
     /**

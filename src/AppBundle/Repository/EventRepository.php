@@ -67,7 +67,7 @@ class EventRepository extends Repository
      * @param  string[] $usernames
      * @return array With keys 'edited' and 'created'.
      */
-    public function getNumPagesEdited($dbName, DateTime $start, DateTime $end, $usernames)
+    public function getNumPagesEdited($dbName, DateTime $start, DateTime $end, array $usernames)
     {
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
@@ -91,6 +91,61 @@ class EventRepository extends Repository
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
 
         return $this->executeQueryBuilder($rqb)->fetch();
+    }
+
+    /**
+     * Get the number of files uploaded in the given time period by given users.
+     * @param  DateTime $start
+     * @param  DateTime $end
+     * @param  string[] $usernames
+     * @return int
+     */
+    public function getFilesUploadedCommons(DateTime $start, DateTime $end, array $usernames)
+    {
+        $start = $start->format('YmdHis');
+        $end = $end->format('YmdHis');
+
+        $conn = $this->getReplicaConnection();
+        $rqb = $conn->createQueryBuilder();
+
+        $rqb->select(['COUNT(DISTINCT(img_name)) AS count'])
+            ->from('commonswiki_p.image')
+            ->where('img_timestamp BETWEEN :start AND :end')
+            ->andwhere('img_user_text IN (:usernames)')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+
+        return (int)$this->executeQueryBuilder($rqb)->fetchColumn();
+    }
+
+    /**
+     * Get the number of unique mainspace pages across all projects that are using files
+     * uploaded by the given users that were uploaded during the given timeframe.
+     * @param  DateTime $start
+     * @param  DateTime $end
+     * @param  string[] $usernames
+     * @return int
+     */
+    public function getFileUsage(DateTime $start, DateTime $end, array $usernames)
+    {
+        $start = $start->format('YmdHis');
+        $end = $end->format('YmdHis');
+
+        $conn = $this->getReplicaConnection();
+        $rqb = $conn->createQueryBuilder();
+
+        $rqb->select(['COUNT(DISTINCT(img_name)) AS count'])
+            ->from('commonswiki_p.globalimagelinks')
+            ->join('commonswiki_p.globalimagelinks', 'commonswiki_p.image', null, 'gil_to = img_name')
+            ->where('img_timestamp BETWEEN :start AND :end')
+            ->andwhere('img_user_text IN (:usernames)')
+            ->andwhere('gil_page_namespace_id = 0')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+
+        return (int)$this->executeQueryBuilder($rqb)->fetchColumn();
     }
 
     /**
@@ -119,7 +174,7 @@ class EventRepository extends Repository
      * @param  string $family
      * @return string[] Domain names in the format of lang.project, e.g. en.wiktionary
      */
-    public function getCommonLangWikiDomains($usernames, $family)
+    public function getCommonLangWikiDomains(array $usernames, $family)
     {
         $conn = $this->getCentralAuthConnection();
         $rqb = $conn->createQueryBuilder();
@@ -144,7 +199,7 @@ class EventRepository extends Repository
      * @param string[] $usernames
      * @return string[]
      */
-    public function getUsersRetained($dbName, DateTime $start, $usernames)
+    public function getUsersRetained($dbName, DateTime $start, array $usernames)
     {
         $start = $start->format('YmdHis');
         $conn = $this->getReplicaConnection();
@@ -273,16 +328,21 @@ class EventRepository extends Repository
             $dbName = $eventWikiRepo->getDbName($wiki);
             $domain = $wiki->getDomain();
 
+            $nsClause = $dbName === 'commonswiki_p'
+                ? '6 AND rev_parent_id = 0' // Only creations of File pages.
+                : '0';
+
             $sqlClauses[] = "SELECT rev_id AS 'id',
                     rev_timestamp AS 'timestamp',
                     REPLACE(page_title, '_', ' ') AS 'page',
+                    page_namespace AS namespace,
                     rev_user_text AS 'username',
                     rev_comment AS 'summary',
                     '$domain' AS 'wiki'
                 FROM $dbName.$revisionTable
                 JOIN $dbName.$pageTable ON page_id = rev_page
                 WHERE rev_user_text IN ($usernames)
-                AND page_namespace = 0
+                AND page_namespace = $nsClause
                 AND rev_timestamp BETWEEN :startDate AND :endDate";
         }
 

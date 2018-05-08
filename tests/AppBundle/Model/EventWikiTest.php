@@ -101,7 +101,7 @@ class EventWikiTest extends PHPUnit_Framework_TestCase
         // Not a wiki family.
         $wiki = new EventWiki($this->event, 'test.wikipedia');
         $this->assertFalse($wiki->isFamilyWiki());
-        $this->assertNull($wiki->getFamilyName());
+        $this->assertEquals('wikipedia', $wiki->getFamilyName());
         $this->assertEquals([], $wiki->getChildWikis());
         $this->assertFalse($wiki->isChildWiki());
 

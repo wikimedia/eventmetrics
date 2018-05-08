@@ -42,6 +42,15 @@
         }
     }
 
+    .event-stats {
+        display: flex;
+    }
+
+    .event-stats--tile {
+        flex: auto;
+        margin: 0 5px;
+    }
+
     .event-wiki-stats .glyphicon {
         vertical-align: -1px;
     }

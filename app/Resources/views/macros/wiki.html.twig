@@ -6,7 +6,23 @@
     {% endspaceless %}
 {% endmacro %}
 
-{% macro pageLink(pageTitle, domain, label = null) %}{% spaceless %}
+{% macro pageLink(pageTitle, domain, label = null, wikitext = false) %}{% spaceless %}
     {% from _self import extLink as extLink %}
-    {{ extLink('https://' ~ domain ~ '.org/wiki/' ~ pageTitle, pageTitle, label) }}
+    {% if wikitext %}
+        [{{ 'https://' ~ domain ~ '.org/wiki/' ~ pageTitle|replace({' ': '_'}) }} {{ pageTitle|replace({'_': ' '}) }}]
+    {% else %}
+        {{ extLink('https://' ~ domain ~ '.org/wiki/' ~ pageTitle, pageTitle|replace({'_': ' '}), label) }}
+    {% endif %}
+{% endspaceless %}{% endmacro %}
+
+{##
+ # Given a revision, or a page title and namespace,
+ # generate the path including the namespace.
+ # TODO: programatically get namespace from meta API.
+ #}
+{% macro pagePath(rev, ns = null) %}{% spaceless %}
+    {% if rev is not iterable %}
+        {% set rev = {page: rev, namespace: ns} %}
+    {% endif %}
+    {{ (rev.namespace == 6 ? 'File:' : '') ~ rev.page }}
 {% endspaceless %}{% endmacro %}

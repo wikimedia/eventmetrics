@@ -32,7 +32,15 @@ class EventWiki
     /**
      * Regex pattern of the supported wikis.
      */
-    const VALID_WIKI_PATTERN = '/\w+\.wikipedia/';
+    const VALID_WIKI_PATTERN = '/\w+\.wikipedia|commons\.wikimedia/';
+
+    /**
+     * Valid names of wiki families.
+     */
+    const FAMILY_NAMES = [
+        'wikipedia',
+        'commons',
+    ];
 
     /**
      * @ORM\Id
@@ -122,12 +130,19 @@ class EventWiki
     }
 
     /**
-     * If this EventWiki represents a family, return the family name, null otherwise.
+     * Get the family name of this wiki ('wikipedia', 'commons', etc.).
      * @return string|null
      */
     public function getFamilyName()
     {
-        return $this->isFamilyWiki() ? substr($this->domain, 2) : null;
+        foreach (self::FAMILY_NAMES as $family) {
+            if (strpos($this->domain, $family) !== false) {
+                return $family;
+            }
+        }
+
+        // Shouldn't happen...
+        return null;
     }
 
     /**
@@ -137,11 +152,11 @@ class EventWiki
      */
     public function getChildWikis()
     {
-        $family = $this->getFamilyName();
-
-        if (null === $family) {
+        if (!$this->isFamilyWiki()) {
             return [];
         }
+
+        $family = $this->getFamilyName();
 
         return $this->event->getWikis()->filter(function ($wiki) use ($family) {
             return substr($this->domain, 2) === $family && $wiki->getDomain() !== $this->domain;

@@ -1,13 +1,12 @@
-{% set colSize = 12 // (event.statistics|length + 1) %}
 <div class="row event-stats">
-    <div class="col-sm-{{ colSize }} text-center{% if colSize is even and colSize < 12 %} col-sm-offset-1{% endif %}">
+    <div class="text-center event-stats--tile">
         <h4>{{ msg('participants') }}</h4>
         <h3>{{ event.numParticipants|num_format }}</h3>
     </div>
     {% for metric, offset in event.availableMetrics %}
         {% set stat = event.getStatistic(metric) %}
         {% if stat is not empty %}
-            <div class="col-sm-{{ colSize }} text-center">
+            <div class="text-center event-stats--tile">
                 <h4{% if msgExists(stat.metric ~ '-desc', [stat.offset]) %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}" class="event-metric-desc"{% endif %}>
                     {{ msg(stat.metric, [stat.offset]) }}
                     {% if msgExists(stat.metric ~ '-desc', [stat.offset]) %}

@@ -51,6 +51,8 @@ class Event
         'retention' => 7,
         'pages-created' => null,
         'pages-improved' => null,
+        'files-uploaded' => null,
+        'file-usage' => null,
     ];
 
     /**
