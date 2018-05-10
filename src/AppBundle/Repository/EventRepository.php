@@ -38,7 +38,7 @@ class EventRepository extends Repository
     public function getNewEditors(Event $event)
     {
         $userIds = $event->getParticipantIds();
-        $offset = Event::getAvailableMetrics()['new-editors'];
+        $offset = Event::getAllAvailableMetrics()['new-editors'];
         $start = (new DateTime($event->getStart()->format('YmdHis')))
             ->sub(new DateInterval('P'.$offset.'D'))
             ->format('YmdHis');

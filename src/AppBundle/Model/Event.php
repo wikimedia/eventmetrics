@@ -56,6 +56,16 @@ class Event
     ];
 
     /**
+     * This defines what metrics are available to what wiki families.
+     * '*' means all wikis are applicable.
+     */
+    const WIKI_FAMILY_METRIC_MAP = [
+        '*' => ['new-editors', 'retention'],
+        'wikipedia' => ['pages-created', 'pages-improved'],
+        'commons' => ['files-uploaded', 'file-usage'],
+    ];
+
+    /**
      * NOTE: Some methods pertaining to titles and Participants
      * live in the TitleUserTrait trait.
      */
@@ -194,19 +204,6 @@ class Event
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Get the available metric types and their default offset values.
-     * @return array
-     * @static
-     *
-     * No need to test a hard-coded list.
-     * @codeCoverageIgnore
-     */
-    public static function getAvailableMetrics()
-    {
-        return self::AVAILABLE_METRICS;
     }
 
     /**
@@ -404,6 +401,42 @@ class Event
         foreach ($this->wikis->toArray() as $wiki) {
             $wiki->clearStatistics();
         }
+    }
+
+    /**
+     * Get the metric types available to this event, based on associated wikis,
+     * and their default offset values.
+     * @return array
+     */
+    public function getAvailableMetrics()
+    {
+        $metricMap = self::WIKI_FAMILY_METRIC_MAP;
+
+        // Start with metrics available to all wiki families.
+        $metricKeys = $metricMap['*'];
+
+        foreach ($this->wikis as $wiki) {
+            if (isset($metricMap[$wiki->getFamilyName()])) {
+                $metricKeys = array_merge(
+                    $metricKeys,
+                    $metricMap[$wiki->getFamilyName()]
+                );
+            }
+        }
+
+        // Return as associative array with the offsets as the values.
+        return array_filter(self::AVAILABLE_METRICS, function ($offset, $metric) use ($metricKeys) {
+            return in_array($metric, $metricKeys);
+        }, ARRAY_FILTER_USE_BOTH);
+    }
+
+    /**
+     * Get all metrics available to all events, regardless of associated wikis.
+     * @return string[]
+     */
+    public static function getAllAvailableMetrics()
+    {
+        return self::AVAILABLE_METRICS;
     }
 
     /**

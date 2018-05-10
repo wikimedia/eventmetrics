@@ -425,10 +425,18 @@ class EventController extends EntityController
             return $event->getStatistics();
         }
 
-        return array_map(function ($metric) use ($event) {
-            $offset = Event::getAvailableMetrics()[$metric];
-            return new EventStat($event, $metric, null, $offset);
-        }, EventStat::getMetricTypes());
+        $availableMetrics = $event->getAvailableMetrics();
+        $stats = [];
+
+        foreach (EventStat::getMetricTypes() as $metric) {
+            if (!in_array($metric, array_keys($availableMetrics))) {
+                continue;
+            }
+
+            $stats[] = new EventStat($event, $metric, null, $availableMetrics[$metric]);
+        }
+
+        return $stats;
     }
 
     /**

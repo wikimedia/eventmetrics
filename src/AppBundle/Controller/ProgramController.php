@@ -55,7 +55,6 @@ class ProgramController extends EntityController
             'programs' => $programs,
             'programRepo' => $programRepo,
             'gmTitle' => 'my-programs',
-            'retentionThreshold' => Event::getAvailableMetrics()['retention'],
             'metrics' => $organizerRepo->getUniqueMetrics($organizer),
         ]);
     }
@@ -147,7 +146,6 @@ class ProgramController extends EntityController
 
         return $this->render('programs/show.html.twig', [
             'program' => $this->program,
-            'retentionThreshold' => Event::getAvailableMetrics()['retention'],
             'metrics' => $programRepo->getUniqueMetrics($this->program),
             'isOrganizer' => $this->authUserIsOrganizer($this->program),
         ]);

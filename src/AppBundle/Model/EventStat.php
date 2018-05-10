@@ -29,17 +29,23 @@ class EventStat
      */
     use StatTrait;
 
-    // Allowed metric types, that also serve as the defaults when no EventStats
-    // are associated with an Event. The order here is important. It should
-    // match whatever order things are processed in EventProcessor.
+    /**
+     * Allowed metric types. Keys are the i18n key for the metric, and is what
+     * is stored in the database. Values are the applicable wikis for that type
+     * of metric, with null meaning all wikis.
+     *
+     * These also serve as the defaults when no EventStats are associated with
+     * an Event, based on the configured wiki(s).
+     *
+     * @see StatTrait Shared methods that use this constant.
+     */
     const METRIC_TYPES = [
         'new-editors',
+        'retention',
 
         // These are also stored on a per-wiki basis as a EventWikiStat
         'pages-created',
         'pages-improved',
-
-        'retention',
 
         // For Commons
         'files-uploaded',

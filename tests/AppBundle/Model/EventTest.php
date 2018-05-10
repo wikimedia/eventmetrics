@@ -304,5 +304,16 @@ class EventTest extends KernelTestCase
 
         // Family EventWiki should still be there.
         $this->assertEquals([$family], $event->getFamilyWikis()->toArray());
+
+        // Statistics available based on associated families.
+        $this->assertEquals(
+            [
+                'new-editors' => 15,
+                'retention' => 7,
+                'pages-created' => null,
+                'pages-improved' => null
+            ],
+            $event->getAvailableMetrics()
+        );
     }
 }

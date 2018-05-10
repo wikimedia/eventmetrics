@@ -185,7 +185,7 @@ class EventProcessor
     {
         $this->log("\nFetching number of new editors...");
         $numNewEditors = count($this->getNewEditors());
-        $newEditorOffset = Event::getAvailableMetrics()['new-editors'];
+        $newEditorOffset = Event::getAllAvailableMetrics()['new-editors'];
         $this->createOrUpdateEventStat('new-editors', $numNewEditors, $newEditorOffset);
         $this->log(">> <info>New editors: $numNewEditors</info>");
     }
@@ -326,7 +326,7 @@ class EventProcessor
     {
         $this->log("\nFetching retention...");
 
-        $retentionOffset = Event::getAvailableMetrics()['retention'];
+        $retentionOffset = Event::getAllAvailableMetrics()['retention'];
         $end = $this->event->getEndWithTimezone()->modify("+$retentionOffset days");
 
         // Only calculate for new editors.

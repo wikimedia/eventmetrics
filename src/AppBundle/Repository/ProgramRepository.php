@@ -32,7 +32,7 @@ class ProgramRepository extends Repository
 
     /**
      * Get the unique metrics for this Program, across all Events.
-     * This also combines the configured metrics in Event::getAvailableMetrics(),
+     * This also combines the configured metrics in Event::getAllAvailableMetrics(),
      * regardless if the stats exist on the Program or its Events.
      * @param  Program $program
      * @return string[]
@@ -54,7 +54,7 @@ class ProgramRepository extends Repository
         $metrics = array_merge($eventMetrics, $eventWikiMetrics);
 
         // Start with available metrics.
-        $uniqueMetrics = Event::getAvailableMetrics();
+        $uniqueMetrics = Event::getAllAvailableMetrics();
 
         // Merge in any differing metrics that exist on the Program.
         foreach ($metrics as $metric) {
