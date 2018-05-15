@@ -32,8 +32,8 @@ class ProgramRepository extends Repository
 
     /**
      * Get the unique metrics for this Program, across all Events.
-     * This also combines the configured metrics in Event::getAllAvailableMetrics(),
-     * regardless if the stats exist on the Program or its Events.
+     * This also uses the configured metrics in Event::getAllAvailableMetrics()
+     * to determine what order the metrics should be presented.
      * @param  Program $program
      * @return string[]
      */
@@ -51,22 +51,22 @@ class ProgramRepository extends Repository
             ->fetchAll(\PDO::FETCH_NUM);
         $eventWikiMetrics = $this->getEventWikiMetrics($rqb, $eventIds);
 
-        $metrics = array_merge($eventMetrics, $eventWikiMetrics);
+        $mergedMetrics = array_merge($eventMetrics, $eventWikiMetrics);
+        $availableMetrics = array_keys(Event::getAllAvailableMetrics());
+        $metrics = [];
 
-        // Start with available metrics.
-        $uniqueMetrics = Event::getAllAvailableMetrics();
-
-        // Merge in any differing metrics that exist on the Program.
-        foreach ($metrics as $metric) {
-            // For each $metric, the first element is the metric name,
-            // and the second element is the offset value.
-            if (!isset($metrics[$metric[0]])) {
-                $uniqueMetrics[$metric[0]] = $metric[1];
+        // Use available metrics to build our array in the order we want them
+        // to be shown in the interface.
+        foreach ($availableMetrics as $metric) {
+            foreach ($mergedMetrics as $row) {
+                if ($row[0] === $metric && !isset($metrics[$row[0]])) {
+                    // Keys are the metric name, values are the offset.
+                    $metrics[$row[0]] = $row[1];
+                }
             }
         }
 
-        // Include configured metrics.
-        return $uniqueMetrics;
+        return $metrics;
     }
 
     /**

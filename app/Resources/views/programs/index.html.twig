@@ -65,7 +65,7 @@
                             </td>
                             {% for metric in metrics|keys %}
                                 <td class="sort-entry--{{ metric }} text-nowrap" data-value="{{ program.statistic(metric) }}">
-                                    {{ (program.statistic(metric) ? program.statistic(metric)|num_format : '&ndash;')|raw }}
+                                    {{ (program.statistic(metric) is not empty ? program.statistic(metric)|num_format : '&ndash;')|raw }}
                                 </td>
                             {% endfor %}
                         </tr>

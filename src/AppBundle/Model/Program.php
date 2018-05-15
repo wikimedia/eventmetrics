@@ -320,11 +320,11 @@ class Program
     /**
      * Get a combined statistic about all Events in this Program with the given metric.
      * @param string $metric Name of metric, one of EventStat::METRIC_TYPES.
-     * @return int Will be 0 if metric was not found.
+     * @return int|null Will be null if metric was not found.
      */
     public function getStatistic($metric)
     {
         $stats = $this->getStatistics();
-        return isset($stats[$metric]) ? $stats[$metric] : 0;
+        return isset($stats[$metric]) ? $stats[$metric] : null;
     }
 }
