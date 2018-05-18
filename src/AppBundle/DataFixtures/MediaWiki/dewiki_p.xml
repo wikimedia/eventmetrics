@@ -1,0 +1,142 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="en">
+<siteinfo>
+    <sitename>Wikipedia</sitename>
+    <dbname>dewiki_p</dbname>
+    <namespaces>
+        <namespace key="-2" case="first-letter">Media</namespace>
+        <namespace key="-1" case="first-letter">Special</namespace>
+        <namespace key="0" case="first-letter"/>
+        <namespace key="1" case="first-letter">Talk</namespace>
+        <namespace key="6" case="first-letter">File</namespace>
+        <namespace key="7" case="first-letter">File talk</namespace>
+    </namespaces>
+</siteinfo>
+<!-- Article created by MusikAnimal (old editor) before the event began, edited by NiharikaKohli (new editor) during the event. -->
+<page>
+    <title>Awesome article (dewiki)</title>
+    <ns>0</ns>
+    <id>5</id>
+    <revision>
+        <id>1</id>
+        <timestamp>2013-12-10T18:41:03Z</timestamp>
+        <contributor>
+            <username>MusikAnimal</username>
+            <id>50</id>
+        </contributor>
+        <comment>test summary</comment>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="7">testing</text>
+        <sha1>pr0s8e18148pxhgjfa0gjrvpy8fiyxc</sha1>
+    </revision>
+    <revision>
+        <id>2</id>
+        <parentid>1</parentid>
+        <timestamp>2014-01-23T20:07:48Z</timestamp>
+        <contributor>
+            <username>NiharikaKohli</username>
+            <id>51</id>
+        </contributor>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="27">This is some test content</text>
+        <sha1>f242lcvbjl36q4b34dz80h8akfioavm</sha1>
+    </revision>
+</page>
+<!-- Article created by MusikAnimal (old editor) during the event, edited by Samwilson (old editor) after the event. -->
+<page>
+    <title>Weeee (dewiki)</title>
+    <ns>0</ns>
+    <id>10</id>
+    <revision>
+        <id>3</id>
+        <timestamp>2014-01-23T19:41:03Z</timestamp>
+        <contributor>
+            <username>MusikAnimal</username>
+            <id>50</id>
+        </contributor>
+        <comment>test summary</comment>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="7">testing</text>
+        <sha1>pr0s8e18148pxhgjfa0gjrvpy8fiyxc</sha1>
+    </revision>
+    <revision>
+        <id>4</id>
+        <parentid>4</parentid>
+        <timestamp>2014-01-30T16:07:48Z</timestamp>
+        <contributor>
+            <username>Samwilson</username>
+            <id>53</id>
+        </contributor>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="27">This is should not be counted toward retention</text>
+        <sha1>f242lcvbjl36q4b34dz80h8akfioavm</sha1>
+    </revision>
+</page>
+<!-- Article created by Samwilson (old editor) during the event, edited by NiharikaKohli (new editor) after the event. -->
+<page>
+    <title>Foo bar baz (dewiki)</title>
+    <ns>0</ns>
+    <id>15</id>
+    <revision>
+        <id>5</id>
+        <timestamp>2014-01-23T20:41:03Z</timestamp>
+        <contributor>
+            <username>Samwilson</username>
+            <id>53</id>
+        </contributor>
+        <comment>test summary</comment>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="7">testing</text>
+        <sha1>pr0s8e18148pxhgjfa0gjrvpy8fiyxc</sha1>
+    </revision>
+    <revision>
+        <id>6</id>
+        <parentid>4</parentid>
+        <timestamp>2014-02-01T16:07:48Z</timestamp>
+        <contributor>
+            <username>NiharikaKohli</username>
+            <id>51</id>
+        </contributor>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="27">This should be counted toward retention</text>
+        <sha1>f242lcvbjl36q4b34dz80h8akfioavm</sha1>
+    </revision>
+</page>
+<!-- Article created by non-participant during the event, edited by Samwilson (old editor) during the event. -->
+<page>
+    <title>This one doesn't count (dewiki)</title>
+    <ns>0</ns>
+    <id>20</id>
+    <revision>
+        <id>7</id>
+        <timestamp>2014-01-23T20:45:03Z</timestamp>
+        <contributor>
+            <username>CIUser</username>
+            <id>1</id>
+        </contributor>
+        <comment>test summary</comment>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="7">testing</text>
+        <sha1>pr0s8e18148pxhgjfa0gjrvpy8fiyxc</sha1>
+    </revision>
+    <revision>
+        <id>8</id>
+        <parentid>6</parentid>
+        <timestamp>2014-01-23T21:07:48Z</timestamp>
+        <contributor>
+            <username>Samwilson</username>
+            <id>53</id>
+        </contributor>
+        <model>wikitext</model>
+        <format>text/x-wiki</format>
+        <text xml:space="preserve" bytes="27">This edit counts, but not the page creation.</text>
+        <sha1>f242lcvbjl36q4b34dz80h8akfioavm</sha1>
+    </revision>
+</page>
+</mediawiki>

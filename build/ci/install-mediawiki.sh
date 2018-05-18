@@ -41,6 +41,7 @@ php maintenance/createAndPromote.php Samwilson 1234abcd --wiki dewiki_p
 # so we'll use just one wiki (enwiki_p) in our tests, for now...
 
 php maintenance/importDump.php --conf LocalSettings.php $originalDirectory/src/AppBundle/DataFixtures/MediaWiki/enwiki_p.xml --wiki enwiki_p
+php maintenance/importDump.php --conf LocalSettings.php $originalDirectory/src/AppBundle/DataFixtures/MediaWiki/dewiki_p.xml --wiki dewiki_p
 
 echo '
 require_once "$IP/extensions/CentralAuth/CentralAuth.php";
@@ -54,6 +55,7 @@ $wgCentralAuthDryRun = false;
 $wgConf = new SiteConfiguration;
 $wgLocalDatabases = [
     "enwiki_p",
+    "dewiki_p",
 ];
 $wgConf->wikis = $wgLocalDatabases;
 $wgConf->suffixes = ["wiki_p"];
