@@ -27,10 +27,15 @@ composer self-update
 composer install
 
 mysql -e 'CREATE DATABASE enwiki_p;'
+mysql -e 'CREATE DATABASE dewiki_p;'
 php maintenance/install.php --dbtype mysql --dbuser root --dbname enwiki_p --dbpath $(pwd) --pass CIPass Wikipedia CIUser
+php maintenance/install.php --dbtype mysql --dbuser root --dbname dewiki_p --dbpath $(pwd) --pass CIPass Wikipedia CIUser
 php maintenance/createAndPromote.php MusikAnimal 1234abcd --wiki enwiki_p
 php maintenance/createAndPromote.php NiharikaKohli 1234abcd --wiki enwiki_p
 php maintenance/createAndPromote.php Samwilson 1234abcd --wiki enwiki_p
+php maintenance/createAndPromote.php MusikAnimal 1234abcd --wiki dewiki_p
+php maintenance/createAndPromote.php NiharikaKohli 1234abcd --wiki dewiki_p
+php maintenance/createAndPromote.php Samwilson 1234abcd --wiki dewiki_p
 
 # Installing multiple installations of MediaWiki takes a long time,
 # so we'll use just one wiki (enwiki_p) in our tests, for now...
@@ -66,10 +71,12 @@ $wgConf->settings = [
 
     "wgScriptPath" => [
         "enwiki_p" => "/enwiki",
+        "dewiki_p" => "/dewiki",
     ],
 
     "wgArticlePath" => [
         "enwiki_p" => "/enwiki/\$1", //for short urls
+        "dewiki_p" => "/dewiki/\$1",
     ],
 
     "wgLanguageCode" => [
