@@ -17,6 +17,7 @@ After cloning the repository, run:
     * Use `grantmetrics` as the `database_name`.
     * `database.replica.is_wikimedia` tells the tests to go off of live replica data when making assertions, rather than the fixtures. Set this to `1` if you are working locally and are connected to the replicas.
     * Fill out your credentials accordingly.
+    * `app.logged_in_user` is used to mock the current user, instead of going through OAuth. Must be a valid Wikimedia username. In production this should be `null`.
 * `php bin/console server:start` to start the server.
 * You should be up and running at http://localhost:8000
 

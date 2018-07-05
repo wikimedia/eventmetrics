@@ -46,8 +46,8 @@ class DefaultController extends Controller
      * @Route("/api/background/{windowSize}", name="BackgroundImage")
      * @Route("/api/background/{windowSize}/", name="BackgroundImageSlash")
      * @param int $windowSize Device's screen size, so that we don't
-     *                        download imagery larger than what's necessary.
-     *
+     *   download imagery larger than what's necessary.
+     * @return JsonResponse
      * This requires access to the API, and while we have a MediaWiki install
      * with the continuous integration build, we don't want to bother with
      * uploading images to test this just-for-fun method.
@@ -99,6 +99,15 @@ class DefaultController extends Controller
      */
     public function loginAction()
     {
+        $mockUser = $this->container->getParameter('app.logged_in_user');
+
+        if (isset($mockUser)) {
+            $this->get('session')->set('logged_in_user', (object) [
+                'username' => $mockUser
+            ]);
+            return new RedirectResponse('/programs');
+        }
+
         try {
             list($next, $token) = $this->getOauthClient()->initiate();
         } catch (Exception $oauthException) {
@@ -183,6 +192,7 @@ class DefaultController extends Controller
     /**
      * Log out the user and return to the homepage.
      * @Route("/logout", name="logout")
+     * @return RedirectResponse
      */
     public function logoutAction()
     {

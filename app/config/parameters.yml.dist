@@ -56,3 +56,7 @@ parameters:
     # Show a notice at the top of the interface, on all pages. The 'style' is the Bootstrap alert type.
     app.notice.text: ~
     app.notice.style: danger
+
+    # Mock the logged in user (for development purposes, to avoid setting up OAuth).
+    # Must be a valid Wikimedia username.
+    app.logged_in_user: null
