@@ -8,6 +8,7 @@ namespace AppBundle\Controller;
 use AppBundle\Model\Event;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
+use AppBundle\Repository\OrganizerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -84,7 +85,8 @@ abstract class EntityController extends Controller
      */
     private function setProgram()
     {
-        if ($programTitle = $this->request->get('programTitle')) {
+        $programTitle = $this->request->get('programTitle');
+        if ($programTitle) {
             $this->program = $this->em->getRepository(Program::class)
                 ->findOneBy(['title' => $programTitle]);
 
@@ -100,7 +102,8 @@ abstract class EntityController extends Controller
      */
     private function setEvent()
     {
-        if ($eventTitle = $this->request->get('eventTitle')) {
+        $eventTitle = $this->request->get('eventTitle');
+        if ($eventTitle) {
             $this->event = $this->em->getRepository(Event::class)
                 ->findOneBy([
                     'program' => $this->program,
@@ -119,7 +122,9 @@ abstract class EntityController extends Controller
      */
     protected function getOrganizer()
     {
+        /** @var OrganizerRepository $organizerRepo */
         $organizerRepo = $this->em->getRepository(Organizer::class);
+
         $organizerRepo->setContainer($this->container);
         return $organizerRepo->getOrganizerByUsername(
             $this->get('session')->get('logged_in_user')->username
@@ -172,7 +177,7 @@ abstract class EntityController extends Controller
             return;
         }
 
-        $this->addFlash('danger', /** @scrutinizer ignore-type */ [
+        $this->addFlash('danger', [
             'please-login',
         ]);
 

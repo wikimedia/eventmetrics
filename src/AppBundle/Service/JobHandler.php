@@ -6,7 +6,6 @@
 namespace AppBundle\Service;
 
 use AppBundle\Model\Job;
-use AppBundle\Service\EventProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;

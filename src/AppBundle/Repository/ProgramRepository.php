@@ -6,13 +6,9 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Model\Event;
-use AppBundle\Model\EventStat;
-use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\ORM\EntityManager;
 
 /**
  * This class supplies and fetches data for the Program class.
@@ -39,7 +35,7 @@ class ProgramRepository extends Repository
      */
     public function getUniqueMetrics(Program $program)
     {
-        $rqb = $this->getGrantmetricsConnection()->createQueryBuilder();
+        $rqb = $this->getGrantMetricsConnection()->createQueryBuilder();
 
         $eventIds = $program->getEventIds();
 
@@ -100,7 +96,7 @@ class ProgramRepository extends Repository
      */
     public function getNumParticipants(Program $program)
     {
-        $rqb = $this->getGrantmetricsConnection()->createQueryBuilder();
+        $rqb = $this->getGrantMetricsConnection()->createQueryBuilder();
 
         $eventIds = $program->getEventIds();
 

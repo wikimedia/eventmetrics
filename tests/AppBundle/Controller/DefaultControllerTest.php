@@ -17,8 +17,8 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
     {
         $this->crawler = $this->client->request('GET', '/');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(200, $this->response->getStatusCode());
-        $this->assertContains('Welcome to Grant Metrics', $this->crawler->filter('.splash-dialog')->text());
+        static::assertEquals(200, $this->response->getStatusCode());
+        static::assertContains('Welcome to Grant Metrics', $this->crawler->filter('.splash-dialog')->text());
     }
 
     /**
@@ -30,7 +30,7 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
 
         $this->crawler = $this->client->request('GET', '/');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(302, $this->response->getStatusCode());
+        static::assertEquals(302, $this->response->getStatusCode());
     }
 
     /**
@@ -42,8 +42,8 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
 
         $this->crawler = $this->client->request('GET', '/logout');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(302, $this->response->getStatusCode());
-        $this->assertNull(
+        static::assertEquals(302, $this->response->getStatusCode());
+        static::assertNull(
             $this->container->get('session')->get('logged_in_user')
         );
     }
@@ -54,9 +54,9 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
     public function testOAuthCallback()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/oauth_callback');
+        $client->request('GET', '/oauth_callback');
 
         // Callback should 404 since we didn't give it anything.
-        $this->assertEquals(404, $client->getResponse()->getStatusCode());
+        static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 }

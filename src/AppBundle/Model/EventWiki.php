@@ -148,23 +148,23 @@ class EventWiki
     /**
      * If this EventWiki represents a family, return all EventWikis
      * of the Event that belong to the family.
-     * @return EventWiki[]
+     * @return ArrayCollection of EventWikis
      */
     public function getChildWikis()
     {
         if (!$this->isFamilyWiki()) {
-            return [];
+            return new ArrayCollection([]);
         }
 
         $family = $this->getFamilyName();
 
-        return $this->event->getWikis()->filter(function ($wiki) use ($family) {
+        return $this->event->getWikis()->filter(function (EventWiki $wiki) use ($family) {
             return substr($this->domain, 2) === $family && $wiki->getDomain() !== $this->domain;
         });
     }
 
     /**
-     * Is this EventWiki a child of family EventWiki that belongs to the same Event?
+     * Is this EventWiki a child of a family EventWiki that belongs to the same Event?
      * @return bool
      */
     public function isChildWiki()
@@ -192,7 +192,7 @@ class EventWiki
      */
     public function getStatistic($metric)
     {
-        $ewStats = array_filter($this->stats->toArray(), function ($stat) use ($metric) {
+        $ewStats = array_filter($this->stats->toArray(), function (EventWikiStat $stat) use ($metric) {
             return $stat->getMetric() === $metric;
         });
         return count($ewStats) > 0 ? reset($ewStats) : null;

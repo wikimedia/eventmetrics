@@ -9,16 +9,13 @@ use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Participant;
-use AppBundle\Model\Program;
+use AppBundle\Repository\EventRepository;
 use AppBundle\Repository\EventWikiRepository;
 use AppBundle\Repository\ParticipantRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,9 +24,8 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
@@ -103,7 +99,7 @@ class EventController extends EntityController
         $form = $this->handleFormSubmission($this->event);
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
-            $this->addFlash('success', /** @scrutinizer ignore-type */ [
+            $this->addFlash('success', [
                 'event-updated',
                 $this->event->getDisplayTitle(),
             ]);
@@ -157,7 +153,7 @@ class EventController extends EntityController
     public function deleteAction()
     {
         // Flash message will be shown at the top of the page.
-        $this->addFlash('danger', /** @scrutinizer ignore-type */ [
+        $this->addFlash('danger', [
             'event-deleted',
             $this->event->getDisplayTitle(),
         ]);
@@ -173,7 +169,7 @@ class EventController extends EntityController
     /**
      * Handle creation or updating of an Event on form submission.
      * @param Event $event
-     * @return Form|RedirectResponse
+     * @return FormInterface|RedirectResponse
      */
     private function handleFormSubmission(Event $event)
     {
@@ -221,7 +217,7 @@ class EventController extends EntityController
     /**
      * Build a form for the given event.
      * @param Event $event
-     * @return Form
+     * @return FormInterface
      */
     private function getFormForEvent(Event $event)
     {
@@ -330,7 +326,7 @@ class EventController extends EntityController
             function ($wikiObjects) {
                 // To domain names for the form, from EventWikis.
                 $wikis = $wikiObjects->toArray();
-                return array_map(function ($wiki) {
+                return array_map(function (EventWiki $wiki) {
                     return $wiki->getDomain();
                 }, $wikis);
             },
@@ -391,13 +387,14 @@ class EventController extends EntityController
         $form = $this->handleParticipantForm();
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
-            $this->addFlash('success', /** @scrutinizer ignore-type */ [
+            $this->addFlash('success', [
                 'event-updated',
                 $this->event->getDisplayTitle(),
             ]);
             return $form;
         }
 
+        /** @var EventRepository $eventRepo */
         $eventRepo = $this->em->getRepository(Event::class);
 
         return $this->render('events/show.html.twig', [
@@ -441,8 +438,7 @@ class EventController extends EntityController
 
     /**
      * Handle submission of form to add/remove participants.
-     * @param  Event $event
-     * @return Form|RedirectResponse
+     * @return FormInterface|RedirectResponse
      */
     private function handleParticipantForm()
     {
@@ -471,7 +467,7 @@ class EventController extends EntityController
     /**
      * Get the participant list form. Shown on the 'show' page.
      * @param  Event $event
-     * @return Form
+     * @return FormInterface
      */
     private function getParticipantForm(Event $event)
     {
@@ -542,7 +538,7 @@ class EventController extends EntityController
      * @param  Event    $event
      * @param  string[] $row As fetched from ParticipantRepository::getRowsFromUsernames().
      * @param  ParticipantRepository $participantRepo
-     * @return Participant[]
+     * @return Participant
      */
     private function getParticipantFromRow(Event $event, $row, ParticipantRepository $participantRepo)
     {
@@ -583,10 +579,11 @@ class EventController extends EntityController
         return new CallbackTransformer(
             // Transform to the form.
             function ($participantObjects) {
-                $parIds = array_map(function ($participant) {
+                $parIds = array_map(function (Participant $participant) {
                     return $participant->getUserId();
                 }, $participantObjects->toArray());
 
+                /** @var EventRepository $eventRepo */
                 $eventRepo = $this->em->getRepository(Event::class);
                 $eventRepo->setContainer($this->container);
 
@@ -596,8 +593,7 @@ class EventController extends EntityController
             },
             // Transform from the form.
             function ($participantNames) use ($event) {
-
-                /** @var ParticipantRepository Repo for a Participant */
+                /** @var ParticipantRepository $participantRepo */
                 $participantRepo = $this->em->getRepository(Participant::class);
                 $participantRepo->setContainer($this->container);
 

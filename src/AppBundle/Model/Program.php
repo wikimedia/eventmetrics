@@ -8,7 +8,6 @@ namespace AppBundle\Model;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Model\Traits\TitleUserTrait;
 
@@ -140,7 +139,7 @@ class Program
      */
     public function getOrganizerIds()
     {
-        return array_map(function ($organizer) {
+        return array_map(function (Organizer $organizer) {
             return $organizer->getUserId();
         }, $this->organizers->toArray());
     }
@@ -151,7 +150,7 @@ class Program
      */
     public function getOrganizerNames()
     {
-        return array_map(function ($organizer) {
+        return array_map(function (Organizer $organizer) {
             return $organizer->getUsername();
         }, $this->organizers->toArray());
     }
@@ -190,7 +189,7 @@ class Program
             }
         }
 
-        usort($nonPrimaryOrgs, function ($a, $b) {
+        usort($nonPrimaryOrgs, function (Organizer $a, Organizer $b) {
             return strnatcmp($a->getUsername(), $b->getUsername());
         });
 
@@ -248,7 +247,7 @@ class Program
      */
     public function getEventIds()
     {
-        return array_map(function ($event) {
+        return array_map(function (Event $event) {
             return $event->getId();
         }, $this->events->toArray());
     }

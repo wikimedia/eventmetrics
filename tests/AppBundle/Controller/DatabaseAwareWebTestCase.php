@@ -8,10 +8,11 @@ namespace Tests\AppBundle\Controller;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Client;
 
 /**
  * This ensures fixtures are loaded with every functional test.
@@ -33,7 +34,7 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
      */
     private $fixtureLoader;
 
-    /** @var Container The Symfony container. */
+    /** @var ContainerInterface The Symfony container. */
     protected $container;
 
     /** @var Client The Symfony client. */
@@ -47,20 +48,19 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
 
     /**
      * The web crawler used for browsing and capturing elements on the page.
-     * @var Symfony\Component\DomCrawler\Crawler
+     * @var \Symfony\Component\DomCrawler\Crawler
      */
     protected $crawler;
 
     /**
      * Whenever we are testing the response in a functional test, we set it
      * on this class property. That way $this->tearDown() can print the stacktrace.
-     * @var Symfony\Component\HttpFoundation\Response
+     * @var \Symfony\Component\HttpFoundation\Response
      */
     protected $response;
 
     /**
      * Runs before each test.
-     * @param bool $suppressErrors Whether to hide error output from the response.
      */
     public function setUp()
     {
@@ -96,11 +96,6 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
         $this->session->invalidate();
     }
 
-    public function getLoggedInUser()
-    {
-        return $this->session->get('logged_in_user');
-    }
-
     /**
      * Every functional test sets the class property $this->response, and
      * here after every test finishes we check to see if it was successful.
@@ -109,6 +104,8 @@ abstract class DatabaseAwareWebTestCase extends WebTestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         if (isset($this->response) && !$this->response->isSuccessful() && $this->suppressErrors === false) {
             $stacktrace = $this->crawler->filter('.stacktrace');
             if ($stacktrace->count()) {

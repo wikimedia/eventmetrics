@@ -20,8 +20,8 @@ class OrganizerTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $organizer = new Organizer(50);
-        $this->assertNull($organizer->getId());
-        $this->assertEquals(50, $organizer->getUserId());
+        static::assertNull($organizer->getId());
+        static::assertEquals(50, $organizer->getUserId());
     }
 
     /**
@@ -31,7 +31,7 @@ class OrganizerTest extends PHPUnit_Framework_TestCase
     {
         $organizer = new Organizer(50);
 
-        $this->assertEquals(0, count($organizer->getPrograms()));
+        static::assertEquals(0, count($organizer->getPrograms()));
 
         // Add a program.
         $program = new Program($organizer);
@@ -43,11 +43,11 @@ class OrganizerTest extends PHPUnit_Framework_TestCase
 
         // Try adding the same one, which shouldn't duplicate.
         $organizer->addProgram($program2);
-        $this->assertEquals(2, count($organizer->getPrograms()));
+        static::assertEquals(2, count($organizer->getPrograms()));
 
         // Removing the program.
         $organizer->removeProgram($program);
-        $this->assertEquals(1, count($organizer->getPrograms()));
+        static::assertEquals(1, count($organizer->getPrograms()));
 
         // Double-remove shouldn't error out.
         $organizer->removeProgram($program);
@@ -63,8 +63,8 @@ class OrganizerTest extends PHPUnit_Framework_TestCase
         $organizer->setUsername('MusikAnimal');
         $organizer->setUserId(123);
 
-        $this->assertFalse($organizer->exists());
-        $this->assertEquals(123, $organizer->getUserId());
-        $this->assertEquals('MusikAnimal', $organizer->getUsername());
+        static::assertFalse($organizer->exists());
+        static::assertEquals(123, $organizer->getUserId());
+        static::assertEquals('MusikAnimal', $organizer->getUsername());
     }
 }

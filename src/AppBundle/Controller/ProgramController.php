@@ -5,13 +5,12 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Model\Event;
 use AppBundle\Model\Program;
 use AppBundle\Model\Organizer;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use AppBundle\Repository\OrganizerRepository;
+use AppBundle\Repository\ProgramRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -19,7 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Form;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
 
@@ -36,12 +34,14 @@ class ProgramController extends EntityController
      */
     public function indexAction()
     {
-        // FIXME: workaround to avoid calling the UserSubscriber
-        //   when Participant objects are loaded.
+        // FIXME: workaround to avoid calling the UserSubscriber when Participant objects are loaded.
+        /** @var ProgramRepository $programRepo */
         $programRepo = $this->em->getRepository(Program::class);
         $programRepo->setContainer($this->container);
 
         $organizer = $this->getOrganizer();
+
+        /** @var OrganizerRepository $organizerRepo */
         $organizerRepo = $this->em->getRepository(Organizer::class);
         $organizerRepo->setContainer($this->container);
 
@@ -141,6 +141,7 @@ class ProgramController extends EntityController
      */
     public function showAction()
     {
+        /** @var ProgramRepository $programRepo */
         $programRepo = $this->em->getRepository(Program::class);
         $programRepo->setContainer($this->container);
 
@@ -153,7 +154,7 @@ class ProgramController extends EntityController
 
     /**
      * Handle creation or updating of a Program on form submission.
-     * @param  Program $program
+     * @param Program $program
      * @return Form|RedirectResponse
      */
     private function handleFormSubmission(Program $program)
@@ -174,8 +175,8 @@ class ProgramController extends EntityController
 
     /**
      * Build a form for the given program.
-     * @param  Program $program
-     * @return Form
+     * @param Program $program
+     * @return FormInterface
      */
     private function getFormForProgram(Program $program)
     {
@@ -210,12 +211,13 @@ class ProgramController extends EntityController
     {
         return new CallbackTransformer(
             function ($organizerObjects) {
-                return array_map(function ($organizer) {
+                return array_map(function (Organizer $organizer) {
                     return $organizer->getUsername();
                 }, $organizerObjects->toArray());
             },
             function ($organizerNames) {
                 return array_map(function ($organizerName) {
+                    /** @var OrganizerRepository $organizerRepo */
                     $organizerRepo = $this->em->getRepository(Organizer::class);
                     $organizerRepo->setContainer($this->container);
                     return $organizerRepo->getOrganizerByUsername($organizerName);

@@ -37,17 +37,17 @@ class EventWikiStatTest extends PHPUnit_Framework_TestCase
         $ews = new EventWikiStat($eventWiki, 'pages-created', 50);
 
         // Getters.
-        $this->assertEquals($event, $ews->getEvent());
-        $this->assertEquals($eventWiki, $ews->getWiki());
-        $this->assertEquals('pages-created', $ews->getMetric());
-        $this->assertEquals(50, $ews->getValue());
-        $this->assertEquals(null, $ews->getOffset());
+        static::assertEquals($event, $ews->getEvent());
+        static::assertEquals($eventWiki, $ews->getWiki());
+        static::assertEquals('pages-created', $ews->getMetric());
+        static::assertEquals(50, $ews->getValue());
+        static::assertEquals(null, $ews->getOffset());
 
         // Make sure the association was made on the Event object, too.
-        $this->assertEquals($ews, $eventWiki->getStatistics()[0]);
+        static::assertEquals($ews, $eventWiki->getStatistics()[0]);
 
         // Invalid metric.
         $this->expectException(InvalidArgumentException::class);
-        $ews = new EventWikiStat($eventWiki, 'invalid', 30);
+        new EventWikiStat($eventWiki, 'invalid', 30);
     }
 }

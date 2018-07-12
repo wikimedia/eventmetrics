@@ -12,7 +12,6 @@ use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Command\SpawnJobsCommand;
 use AppBundle\Model\Event;
 use AppBundle\Model\Job;
-use AppBundle\Service\JobHandler;
 use DateTime;
 
 /**
@@ -45,12 +44,6 @@ class SpawnJobsCommandTest extends KernelTestCase
      * @var Event
      */
     private $event;
-
-    /**
-     * Whether or not we're testing against the Wikimedia replicas.
-     * @var bool
-     */
-    private $isWikimedia;
 
     public function setUp()
     {
@@ -123,10 +116,10 @@ class SpawnJobsCommandTest extends KernelTestCase
     private function nonexistentSpec()
     {
         $this->commandTester->execute([]);
-        $this->assertEquals(0, $this->commandTester->getStatusCode());
+        static::assertEquals(0, $this->commandTester->getStatusCode());
 
         $output = $this->commandTester->getDisplay();
-        $this->assertContains('No jobs found in the queue', $output);
+        static::assertContains('No jobs found in the queue', $output);
     }
 
     /**
@@ -136,12 +129,12 @@ class SpawnJobsCommandTest extends KernelTestCase
      */
     private function jobSpec(Job $job)
     {
-        $this->assertTrue($job->getId() > 0);
-        $this->assertEquals(
+        static::assertTrue($job->getId() > 0);
+        static::assertEquals(
             (new DateTime())->format('Ymd'),
             $job->getSubmitted()->format('Ymd')
         );
-        $this->assertFalse($job->getStarted());
+        static::assertFalse($job->getStarted());
     }
 
     /**
@@ -151,10 +144,10 @@ class SpawnJobsCommandTest extends KernelTestCase
     private function spawnSpec(Job $job)
     {
         $this->commandTester->execute([]);
-        $this->assertTrue($job->getStarted());
+        static::assertTrue($job->getStarted());
         $output = $this->commandTester->getDisplay();
-        $this->assertContains('Event statistics successfully saved', $output);
-        $this->assertEquals(0, $this->commandTester->getStatusCode());
+        static::assertContains('Event statistics successfully saved', $output);
+        static::assertEquals(0, $this->commandTester->getStatusCode());
     }
 
     /**
@@ -166,13 +159,13 @@ class SpawnJobsCommandTest extends KernelTestCase
         // First try bogus job ID.
         $this->commandTester->execute(['--id' => 12345]);
         $output = $this->commandTester->getDisplay();
-        $this->assertContains('No job found', $output);
-        $this->assertEquals(1, $this->commandTester->getStatusCode());
+        static::assertContains('No job found', $output);
+        static::assertEquals(1, $this->commandTester->getStatusCode());
 
         $this->commandTester->execute(['--id' => $job->getId()]);
-        $this->assertTrue($job->getStarted());
+        static::assertTrue($job->getStarted());
         $output = $this->commandTester->getDisplay();
-        $this->assertContains('Event statistics successfully saved', $output);
-        $this->assertEquals(0, $this->commandTester->getStatusCode());
+        static::assertContains('Event statistics successfully saved', $output);
+        static::assertEquals(0, $this->commandTester->getStatusCode());
     }
 }

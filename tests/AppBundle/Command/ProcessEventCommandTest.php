@@ -15,9 +15,6 @@ use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Command\ProcessEventCommand;
 use AppBundle\Model\Job;
 use AppBundle\Model\Event;
-use AppBundle\Model\EventStat;
-use AppBundle\Service\EventProcessor;
-use Psr\Log\LoggerInterface;
 
 /**
  * Tests for the ProcessEventCommand.
@@ -113,7 +110,7 @@ class ProcessEventCommandTest extends KernelTestCase
         $this->entityManager->flush();
 
         $this->commandTester->execute(['eventId' => $this->event->getId()]);
-        $this->assertEquals(0, $this->commandTester->getStatusCode());
+        static::assertEquals(0, $this->commandTester->getStatusCode());
 
         $this->numEventStatsSpec();
 
@@ -132,7 +129,7 @@ class ProcessEventCommandTest extends KernelTestCase
     private function nonexistentSpec()
     {
         $this->commandTester->execute(['eventId' => 12345]);
-        $this->assertEquals(1, $this->commandTester->getStatusCode());
+        static::assertEquals(1, $this->commandTester->getStatusCode());
     }
 
     /**
@@ -143,7 +140,7 @@ class ProcessEventCommandTest extends KernelTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findAll(['event' => $this->event]);
-        $this->assertEquals(4, count($eventStats));
+        static::assertEquals(4, count($eventStats));
     }
 
     /**
@@ -157,7 +154,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'event' => $this->event,
                 'metric' => 'new-editors'
             ]);
-        $this->assertEquals(1, $eventStat->getValue());
+        static::assertEquals(1, $eventStat->getValue());
     }
 
     /**
@@ -172,7 +169,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'event' => $this->event,
                 'metric' => 'pages-created',
             ]);
-        $this->assertEquals($this->isWikimedia ? 3 : 2, $eventStat->getValue());
+        static::assertEquals($this->isWikimedia ? 3 : 2, $eventStat->getValue());
 
         // As an EventWikiStat...
         $eventWikiStat = $this->entityManager
@@ -181,7 +178,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'wiki' => $this->event->getWikis()[0],
                 'metric' => 'pages-created',
             ]);
-        $this->assertEquals($this->isWikimedia ? 3 : 2, $eventWikiStat->getValue());
+        static::assertEquals($this->isWikimedia ? 3 : 2, $eventWikiStat->getValue());
     }
 
     /**
@@ -196,7 +193,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved',
             ]);
-        $this->assertEquals($this->isWikimedia ? 5 : 4, $eventStat->getValue());
+        static::assertEquals($this->isWikimedia ? 5 : 4, $eventStat->getValue());
 
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
@@ -204,7 +201,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'wiki' => $this->event->getWikis()[0],
                 'metric' => 'pages-improved',
             ]);
-        $this->assertEquals($this->isWikimedia ? 5 : 4, $eventWikiStat->getValue());
+        static::assertEquals($this->isWikimedia ? 5 : 4, $eventWikiStat->getValue());
     }
 
     /**
@@ -218,7 +215,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'event' => $this->event,
                 'metric' => 'retention'
             ]);
-        $this->assertEquals(1, $eventStat->getValue());
+        static::assertEquals(1, $eventStat->getValue());
     }
 
     /**
@@ -231,6 +228,6 @@ class ProcessEventCommandTest extends KernelTestCase
             ->findOneBy([
                 'event' => $this->event,
             ]);
-        $this->assertEquals(0, count($jobs));
+        static::assertEquals(0, count($jobs));
     }
 }

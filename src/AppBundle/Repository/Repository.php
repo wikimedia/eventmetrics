@@ -8,11 +8,13 @@ namespace AppBundle\Repository;
 use DateInterval;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
@@ -88,7 +90,7 @@ abstract class Repository extends EntityRepository
     /**
      * Set the DI container and assign the cache, log, and
      * stopwatch adapters, which are accessed via the Container.
-     * @param Container $container
+     * @param Container|ContainerInterface $container
      */
     public function setContainer(Container $container)
     {
@@ -169,7 +171,7 @@ abstract class Repository extends EntityRepository
     /**
      * Set the cache with given options.
      * @param string $cacheKey
-     * @param mixed  $value
+     * @param mixed $value
      * @param string $duration Valid DateInterval string.
      * @return mixed The given $value.
      */
@@ -191,7 +193,7 @@ abstract class Repository extends EntityRepository
      * Get the database connection for the 'grantmetrics' database.
      * @return Connection
      */
-    protected function getGrantmetricsConnection()
+    protected function getGrantMetricsConnection()
     {
         if (!$this->grantmetricsConnection instanceof Connection) {
             $this->grantmetricsConnection = $this->container
@@ -278,8 +280,8 @@ abstract class Repository extends EntityRepository
     /**
      * Get the global user IDs for mutiple users,
      * based on the central auth database.
-     * @param  string[] $usernames Usernames to query for.
-     * @return string[] with keys 'user_name' and 'user_id'.
+     * @param string[] $usernames Usernames to query for.
+     * @return array with keys 'user_name' and 'user_id'.
      * FIXME: add caching.
      */
     public function getUserIdsFromNames($usernames)
@@ -294,7 +296,7 @@ abstract class Repository extends EntityRepository
 
     /**
      * Get the global user ID for the given username.
-     * @param  string $username
+     * @param string $username
      * @return int|null
      */
     public function getUserIdFromName($username)
@@ -306,8 +308,8 @@ abstract class Repository extends EntityRepository
     /**
      * Get the usernames given multiple global user IDs,
      * based on the central auth database.
-     * @param  int[] $userIds User IDs to query for.
-     * @return string[] with keys 'user_name' and 'user_id'.
+     * @param int[] $userIds User IDs to query for.
+     * @return array with keys 'user_name' and 'user_id'.
      * FIXME: add caching.
      */
     public function getUsernamesFromIds($userIds)
@@ -324,7 +326,7 @@ abstract class Repository extends EntityRepository
 
     /**
      * Get the username given the global user ID.
-     * @param  int $userId
+     * @param int $userId
      * @return string|null
      */
     public function getUsernameFromId($userId)
@@ -371,6 +373,8 @@ abstract class Repository extends EntityRepository
      * @param int|null|false $timeout Maximum statement time in seconds. null will use the
      *   default specified by the app.query_timeout config parameter. false will set no timeout.
      * @return \Doctrine\DBAL\Driver\Statement
+     * @throws DriverException
+     * @throws DBALException
      */
     public function executeReplicaQuery($sql, $params = [], $timeout = null)
     {
@@ -388,6 +392,8 @@ abstract class Repository extends EntityRepository
      * @param int|null|false $timeout Maximum statement time in seconds. null will use the
      *   default specified by the app.query_timeout config parameter. false will set no timeout.
      * @return \Doctrine\DBAL\Driver\Statement
+     * @throws DriverException
+     * @throws DBALException
      */
     public function executeQueryBuilder(QueryBuilder $qb, $timeout = null)
     {

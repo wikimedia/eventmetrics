@@ -5,7 +5,6 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Model\Event;
 use AppBundle\Model\Participant;
 
 /**

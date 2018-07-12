@@ -6,9 +6,6 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Model\EventWiki;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManager;
 
 /**
  * This class supplies and fetches data for the EventWiki class.

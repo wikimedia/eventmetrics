@@ -10,7 +10,6 @@ use AppBundle\Model\Job;
 use AppBundle\Model\Event;
 use AppBundle\Model\Program;
 use AppBundle\Model\Organizer;
-use DateTime;
 
 /**
  * Tests for the Job class.
@@ -36,16 +35,16 @@ class JobTest extends PHPUnit_Framework_TestCase
         $job->setStarted();
 
         // Getters.
-        $this->assertEquals($event, $job->getEvent());
-        $this->assertTrue($job->getStarted());
+        static::assertEquals($event, $job->getEvent());
+        static::assertTrue($job->getStarted());
 
         // Record hasn't been persisted yet.
-        $this->assertNull($job->getId());
-        $this->assertNull($job->getSubmitted());
+        static::assertNull($job->getId());
+        static::assertNull($job->getSubmitted());
 
         // Can't re-add to the Event.
-        $this->assertEquals(1, $event->getNumJobs());
+        static::assertEquals(1, $event->getNumJobs());
         $event->addJob($job);
-        $this->assertEquals(1, $event->getNumJobs());
+        static::assertEquals(1, $event->getNumJobs());
     }
 }

@@ -10,7 +10,6 @@ use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Model\Traits\EventStatTrait;
 use AppBundle\Model\Traits\TitleUserTrait;
@@ -214,7 +213,7 @@ class Event
 
     /**
      * Get unique cache key for the Event. This is called by Repository::getCacheKey(),
-     * used when making expensive queries againt the replicas.
+     * used when making expensive queries against the replicas.
      * @return string
      */
     public function getCacheKey()
@@ -357,7 +356,7 @@ class Event
 
     /**
      * Get participants of this Event.
-     * @return ArrayCollection|Participant[]
+     * @return ArrayCollection of Participants.
      */
     public function getParticipants()
     {
@@ -403,7 +402,7 @@ class Event
      */
     public function getParticipantIds()
     {
-        return array_map(function ($participant) {
+        return array_map(function (Participant $participant) {
             return $participant->getUserId();
         }, $this->participants->toArray());
     }
@@ -414,7 +413,7 @@ class Event
      */
     public function getParticipantNames()
     {
-        return array_map(function ($participant) {
+        return array_map(function (Participant $participant) {
             return $participant->getUsername();
         }, $this->participants->toArray());
     }
@@ -471,22 +470,22 @@ class Event
     /**
      * Get all EventWikis belonging to the Event that represent
      * a wiki family (*.wikipedia, *.wiktionary, etc).
-     * @return EventWiki[]
+     * @return ArrayCollection of EventWikis
      */
     public function getFamilyWikis()
     {
-        return $this->wikis->filter(function ($wiki) {
+        return $this->wikis->filter(function (EventWiki $wiki) {
             return substr($wiki->getDomain(), 0, 2) === '*.';
         });
     }
 
     /**
      * Get all associated EventWikis that belong to a family.
-     * @return EventWiki[]
+     * @return ArrayCollection of EventWikis
      */
     public function getChildWikis()
     {
-        return $this->wikis->filter(function ($wiki) {
+        return $this->wikis->filter(function (EventWiki $wiki) {
             return $wiki->isChildWiki();
         });
     }
@@ -506,16 +505,16 @@ class Event
      * Get all EventWikis that are not part of a family that has been added
      * to the Event. For instance, if there is an EventWiki for *.wikipedia
      * (wikipedia family), a fr.wikipedia EventWiki is not returned, but it
-     * will if there is not a *.wikipedia EventWiki/
-     * @return EventWiki[]
+     * will if there is not a *.wikipedia EventWiki.
+     * @return ArrayCollection of EventWikis
      */
     public function getOrphanWikis()
     {
-        $familyNames = $this->getFamilyWikis()->map(function ($eventWiki) {
+        $familyNames = $this->getFamilyWikis()->map(function (EventWiki $eventWiki) {
             return $eventWiki->getFamilyName();
         });
 
-        return $this->wikis->filter(function ($wiki) use ($familyNames) {
+        return $this->wikis->filter(function (EventWiki $wiki) use ($familyNames) {
             return null === $wiki->getDomain()
                 || !$familyNames->contains(explode('.', $wiki->getDomain())[1]);
         });
@@ -524,7 +523,7 @@ class Event
     /**
      * Get EventWikis that are represent a wiki family, or an individual wiki
      * that is not part of a family.
-     * @return EventWiki
+     * @return ArrayCollection Containing EventWikis
      */
     public function getOrphanWikisAndFamilies()
     {

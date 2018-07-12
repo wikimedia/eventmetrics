@@ -6,9 +6,9 @@
 namespace Tests\AppBundle\Controller;
 
 use AppBundle\DataFixtures\ORM\LoadFixtures;
+use AppBundle\Model\Event;
 use AppBundle\Model\EventWiki;
 use DateTime;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Integration/functional tests for the EventController.
@@ -18,7 +18,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Called before each test.
      */
-    public function setup()
+    public function setUp()
     {
         parent::setUp();
 
@@ -35,7 +35,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->loginUser('Test user');
         $this->crawler = $this->client->request('GET', '/events');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(302, $this->response->getStatusCode());
+        static::assertEquals(302, $this->response->getStatusCode());
     }
 
     /**
@@ -69,7 +69,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         // 'My_fun_program' was already created via fixtures.
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(307, $this->response->getStatusCode());
+        static::assertEquals(307, $this->response->getStatusCode());
     }
 
     /**
@@ -85,21 +85,21 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Oliver_and_Company');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(403, $this->response->getStatusCode());
+        static::assertEquals(403, $this->response->getStatusCode());
 
         /**
          * For now, you must be an organizer of an event in order to view it.
          */
 
         // // Should see the 'edit event', since we are logged in and are one of the organizers.
-        // $this->assertNotContains(
+        // static::assertNotContains(
         //     'edit event',
         //     $this->crawler->filter('.page-header')->text()
         // );
 
         // // Should not be able to edit an event.
         // $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/Oliver_and_Company');
-        // $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+        // static::assertEquals(403, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -110,7 +110,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         // 'My_fun_program' was already created via fixtures.
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(200, $this->response->getStatusCode());
+        static::assertEquals(200, $this->response->getStatusCode());
     }
 
     /**
@@ -119,8 +119,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     private function newSpec()
     {
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/new');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertContains(
+        static::assertEquals(200, $this->client->getResponse()->getStatusCode());
+        static::assertContains(
             'Create a new event',
             $this->crawler->filter('.page-header')->text()
         );
@@ -140,18 +140,18 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->submit($form);
 
         $this->response = $this->client->getResponse();
-        $this->assertEquals(302, $this->response->getStatusCode());
+        static::assertEquals(302, $this->response->getStatusCode());
 
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'The_Lion_King']);
 
-        $this->assertNotNull($event);
-        $this->assertEquals(
+        static::assertNotNull($event);
+        static::assertEquals(
             'My_fun_program',
             $event->getProgram()->getTitle()
         );
-        $this->assertEquals(
+        static::assertEquals(
             new DateTime('2017-01-01 18:00'),
             $event->getStart()
         );
@@ -159,21 +159,21 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['event' => $event]);
-        $this->assertNotNull($eventWiki);
-        $this->assertEquals(
+        static::assertNotNull($eventWiki);
+        static::assertEquals(
             'de.wikipedia',
             $eventWiki->getDomain()
         );
 
         $this->crawler = $this->client->followRedirect();
 
-        $this->assertContains(
+        static::assertContains(
             'The Lion King',
             $this->crawler->filter('.events-list')->text()
         );
 
         // Should be deletable.
-        $this->assertNotContains(
+        static::assertNotContains(
             'disabled',
             $this->crawler->filter('.event-action__delete')->attr('class')
         );
@@ -185,7 +185,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     private function updateSpec()
     {
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/The_Lion_King');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $this->crawler->selectButton('Submit')->form();
 
@@ -196,25 +196,25 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'The_Lion_King']);
-        $this->assertNull($event);
+        static::assertNull($event);
 
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['domain' => 'de.wikipedia']);
-        $this->assertNull($eventWiki);
+        static::assertNull($eventWiki);
 
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'Pinocchio']);
         $this->entityManager->refresh($event);
-        $this->assertNotNull($event);
+        static::assertNotNull($event);
 
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['event' => $event]);
-        $this->assertNotNull($eventWiki);
+        static::assertNotNull($eventWiki);
 
-        $this->assertEquals(
+        static::assertEquals(
             'en.wikipedia',
             $eventWiki->getDomain()
         );
@@ -223,6 +223,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     public function familyWikiSpec()
     {
         // First create multiple 'orphan' wikis (that don't have an associated family wiki yet).
+        /** @var Event $event */
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'Pinocchio']);
@@ -233,13 +234,13 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['domain' => 'fr.wikipedia']);
-        $this->assertNotNull($eventWiki);
+        static::assertNotNull($eventWiki);
 
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/Pinocchio');
 
         // Make sure the two wikis are in the form.
-        $this->assertEquals('en.wikipedia', $this->crawler->filter('#form_wikis_0')->attr('value'));
-        $this->assertEquals('fr.wikipedia', $this->crawler->filter('#form_wikis_1')->attr('value'));
+        static::assertEquals('en.wikipedia', $this->crawler->filter('#form_wikis_0')->attr('value'));
+        static::assertEquals('fr.wikipedia', $this->crawler->filter('#form_wikis_1')->attr('value'));
 
         // Change one to all Wikipedias, and save.
         $form = $this->crawler->selectButton('Submit')->form();
@@ -250,15 +251,15 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['domain' => 'en.wikipedia']);
-        $this->assertNull($eventWiki);
+        static::assertNull($eventWiki);
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['domain' => 'fr.wikipedia']);
-        $this->assertNull($eventWiki);
+        static::assertNull($eventWiki);
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['event' => $event]);
-        $this->assertEquals('*.wikipedia', $eventWiki->getDomain());
+        static::assertEquals('*.wikipedia', $eventWiki->getDomain());
     }
 
     /**
@@ -267,13 +268,13 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     private function validateSpec()
     {
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/The_Lion_King');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $this->crawler->selectButton('Submit')->form();
         $form['form[wikis][0]'] = 'invalid_wiki';
         $this->crawler = $this->client->submit($form);
 
-        $this->assertContains(
+        static::assertContains(
             '1 wiki is invalid.',
             $this->crawler->filter('.alert-danger')->text()
         );
@@ -286,10 +287,10 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     {
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Pinocchio');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(200, $this->response->getStatusCode());
+        static::assertEquals(200, $this->response->getStatusCode());
 
         // Should see the 'edit event', since we are logged in and are one of the organizers.
-        $this->assertContains(
+        static::assertContains(
             'edit event',
             $this->crawler->filter('.page-header')->text()
         );
@@ -305,7 +306,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $form['form[new_participants]'] = "  MusikAnimal  \r\nUser_does_not_exist_1234";
         $this->crawler = $this->client->submit($form);
 
-        $this->assertContains(
+        static::assertContains(
             '1 username is invalid',
             $this->crawler->filter('.alert-danger')->text()
         );
@@ -313,20 +314,20 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $form = $this->crawler->selectButton('Save participants')->form();
         $inputs = $this->crawler->filter('.participant-row input');
 
-        $this->assertEquals('User does not exist 1234', $inputs->first()->attr('value'));
-        $this->assertEquals('MusikAnimal', $inputs->last()->attr('value'));
+        static::assertEquals('User does not exist 1234', $inputs->first()->attr('value'));
+        static::assertEquals('MusikAnimal', $inputs->last()->attr('value'));
 
         // Remove invalid user and submit again.
         unset($form['form[participants][1]']);
         $this->crawler = $this->client->submit($form);
 
         $this->response = $this->client->getResponse();
-        $this->assertEquals(302, $this->response->getStatusCode());
+        static::assertEquals(302, $this->response->getStatusCode());
 
         $eventRepo = $this->entityManager->getRepository('Model:Event');
         $event = $eventRepo->findOneBy(['title' => 'Pinocchio']);
 
-        $this->assertEquals(
+        static::assertEquals(
             [10584730], // User ID of MusikAnimal.
             $event->getParticipantIds()
         );
@@ -338,21 +339,21 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     private function cloneSpec()
     {
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/copy/Pinocchio');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $this->crawler->selectButton('Submit')->form();
         $form['form[title]'] = 'Pinocchio II';
         $this->crawler = $this->client->submit($form);
 
         $this->response = $this->client->getResponse();
-        $this->assertEquals(302, $this->response->getStatusCode());
+        static::assertEquals(302, $this->response->getStatusCode());
 
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'Pinocchio_II']);
 
-        $this->assertNotNull($event);
-        $this->assertEquals(
+        static::assertNotNull($event);
+        static::assertEquals(
             new DateTime('2017-01-01 18:00'),
             $event->getStart()
         );
@@ -360,13 +361,13 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $eventWiki = $this->entityManager
             ->getRepository('Model:EventWiki')
             ->findOneBy(['event' => $event]);
-        $this->assertNotNull($eventWiki);
-        $this->assertEquals(
+        static::assertNotNull($eventWiki);
+        static::assertEquals(
             '*.wikipedia',
             $eventWiki->getDomain()
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             [10584730],
             $event->getParticipantIds()
         );
@@ -377,16 +378,16 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     private function deleteSpec()
     {
-        $this->assertCount(
+        static::assertCount(
             2, // There was a cloned event, see self::cloneSpec()
             $this->entityManager->getRepository('Model:Event')->findAll()
         );
 
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/delete/Pinocchio');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(302, $this->response->getStatusCode());
+        static::assertEquals(302, $this->response->getStatusCode());
 
-        $this->assertCount(
+        static::assertCount(
             1,
             $this->entityManager->getRepository('Model:Event')->findAll()
         );

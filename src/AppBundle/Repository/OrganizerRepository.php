@@ -6,6 +6,7 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Model\Organizer;
+use Doctrine\ORM\EntityManager;
 
 /**
  * This class supplies and fetches data for the Organizer class.
@@ -38,6 +39,7 @@ class OrganizerRepository extends Repository
             return new Organizer($username);
         }
 
+        /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
         $organizer = $em->getRepository(Organizer::class)
             ->findOneBy(['userId' => $userId]);

@@ -12,7 +12,6 @@ use AppBundle\Repository\EventWikiRepository;
 use AppBundle\Model\EventWikiStat;
 use AppBundle\Repository\EventRepository;
 use DateTime;
-use DateTimeZone;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -133,7 +132,7 @@ class EventProcessor
             );
 
             // Find domains of existing EventWikis.
-            $existingDomains = array_map(function ($eventWiki) {
+            $existingDomains = array_map(function (EventWiki $eventWiki) {
                 return $eventWiki->getDomain();
             }, $this->event->getWikis()->toArray());
 
@@ -213,6 +212,7 @@ class EventProcessor
         $pagesImproved = 0;
         $pagesCreated = 0;
 
+        /** @var EventWikiRepository $ewRepo */
         $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
 

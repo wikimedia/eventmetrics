@@ -7,7 +7,7 @@ namespace AppBundle\EventSubscriber;
 
 use AppBundle\Model\Program;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * ProgramSubscriber does post-processing after fetching a Program.

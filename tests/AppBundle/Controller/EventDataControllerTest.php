@@ -15,7 +15,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
     /**
      * Called before each test.
      */
-    public function setup()
+    public function setUp()
     {
         parent::setUp();
 
@@ -44,7 +44,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 
         // 'Updated' is currently null (not in extended.yml fixture),
         // so the revision browser should redirect to the event page.
-        $this->assertEquals(302, $this->response->getStatusCode());
+        static::assertEquals(302, $this->response->getStatusCode());
 
         // Set updated attribute then try again.
         $event->setUpdated(new \DateTime('2014-01-24T00:00:00Z'));
@@ -55,9 +55,9 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             '/programs/My_fun_program/Oliver_and_Company/revisions'
         );
         $this->response = $this->client->getResponse();
-        $this->assertEquals(200, $this->response->getStatusCode());
+        static::assertEquals(200, $this->response->getStatusCode());
 
-        $this->assertContains(
+        static::assertContains(
             'MusikAnimal',
             $this->crawler->filter('.event-revisions')->text()
         );
@@ -75,7 +75,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         // Without the XMLHttpRequest header (not AJAX).
         $this->crawler = $this->client->request('GET', '/events/process/'.$event->getId());
         $this->response = $this->client->getResponse();
-        $this->assertEquals(403, $this->response->getStatusCode());
+        static::assertEquals(403, $this->response->getStatusCode());
 
         // Nonexistent Event.
         $this->crawler = $this->client->request(
@@ -86,7 +86,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             ['HTTP_X-Requested-With' => 'XMLHttpRequest']
         );
         $this->response = $this->client->getResponse();
-        $this->assertEquals(404, $this->response->getStatusCode());
+        static::assertEquals(404, $this->response->getStatusCode());
 
         $this->crawler = $this->client->request(
             'GET',
@@ -96,13 +96,13 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             ['HTTP_X-Requested-With' => 'XMLHttpRequest']
         );
         $this->response = $this->client->getResponse();
-        $this->assertEquals(200, $this->response->getStatusCode());
+        static::assertEquals(200, $this->response->getStatusCode());
 
         // Quick assertion to make sure proper JSON is returned.
         // The actual statistics are tested in the EventProcessorTest.
         $ret = json_decode($this->response->getContent(), true);
-        $this->assertEquals('complete', $ret['status']);
-        $this->assertEquals(
+        static::assertEquals('complete', $ret['status']);
+        static::assertEquals(
             ['new-editors', 'wikis', 'pages-created', 'pages-improved', 'retention'],
             array_keys($ret['data'])
         );
@@ -111,6 +111,6 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findBy(['event' => $event]);
-        $this->assertEquals(4, count($eventStats));
+        static::assertEquals(4, count($eventStats));
     }
 }

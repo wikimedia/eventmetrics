@@ -7,14 +7,11 @@ namespace AppBundle\Controller;
 
 use AppBundle\Model\Event;
 use AppBundle\Model\Job;
-use AppBundle\Model\Program;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
-use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -44,6 +41,7 @@ class EventDataController extends EntityController
             ]);
         }
 
+        /** @var EventRepository $eventRepo */
         $eventRepo = $this->em->getRepository(Event::class);
         $eventRepo->setContainer($this->container);
 
@@ -128,6 +126,7 @@ class EventDataController extends EntityController
         }
 
         // Find the Event.
+        /** @var Event $event */
         $event = $this->em->getRepository(Event::class)
             ->findOneBy(['id' => $eventId]);
 
@@ -138,6 +137,7 @@ class EventDataController extends EntityController
         // Check if a Job already exists. This is difficult to test, so we'll ignore...
         // @codeCoverageIgnoreStart
         if ($event->hasJob()) {
+            /** @var Job $job */
             $job = $event->getJobs()[0];
 
             return new JsonResponse(

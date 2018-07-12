@@ -24,11 +24,11 @@ class ParticipantTest extends PHPUnit_Framework_TestCase
         list($event, $participant) = $this->createEventAndParticipant();
 
         // Basic getters.
-        $this->assertEquals(50, $participant->getUserId());
-        $this->assertEquals($event, $participant->getEvent());
+        static::assertEquals(50, $participant->getUserId());
+        static::assertEquals($event, $participant->getEvent());
 
         // Make sure the association was made on the Event object, too.
-        $this->assertEquals($participant, $event->getParticipants()[0]);
+        static::assertEquals($participant, $event->getParticipants()[0]);
     }
 
     /**
@@ -36,13 +36,13 @@ class ParticipantTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters()
     {
-        list($event, $participant) = $this->createEventAndParticipant();
+        list(, $participant) = $this->createEventAndParticipant();
 
         $participant->setUsername('MusikAnimal');
         $participant->setUserId(123);
 
-        $this->assertEquals(123, $participant->getUserId());
-        $this->assertEquals('MusikAnimal', $participant->getUsername());
+        static::assertEquals(123, $participant->getUserId());
+        static::assertEquals('MusikAnimal', $participant->getUsername());
     }
 
     /**

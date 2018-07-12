@@ -32,7 +32,7 @@ class EventRepository extends Repository
     /**
      * Get the usernames of participants who are new editors,
      * relative to the time of the event.
-     * @param  Event $event The Event in question.
+     * @param Event $event The Event in question.
      * @return string[] Usernames of new editors.
      */
     public function getNewEditors(Event $event)
@@ -312,6 +312,7 @@ class EventRepository extends Repository
             return $this->revisionsInnerSql;
         }
 
+        /** @var EventWikiRepository $eventWikiRepo */
         $eventWikiRepo = $this->em->getRepository('Model:EventWiki');
         $eventWikiRepo->setContainer($this->container);
         $sqlClauses = [];
@@ -355,6 +356,7 @@ class EventRepository extends Repository
      * because you can't bind PARAM_STR_ARRAY in Doctrine. The usernames are fetched
      * from CentralAuth, so they are safe from SQL injection.
      * @param Event $event
+     * @return string
      */
     private function getUsernamesSql(Event $event)
     {

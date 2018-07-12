@@ -42,23 +42,23 @@ class EventTest extends KernelTestCase
             new DateTime('2017-03-01 16:00'),
             'America/New_York'
         );
-        $this->assertNull($event->getId());
+        static::assertNull($event->getId());
 
-        $this->assertEquals($this->program, $event->getProgram());
-        $this->assertEquals('My_program', $event->getTitle());
-        $this->assertEquals('My program', $event->getDisplayTitle());
-        $this->assertEquals('America/New_York', $event->getTimezone());
-        $this->assertEquals('America/New York', $event->getDisplayTimezone());
+        static::assertEquals($this->program, $event->getProgram());
+        static::assertEquals('My_program', $event->getTitle());
+        static::assertEquals('My program', $event->getDisplayTitle());
+        static::assertEquals('America/New_York', $event->getTimezone());
+        static::assertEquals('America/New York', $event->getDisplayTimezone());
 
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             'Doctrine\Common\Collections\ArrayCollection',
             $event->getParticipants()
         );
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             'Doctrine\Common\Collections\ArrayCollection',
             $event->getStatistics()
         );
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             'Doctrine\Common\Collections\ArrayCollection',
             $event->getWikis()
         );
@@ -76,10 +76,10 @@ class EventTest extends KernelTestCase
             new DateTime('2017-03-01 21:00'),
             'America/New_York'
         );
-        $this->assertEquals(new DateTime('2017-01-01 16:00'), $event->getStart());
-        $this->assertEquals(new DateTime('2017-03-01 21:00'), $event->getEnd());
-        $this->assertEquals(new DateTime('2017-01-01 21:00'), $event->getStartWithTimezone());
-        $this->assertEquals(new DateTime('2017-03-02 02:00'), $event->getEndWithTimezone());
+        static::assertEquals(new DateTime('2017-01-01 16:00'), $event->getStart());
+        static::assertEquals(new DateTime('2017-03-01 21:00'), $event->getEnd());
+        static::assertEquals(new DateTime('2017-01-01 21:00'), $event->getStartWithTimezone());
+        static::assertEquals(new DateTime('2017-03-02 02:00'), $event->getEndWithTimezone());
 
         // Date types reversed.
         $event2 = new Event(
@@ -88,8 +88,8 @@ class EventTest extends KernelTestCase
             new DateTime('2017-03-01'),
             '2017-04-01'
         );
-        $this->assertEquals(new DateTime('2017-03-01'), $event2->getStart());
-        $this->assertEquals(new DateTime('2017-04-01'), $event2->getEnd());
+        static::assertEquals(new DateTime('2017-03-01'), $event2->getStart());
+        static::assertEquals(new DateTime('2017-04-01'), $event2->getEnd());
     }
 
     /**
@@ -104,21 +104,21 @@ class EventTest extends KernelTestCase
             new DateTime('2017-03-01'),
             'America/New_York'
         );
-        $this->assertEquals(0, count($event->getStatistics()));
+        static::assertEquals(0, count($event->getStatistics()));
 
         // Add an EventStat.
         $eventStat = new EventStat($event, 'retention', 50);
         $event->addStatistic($eventStat);
-        $this->assertEquals($eventStat, $event->getStatistics()[0]);
-        $this->assertEquals($eventStat, $event->getStatistic('retention'));
+        static::assertEquals($eventStat, $event->getStatistics()[0]);
+        static::assertEquals($eventStat, $event->getStatistic('retention'));
 
         // Try adding the same one, which shouldn't duplicate.
         $event->addStatistic($eventStat);
-        $this->assertEquals(1, count($event->getStatistics()));
+        static::assertEquals(1, count($event->getStatistics()));
 
         // Removing the statistic.
         $event->removeStatistic($eventStat);
-        $this->assertEquals(0, count($event->getStatistics()));
+        static::assertEquals(0, count($event->getStatistics()));
 
         // Double-remove shouldn't error out.
         $event->removeStatistic($eventStat);
@@ -126,14 +126,14 @@ class EventTest extends KernelTestCase
         // Changing the 'updated' attribute.
         $datetime = new DateTime('2017-01-01');
         $event->setUpdated($datetime);
-        $this->assertEquals($datetime, $event->getUpdated());
+        static::assertEquals($datetime, $event->getUpdated());
 
         // Clearing all statistics.
         $event->addStatistic($eventStat);
-        $this->assertEquals(1, count($event->getStatistics()));
+        static::assertEquals(1, count($event->getStatistics()));
         $event->clearStatistics();
-        $this->assertEquals(0, count($event->getStatistics()));
-        $this->assertNull($event->getUpdated());
+        static::assertEquals(0, count($event->getStatistics()));
+        static::assertNull($event->getUpdated());
     }
 
     /**
@@ -149,23 +149,23 @@ class EventTest extends KernelTestCase
             'America/New_York'
         );
 
-        $this->assertEquals(0, count($event->getParticipants()));
+        static::assertEquals(0, count($event->getParticipants()));
 
         // Add a Participant.
         $participant = new Participant($event, 50);
         $participant->setUsername('DannyH (WMF)');
         $event->addParticipant($participant);
 
-        $this->assertEquals($participant, $event->getParticipants()[0]);
-        $this->assertEquals(['DannyH (WMF)'], $event->getParticipantNames());
+        static::assertEquals($participant, $event->getParticipants()[0]);
+        static::assertEquals(['DannyH (WMF)'], $event->getParticipantNames());
 
         // Try adding the same one, which shouldn't duplicate.
         $event->addParticipant($participant);
-        $this->assertEquals(1, $event->getNumParticipants());
+        static::assertEquals(1, $event->getNumParticipants());
 
         // Removing the event.
         $event->removeParticipant($participant);
-        $this->assertEquals(0, $event->getNumParticipants());
+        static::assertEquals(0, $event->getNumParticipants());
 
         // Double-remove shouldn't error out.
         $event->removeParticipant($participant);
@@ -184,21 +184,21 @@ class EventTest extends KernelTestCase
             'America/New_York'
         );
 
-        $this->assertEquals(0, count($event->getParticipants()));
+        static::assertEquals(0, count($event->getParticipants()));
 
         // Add a wiki.
         $wiki = new EventWiki($event, 'testwiki');
         $event->addWiki($wiki);
 
-        $this->assertEquals($wiki, $event->getWikis()[0]);
+        static::assertEquals($wiki, $event->getWikis()[0]);
 
         // Try adding the same one, which shouldn't duplicate.
         $event->addWiki($wiki);
-        $this->assertEquals(1, count($event->getWikis()));
+        static::assertEquals(1, count($event->getWikis()));
 
         // Removing the wiki.
         $event->removeWiki($wiki);
-        $this->assertEquals(0, count($event->getWikis()));
+        static::assertEquals(0, count($event->getWikis()));
 
         // Double-remove shouldn't error out.
         $event->removeWiki($wiki);
@@ -219,7 +219,7 @@ class EventTest extends KernelTestCase
 
         $validator = static::$kernel->getContainer()->get('validator');
         $errors = $validator->validate($event);
-        $this->assertEquals(
+        static::assertEquals(
             'error-title-reserved',
             $errors->get(0)->getMessage()
         );
@@ -227,7 +227,7 @@ class EventTest extends KernelTestCase
         $event->setTitle('Foo/bar');
         $validator = static::$kernel->getContainer()->get('validator');
         $errors = $validator->validate($event);
-        $this->assertEquals(
+        static::assertEquals(
             'error-title-invalid-chars',
             $errors->get(0)->getMessage()
         );
@@ -247,12 +247,12 @@ class EventTest extends KernelTestCase
         );
         $job = new Job($event);
 
-        $this->assertTrue($event->hasJob());
-        $this->assertEquals(1, $event->getNumJobs());
-        $this->assertEquals($job, $event->getJobs()[0]);
+        static::assertTrue($event->hasJob());
+        static::assertEquals(1, $event->getNumJobs());
+        static::assertEquals($job, $event->getJobs()[0]);
         $event->removeJobs();
-        $this->assertFalse($event->hasJob());
-        $this->assertEquals(0, $event->getNumJobs());
+        static::assertFalse($event->hasJob());
+        static::assertEquals(0, $event->getNumJobs());
     }
 
     /**
@@ -269,8 +269,8 @@ class EventTest extends KernelTestCase
         );
         $datetime = new DateTime('2017-01-01 17:00');
         $event->setUpdated($datetime);
-        $this->assertEquals($datetime, $event->getUpdated());
-        $this->assertEquals(
+        static::assertEquals($datetime, $event->getUpdated());
+        static::assertEquals(
             new DateTime('2017-01-01 12:00'),
             $event->getUpdatedWithTimezone()
         );
@@ -287,26 +287,26 @@ class EventTest extends KernelTestCase
         $child = new EventWiki($event, 'test.wikipedia');
         $orphan = new EventWiki($event, 'fr.wiktionary');
 
-        $this->assertEquals([$family], $event->getFamilyWikis()->toArray());
+        static::assertEquals([$family], $event->getFamilyWikis()->toArray());
 
         // Doctrine doesn't reindex the arrays (instead preserving original keys),
         // so we need to use array_values in our test.
-        $this->assertEquals([$orphan], array_values($event->getOrphanWikis()->toArray()));
+        static::assertEquals([$orphan], array_values($event->getOrphanWikis()->toArray()));
 
-        $this->assertEquals(
+        static::assertEquals(
             [$family, $orphan],
             array_values($event->getOrphanWikisAndFamilies()->toArray())
         );
 
-        $this->assertEquals([$child], array_values($event->getChildWikis()->toArray()));
+        static::assertEquals([$child], array_values($event->getChildWikis()->toArray()));
         $event->clearChildWikis();
-        $this->assertEquals(0, $event->getChildWikis()->count());
+        static::assertEquals(0, $event->getChildWikis()->count());
 
         // Family EventWiki should still be there.
-        $this->assertEquals([$family], $event->getFamilyWikis()->toArray());
+        static::assertEquals([$family], $event->getFamilyWikis()->toArray());
 
         // Statistics available based on associated families.
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'new-editors' => 15,
                 'retention' => 7,

@@ -12,7 +12,7 @@ use AppBundle\DataFixtures\ORM\LoadFixtures;
  */
 class ProgramControllerTest extends DatabaseAwareWebTestCase
 {
-    public function setup()
+    public function setUp()
     {
         parent::setUp();
 
@@ -36,7 +36,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->updateSpec();
 
         $this->crawler = $this->client->request('GET', '/programs');
-        $this->assertContains(
+        static::assertContains(
             'The Lion King',
             $this->crawler->filter('.programs-list')->text()
         );
@@ -59,14 +59,14 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
 
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(403, $this->response->getStatusCode());
+        static::assertEquals(403, $this->response->getStatusCode());
 
         /**
          * For now, you must be an organizer of a program in order to view it.
          */
 
         // // Should not see the 'edit program', since we are logged in and are one of the organizers.
-        // $this->assertNotContains(
+        // static::assertNotContains(
         //     'edit program',
         //     $this->crawler->filter('.page-header')->text()
         // );
@@ -79,7 +79,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     {
         $this->crawler = $this->client->request('GET', '/programs');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(200, $this->response->getStatusCode());
+        static::assertEquals(200, $this->response->getStatusCode());
     }
 
     /**
@@ -89,12 +89,12 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     {
         $this->crawler = $this->client->request('GET', '/programs/new');
 
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertContains(
+        static::assertEquals(200, $this->client->getResponse()->getStatusCode());
+        static::assertContains(
             'Create a new program',
             $this->crawler->filter('.page-header')->text()
         );
-        $this->assertContains(
+        static::assertContains(
             'MusikAnimal',
             $this->crawler->filter('#form_organizers_0')->attr('value')
         );
@@ -110,13 +110,13 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->submit($form);
 
         $this->response = $this->client->getResponse();
-        $this->assertEquals(302, $this->response->getStatusCode());
+        static::assertEquals(302, $this->response->getStatusCode());
 
         $program = $this->entityManager
             ->getRepository('Model:Program')
             ->findOneBy(['title' => 'My_test_program']);
-        $this->assertNotNull($program);
-        $this->assertEquals(['MusikAnimal'], $program->getOrganizerNames());
+        static::assertNotNull($program);
+        static::assertEquals(['MusikAnimal'], $program->getOrganizerNames());
     }
 
     /**
@@ -132,7 +132,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $program = $this->entityManager
             ->getRepository('Model:Program')
             ->findOneBy(['title' => 'The_Lion_King']);
-        $this->assertNotNull($program);
+        static::assertNotNull($program);
     }
 
     /**
@@ -142,18 +142,18 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     {
         $this->crawler = $this->client->request('GET', '/programs/The_Lion_King');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(200, $this->response->getStatusCode());
-        $this->assertContains(
+        static::assertEquals(200, $this->response->getStatusCode());
+        static::assertContains(
             'The Lion King',
             $this->crawler->filter('.page-header')->text()
         );
-        $this->assertContains(
+        static::assertContains(
             'MusikAnimal',
             $this->crawler->filter('.programs-organizers')->text()
         );
 
         // Should see the 'edit program', since we are logged in and are one of the organizers.
-        $this->assertContains(
+        static::assertContains(
             'edit program',
             $this->crawler->filter('.page-header')->text()
         );
@@ -164,16 +164,16 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
      */
     private function deleteSpec()
     {
-        $this->assertCount(
+        static::assertCount(
             1,
             $this->entityManager->getRepository('Model:Program')->findAll()
         );
 
         $this->crawler = $this->client->request('GET', '/programs/delete/The_Lion_King');
         $this->response = $this->client->getResponse();
-        $this->assertEquals(302, $this->response->getStatusCode());
+        static::assertEquals(302, $this->response->getStatusCode());
 
-        $this->assertCount(
+        static::assertCount(
             0,
             $this->entityManager->getRepository('Model:Program')->findAll()
         );

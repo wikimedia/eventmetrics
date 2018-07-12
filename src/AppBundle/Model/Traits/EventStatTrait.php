@@ -34,6 +34,7 @@ trait EventStatTrait
      */
     public function getStatistic($metric)
     {
+        /** @var ArrayCollection $ewStats of EventStats. */
         $ewStats = $this->stats->filter(function ($stat) use ($metric) {
             return $stat->getMetric() === $metric;
         });

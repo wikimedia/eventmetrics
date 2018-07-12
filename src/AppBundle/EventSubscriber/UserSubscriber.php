@@ -5,6 +5,8 @@
 
 namespace AppBundle\EventSubscriber;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Psr\Container\ContainerInterface;
 use AppBundle\Model\Organizer;
@@ -36,6 +38,7 @@ class UserSubscriber
      */
     public function postLoad(LifecycleEventArgs $event)
     {
+        /** @var mixed $entity One of the AppBundle\Model classes. */
         $entity = $event->getEntity();
         if (!$this->isUserType($entity)) {
             return;
@@ -55,6 +58,7 @@ class UserSubscriber
      */
     public function prePersist(LifecycleEventArgs $event)
     {
+        /** @var mixed $entity One of AppBundle\Model classes. */
         $entity = $event->getEntity();
         if (!$this->isUserType($entity)) {
             return;
@@ -110,17 +114,17 @@ class UserSubscriber
     }
 
     /**
-     * Get the entity and corresponding repository, given the lifecycle event.
-     * @param  Organizer|Participant $entity
-     * @param  LifecycleEventArgs $event
+     * Get the entity and corresponding Repository, given the lifecycle event.
+     * @param Organizer|Participant $entity
+     * @param LifecycleEventArgs $event
      * @return Repository
      */
     private function getRepository($entity, LifecycleEventArgs $event)
     {
-        /** @var EntityManager */
+        /** @var EntityManager $em */
         $em = $event->getEntityManager();
 
-        /** @var Repository */
+        /** @var Repository $repo */
         $repo = $em->getRepository(get_class($entity));
         $repo->setContainer($this->container);
 

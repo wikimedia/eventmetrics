@@ -164,7 +164,7 @@ class AppExtension extends Extension
      */
     public function isRTL()
     {
-        return $this->getIntuition()->isRTL($this->getIntuition()->getLang());
+        return $this->getIntuition()->isRtl($this->getIntuition()->getLang());
     }
 
     /**
@@ -174,7 +174,7 @@ class AppExtension extends Extension
      */
     public function isRTLLang($lang)
     {
-        return $this->getIntuition()->isRTL($lang);
+        return $this->getIntuition()->isRtl($lang);
     }
 
     /**

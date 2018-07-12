@@ -41,22 +41,22 @@ class AppExtensionTest extends WebTestCase
      */
     public function testIntution()
     {
-        $this->assertEquals('en', $this->appExtension->getLang());
-        $this->assertEquals('English', $this->appExtension->getLangName());
+        static::assertEquals('en', $this->appExtension->getLang());
+        static::assertEquals('English', $this->appExtension->getLangName());
 
         $allLangs = $this->appExtension->getAllLangs();
 
         // There should be a bunch.
-        $this->assertGreaterThan(20, count($allLangs));
+        static::assertGreaterThan(20, count($allLangs));
 
         // Keys should be the language codes, with name as the values.
-        $this->assertArraySubset(['en' => 'English'], $allLangs);
-        $this->assertArraySubset(['de' => 'Deutsch'], $allLangs);
-        $this->assertArraySubset(['es' => 'Español'], $allLangs);
+        static::assertArraySubset(['en' => 'English'], $allLangs);
+        static::assertArraySubset(['de' => 'Deutsch'], $allLangs);
+        static::assertArraySubset(['es' => 'Español'], $allLangs);
 
         // Testing if the language is RTL.
-        $this->assertFalse($this->appExtension->isRTLLang('en'));
-        $this->assertTrue($this->appExtension->isRTLLang('ar'));
+        static::assertFalse($this->appExtension->isRTLLang('en'));
+        static::assertTrue($this->appExtension->isRTLLang('ar'));
     }
 
     /**
@@ -64,7 +64,7 @@ class AppExtensionTest extends WebTestCase
      */
     public function testGitMethods()
     {
-        $this->assertEquals(7, strlen($this->appExtension->gitShortHash()));
-        $this->assertEquals(40, strlen($this->appExtension->gitHash()));
+        static::assertEquals(7, strlen($this->appExtension->gitShortHash()));
+        static::assertEquals(40, strlen($this->appExtension->gitHash()));
     }
 }
