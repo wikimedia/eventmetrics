@@ -1,0 +1,60 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    database.host: 127.0.0.1
+    database.port: ~
+    database.name: grantmetrics
+    database.user: root
+    database.password: ~
+
+    database.test.host: 127.0.0.1
+    database.test.port: ~
+    database.test.name: grantmetrics_test
+    database.test.user: root
+    database.test.password: ~
+
+    database.replica.is_wikimedia: 1
+
+    database.replica.host: 127.0.0.1
+    database.replica.port: ~
+    database.replica.name: enwiki_p
+    database.replica.user: '%env(DB_USER)%'
+    database.replica.password: '%env(DB_PASSWORD)%'
+
+    # Should be something like redis://localhost:6379. If you want to connect to the Toolforge Redis
+    # instance, use SSH forwarding and provide the local port. Leave blank to disable caching.
+    cache.redis_dsn: ''
+
+    mailer.transport: smtp
+    mailer.host: 127.0.0.1
+    mailer.user: ~
+    mailer.password: ~
+
+    # A secret key that's used to generate certain security-related tokens
+    secret: ThisTokenIsNotSoSecretChangeIt
+
+    # Oauth consumer credentials, from https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration
+    oauth.key:                  ~
+    oauth.secret:               ~
+
+    # Path from domain to get to the root of the app. On Toolforge for instance this is /grantmetrics
+    # Do not include a trailing slash.
+    app.root_path: ''
+
+    # Number of revisions to show per page on the Event Data page.
+    app.revisions_per_page: 100
+
+    # Admins who can view/edit/delete any program or event.
+    app.admins:
+
+    # Max number of seconds any given query is allowed to run.
+    app.query_timeout: 120
+
+    # Show a notice at the top of the interface, on all pages. The 'style' is the Bootstrap alert type.
+    app.notice.text: ~
+    app.notice.style: danger
+
+    # Mock the logged in user (for development purposes, to avoid setting up OAuth).
+    # Must be a valid Wikimedia username.
+    app.logged_in_user: null
