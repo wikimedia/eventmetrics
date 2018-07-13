@@ -115,12 +115,14 @@ class EventDataController extends EntityController
      * @param JobHandler $jobHandler The job handler service, provided by Symfony dependency injection.
      * @param int $eventId The ID of the event to process.
      * @return JsonResponse
+     * @throws AccessDeniedHttpException
+     * @throws NotFoundHttpException
      * Coverage done on the ProcessEventCommand itself to avoid overhead of the request stack,
      * and also because this action can only be called via AJAX.
      */
     public function generateStatsAction(JobHandler $jobHandler, $eventId)
     {
-        // Only responsd to AJAX.
+        // Only respond to AJAX.
         if (!$this->request->isXmlHttpRequest()) {
             throw new AccessDeniedHttpException('This endpoint is for internal use only.');
         }
@@ -158,8 +160,8 @@ class EventDataController extends EntityController
 
     /**
      * Create a Job for the given Event, and return the JSON response.
-     * @param  JobHandler $jobHandler The job handler service.
-     * @param  Event $event
+     * @param JobHandler $jobHandler The job handler service.
+     * @param Event $event
      * @return JsonResponse
      * Coverage done on the ProcessEventCommand itself to avoid overhead of the request stack,
      * and also because this action can only be called via AJAX.

@@ -390,10 +390,10 @@ class EventProcessor
      * Loop through the given databases and determine how many of the given
      * users have made at least one edit after the given date. If all users have
      * met the retention threshold, the looping short-circuits and `true` is returned.
-     * @param  string[] $dbNames
-     * @param  string[] $usernames [description]
-     * @param  DateTime $end
-     * @param  ProgressBar &$progress The progress bar, used when running from a Command.
+     * @param string[] $dbNames
+     * @param string[] $usernames
+     * @param DateTime $end
+     * @param ProgressBar &$progress The progress bar, used when running from a Command.
      * @return int Number of users retained.
      */
     private function getNumUsersRetainedInner(array $dbNames, array $usernames, $end, &$progress)
@@ -421,9 +421,9 @@ class EventProcessor
     /**
      * Persist an EventStat with given metric and value, or update the
      * existing one, if present.
-     * @param  string $metric
-     * @param  mixed $value
-     * @param  int $offset Offset value associated with the metric,
+     * @param string $metric
+     * @param mixed $value
+     * @param int $offset Offset value associated with the metric,
      *   such as the number of days in evaluating retention.
      * @return EventStat
      */
@@ -455,9 +455,9 @@ class EventProcessor
     }
 
     /**
-     * Persist an EventWikiStat with given metric and value, or update the
-     * existing one, if present.
-     * @param EventWikiStat $wiki
+     * For the given EventWiki, create and persist an EventWikiStat with given metric and value,
+     * or update the existing one, if present.
+     * @param EventWiki $wiki
      * @param string $metric
      * @param mixed $value
      * @param int $offset Offset value associated with the metric,
