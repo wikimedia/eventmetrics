@@ -4,10 +4,10 @@ Grant Metrics
 A Wikimedia Foundation tool that provides grantees a simple, easy to use interface for reporting their shared metrics, removing the need for any manual counting.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Build Status](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/build.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/build-status/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/?branch=master)
+[![Build Status](https://travis-ci.org/wikimedia/grantmetrics.svg?branch=master)](https://travis-ci.org/wikimedia/grantmetrics)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/?branch=master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 ## Installation
 
@@ -15,7 +15,6 @@ After cloning the repository, run:
 
 * `composer install`.
     * Use `grantmetrics` as the `database_name`.
-    * `database.replica.is_wikimedia` tells the tests to go off of live replica data when making assertions, rather than the fixtures. Set this to `1` if you are working locally and are connected to the replicas.
     * Fill out your credentials accordingly.
     * `app.logged_in_user` is used to mock the current user, instead of going through OAuth. Must be a valid Wikimedia username. In production this should be `null`.
 * `php bin/console server:start` to start the server.

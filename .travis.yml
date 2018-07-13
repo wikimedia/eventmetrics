@@ -1,0 +1,48 @@
+language: php
+
+php:
+  - '7.0'
+
+env:
+  global:
+    - CC_TEST_REPORTER_ID=966ea05770ea94b742ad354b39a3ededb823f7161d5b8c74085078283e01ceb9
+
+before_install:
+  - composer self-update
+  - openssl aes-256-cbc -K $encrypted_cb2dad272cf1_key -iv $encrypted_cb2dad272cf1_iv -in build/ci/travis.tar.enc -out build/ci/travis.tar -d
+  - tar xvf build/ci/travis.tar
+  - mv travis ~/.ssh/id_rsa
+  - mv travis.pub ~/.ssh/id_rsa.pub
+  - chmod 600 ~/.ssh/id_rsa.pub
+  - chmod 600 ~/.ssh/id_rsa
+  - echo "Host *.wmflabs" > ~/.ssh/config
+  - echo "  User communitytech" > ~/.ssh/config
+  - ssh-keyscan -t rsa tools-dev.wmflabs.org >> ~/.ssh/known_hosts
+  - sudo apt-get install expect
+  - chmod +x ./build/ci/ssh-tunnel.sh
+  - ./build/ci/ssh-tunnel.sh
+  - wget https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.0/phpDocumentor.phar
+
+install:
+  - composer install
+  - cp app/config/parameters-travis.yml.dist app/config/parameters.yml
+  - php bin/console doctrine:database:create --env=test --no-interaction --quiet
+  - php bin/console doctrine:migrations:migrate --env=test --no-interaction --quiet
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+script:
+  - composer lint
+  - php phpDocumentor.phar -d src -t docs/api --template="checkstyle" # Different than `composer docs` for CI build.
+  - composer unit
+
+after_script:
+  - ps -ef | grep communitytech@tools-dev.wmflabs.org | awk 'NR==1{print $3}' | xargs kill -9
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+branches:
+  only:
+    - master

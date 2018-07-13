@@ -340,8 +340,7 @@ abstract class Repository extends EntityRepository
      *****************/
 
     /**
-     * Get the table name for use when querying the replicas. This automatically
-     * appends _userindex if the 'database.replica.is_wikimedia' config option is set.
+     * Get the table name for use when querying the replicas.
      * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
      * @param string $name Name of table.
      * @param string $suffix Suffix to use instead of _userindex.
@@ -349,17 +348,14 @@ abstract class Repository extends EntityRepository
      */
     protected function getTableName($name, $suffix = null)
     {
-        $isWikimedia = (bool)$this->container
-            ->getParameter('database.replica.is_wikimedia');
-
-        if ($isWikimedia && $suffix !== null) {
+        if ($suffix !== null) {
             return $name.'_'.$suffix;
         }
 
         // For 'revision' and 'logging' tables (actually views) on the WMF replicas,
         // use the indexed versions (that have some rows hidden, e.g. for revdeleted users).
         $isLoggingOrRevision = in_array($name, ['revision', 'logging', 'archive']);
-        if ($isWikimedia && $isLoggingOrRevision) {
+        if ($isLoggingOrRevision) {
             $name = $name.'_userindex';
         }
 
@@ -437,9 +433,7 @@ abstract class Repository extends EntityRepository
      */
     public function getQueryTimeoutClause($timeout = null)
     {
-        // Scrutinizer doesn't use MariaDB, and/or queries might for some reason take really long.
-        $isWikimedia = (bool)$this->container->getParameter('database.replica.is_wikimedia');
-        if (!$isWikimedia || false === $timeout) {
+        if (false === $timeout) {
             return '';
         }
 
