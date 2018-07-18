@@ -220,6 +220,10 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         );
     }
 
+    /**
+     * Test how child wikis are handled when a family wiki is added, and when stats are generated.
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function familyWikiSpec()
     {
         // First create multiple 'orphan' wikis (that don't have an associated family wiki yet).
@@ -228,6 +232,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'Pinocchio']);
         new EventWiki($event, 'fr.wikipedia');
+        new EventWiki($event, 'commons.wikimedia');
         $this->entityManager->persist($event);
         $this->entityManager->flush();
 
@@ -238,11 +243,12 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/Pinocchio');
 
-        // Make sure the two wikis are in the form.
-        static::assertEquals('en.wikipedia', $this->crawler->filter('#form_wikis_0')->attr('value'));
-        static::assertEquals('fr.wikipedia', $this->crawler->filter('#form_wikis_1')->attr('value'));
+        // Make sure the three wikis are in the form.
+        static::assertEquals('commons.wikimedia', $this->crawler->filter('#form_wikis_0')->attr('value'));
+        static::assertEquals('en.wikipedia', $this->crawler->filter('#form_wikis_1')->attr('value'));
+        static::assertEquals('fr.wikipedia', $this->crawler->filter('#form_wikis_2')->attr('value'));
 
-        // Change one to all Wikipedias, and save.
+        // Change en.wikipedia to all Wikipedias, and save.
         $form = $this->crawler->selectButton('Submit')->form();
         $form['form[wikis][1]'] = '*.wikipedia';
         $this->crawler = $this->client->submit($form);
@@ -256,10 +262,15 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             ->getRepository('Model:EventWiki')
             ->findOneBy(['domain' => 'fr.wikipedia']);
         static::assertNull($eventWiki);
-        $eventWiki = $this->entityManager
+        $eventWikis = $this->entityManager
             ->getRepository('Model:EventWiki')
-            ->findOneBy(['event' => $event]);
-        static::assertEquals('*.wikipedia', $eventWiki->getDomain());
+            ->findBy(['event' => $event]);
+
+        // *.wikipedia and commons.wikimedia should still remain.
+        $domains = array_map(function (EventWiki $eventWiki) {
+            return $eventWiki->getDomain();
+        }, $eventWikis);
+        static::assertEquals(['*.wikipedia', 'commons.wikimedia'], $domains);
     }
 
     /**

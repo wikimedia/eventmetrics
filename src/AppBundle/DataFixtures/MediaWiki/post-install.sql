@@ -22,7 +22,9 @@ CREATE TABLE wiki (
 INSERT INTO wiki VALUES('enwiki', 'en', 'https://en.wikipedia.org', 'wikipedia');
 
 -- This is used only for some integration tests.
--- There is not actually a dewiki installed on the CI build.
+-- These wikis are not actually installed in the CI build.
 INSERT INTO wiki VALUES('dewiki', 'de', 'https://de.wikipedia.org', 'wikipedia');
+INSERT INTO wiki VALUES('frwiki', 'fr', 'https://fr.wikipedia.org', 'wikipedia');
+INSERT INTO wiki VALUES('commonswiki', 'en', 'https://commons.wikimedia.org', 'wikipedia');
 
 GRANT all on meta_p.* to 'root'@'localhost';

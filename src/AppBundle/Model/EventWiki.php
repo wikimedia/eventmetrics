@@ -39,7 +39,6 @@ class EventWiki
      */
     const FAMILY_NAMES = [
         'wikipedia',
-        'commons',
     ];
 
     /**
@@ -159,7 +158,9 @@ class EventWiki
         $family = $this->getFamilyName();
 
         return $this->event->getWikis()->filter(function (EventWiki $wiki) use ($family) {
-            return substr($this->domain, 2) === $family && $wiki->getDomain() !== $this->domain;
+            return $wiki->isChildWiki() &&
+                $wiki->getFamilyName() === $family &&
+                $wiki->getDomain() !== $this->domain;
         });
     }
 

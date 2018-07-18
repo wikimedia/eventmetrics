@@ -108,5 +108,27 @@ class EventWikiTest extends PHPUnit_Framework_TestCase
         static::assertEquals('wikipedia', $wikiFam->getFamilyName());
         static::assertEquals([$wiki], $wikiFam->getChildWikis()->toArray());
         static::assertTrue($wiki->isChildWiki());
+
+        // Add Commons, which should be treated as an orphan wiki.
+        $commons = new EventWiki($this->event, 'commons.wikimedia');
+        static::assertFalse($commons->isFamilyWiki());
+        static::assertNull($commons->getFamilyName());
+        static::assertEquals(new ArrayCollection([]), $commons->getChildWikis());
+        static::assertFalse($commons->isChildWiki());
+
+        $familyDomains = $this->event->getFamilyWikis()->map(function (EventWiki $wiki) {
+            return $wiki->getDomain();
+        })->toArray();
+        static::assertEquals(['*.wikipedia'], array_values($familyDomains));
+
+        // Commons should not be a child of *.wikipedia
+        static::assertFalse($wikiFam->getChildWikis()->contains($commons));
+
+        // Clearing child wikis from the Event should only remove test.wikipedia
+        $this->event->clearChildWikis();
+        $domains = $this->event->getWikis()->map(function (EventWiki $wiki) {
+            return $wiki->getDomain();
+        })->toArray();
+        static::assertEquals(['*.wikipedia', 'commons.wikimedia'], array_values($domains));
     }
 }
