@@ -234,6 +234,29 @@ class EventTest extends KernelTestCase
     }
 
     /**
+     * Validations of the Event itself.
+     */
+    public function testIsValid()
+    {
+        $event = new Event($this->program, 'Test event');
+
+        static::assertFalse($event->isValid());
+
+        // Add start/end dates.
+        $event->setStart('2018-01-01');
+        $event->setEnd('2018-02-01');
+        static::assertFalse($event->isValid());
+
+        // Set participants.
+        new Participant($event, 50);
+        static::assertFalse($event->isValid());
+
+        // Set wikis.
+        new EventWiki($event, 'test.wikipedia');
+        static::assertTrue($event->isValid());
+    }
+
+    /**
      * Jobs associated with the Event.
      */
     public function testJobs()
@@ -315,5 +338,22 @@ class EventTest extends KernelTestCase
             ],
             $event->getAvailableMetrics()
         );
+    }
+
+    /**
+     * @covers Event::getWikisByFamily()
+     */
+    public function testWikisByFamily()
+    {
+        $event = new Event($this->program);
+
+        new EventWiki($event, '*.wikipedia');
+        $testwiki = new EventWiki($event, 'test.wikipedia');
+        $commons = new EventWiki($event, 'commons.wikimedia');
+
+        static::assertEquals([
+            'commons' => [$commons],
+            'wikipedia' => [$testwiki],
+        ], $event->getWikisByFamily());
     }
 }

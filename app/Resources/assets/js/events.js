@@ -117,6 +117,15 @@ $(function () {
         });
     });
 
+    /**
+     * Link to process event in message shown when stats have not yet been generated.
+     */
+    $('.event-process-link').on('click', function (e) {
+        $('.event-process-btn').trigger('click');
+        $('.event-wiki-stats--empty').html('&nbsp;');
+        e.preventDefault();
+    });
+
     setupAutocompletion();
     setupColumnSorting();
 

@@ -1,5 +1,5 @@
 @import 'mixins';
-@import url('https://tools-static.wmflabs.org/fontcdn/css?family=Open+Sans');
+@import url('https://tools-static.wmflabs.org/fontcdn/css?family=Roboto:400,700');
 
 html {
     height: 100%;
@@ -18,7 +18,7 @@ html {
 }
 
 body {
-    font-family: 'Open Sans', sans-serif !important;
+    font-family: 'Roboto', sans-serif !important;
     min-height: 100%;
     position: relative;
 
