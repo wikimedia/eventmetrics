@@ -278,7 +278,7 @@ abstract class Repository extends EntityRepository
      *************/
 
     /**
-     * Get the global user IDs for mutiple users,
+     * Get the global user IDs for multiple users,
      * based on the central auth database.
      * @param string[] $usernames Usernames to query for.
      * @return array with keys 'user_name' and 'user_id'.
