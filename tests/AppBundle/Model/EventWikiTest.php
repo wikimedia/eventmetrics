@@ -112,7 +112,7 @@ class EventWikiTest extends PHPUnit_Framework_TestCase
         // Add Commons, which should be treated as an orphan wiki.
         $commons = new EventWiki($this->event, 'commons.wikimedia');
         static::assertFalse($commons->isFamilyWiki());
-        static::assertNull($commons->getFamilyName());
+        static::assertEquals('commons', $commons->getFamilyName());
         static::assertEquals(new ArrayCollection([]), $commons->getChildWikis());
         static::assertFalse($commons->isChildWiki());
 

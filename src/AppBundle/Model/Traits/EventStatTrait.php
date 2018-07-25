@@ -82,9 +82,10 @@ trait EventStatTrait
     /**
      * Get the metric types available to this event, based on associated wikis,
      * and their default offset values.
+     * @param string|null $family Only return metrics available to given wiki family.
      * @return array
      */
-    public function getAvailableMetrics()
+    public function getAvailableMetrics($family = null)
     {
         $metricMap = self::WIKI_FAMILY_METRIC_MAP;
 
@@ -92,7 +93,9 @@ trait EventStatTrait
         $metricKeys = $metricMap['*'];
 
         foreach ($this->wikis as $wiki) {
-            if (isset($metricMap[$wiki->getFamilyName()])) {
+            $isFamily = $family === null ? true : $wiki->getFamilyName() === $family;
+
+            if ($isFamily && isset($metricMap[$wiki->getFamilyName()])) {
                 $metricKeys = array_merge(
                     $metricKeys,
                     $metricMap[$wiki->getFamilyName()]

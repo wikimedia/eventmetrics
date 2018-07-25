@@ -28,8 +28,17 @@
         }
     }
 
+    // When there are no statistics to show.
+    .event-metadata ~ .event-section {
+        margin-top: 30px;
+    }
+
     .event-metric-desc {
         cursor: help;
+    }
+
+    .event-wiki-stats--empty {
+        margin: 36px 0;
     }
 
     .event-stats,
@@ -40,6 +49,31 @@
             color: #6ea8dc;
             font-size: 14px;
         }
+    }
+
+    .event-metadata--grouped {
+        margin: 25px 0;
+
+        th {
+            padding-right: 20px;
+        }
+    }
+
+    .event-wiki-stats--grouped {
+        margin: 0;
+
+        th,
+        td {
+            border: 0;
+        }
+
+        &:last-of-type {
+            margin-bottom: 30px;
+        }
+    }
+
+    .event-wiki-stats--grouped-hr {
+        margin: 5px;
     }
 
     .event-stats {

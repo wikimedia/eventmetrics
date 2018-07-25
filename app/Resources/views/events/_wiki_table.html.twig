@@ -1,0 +1,56 @@
+{% set metricOrder = [] %}
+<table class="table table-hover gm-table event-wiki-stats event-wiki-stats--grouped">
+    <thead>
+        <tr>
+            <th class="col-lg-3"></th>
+            {% set sortableMetrics = ['pages-created', 'pages-improved'] %}
+            {% set columnCount = 1 %}
+            {% for metric, offset in availableMetrics %}
+                {% if metric not in commonMetrics and event.statistic(metric) is defined %}
+                    {% set columnCount = columnCount + 1 %}
+                    {% set stat = event.statistic(metric) %}
+                    {% set metricOrder = metricOrder|merge([stat.metric]) %}
+                    {% set hasDesc = msgExists(stat.metric ~ '-desc', [stat.offset]) %}
+                    <th class="col-lg-3">
+                        <div class="{% if stat.metric in sortableMetrics %} sort-link sort-link--{{ stat.metric }}{% endif %}{% if hasDesc %} event-metric-desc{% endif %}" {% if hasDesc %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"{% endif %} data-column="{{ stat.metric }}">
+                            {{ msg(stat.metric, [stat.offset]) }}
+                        </div>
+                    </th>
+                {% endif %}
+            {% endfor %}
+            {% for i in columnCount..3 %}
+                <th class="col-lg-3"></th>
+            {% endfor %}
+        </tr>
+        {% if wikis|length > 1 %}
+            <tr>
+                <th>{{ msg('totals') }}</th>
+                {% for metric in metricOrder %}
+                    <th>{{ event.statistic(metric).value|num_format }}</th>
+                {% endfor %}
+            </tr>
+        {% endif %}
+    </thead>
+    <tbody>
+        {% for wiki in wikis %}
+            <tr>
+                <td class="sort-entry--domain" data-value="{{ wiki.domain }}">
+                    {{ wiki.domain }}
+                </td>
+                {% for metric in metricOrder %}
+                    {% set stat = wiki.statistic(metric) %}
+                    <td class="sort-entry--{{ metric }}" data-value="{{ stat != null ? stat.value : -1 }}">
+                        {% if stat != null %}
+                            {{ stat.value|num_format }}
+                        {% else %}
+                            &mdash;
+                        {% endif %}
+                    </td>
+                {% endfor %}
+                {% for i in columnCount..3 %}
+                    <td class="col-lg-3"></td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

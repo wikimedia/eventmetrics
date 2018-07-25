@@ -157,12 +157,6 @@ class Event
     protected $updated;
 
     /**
-     * @ORM\Column(name="event_valid", type="boolean", options={"default": true})
-     * @var bool Whether the event has passed validity checks.
-     */
-    protected $valid = true;
-
-    /**
      * One Event has many Jobs.
      * @ORM\OneToMany(targetEntity="Job", mappedBy="event", orphanRemoval=true)
      * @var ArrayCollection|Job[] Jobs for this Event.
@@ -219,6 +213,19 @@ class Event
     public function getCacheKey()
     {
         return (string)$this->id;
+    }
+
+    /**
+     * Is the Event valid? If false, statistics will not be able to be generated.
+     * @return bool
+     */
+    public function isValid()
+    {
+        return $this->wikis->count() > 0 &&
+            $this->start !== null &&
+            $this->end !== null &&
+            $this->start < new DateTime() &&
+            $this->participants->count() > 0;
     }
 
     /***********
@@ -480,6 +487,34 @@ class Event
     }
 
     /**
+     * This method returns all EventWikis associated with the Event, grouped by the name of the associated family.
+     * It is used for display purposes on the Event page. This does not pay mind to whether there is an EventWiki
+     * representing a family (e.g. *.wikipedia). For instance, if there are EventWikis for en.wikipedia, fr.wikipedia,
+     * and commons.wikipedia, the two Wikipedias are grouped together. If there's also a *.wikipedia,
+     * it is not included in the 'wikipedia' group.
+     * @return array
+     */
+    public function getWikisByFamily()
+    {
+        $wikisByFamily = [];
+
+        foreach ($this->wikis->toArray() as $wiki) {
+            if ($wiki->isFamilyWiki()) {
+                continue;
+            }
+
+            $familyName = $wiki->getFamilyName();
+            if (!isset($wikisByFamily[$familyName])) {
+                $wikisByFamily[$familyName] = [$wiki];
+            } else {
+                $wikisByFamily[$familyName][] = $wiki;
+            }
+        }
+
+        return $wikisByFamily;
+    }
+
+    /**
      * Get all associated EventWikis that belong to a family.
      * @return ArrayCollection of EventWikis
      */
@@ -491,18 +526,7 @@ class Event
     }
 
     /**
-     * Remove all associated EventWikis that belong to a family.
-     */
-    public function clearChildWikis()
-    {
-        $children = $this->getChildWikis()->toArray();
-        foreach ($children as $child) {
-            $this->removeWiki($child);
-        }
-    }
-
-    /**
-     * Get all EventWikis that are not part of a family that has been added
+     * Get all EventWikis that are not part of a family that have been added
      * to the Event. For instance, if there is an EventWiki for *.wikipedia
      * (wikipedia family), a fr.wikipedia EventWiki is not returned, but it
      * will if there is not a *.wikipedia EventWiki.
@@ -516,8 +540,19 @@ class Event
 
         return $this->wikis->filter(function (EventWiki $wiki) use ($familyNames) {
             return null === $wiki->getDomain()
-                || !$familyNames->contains(explode('.', $wiki->getDomain())[1]);
+                || !$familyNames->contains($wiki->getFamilyName());
         });
+    }
+
+    /**
+     * Remove all associated EventWikis that belong to a family.
+     */
+    public function clearChildWikis()
+    {
+        $children = $this->getChildWikis()->toArray();
+        foreach ($children as $child) {
+            $this->removeWiki($child);
+        }
     }
 
     /**

@@ -35,10 +35,11 @@ class EventWiki
     const VALID_WIKI_PATTERN = '/\w+\.wikipedia|commons\.wikimedia/';
 
     /**
-     * Valid names of wiki families.
+     * Valid names of wiki families, or singular orphan wikis like commons.
      */
     const FAMILY_NAMES = [
         'wikipedia',
+        'commons',
     ];
 
     /**
@@ -145,8 +146,7 @@ class EventWiki
     }
 
     /**
-     * If this EventWiki represents a family, return all EventWikis
-     * of the Event that belong to the family.
+     * If this EventWiki represents a family, return all EventWikis of the Event that belong to the family.
      * @return ArrayCollection of EventWikis
      */
     public function getChildWikis()

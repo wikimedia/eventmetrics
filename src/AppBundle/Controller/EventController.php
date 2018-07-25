@@ -67,7 +67,7 @@ class EventController extends EntityController
 
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
-            $this->addFlash('success', /** @scrutinizer ignore-type */ [
+            $this->addFlash('success', [
                 'event-created',
                 $event->getDisplayTitle(),
             ]);

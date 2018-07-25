@@ -1,0 +1,82 @@
+{% import 'macros/layout.html.twig' as layout %}
+
+{% set content %}
+    {% if isOrganizer %}
+        {{ form_errors(form) }}
+
+        {# Valid participants should be shown below invalid ones. #}
+        {% set validParticipants = [] %}
+
+        {{ form_start(form, {'method': 'post', 'attr': {'class': 'form-horizontal save-participants-form', 'autocomplete': 'off'}}) }}
+        {% for participant in form.participants %}
+            {% set invalidParticipant = false %}
+            {% if not(participant.vars.valid) %}
+                {% set invalidParticipant = true %}
+            {% endif %}
+
+            {% set participantRow %}
+                <div class="form-group participant-row{% if invalidParticipant %} has-error{% endif %}">
+                    <div class="col-sm-4">
+                        {{ form_widget(participant, {'attr': {'class': 'user-input'}}) }}
+                        {% if invalidParticipant %}
+                            <span class="font-awesome invalid-input">&#xf071;</span>
+                        {% else %}
+                            <span class="font-awesome valid-input">&#xf05d;</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-default remove-participant">
+                            {{ msg('remove') }}
+                        </button>
+                    </div>
+                </div>
+            {% endset %}
+
+            {##
+             # If invalid, show immediately, otherwise merge into valid ones that
+             # will show below the invalid ones.
+             #}
+            {% if invalidParticipant %}
+                {{ participantRow }}
+            {% else %}
+                {% set validParticipants = validParticipants|merge([participantRow]) %}
+            {% endif %}
+        {% endfor %}
+
+        {# Render valid participants. #}
+        {% for row in validParticipants %}
+            {{ row }}
+        {% endfor %}
+
+        <div class="col-sm-6 col-sm-offset-6 save-participants-btn">
+            {{ form_widget(form.submit, {'label': msg('save-participants'), 'attr': {'class': 'btn-primary'}}) }}
+        </div>
+
+        <div class="form-group col-sm-6 event-add-participants">
+            <label for="form_new_participants">{{ msg('add-more-participants') }}</label>
+            {{ form_widget(form.new_participants, {'attr': {'class': 'event-new-participants', 'rows': 10}}) }}
+        </div>
+        {% if form.participants|length == 0 %}
+            <div class="col-sm-6">
+                {{ form_widget(form.submit, {'label': msg('save-participants'), 'attr': {'class': 'btn-primary'}}) }}
+            </div>
+        {% endif %}
+
+        {{ form_row(form._token) }}
+        {{ form_end(form, {'render_rest': false}) }}
+    {% else %}
+        {% for participant in event.participants %}
+            <div class="participant-row">
+                {{ participant.username }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endset %}
+
+{{
+    layout.eventAccordion(
+        'participants',
+        event.numParticipants ~ ' ' ~ msg('num-participants', [event.numParticipants]),
+        content
+    )
+}}
