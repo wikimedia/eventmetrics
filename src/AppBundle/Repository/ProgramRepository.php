@@ -30,7 +30,7 @@ class ProgramRepository extends Repository
      * Get the unique metrics for this Program, across all Events.
      * This also uses the configured metrics in Event::getAllAvailableMetrics()
      * to determine what order the metrics should be presented.
-     * @param  Program $program
+     * @param Program $program
      * @return string[]
      */
     public function getUniqueMetrics(Program $program)
@@ -66,27 +66,27 @@ class ProgramRepository extends Repository
     }
 
     /**
-     * Get the names and offsets of all unique EventWikiMetrics
-     * belonging to the Events with the given event IDs.
-     * @param  QueryBuilder $rqb
-     * @param  int[] $eventIds
+     * Get the names and offsets of all unique EventWikiMetrics belonging to the Events with the given event IDs.
+     * @param QueryBuilder $rqb
+     * @param int[] $eventIds
      * @return array With metric names as the keys.
      */
     private function getEventWikiMetrics(QueryBuilder $rqb, array $eventIds)
     {
-        $eventWikiIds = $rqb->select(['ew_id'])
+        $eventWikiIds = $rqb->select(['DISTINCT(ew_id)'])
             ->from('event_wiki')
             ->where('ew_event_id IN (:eventIds)')
             ->setParameter('eventIds', $eventIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
 
-        return $rqb->select(['DISTINCT(ews_metric), ews_metric_offset'])
-            ->from('event_wiki_stat')
-            ->where('ews_event_wiki_id IN (:eventWikiIds)')
-            ->setParameter('eventWikiIds', $eventWikiIds, Connection::PARAM_INT_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_NUM);
+        // Sometimes Doctrine query builder isn't the way to go... The raw SQL here is dramatically faster.
+        $sql = "SELECT DISTINCT(ews_metric), ews_metric_offset
+                FROM event_wiki_stat
+                WHERE ews_event_wiki_id IN (?)";
+        $stmt = $this->getGrantMetricsConnection()
+            ->executeQuery($sql, [$eventWikiIds], [Connection::PARAM_INT_ARRAY]);
+        return $stmt->fetchAll(\PDO::FETCH_NUM);
     }
 
     /**
