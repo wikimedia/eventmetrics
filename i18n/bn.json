@@ -1,4 +1,9 @@
 {
+	"@metadata": {
+		"authors": [
+			"আফতাবুজ্জামান"
+		]
+	},
 	"all": "সব",
 	"apply": "প্রয়োগ",
 	"cancel": "বাতিল",
@@ -22,10 +27,17 @@
 	"page": "পাতা",
 	"pager-newer-n": "{{PLURAL:$1|নতুনতর ১টি|নতুনতর $1টি}}",
 	"pager-older-n": "{{PLURAL:$1|আরও পুরনো ১টি|আরও পুরনো $1টি}}",
+	"participants": "অংশগ্রহণকারী",
+	"remove": "সরান",
 	"report-issue": "একটি সমস্যা প্রতিবেদন করুন",
 	"submit": "জমা দিন",
+	"time": "সময়",
+	"timezone": "সময়অঞ্চল",
+	"title": "শিরোনাম",
 	"totals": "মোট",
 	"unknown": "অজানা",
+	"updating": "হালনাগাদ হচ্ছে",
 	"username": "ব্যবহারকারী নাম",
-	"view-source": "উৎস দেখুন"
+	"view-source": "উৎস দেখুন",
+	"wiki": "উইকি"
 }
