@@ -63,10 +63,24 @@ class EventRepository extends Repository
      * @param DateTime $start
      * @param DateTime $end
      * @param string[] $usernames
+     * @param int[] $categoryIds Only search within given categories.
      * @return array With keys 'edited' and 'created'.
      */
-    public function getNumPagesEdited($dbName, DateTime $start, DateTime $end, array $usernames)
-    {
+    public function getNumPagesEdited(
+        $dbName,
+        DateTime $start,
+        DateTime $end,
+        array $usernames = [],
+        array $categoryIds = []
+    ) {
+        if (empty($usernames) && empty($categoryIds)) {
+            // FIXME: This should throw an Exception or something so we can print an error message.
+            return [
+                'edited' => 0,
+                'created' => 0,
+            ];
+        }
+
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
 
@@ -82,11 +96,29 @@ class EventRepository extends Repository
             ->from("$dbName.page")
             ->join("$dbName.page", "$dbName.$revisionTable", null, 'rev_page = page_id')
             ->where('page_namespace = 0')
-            ->andWhere('rev_timestamp BETWEEN :start AND :end')
-            ->andWhere('rev_user_text IN (:usernames)')
-            ->setParameter('start', $start)
-            ->setParameter('end', $end)
-            ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+            ->andWhere('rev_timestamp BETWEEN :start AND :end');
+
+        if (count($usernames) > 0) {
+            $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
+                ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+        }
+        if (count($categoryIds) > 0) {
+            $catRepo = $this->em->getRepository('Model:EventCategory');
+            $catRepo->setContainer($this->container);
+            $rqb->andWhere(
+                $rqb->expr()->in(
+                    'page_id',
+                    // null is used to remove the LIMIT, since our version of MariaDB doesn't support LIMIT
+                    // within a subquery. This should (maybe?) still be performant, since we're not putting all the
+                    // categories in local memory.
+                    $catRepo->getPagesInCategories($dbName, $categoryIds, true, null)->getSQL()
+                )
+            );
+            $rqb->setParameter('categoryIds', $categoryIds, Connection::PARAM_INT_ARRAY);
+        }
+
+        $rqb->setParameter('start', $start)
+            ->setParameter('end', $end);
 
         return $this->executeQueryBuilder($rqb)->fetch();
     }

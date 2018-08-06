@@ -5,6 +5,7 @@
 
 namespace Tests\AppBundle\Command;
 
+use AppBundle\Model\EventCategory;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
@@ -113,8 +114,8 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
         $this->pagesCreatedSpec();
         $this->pagesImprovedSpec();
         $this->filesUploadedSpec();
+        $this->fileUsageSpec();
         $this->retentionSpec();
-
         $this->jobFinishedSpec();
     }
 
@@ -269,5 +270,40 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
                 'event' => $this->event,
             ]);
         static::assertEquals(0, count($jobs));
+    }
+
+    /**
+     * Creates a new job, this time with EventCategorys on the Event.
+     */
+    public function testCategories()
+    {
+        $ew = $this->event->getWikiByDomain('en.wikipedia');
+
+        // Add https://en.wikipedia.org/wiki/Category:Parks_in_Brooklyn.
+        // This will include [[Domino Park]] created and edited by MusikAnimal.
+        new EventCategory($ew, 234634);
+
+        // Create a Job for the Event and flush it to the database.
+        $job = new Job($this->event);
+        $this->entityManager->persist($job);
+        $this->entityManager->flush();
+
+        $this->commandTester->execute(['eventId' => $this->event->getId()]);
+
+        // Should be only 1 page created and improved, ([[Domino Park]]).
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'pages-created',
+            ]);
+        static::assertEquals(1, $eventStat->getValue());
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'pages-improved',
+            ]);
+        static::assertEquals(1, $eventStat->getValue());
     }
 }
