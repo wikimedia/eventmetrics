@@ -47,19 +47,11 @@ class ProcessEventCommandTest extends KernelTestCase
      */
     private $event;
 
-    /**
-     * Whether or not we're testing against the Wikimedia replicas.
-     * @var bool
-     */
-    private $isWikimedia;
-
     public function setUp()
     {
         self::bootKernel();
 
         $container = self::$kernel->getContainer();
-
-        $this->isWikimedia = (bool)$container->getParameter('database.replica.is_wikimedia');
 
         /** @var \Doctrine\ORM\EntityManager $entityManager */
         $this->entityManager = $container->get('doctrine')->getManager();
@@ -169,7 +161,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'event' => $this->event,
                 'metric' => 'pages-created',
             ]);
-        static::assertEquals($this->isWikimedia ? 3 : 2, $eventStat->getValue());
+        static::assertEquals(3, $eventStat->getValue());
 
         // As an EventWikiStat...
         $eventWikiStat = $this->entityManager
@@ -178,7 +170,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'wiki' => $this->event->getWikis()[0],
                 'metric' => 'pages-created',
             ]);
-        static::assertEquals($this->isWikimedia ? 3 : 2, $eventWikiStat->getValue());
+        static::assertEquals(3, $eventWikiStat->getValue());
     }
 
     /**
@@ -193,7 +185,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals($this->isWikimedia ? 5 : 4, $eventStat->getValue());
+        static::assertEquals(5, $eventStat->getValue());
 
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
@@ -201,7 +193,7 @@ class ProcessEventCommandTest extends KernelTestCase
                 'wiki' => $this->event->getWikis()[0],
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals($this->isWikimedia ? 5 : 4, $eventWikiStat->getValue());
+        static::assertEquals(5, $eventWikiStat->getValue());
     }
 
     /**

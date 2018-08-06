@@ -1,38 +1,11 @@
 build:
-    project_setup:
-        before:
-            - cp app/config/parameters.yml.dist app/config/parameters.yml
-            - composer self-update
-            - wget https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.0/phpDocumentor.phar
-            - php bin/console doctrine:database:create --env=test --no-interaction --quiet
-            - php bin/console doctrine:migrations:migrate --env=test --no-interaction --quiet
-            - export MW='REL1_30'
-            - bash ./build/ci/install-mediawiki.sh
-            - bash ./build/ci/run-webserver.sh
-            - export MW_API='http://localhost:8080/w/api.php'
-            - export MW_USER='CIUser'
-            - export MW_PASSWORD='CIPass'
-            - export IP='/home/scrutinizer/web/w'
     environment:
         php:
             version: 5.6
-        ruby: 2.4.0
     tests:
         override:
-            -
-                command: composer validate
-            -
-                command: ./vendor/bin/phpcs -s .
-            -
-                command: php phpDocumentor.phar -d src -t docs/api --template="checkstyle"
-            -
-                command: ( [[ -z $(grep "error" docs/api/checkstyle.xml) ]] )
-            -
-                command: 'vendor/bin/simple-phpunit --coverage-clover=coverage.xml'
-                idle_timeout: 300
-                coverage:
-                    file: 'coverage.xml'
-                    format: 'clover'
+            # Disables tests. We're only using Scrutinizer for inspections.
+            command: 'php -v'
 
 filter:
     excluded_paths:
@@ -54,6 +27,3 @@ build_failure_conditions:
 
     - 'project.metric("scrutinizer.quality", < 9)' # Code Quality Rating drops below 9
     - 'project.metric("scrutinizer.test_coverage", < 0.80)' # Code Coverage drops below 80%
-
-    # Code Coverage decreased from previous inspection
-    - 'project.metric_change("scrutinizer.test_coverage", < -1)'

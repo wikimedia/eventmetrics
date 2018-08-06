@@ -15,10 +15,10 @@ parameters:
     database.test.password: ~
 
     database.replica.host: 127.0.0.1
-    database.replica.port: ~
+    database.replica.port: 4711
     database.replica.name: enwiki_p
-    database.replica.user: root
-    database.replica.password:
+    database.replica.user: '%env(DB_USER)%'
+    database.replica.password: '%env(DB_PASSWORD)%'
 
     # Should be something like redis://localhost:6379. If you want to connect to the Toolforge Redis
     # instance, use SSH forwarding and provide the local port. Leave blank to disable caching.
@@ -44,12 +44,10 @@ parameters:
     app.revisions_per_page: 100
 
     # Admins who can view/edit/delete any program or event.
-    app.admins:
-        - MusikAnimal (WMF)
-        - NKohli (WMF)
+    app.admins: []
 
     # Max number of seconds any given query is allowed to run.
-    app.query_timeout: 900
+    app.query_timeout: 120
 
     # Show a notice at the top of the interface, on all pages. The 'style' is the Bootstrap alert type.
     app.notice.text: ~
