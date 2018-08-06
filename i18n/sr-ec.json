@@ -1,5 +1,9 @@
 {
-	"@metadata": [],
+	"@metadata": {
+		"authors": [
+			"BadDog"
+		]
+	},
 	"all": "Све",
 	"apply": "Примени",
 	"cancel": "Откажи",
@@ -7,6 +11,7 @@
 	"date": "Датум",
 	"diff": "Разл",
 	"documentation": "Документација",
+	"edit-program": "Уреди програм",
 	"edit-summary": "Опис измене",
 	"error-server-message": "Сервер каже: $1",
 	"error-service-overload": "Grant Metrics је тренутно преоптерећен сервисирањем других захтева. Покушајте поново за неколико минута.",
@@ -24,10 +29,21 @@
 	"page": "Страница",
 	"pager-newer-n": "{{PLURAL:$1|новији 1|новија $1|новијих $1}}",
 	"pager-older-n": "{{PLURAL:$1|старији 1|старијих $1}}",
+	"participants": "Учесници",
+	"queued": "На чекању",
+	"remove": "Уклони",
 	"report-issue": "Пријави проблем",
+	"start-date": "Датум почетка",
 	"submit": "Пошаљи",
+	"time": "Време",
+	"timezone": "Временска зона",
+	"title": "Наслов",
 	"totals": "Укупно",
 	"unknown": "Непознато",
+	"update-data": "Ажурирај податке",
+	"updating": "Ажурирам",
 	"username": "Корисничко име",
-	"view-source": "Погледај извор"
+	"view-source": "Погледај извор",
+	"wiki": "Вики",
+	"wikis": "Викији"
 }

@@ -1,13 +1,21 @@
 {
-	"@metadata": [],
+	"@metadata": {
+		"authors": [
+			"Saederup92"
+		]
+	},
 	"all": "Alle",
 	"apply": "Anvend",
 	"cancel": "Afbryd",
 	"close": "Luk",
+	"copy": "Kopier",
+	"create-new-program": "Opret et nyt program",
 	"date": "Dato",
+	"delete": "Slet",
 	"diff": "Forskel",
 	"documentation": "Dokumentation",
 	"edit-summary": "Kommentar",
+	"error-failed": "Dette mislykkedes desværre :(",
 	"error-query-timeout": "Beklager, informationen tog for lang tid at behandle (tidsudløb $1 {{PLURAL:$1|sekund|sekunder}}). For at kunne spare på ressourcerne blev forespørgslen automatisk stoppet.",
 	"error-server-message": "Serveren sagde: $1",
 	"error-service-overload": "Grant Metrics er i øjeblikket overbelastet af andre forespørgsler. Prøv igen om nogle minutter.",
@@ -25,10 +33,17 @@
 	"page": "Side",
 	"pager-newer-n": "{{PLURAL:$1|1 nyere|$1 nyere}}",
 	"pager-older-n": "{{PLURAL:$1|1 ældre|$1 ældre}}",
+	"participants": "Deltagere",
+	"remove": "Fjern",
 	"report-issue": "Rapporter et problem",
+	"start-date": "Startdato",
 	"submit": "Udfør",
+	"timezone": "Tidszone",
+	"title": "Titel",
 	"totals": "I alt",
 	"unknown": "Ukendt",
+	"update-data": "Opdater data",
+	"updating": "Opdaterer",
 	"username": "Brugernavn",
 	"view-source": "Vis kildekode"
 }
