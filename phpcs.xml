@@ -19,4 +19,9 @@
         <exclude-pattern>app/AppKernel.php</exclude-pattern>
         <exclude-pattern>app/AppCache.php</exclude-pattern>
     </rule>
+    <rule ref="Squiz.Strings.ConcatenationSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
 </ruleset>

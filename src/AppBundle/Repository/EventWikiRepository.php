@@ -119,8 +119,8 @@ class EventWikiRepository extends Repository
             // Must have underscores for the link to properly go to the section.
             $sectionTitleLink = htmlspecialchars(str_replace(' ', '_', $sectionTitle));
 
-            $sectionWikitext = "<a target='_blank' href='$pageUrl#$sectionTitleLink'>&rarr;</a>" .
-                "<em class='text-muted'>".htmlspecialchars($sectionTitle) . ":</em> ";
+            $sectionWikitext = "<a target='_blank' href='$pageUrl#$sectionTitleLink'>&rarr;</a>".
+                "<em class='text-muted'>".htmlspecialchars($sectionTitle).":</em> ";
             $wikitext = str_replace($sectionMatch[0][0], trim($sectionWikitext), $wikitext);
         }
 

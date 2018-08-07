@@ -146,7 +146,7 @@ class FormatExtensionTest extends GrantMetricsTestCase
     {
         $wikitext = '<script>alert("XSS baby")</script> [[test page]]';
         static::assertEquals(
-            "&lt;script&gt;alert(\"XSS baby\")&lt;/script&gt; " .
+            "&lt;script&gt;alert(\"XSS baby\")&lt;/script&gt; ".
                 "<a target='_blank' href='https://test.example.org/wiki/Test_page'>test page</a>",
             $this->formatExtension->wikify($wikitext, 'test.example')
         );
