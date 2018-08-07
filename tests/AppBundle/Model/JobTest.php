@@ -5,16 +5,16 @@
 
 namespace Tests\AppBundle\Model;
 
-use PHPUnit_Framework_TestCase;
 use AppBundle\Model\Job;
 use AppBundle\Model\Event;
 use AppBundle\Model\Program;
 use AppBundle\Model\Organizer;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Tests for the Job class.
  */
-class JobTest extends PHPUnit_Framework_TestCase
+class JobTest extends GrantMetricsTestCase
 {
     /**
      * Tests constructor and basic getters/setters.

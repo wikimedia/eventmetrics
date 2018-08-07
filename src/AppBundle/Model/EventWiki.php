@@ -73,6 +73,13 @@ class EventWiki
     protected $stats;
 
     /**
+     * One EventWiki has many EventCategory's.
+     * @ORM\OneToMany(targetEntity="EventCategory", mappedBy="wiki", orphanRemoval=true, cascade={"persist"})
+     * @var ArrayCollection|EventCategory[] Category's for this EventWiki.
+     */
+    protected $categories;
+
+    /**
      * EventWiki constructor.
      * @param Event $event Event that this EventWiki belongs to.
      * @param string $domain Domain name of the wiki, without the .org.
@@ -83,6 +90,7 @@ class EventWiki
         $this->event->addWiki($this);
         $this->domain = $domain;
         $this->stats = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -114,6 +122,63 @@ class EventWiki
     public static function getValidPattern()
     {
         return self::VALID_WIKI_PATTERN;
+    }
+
+    /**************
+     * CATEGORIES *
+     **************/
+
+    /**
+     * Get categories configured for this wiki.
+     * @return EventCategory[]|ArrayCollection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Get the IDs of all the categories for this EventWiki.
+     * This correlates to the cat_id in the category table on the WMF replicas.
+     * @return array
+     */
+    public function getCategoryIds()
+    {
+        return array_map(function (EventCategory $category) {
+            return $category->getCategoryId();
+        }, $this->categories->toArray());
+    }
+
+    /**
+     * Add an EventCategory to this EventWiki.
+     * @param EventCategory $category
+     */
+    public function addCategory(EventCategory $category)
+    {
+        if ($this->categories->contains($category)) {
+            return;
+        }
+        $this->categories->add($category);
+    }
+
+    /**
+     * Remove an EventCategory from this EventWiki.
+     * @param EventCategory $category
+     */
+    public function removeCategory(EventCategory $category)
+    {
+        if (!$this->categories->contains($category)) {
+            return;
+        }
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Clear all associated statistics.
+     */
+    public function clearCategories()
+    {
+        $this->categories->clear();
     }
 
     /***************

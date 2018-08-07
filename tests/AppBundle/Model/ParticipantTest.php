@@ -5,16 +5,16 @@
 
 namespace Tests\AppBundle\Model;
 
-use PHPUnit_Framework_TestCase;
 use AppBundle\Model\Participant;
 use AppBundle\Model\Event;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Tests for the Participant class.
  */
-class ParticipantTest extends PHPUnit_Framework_TestCase
+class ParticipantTest extends GrantMetricsTestCase
 {
     /**
      * Tests constructor and basic getters.

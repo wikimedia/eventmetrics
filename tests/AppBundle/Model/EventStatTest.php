@@ -5,17 +5,17 @@
 
 namespace Tests\AppBundle\Model;
 
-use PHPUnit_Framework_TestCase;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use InvalidArgumentException;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Tests for the EventStat class.
  */
-class EventStatTest extends PHPUnit_Framework_TestCase
+class EventStatTest extends GrantMetricsTestCase
 {
     /**
      * Tests constructor and basic getters.

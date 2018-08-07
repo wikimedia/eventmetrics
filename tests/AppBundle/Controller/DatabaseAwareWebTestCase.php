@@ -9,15 +9,15 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * This ensures fixtures are loaded with every functional test.
  */
-abstract class DatabaseAwareWebTestCase extends WebTestCase
+abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
 {
     /**
      * @var ORMExecutor

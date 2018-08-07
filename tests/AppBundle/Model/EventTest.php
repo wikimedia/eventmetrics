@@ -5,7 +5,6 @@
 
 namespace Tests\AppBundle\Model;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
@@ -14,18 +13,20 @@ use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use AppBundle\Model\Participant;
 use DateTime;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Tests for the Event class.
  */
-class EventTest extends KernelTestCase
+class EventTest extends GrantMetricsTestCase
 {
     /** @var Program The Program that the Event is part of. */
     protected $program;
 
     public function setUp()
     {
-        date_default_timezone_set('UTC');
+        parent::setUp();
+
         $organizer = new Organizer(50);
         $this->program = new Program($organizer);
     }

@@ -357,6 +357,24 @@ class Event
 
     // @see EventStatTrait
 
+    /**************
+     * CATEGORIES *
+     **************/
+
+    /**
+     * Are there any categories set on EventWikis associated with this Event?
+     * @return bool
+     */
+    public function hasCategories()
+    {
+        foreach ($this->wikis as $wiki) {
+            if (count($wiki->getCategories()) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /****************
      * PARTICIPANTS *
      ****************/

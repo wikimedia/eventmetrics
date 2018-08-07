@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
@@ -13,11 +12,12 @@ use AppBundle\Command\SpawnJobsCommand;
 use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use DateTime;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Tests for the SpawnJobsCommand.
  */
-class SpawnJobsCommandTest extends KernelTestCase
+class SpawnJobsCommandTest extends GrantMetricsTestCase
 {
     /**
      * @var ORMExecutor
@@ -47,6 +47,8 @@ class SpawnJobsCommandTest extends KernelTestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         self::bootKernel();
 
         /** @var \Doctrine\ORM\EntityManager $entityManager */

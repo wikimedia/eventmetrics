@@ -60,11 +60,12 @@ class EventCategory
     public function __construct(EventWiki $wiki, $categoryId)
     {
         $this->wiki = $wiki;
+        $this->wiki->addCategory($this);
         $this->categoryId = $categoryId;
     }
 
     /**
-     * Get the Event this EventWikiStat applies to.
+     * Get the Event this EventWiki applies to.
      * @return Event
      */
     public function getEvent()
@@ -73,11 +74,20 @@ class EventCategory
     }
 
     /**
-     * Get the EventWiki this EventWikiStat applies to.
+     * Get the EventWiki this EventWiki applies to.
      * @return EventWiki
      */
     public function getWiki()
     {
         return $this->wiki;
+    }
+
+    /**
+     * ID of the category in the MediaWiki database.
+     * @return int
+     */
+    public function getCategoryId()
+    {
+        return $this->categoryId;
     }
 }

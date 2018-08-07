@@ -5,23 +5,21 @@
 
 namespace AppBundle\Twig;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
-use AppBundle\Twig\AppExtension;
-use AppBundle\Twig\Extension;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Tests for the AppExtension class.
  * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
  */
-class AppExtensionTest extends WebTestCase
+class AppExtensionTest extends GrantMetricsTestCase
 {
     /** @var Container The Symfony container. */
     protected $container;
 
-    /** @var AppBundle\Twig\AppExtension Instance of class */
+    /** @var \AppBundle\Twig\AppExtension Instance of class */
     protected $appExtension;
 
     /**
@@ -29,8 +27,10 @@ class AppExtensionTest extends WebTestCase
      */
     public function setUp()
     {
-        $this->client = static::createClient();
-        $this->container = $this->client->getContainer();
+        parent::setUp();
+
+        $client = static::createClient();
+        $this->container = $client->getContainer();
         $stack = new RequestStack();
         $session = new Session();
         $this->appExtension = new AppExtension($this->container, $stack, $session);

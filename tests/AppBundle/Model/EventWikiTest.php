@@ -5,25 +5,26 @@
 
 namespace Tests\AppBundle\Model;
 
+use AppBundle\Model\EventCategory;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit_Framework_TestCase;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Program;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventWikiStat;
 use AppBundle\Model\Organizer;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Tests for the EventWiki class.
  */
-class EventWikiTest extends PHPUnit_Framework_TestCase
+class EventWikiTest extends GrantMetricsTestCase
 {
     /** @var Event The Event that the EventWiki is part of. */
     protected $event;
 
     public function setUp()
     {
-        date_default_timezone_set('UTC');
+        parent::setUp();
 
         $organizer = new Organizer(50);
         $program = new Program($organizer);
@@ -88,6 +89,38 @@ class EventWikiTest extends PHPUnit_Framework_TestCase
         static::assertEquals(1, $wiki->getStatistics()->count());
         $wiki->clearStatistics();
         static::assertEquals(0, $wiki->getStatistics()->count());
+    }
+
+    /**
+     * Test adding and removing categories.
+     */
+    public function testAddRemoveCategories()
+    {
+        $wiki = new EventWiki($this->event, 'test.wikipedia');
+
+        static::assertEquals(0, count($wiki->getCategories()));
+
+        // Add an EventCategory.
+        $cat = new EventCategory($wiki, 500);
+
+        static::assertEquals($cat, $wiki->getCategories()[0]);
+
+        // Try adding the same one, which shouldn't duplicate.
+        $wiki->addCategory($cat);
+        static::assertEquals(1, count($wiki->getCategories()));
+
+        // Removing the statistic.
+        $wiki->removeCategory($cat);
+        static::assertEquals(0, count($wiki->getCategories()));
+
+        // Double-remove shouldn't error out.
+        $wiki->removeCategory($cat);
+
+        // Clearing statistics.
+        $wiki->addCategory($cat);
+        static::assertEquals(1, $wiki->getCategories()->count());
+        $wiki->clearCategories();
+        static::assertEquals(0, $wiki->getCategories()->count());
     }
 
     /**

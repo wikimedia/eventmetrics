@@ -5,18 +5,18 @@
 
 namespace Tests\AppBundle\Model;
 
-use PHPUnit_Framework_TestCase;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\EventWikiStat;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use InvalidArgumentException;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Tests for the EventWikiStat class.
  */
-class EventWikiStatTest extends PHPUnit_Framework_TestCase
+class EventWikiStatTest extends GrantMetricsTestCase
 {
     /**
      * Tests constructor and basic getters.

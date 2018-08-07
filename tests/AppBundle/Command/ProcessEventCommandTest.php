@@ -5,7 +5,6 @@
 
 namespace Tests\AppBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
@@ -15,11 +14,12 @@ use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Command\ProcessEventCommand;
 use AppBundle\Model\Job;
 use AppBundle\Model\Event;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Tests for the ProcessEventCommand.
  */
-class ProcessEventCommandTest extends KernelTestCase
+class ProcessEventCommandTest extends GrantMetricsTestCase
 {
     /**
      * @var ORMExecutor
@@ -49,6 +49,8 @@ class ProcessEventCommandTest extends KernelTestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         self::bootKernel();
 
         $container = self::$kernel->getContainer();

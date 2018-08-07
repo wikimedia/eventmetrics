@@ -10,10 +10,13 @@ use AppBundle\Model\EventCategory;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
+use Tests\AppBundle\GrantMetricsTestCase;
 
-use PHPUnit_Framework_TestCase;
-
-class EventCategoryTest extends PHPUnit_Framework_TestCase
+/**
+ * Class EventCategoryTest
+ * @package Tests\AppBundle\Model
+ */
+class EventCategoryTest extends GrantMetricsTestCase
 {
     /**
      * Tests constructor and basic getters.
@@ -31,7 +34,11 @@ class EventCategoryTest extends PHPUnit_Framework_TestCase
         );
         $wiki = new EventWiki($event, 'test.wikipedia');
 
+        static::assertFalse($event->hasCategories());
+
         $eventCategory = new EventCategory($wiki, 500);
+
+        static::assertTrue($event->hasCategories());
 
         // Getters.
         static::assertEquals($event, $eventCategory->getEvent());

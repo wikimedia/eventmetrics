@@ -9,12 +9,12 @@ use AppBundle\Model\Program;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\Organizer;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Tests for the Program class.
  */
-class ProgramTest extends KernelTestCase
+class ProgramTest extends GrantMetricsTestCase
 {
     /** @var Organizer The Organizer of the Program. */
     protected $organizer;
@@ -27,6 +27,8 @@ class ProgramTest extends KernelTestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->organizer = new Organizer(50);
         $this->program = new Program($this->organizer);
     }
