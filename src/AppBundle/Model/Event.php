@@ -465,6 +465,18 @@ class Event
     }
 
     /**
+     * Get the EventWiki with the given domain that belongs to this Event.
+     * @param $domain
+     * @return EventWiki
+     */
+    public function getWikiByDomain($domain)
+    {
+        return $this->wikis->filter(function (EventWiki $wiki) use ($domain) {
+            return $wiki->getDomain() === $domain;
+        })->first();
+    }
+
+    /**
      * Add an EventWiki to this Event.
      * @param EventWiki $wiki
      */
