@@ -30,8 +30,7 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get the usernames of participants who are new editors,
-     * relative to the time of the event.
+     * Get the usernames of participants who are new editors, relative to the time of the event.
      * @param Event $event The Event in question.
      * @return string[] Usernames of new editors.
      */
@@ -49,7 +48,7 @@ class EventRepository extends Repository
         $rqb->select('gu_name')
             ->from('globaluser')
             ->where('gu_id IN (:userIds)')
-            ->andwhere("gu_registration BETWEEN :start AND :end")
+            ->andWhere("gu_registration BETWEEN :start AND :end")
             ->setParameter('userIds', $userIds, Connection::PARAM_STR_ARRAY)
             ->setParameter('start', $start)
             ->setParameter('end', $end);
@@ -59,12 +58,11 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get the number of pages edited and created within the timeframe
-     * and for the given users.
-     * @param  string   $dbName Database name such as 'enwiki_p'.
-     * @param  DateTime $start
-     * @param  DateTime $end
-     * @param  string[] $usernames
+     * Get the number of pages edited and created within the timeframe and for the given users.
+     * @param string $dbName Database name such as 'enwiki_p'.
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param string[] $usernames
      * @return array With keys 'edited' and 'created'.
      */
     public function getNumPagesEdited($dbName, DateTime $start, DateTime $end, array $usernames)
@@ -84,8 +82,8 @@ class EventRepository extends Repository
             ->from("$dbName.page")
             ->join("$dbName.page", "$dbName.$revisionTable", null, 'rev_page = page_id')
             ->where('page_namespace = 0')
-            ->andwhere('rev_timestamp BETWEEN :start AND :end')
-            ->andwhere('rev_user_text IN (:usernames)')
+            ->andWhere('rev_timestamp BETWEEN :start AND :end')
+            ->andWhere('rev_user_text IN (:usernames)')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
@@ -95,9 +93,9 @@ class EventRepository extends Repository
 
     /**
      * Get the number of files uploaded in the given time period by given users.
-     * @param  DateTime $start
-     * @param  DateTime $end
-     * @param  string[] $usernames
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param string[] $usernames
      * @return int
      */
     public function getFilesUploadedCommons(DateTime $start, DateTime $end, array $usernames)
@@ -111,7 +109,7 @@ class EventRepository extends Repository
         $rqb->select(['COUNT(DISTINCT(img_name)) AS count'])
             ->from('commonswiki_p.image')
             ->where('img_timestamp BETWEEN :start AND :end')
-            ->andwhere('img_user_text IN (:usernames)')
+            ->andWhere('img_user_text IN (:usernames)')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
@@ -122,9 +120,9 @@ class EventRepository extends Repository
     /**
      * Get the number of unique mainspace pages across all projects that are using files
      * uploaded by the given users that were uploaded during the given timeframe.
-     * @param  DateTime $start
-     * @param  DateTime $end
-     * @param  string[] $usernames
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param string[] $usernames
      * @return int
      */
     public function getFileUsage(DateTime $start, DateTime $end, array $usernames)
@@ -139,8 +137,8 @@ class EventRepository extends Repository
             ->from('commonswiki_p.globalimagelinks')
             ->join('commonswiki_p.globalimagelinks', 'commonswiki_p.image', null, 'gil_to = img_name')
             ->where('img_timestamp BETWEEN :start AND :end')
-            ->andwhere('img_user_text IN (:usernames)')
-            ->andwhere('gil_page_namespace_id = 0')
+            ->andWhere('img_user_text IN (:usernames)')
+            ->andWhere('gil_page_namespace_id = 0')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
@@ -151,7 +149,7 @@ class EventRepository extends Repository
     /**
      * Get database names of wikis attached to the global accounts
      * with the given usernames.
-     * @param  string[] $usernames
+     * @param string[] $usernames
      * @return string[]
      */
     public function getCommonWikis($usernames)
@@ -170,8 +168,8 @@ class EventRepository extends Repository
     /**
      * Get the domain names of wikis within the given family where all
      * of the given users have made edits.
-     * @param  string[] $usernames
-     * @param  string $family
+     * @param string[] $usernames
+     * @param string $family
      * @return string[] Domain names in the format of lang.project, e.g. en.wiktionary
      */
     public function getCommonLangWikiDomains(array $usernames, $family)
@@ -210,7 +208,7 @@ class EventRepository extends Repository
         $rqb->select('DISTINCT(rev_user_text) AS username')
             ->from("$dbName.$revisionTable")
             ->where('rev_timestamp > :start')
-            ->andwhere('rev_user_text IN (:usernames)')
+            ->andWhere('rev_user_text IN (:usernames)')
             ->setParameter('start', $start)
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
         $ret = $this->executeQueryBuilder($rqb)->fetchAll();

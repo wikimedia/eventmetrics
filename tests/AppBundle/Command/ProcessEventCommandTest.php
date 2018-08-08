@@ -112,6 +112,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
         $this->newEditorsSpec();
         $this->pagesCreatedSpec();
         $this->pagesImprovedSpec();
+        $this->filesUploadedSpec();
         $this->retentionSpec();
 
         $this->jobFinishedSpec();
@@ -134,7 +135,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findAll(['event' => $this->event]);
-        static::assertEquals(4, count($eventStats));
+        static::assertEquals(6, count($eventStats));
     }
 
     /**
@@ -163,16 +164,16 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'pages-created',
             ]);
-        static::assertEquals(3, $eventStat->getValue());
+        static::assertEquals(1, $eventStat->getValue());
 
         // As an EventWikiStat...
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
             ->findOneBy([
-                'wiki' => $this->event->getWikis()[0],
+                'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
                 'metric' => 'pages-created',
             ]);
-        static::assertEquals(3, $eventWikiStat->getValue());
+        static::assertEquals(1, $eventWikiStat->getValue());
     }
 
     /**
@@ -187,19 +188,64 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(5, $eventStat->getValue());
+        static::assertEquals(6, $eventStat->getValue());
 
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
             ->findOneBy([
-                'wiki' => $this->event->getWikis()[0],
+                'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(5, $eventWikiStat->getValue());
+        static::assertEquals(6, $eventWikiStat->getValue());
     }
 
     /**
-     * Number of pages improved.
+     * Files uploaded.
+     */
+    private function filesUploadedSpec()
+    {
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'files-uploaded',
+            ]);
+        static::assertEquals(1, $eventStat->getValue());
+
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikiByDomain('commons.wikimedia'),
+                'metric' => 'files-uploaded',
+            ]);
+        static::assertEquals(1, $eventWikiStat->getValue());
+    }
+
+    /**
+     * File usage.
+     */
+    private function fileUsageSpec()
+    {
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'file-usage',
+            ]);
+        // Used at least on [[Domino Park]], but there could eventually be others.
+        static::assertGreaterThan(0, $eventStat->getValue());
+
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikiByDomain('commons.wikimedia'),
+                'metric' => 'file-usage',
+            ]);
+        static::assertGreaterThan(0, $eventWikiStat->getValue());
+    }
+
+    /**
+     * Retention.
      */
     private function retentionSpec()
     {

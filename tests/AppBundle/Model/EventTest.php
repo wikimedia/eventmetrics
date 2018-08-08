@@ -188,10 +188,11 @@ class EventTest extends GrantMetricsTestCase
         static::assertEquals(0, count($event->getParticipants()));
 
         // Add a wiki.
-        $wiki = new EventWiki($event, 'testwiki');
+        $wiki = new EventWiki($event, 'test.wikipedia');
         $event->addWiki($wiki);
 
         static::assertEquals($wiki, $event->getWikis()[0]);
+        static::assertEquals($wiki, $event->getWikiByDomain('test.wikipedia'));
 
         // Try adding the same one, which shouldn't duplicate.
         $event->addWiki($wiki);
