@@ -16,10 +16,6 @@
         margin-bottom: 0;
     }
 
-    .event-add-participants {
-        margin-bottom: 0;
-    }
-
     .event-metadata td {
         padding-bottom: 3px;
 
@@ -120,17 +116,12 @@
     }
 
     .event-new-participants {
-        max-width: 458px;
-    }
-
-    .save-participants-form {
-        position: relative;
+        max-height: 120px;
     }
 
     .save-participants-btn {
-        left: 0;
-        position: absolute;
-        top: 0;
+        // Move the save button down to line up with the textarea to its left.
+        margin-top: 25px;
     }
 
     .event-revisions {
