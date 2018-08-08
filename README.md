@@ -9,16 +9,27 @@ A Wikimedia Foundation tool that provides grantees a simple, easy to use interfa
 [![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/?branch=master)
 
-## Installation
+## Installation for development
 
-After cloning the repository, run:
+Prerequesites:
 
-* `composer install`.
-    * Use `grantmetrics` as the `database_name`.
-    * Fill out your credentials accordingly.
-    * `app.logged_in_user` is used to mock the current user, instead of going through OAuth. Must be a valid Wikimedia username. In production this should be `null`.
-* `php bin/console server:start` to start the server.
-* You should be up and running at http://localhost:8000
+* PHP 5.6 and MySQL.
+* A [Wikimedia developer account](https://wikitech.wikimedia.org/wiki/Help:Create_a_Wikimedia_developer_account) with which to access the Wikimedia database replicas.
+
+After cloning the repository:
+
+1. Create a local database called e.g. `grantmetrics`.
+2. Run `composer install` (this will prompt for some configuration values):
+   * Fill out your local database credentials according to your local configuration;
+     those for `database.replica.user` and `database.replica.password` can be found in
+     your `replica.my.cnf` file in the home directory of your account on Toolforge.
+   * `app.logged_in_user` is used to mock the current user, instead of going through OAuth. Must be a valid Wikimedia username. In production this should be `null`.
+3. Open a tunnel to the WMF databases: `ssh -L 4711:enwiki.web.db.svc.eqiad.wmflabs:3306 -L 4712:tools-db:3306 tools-dev.wmflabs.org -l your-username`
+  (where `your-username` is your Wikimedia developer account username).
+4. `./bin/console server:start` to start the server (shortcut: `s:s`).
+5. You should be up and running at http://localhost:8000
+
+To update: after pulling the latest code, run `composer install`.
 
 ## Usage
 
