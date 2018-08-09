@@ -24,11 +24,6 @@
         }
     }
 
-    // When there are no statistics to show.
-    .event-metadata ~ .event-section {
-        margin-top: 30px;
-    }
-
     .event-metric-desc {
         cursor: help;
     }
@@ -97,22 +92,6 @@
 
     .event-stats-status {
         margin-top: 8px;
-    }
-
-    .event-section {
-        h3 {
-            font-size: 24px;
-        }
-
-        .panel-heading {
-            padding: 10px 0px;
-
-            & > h3,
-            & > span {
-                height: 26px;
-                line-height: 26px;
-            }
-        }
     }
 
     .event-new-participants {

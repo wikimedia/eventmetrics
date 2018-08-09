@@ -219,3 +219,25 @@ a.disabled {
         }
     }
 }
+
+// Panel macro styles. See also views/macros/layout.html.twig and assets/js/application.js
+.panel {
+    .panel-heading {
+        display: flex;
+        align-items: center;
+        .panel-title {
+            font-size: 24px;
+            flex: 3;
+        }
+        .panel-description {
+            flex: 1;
+        }
+        // Add a caret to the left-side of the title and toggle it when collapsed.
+        a.collapsed:before {
+            content: "▸";
+        }
+        a:not(.collapsed):before {
+            content: "▾";
+        }
+    }
+}
