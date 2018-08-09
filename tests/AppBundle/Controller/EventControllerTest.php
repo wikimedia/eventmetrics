@@ -314,22 +314,28 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     {
         $form = $this->crawler->selectButton('Save participants')->form();
 
-        $form['form[new_participants]'] = "  MusikAnimal  \r\nUser_does_not_exist_1234";
+        // Add four usernames: a valid user (twice, with different capitalization), a non-existent user,
+        // and an invalid username. Some with leading and trailing spaces, and with different line breaks.
+        $form['form[new_participants]'] = "  MusikAnimal\nmusikAnimal \r\nUser_does_not_exist_1234\ninvalid|username";
         $this->crawler = $this->client->submit($form);
 
         static::assertContains(
-            '1 username is invalid',
+            '2 usernames are invalid',
             $this->crawler->filter('.alert-danger')->text()
         );
 
         $form = $this->crawler->selectButton('Save participants')->form();
         $inputs = $this->crawler->filter('.participant-row input');
 
-        static::assertEquals('User does not exist 1234', $inputs->first()->attr('value'));
-        static::assertEquals('MusikAnimal', $inputs->last()->attr('value'));
+        // Confirm that only three of the four usernames were added.
+        // The inputs appear with invalid ones first, and so aren't in alphabetical order.
+        static::assertEquals('Invalid|username', $inputs->eq(0)->attr('value'));
+        static::assertEquals('User does not exist 1234', $inputs->eq(1)->attr('value'));
+        static::assertEquals('MusikAnimal', $inputs->eq(2)->attr('value'));
 
-        // Remove invalid user and submit again.
-        unset($form['form[participants][1]']);
+        // Remove invalid users and submit again. Inputs are indexed in alphabetical order.
+        unset($form['form[participants][0]']);
+        unset($form['form[participants][2]']);
         $this->crawler = $this->client->submit($form);
 
         $this->response = $this->client->getResponse();
