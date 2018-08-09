@@ -2,7 +2,9 @@
 	"@metadata": {
 		"authors": [
 			"Vlad5250",
-			"Movses"
+			"Movses",
+			"Okras",
+			"Shaleych"
 		]
 	},
 	"add-organizer": "Добавить организатора",
@@ -27,6 +29,7 @@
 	"end-date": "Дата окончания",
 	"end-time": "Время окончания",
 	"error-event-title-dup": "Событие с названием «$1» уже существует.",
+	"error-failed": "Не выполнено :(",
 	"error-invalid": "Это значение не является допустимым.",
 	"error-program-title-dup": "Программа с названием «$1» уже существует.",
 	"error-program-undeletable": "Программа не может быть удалена, поскольку она содержит одно или более событий.",
@@ -52,14 +55,17 @@
 	"num-days": "{{PLURAL: $1|день|дней|дня}}",
 	"num-hours": "{{PLURAL: $1|час|часа|часов}}",
 	"num-minutes": "{{PLURAL: $1|минута|минуты|минут}}",
+	"num-participants": "{{PLURAL:$1|участник|участника|участников}}",
 	"num-revisions": "{{PLURAL:$1|версия|версий|версии}}",
 	"num-seconds": "{{PLURAL: $1|секунда|секунды|секунд}}",
+	"num-wikis": "{{PLURAL:$1|вики}}",
 	"organizers": "Организаторы",
 	"page": "Страница",
 	"pager-newer-n": "$1 более {{PLURAL:$1|новая|новые|новых}}",
 	"pager-older-n": "$1 более {{PLURAL:$1|старая|старые|старых}}",
 	"pages-created": "Созданные страницы",
 	"pages-improved": "Улучшенные страницы",
+	"participants": "Участники",
 	"please-login": "Пожалуйста, представьтесь системе для продолжения.",
 	"program": "Программа",
 	"program-created": "Программа «$1» была успешно создана.",
@@ -68,6 +74,8 @@
 	"queued": "В очереди",
 	"remove": "Удалить",
 	"report-issue": "Сообщить о проблеме",
+	"return-to-my-programs": "Вернуться в мои программы",
+	"save-participants": "Сохранить участников",
 	"start-date": "Дата начала",
 	"start-time": "Время начала",
 	"submit": "Отправить",

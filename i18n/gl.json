@@ -1,12 +1,27 @@
 {
+	"@metadata": {
+		"authors": [
+			"Maria zaos"
+		]
+	},
 	"all": "Todas",
+	"all-wikipedias": "Todas as Wikipedias",
 	"apply": "Aplicar",
+	"attribution-background": "Imaxe de fondo dispoñible en Commons en $1",
+	"attribution-font": "$1 fonte de letra dispoñible baixo a licenza $2, cortesía de $3",
 	"cancel": "Cancelar",
 	"close": "Pechar",
+	"copy": "Copiar",
 	"date": "Data",
+	"developed-by": "Desenvolvido por Community Tech",
 	"diff": "Dif",
 	"documentation": "Documentación",
-	"edit-summary": "Comentario",
+	"download-csv": "Descargar como CSV",
+	"download-wiki-table": "Descargar como táboa wiki.",
+	"edit-summary": "Resumo de edición",
+	"end-date": "Data de fin",
+	"error-event-undeletable": "Este acontecemento non pode ser eliminado porque ten un ou máis participantes.",
+	"error-not-found": "O programa ou evento non se atopou. Pode que fora eliminado ou renomeado.",
 	"error-server-message": "O servidor respondeu: $1",
 	"fatal-error": "Erro fatal",
 	"feedback": "Comentarios",
@@ -22,6 +37,7 @@
 	"page": "Páxina",
 	"pager-newer-n": "{{PLURAL:$1|unha posterior|$1 posteriores}}",
 	"pager-older-n": "{{PLURAL:$1|unha anterior|$1 anteriores}}",
+	"please-login": "Por favor, inicie sesión para continuar.",
 	"report-issue": "Informar dun problema",
 	"submit": "Enviar",
 	"totals": "Totais",

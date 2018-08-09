@@ -1,15 +1,42 @@
 {
+	"@metadata": {
+		"authors": [
+			"Papuass"
+		]
+	},
 	"all": "Visas",
 	"apply": "Pielietot",
 	"cancel": "Atcelt",
+	"close": "Aizvērt",
+	"copy": "Kopēt",
 	"date": "Datums",
+	"delete": "Dzēst",
 	"documentation": "Dokumentācija",
+	"download-csv": "Lejupielādēt kā CSV",
+	"edit-program": "Labot programmu",
+	"edit-summary": "Izmaiņu kopsavilkums",
+	"end-time": "Beigu laiks",
+	"feedback": "Atsauksmes",
+	"file-usage": "Izmantotie faili",
 	"help": "Palīdzība",
 	"help-translate": "Palīdzi iztulkot",
+	"login-with-oauth": "Pieslēgties ar OAuth",
+	"num-days": "{{PLURAL:$1|dienas|diena|dienas}}",
+	"num-hours": "{{PLURAL:$1|stundas|stunda|stundas}}",
+	"organizers": "Organizatori",
 	"page": "Lapa",
 	"pager-newer-n": "{{PLURAL:$1|$1 jaunākas|$1 jaunāku|$1 jaunākas}}",
 	"pager-older-n": "{{PLURAL:$1|$1 vecākas|$1 vecāku|$1 vecākas}}",
+	"pages-improved": "Uzlabotās lapas",
+	"participants": "Dalībnieki",
+	"remove": "Noņemt",
 	"report-issue": "Ziņot par problēmu",
+	"start-date": "Sākuma datums",
+	"start-time": "Sākuma laiks",
+	"submit": "Iesniegt",
+	"time": "Laiks",
+	"timezone": "Laika josla",
+	"title": "Nosaukums",
 	"totals": "Kopsummas",
 	"unknown": "Nav zināms"
 }
