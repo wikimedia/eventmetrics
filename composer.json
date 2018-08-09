@@ -77,7 +77,7 @@
             "php phpDocumentor.phar -d src -t docs/api --template='checkstyle' --ansi --force && ( [[ -z $(grep 'error' docs/api/checkstyle.xml) ]] )"
         ],
         "unit": [
-            "./vendor/bin/simple-phpunit tests"
+            "./vendor/bin/simple-phpunit --coverage-clover ./clover.xml tests"
         ],
         "test": [
             "@migrate-test",

@@ -5,8 +5,8 @@ A Wikimedia Foundation tool that provides grantees a simple, easy to use interfa
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://travis-ci.org/wikimedia/grantmetrics.svg?branch=master)](https://travis-ci.org/wikimedia/grantmetrics)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/53b3ddf0ce654055f8cd/test_coverage)](https://codeclimate.com/github/wikimedia/grantmetrics/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/53b3ddf0ce654055f8cd/maintainability)](https://codeclimate.com/github/wikimedia/grantmetrics/maintainability)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/?branch=master)
 
 ## Installation for development
