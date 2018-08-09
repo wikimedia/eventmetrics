@@ -510,12 +510,10 @@ class EventController extends EntityController
 
         $participants = isset($event['participants']) ? $event['participants'] : [];
 
-        // Combine usernames from inputs and textarea, removing duplicates and blank values.
-        $event['participants'] = array_filter(array_unique(
-            array_merge($participants, $newParUsernames)
-        ));
+        // Combine usernames from inputs and textarea.
+        $event['participants'] = array_merge($participants, $newParUsernames);
 
-        // Now normalize all the usernames and sort alphabetically.
+        // Now normalize all the usernames.
         // TODO: Refactor this out, doing the same for Organizers to a Program.
         // Need to somehow hook into a callback in the model layer before validations are ran.
         $event['participants'] = array_map(function ($username) {
@@ -524,6 +522,11 @@ class EventController extends EntityController
             // Same as ucfirst but works on all locale settings. This is what MediaWiki wants.
             return mb_strtoupper(mb_substr($normalized, 0, 1)).mb_substr($normalized, 1);
         }, $event['participants']);
+
+        // Remove duplicates and blank entries.
+        $event['participants'] = array_filter(array_unique($event['participants']));
+
+        // Sort alphabetically.
         sort($event['participants']);
 
         // Now unset new_participants so they aren't duplicated in the returned form.
