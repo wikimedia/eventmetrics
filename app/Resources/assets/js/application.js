@@ -21,6 +21,23 @@
 })();
 
 /**
+ * Add tooltips to panel toggle links.
+ * See also views/macros/layout.html.twig and assets/css/application.scss
+ */
+$(function () {
+    // Panels default to expanded, so we add the collapse message.
+    $('.panel .panel-title a').attr('title', $.i18n('hide-section'));
+    // Toggle when clicked.
+    $('.panel')
+        .on("hidden.bs.collapse", function (event) {
+            $(this).find('.panel-title a').attr('title', $.i18n('show-section'));
+        })
+        .on("shown.bs.collapse", function (event) {
+            $(this).find('.panel-title a').attr('title', $.i18n('hide-section'));
+        });
+});
+
+/**
  * Setup form handling for adding/removing arbitrary number of text fields.
  * This is used for adding/removing organizers to a program, and wikis to an event.
  * @param  {string} model  Model name, either 'program' or 'event'.
