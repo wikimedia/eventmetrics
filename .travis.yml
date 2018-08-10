@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - '7.0'
+  - '7.2'
 
 env:
   global:
@@ -21,7 +21,8 @@ before_install:
   - sudo apt-get install expect
   - chmod +x ./build/ci/ssh-tunnel.sh
   - ./build/ci/ssh-tunnel.sh
-  - wget https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.0/phpDocumentor.phar
+  - wget https://github.com/phpDocumentor/phpDocumentor2/releases/download/v3.0.0-alpha.2-nightly-gdff5545/phpDocumentor.phar
+  - wget https://github.com/phpDocumentor/phpDocumentor2/releases/download/v3.0.0-alpha.2-nightly-gdff5545/phpDocumentor.phar.pubkey
 
 install:
   - composer install
@@ -36,7 +37,7 @@ before_script:
 
 script:
   - composer lint
-  - php phpDocumentor.phar -d src -t docs/api --template="checkstyle" # Different than `composer docs` for CI build.
+  - php phpDocumentor.phar run -d src -t docs/api --template="checkstyle" # Different than `composer docs` for CI build.
   - composer unit
 
 after_script:

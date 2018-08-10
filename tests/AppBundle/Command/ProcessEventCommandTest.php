@@ -269,7 +269,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
             ->findOneBy([
                 'event' => $this->event,
             ]);
-        static::assertEquals(0, count($jobs));
+        static::assertNull($jobs);
     }
 
     /**
