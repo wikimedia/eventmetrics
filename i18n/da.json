@@ -4,6 +4,7 @@
 			"Saederup92"
 		]
 	},
+	"add-wiki": "Tilføj wiki",
 	"all": "Alle",
 	"apply": "Anvend",
 	"cancel": "Afbryd",
@@ -24,6 +25,7 @@
 	"help": "Hjælp",
 	"help-translate": "Hjælp til med at oversætte",
 	"logout": "Log ud",
+	"my-programs": "Mine programmer",
 	"no-results": "Ingen resultater blev fundet",
 	"num-days": "{{PLURAL: $1|dag|dage}}",
 	"num-hours": "{{PLURAL: $1|time|timer}}",
@@ -33,7 +35,9 @@
 	"page": "Side",
 	"pager-newer-n": "{{PLURAL:$1|1 nyere|$1 nyere}}",
 	"pager-older-n": "{{PLURAL:$1|1 ældre|$1 ældre}}",
+	"pages-created": "Oprettede sider",
 	"participants": "Deltagere",
+	"program": "Program",
 	"remove": "Fjern",
 	"report-issue": "Rapporter et problem",
 	"start-date": "Startdato",

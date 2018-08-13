@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Wladek92"
+			"Wladek92",
+			"Gomoko"
 		]
 	},
 	"add-more-participants": "Ajouter davantage de participants, un par ligne",
@@ -68,6 +69,7 @@
 	"grant-metrics": "Grant Metrics",
 	"help": "Aide",
 	"help-translate": "Aider à traduire",
+	"hide-section": "Masquer cette section",
 	"last-updated": "Dernière mise à jour le $1",
 	"login-with-oauth": "Connexion avec OAuth",
 	"logout": "Déconnexion",
@@ -106,6 +108,7 @@
 	"retention-desc": "Le nombre de nouveaux contributeurs qui ont fait au moins une modification, sur n'importe quel projet Wikimedia (quelque soit l'espace de noms), entre $1 jour{{PLURAL:$1||s}} après l'événement et le moment où le rapport a été généré.",
 	"return-to-my-programs": "Revenir à Mes Programmes",
 	"save-participants": "Sauvegarder les participants",
+	"show-section": "Afficher cette section",
 	"start-date": "Date de début",
 	"start-time": "Heure de début",
 	"submit": "Envoyer",

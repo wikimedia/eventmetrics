@@ -4,7 +4,8 @@
 			"Vlad5250",
 			"Movses",
 			"Okras",
-			"Shaleych"
+			"Shaleych",
+			"Stjn"
 		]
 	},
 	"add-organizer": "Добавить организатора",
@@ -37,6 +38,7 @@
 	"error-service-overload": "Grant Metrics в настоящее время перегружен, обслуживая другие запросы. Пожалуйста, повторите попытку через несколько минут.",
 	"event": "Событие",
 	"event-created": "Событие «$1» было успешно создано.",
+	"event-data": "Данные события",
 	"event-deleted": "Событие «$1» было удалено.",
 	"events": "События",
 	"fatal-error": "Фатальная ошибка",
@@ -45,6 +47,7 @@
 	"files-uploaded": "Загруженные файлы",
 	"help": "Помощь",
 	"help-translate": "Помочь с переводом",
+	"hide-section": "Скрыть этот раздел",
 	"last-updated": "Последнее обновление: $1",
 	"login-with-oauth": "Войти через OAuth",
 	"logout": "Завершение сеанса",
@@ -76,6 +79,7 @@
 	"report-issue": "Сообщить о проблеме",
 	"return-to-my-programs": "Вернуться в мои программы",
 	"save-participants": "Сохранить участников",
+	"show-section": "Показать этот раздел",
 	"start-date": "Дата начала",
 	"start-time": "Время начала",
 	"submit": "Отправить",
