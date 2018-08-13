@@ -227,7 +227,7 @@ class Event
         return $this->wikis->count() > 0 &&
             $this->start !== null &&
             $this->end !== null &&
-            $this->start < new DateTime() &&
+            $this->getStartWithTimezone() < new DateTime() &&
             $this->participants->count() > 0;
     }
 
