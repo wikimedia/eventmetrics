@@ -239,6 +239,9 @@ class EventController extends EntityController
             ])
             ->add('time', TextType::class, [
                 'mapped' => false,
+                'attr' => [
+                    'autocomplete' => 'off',
+                ],
             ])
             ->add('start', DateTimeType::class, [
                 'widget' => 'single_text',
@@ -411,7 +414,7 @@ class EventController extends EntityController
     /**
      * Get EventStats from the given Event. If there are none, empty EventStats
      * are returned for each metric type specified by EventStat::METRIC_TYPES,
-     * with the default 'offset' values sepcified by Event::getAvailableMetrics().
+     * with the default 'offset' values specified by Event::getAvailableMetrics().
      * This way we can show placeholders in the view.
      * @param Event $event
      * @return EventStat[]
