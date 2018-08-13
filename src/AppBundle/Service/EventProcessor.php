@@ -8,6 +8,7 @@ namespace AppBundle\Service;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
+use AppBundle\Repository\EventCategoryRepository;
 use AppBundle\Repository\EventWikiRepository;
 use AppBundle\Model\EventWikiStat;
 use AppBundle\Repository\EventRepository;
@@ -262,11 +263,13 @@ class EventProcessor
         &$pagesImproved
     ) {
         $dbName = $ewRepo->getDbName($wiki);
+
         $ret = $this->eventRepo->getNumPagesEdited(
             $dbName,
             $this->event->getStartWithTimezone(),
             $this->event->getEndWithTimezone(),
-            $this->getParticipantNames()
+            $this->getParticipantNames(),
+            $wiki->getCategoryIds()
         );
         $pagesCreated += $ret['created'];
         $pagesImproved += $ret['edited'];

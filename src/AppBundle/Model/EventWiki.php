@@ -75,7 +75,7 @@ class EventWiki
     /**
      * One EventWiki has many EventCategory's.
      * @ORM\OneToMany(targetEntity="EventCategory", mappedBy="wiki", orphanRemoval=true, cascade={"persist"})
-     * @var ArrayCollection|EventCategory[] Category's for this EventWiki.
+     * @var ArrayCollection|EventCategory[] Categories for this EventWiki.
      */
     protected $categories;
 
