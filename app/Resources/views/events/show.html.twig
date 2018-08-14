@@ -69,8 +69,10 @@
 
         {% include 'events/_metadata.html.twig' with {'event': event} %}
 
+        <section id="stats">
         {% if event.updated is not null %}
             {% if event.wikis|length > 1 %}
+                <h2>{{ msg('statistics') }}</h2>
                 {% set commonMetrics = ['new-editors', 'retention'] %}
                 <table class="event-metadata event-metadata--grouped">
                     <tr>
@@ -113,6 +115,7 @@
                 {% endif %}
             </div>
         {% endif %}
+        </section><!-- #stats -->
 
         {# Participants accordian #}
         {% include 'events/_participants.html.twig' with {'form': form, 'event': event, 'isOrganizer': isOrganizer} %}

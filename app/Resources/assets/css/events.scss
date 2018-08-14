@@ -32,6 +32,14 @@
         margin: 36px 0;
     }
 
+    // Remove space above the 'Statistics' H2, and reduce the margin between it and the following element.
+    section#stats h2 {
+        margin-top: 30px;
+        & ~ table.event-metadata {
+            margin-top: 0;
+        }
+    }
+
     .event-stats,
     .event-wiki-stats {
         margin: 36px 0;

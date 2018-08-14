@@ -110,6 +110,7 @@
 	"show-section": "Tooltip text for the header of hidden panels, to toggle them open",
 	"start-date": "Label for the start date input field.",
 	"start-time": "Label for the start time input field.",
+	"statistics": "Level-two heading for the event statistics.",
 	"submit": "Submit button text\n{{Identical|Submit}}",
 	"time": "Label for the time-related fields for creating an event.\n{{Identical|Time}}",
 	"timezone": "Label for dropdown to select a timezone.\n{{Identical|Timezone}}",
