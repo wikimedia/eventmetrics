@@ -120,5 +120,8 @@
         {# Participants accordian #}
         {% include 'events/_participants.html.twig' with {'form': form, 'event': event, 'isOrganizer': isOrganizer} %}
 
+        {# Categories accordian #}
+        {% include 'events/_categories.html.twig' with {'form': form, 'event': event, 'isOrganizer': isOrganizer} %}
+
     </div>
 {% endblock %}

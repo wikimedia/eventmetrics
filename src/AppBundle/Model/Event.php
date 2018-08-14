@@ -378,6 +378,17 @@ class Event
         return false;
     }
 
+    /**
+     * Get the number of categories associated with this Event, across all EventWikis.
+     * @return int
+     */
+    public function getNumCategories()
+    {
+        return array_sum($this->getWikis()->map(function (EventWiki $wiki) {
+            return count($wiki->getCategories());
+        })->toArray());
+    }
+
     /****************
      * PARTICIPANTS *
      ****************/
