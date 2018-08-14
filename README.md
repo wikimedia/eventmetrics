@@ -107,6 +107,8 @@ See [`ProgramControllerTest`](https://github.com/wikimedia/grantmetrics/blob/mas
 
 ## Deployment
 
+For maintainer documentation, see https://wikitech.wikimedia.org/wiki/Tool:Grant_Metrics
+
 The application currently is running on WMF's Toolforge environment at https://tools.wmflabs.org/grantmetrics
 
 You'll need to run deploy cammands in the bash shell for the Kubernetes container:
