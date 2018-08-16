@@ -45,6 +45,10 @@ class EventWikiStat
         // For Commons
         'files-uploaded',
         'file-usage',
+
+        // For Wikidata. These will be the same metrics as for the Event.
+        'items-created',
+        'items-improved',
     ];
 
     /**

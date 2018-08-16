@@ -53,6 +53,8 @@ class Event
         'pages-improved' => null,
         'files-uploaded' => null,
         'file-usage' => null,
+        'items-created' => null,
+        'items-improved' => null,
     ];
 
     /**
@@ -63,6 +65,7 @@ class Event
         '*' => ['new-editors', 'retention'],
         'wikipedia' => ['pages-created', 'pages-improved'],
         'commons' => ['files-uploaded', 'file-usage'],
+        'wikidata' => ['items-created', 'items-improved'],
     ];
 
     /**

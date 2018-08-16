@@ -103,7 +103,10 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $ret = json_decode($this->response->getContent(), true);
         static::assertEquals('complete', $ret['status']);
         static::assertEquals(
-            ['new-editors', 'wikis', 'files-uploaded', 'file-usage', 'pages-created', 'pages-improved', 'retention'],
+            [
+                'new-editors', 'wikis', 'files-uploaded', 'file-usage', 'items-created', 'items-improved',
+                'pages-created', 'pages-improved', 'retention'
+            ],
             array_keys($ret['data'])
         );
 
@@ -111,6 +114,6 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findBy(['event' => $event]);
-        static::assertEquals(6, count($eventStats));
+        static::assertEquals(8, count($eventStats));
     }
 }
