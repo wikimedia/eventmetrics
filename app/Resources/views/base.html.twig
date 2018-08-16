@@ -7,7 +7,7 @@
             {% if gmTitle is defined %}{{ msgIfExists(gmTitle) }} - {% elseif exception is defined %}{{ msg('fatal-error') }} - {% endif %}
             {{ msg('grant-metrics') }}
         </title>
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="{{ asset('favicon.ico') }}" />
 
         {# Must be before loading the individual JS files #}
         <script type="text/javascript">
@@ -51,10 +51,10 @@
             <div class="container-fluid">
                 <span class="navbar-left">
                     <span class="home-link">
-                        {{ msg('grant-metrics') }}
+                        <img class="app-header--logo" src="{{ asset('images/logo.svg') }}" alt="{{ msg('grant-metrics') }}" />
                     </span>
                     {##
-                     # When viewing a program/event that you don't organizer, the link to 'My Programs'
+                     # When viewing a program/event that you don't organize, the link to 'My Programs'
                      # appears separate from the breadcrumbs, so that it doesn't look like it's one of
                      # their programs.
                      #}
