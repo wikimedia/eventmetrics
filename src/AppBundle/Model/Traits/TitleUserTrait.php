@@ -62,10 +62,10 @@ trait TitleUserTrait
      */
     public function validateUnreservedTitle(ExecutionContext $context)
     {
-        if (in_array($this->title, ['edit', 'new', 'delete', 'process', 'api', 'revisions'])) {
+        if (in_array($this->title, ['edit', 'new', 'delete', 'process', 'api', 'revisions', 'participants'])) {
             $context->buildViolation('error-title-reserved')
-                ->setParameter(0, '<code>edit</code>, <code>delete</code>, '.
-                    '<code>process</code>, <code>api</code>, <code>revisions</code>')
+                ->setParameter(0, '<code>edit</code>, <code>delete</code>, <code>process</code>, '.
+                    '<code>api</code>, <code>revisions</code>, <code>participants</code>')
                 ->atPath('title')
                 ->addViolation();
         }

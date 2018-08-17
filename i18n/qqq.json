@@ -4,6 +4,7 @@
 			"MusikAnimal"
 		]
 	},
+	"add-category": "Link to add a new category to an event.",
 	"add-more-participants": "Label for text area input to enter in multiple participants for an event.",
 	"add-organizer": "Link to add a new organizer to a program.",
 	"add-wiki": "Link to add a wiki (also known as a 'project') to an event.\n{{Identical|Wiki}}",
@@ -112,6 +113,7 @@
 	"retention": "Heading for the column listing the N-day retention of participants of a program. Shown in the 'My Programs' table. $1 is the number of days.",
 	"retention-desc": "Description for the 'retention' metric. $1 is a number of days.",
 	"return-to-my-programs": "Text for link going back to the My Programs page.",
+	"save-categories": "Label for button to save the categories on an event.",
 	"save-participants": "Label for button to save the participants to an event.",
 	"show-section": "Tooltip text for the header of hidden panels, to toggle them open",
 	"start-date": "Label for the start date input field.",

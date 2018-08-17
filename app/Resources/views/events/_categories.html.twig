@@ -1,0 +1,52 @@
+{% import 'macros/layout.html.twig' as layout %}
+
+{% set content %}
+    {% if isOrganizer %}
+        {{ form_errors(form) }}
+
+        {{ form_start(form, {'method': 'post', 'name': 'categoryForm', 'attr': {'class': 'save-categories-form', 'autocomplete': 'off'}}) }}
+
+        <div class="form-group">
+            <a href="#" class="add-category">
+                <div class="glyphicon glyphicon-plus-sign"></div>
+                {{ msg('add-category') }}
+            </a>
+        </div>
+
+        {{ dump(event.categories) }}
+
+        {{ form_widget(form.submit, {'label': msg('save-categories'), 'attr': {'value': 'categories', 'class': 'btn-primary'}}) }}
+
+        {{ form_row(form._token) }}
+        {{ form_end(form, {'render_rest': false}) }}
+        {#<form name="categoryForm" method="post" class="save-categories-form" autocomplete="off">#}
+            {#<div class="row">#}
+                {#{% for category in event.categories %}#}
+                    {#{% set invalidCategory = false %}#}
+                    {#{% if not(category.vars.valid) %}#}
+                        {#{% set invalidCategory = true %}#}
+                    {#{% endif %}#}
+
+                    {#{% set wikiRowClasses = (invalidCategory ? ' has-error') ~ (loop.index == 1 ? ' category-row__template') %}#}
+
+                    {#{{ form_widget(category, {'attr': {'class': 'user-input', 'readonly': isViewingOrganizer}}) }}#}
+                {#{% endfor %}#}
+            {#</div>#}
+            {#<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">#}
+        {#</form>#}
+    {% else %}{# if not the organizer #}
+        {% for category in event.categories %}
+            <div class="category-row">
+                {{ category.title }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endset %}
+
+{{
+    layout.panel(
+        'categories',
+        event.numCategories ~ ' ' ~ msg('num-categories', [event.numCategories]),
+        content
+    )
+}}

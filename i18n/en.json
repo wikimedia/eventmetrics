@@ -4,6 +4,7 @@
 			"MusikAnimal"
 		]
 	},
+	"add-category": "Add category",
 	"add-more-participants": "Add more participants, one per line",
 	"add-organizer": "Add organizer",
 	"add-wiki": "Add wiki",
@@ -112,6 +113,7 @@
 	"retention": "$1 day retention",
 	"retention-desc": "The number of new editors who make at least one edit, in any Wikimedia project (in any namespace), between $1 {{PLURAL:$1|day|days}} after the event and the time that the report is run.",
 	"return-to-my-programs": "Return to My Programs",
+	"save-categories": "Save categories",
 	"save-participants": "Save participants",
 	"show-section": "Show this section",
 	"start-date": "Start date",

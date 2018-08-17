@@ -8,11 +8,13 @@ namespace AppBundle\Controller;
 use AppBundle\Controller\Traits\CategoryTrait;
 use AppBundle\Controller\Traits\ParticipantTrait;
 use AppBundle\Model\Event;
+use AppBundle\Model\EventCategory;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Participant;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Repository\EventWikiRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -332,7 +334,7 @@ class EventController extends EntityController
         $eventWikiRepo->setContainer($this->container);
 
         return new CallbackTransformer(
-            function ($wikiObjects) {
+            function (ArrayCollection $wikiObjects) {
                 // To domain names for the form, from EventWikis.
                 $wikis = $wikiObjects->toArray();
                 return array_map(function (EventWiki $wiki) {
@@ -351,9 +353,9 @@ class EventController extends EntityController
      * Take the list of wikis provided by the user (enwiki, en.wikipedia, or en.wikipedia.org)
      * and normalize them to the domain (en.wikipedia). This method then instantiates a new
      * EventWiki if one did not already exist.
-     * @param  string[]            $wikis As retrieved by the form.
-     * @param  Event               $event
-     * @param  EventWikiRepository $eventWikiRepo
+     * @param string[] $wikis As retrieved by the form.
+     * @param Event $event
+     * @param EventWikiRepository $eventWikiRepo
      * @return EventWiki[]
      */
     private function normalizeEventWikis($wikis, Event $event, EventWikiRepository $eventWikiRepo)
@@ -382,11 +384,11 @@ class EventController extends EntityController
      * Show a specific event.
      * @Route("/programs/{programTitle}/{eventTitle}", name="Event", requirements={
      *     "programTitle" = "^(?!new|edit|delete).*$",
-     *     "eventTitle" = "^(?!(new|edit|delete|revisions)$)[^\/]+"
+     *     "eventTitle" = "^(?!(new|edit|delete|revisions|participants)$)[^\/]+"
      * })
      * @Route("/programs/{programTitle}/{eventTitle}/", name="EventSlash", requirements={
      *     "programTitle" = "^(?!new|edit|delete).*$",
-     *     "eventTitle" = "^(?!(new|edit|delete|revisions)$)[^\/]+"
+     *     "eventTitle" = "^(?!(new|edit|delete|revisions|participants)$)[^\/]+"
      * })
      * @return Response
      */
@@ -404,15 +406,20 @@ class EventController extends EntityController
         }
 
         // Handle the category Form for the request.
-        $categoryForm = $this->handleCategoryForm();
-        if ($participantForm instanceof RedirectResponse) {
-            // Flash message will be shown at the top of the page.
-            $this->addFlash('success', [
-                'event-updated',
-                $this->event->getDisplayTitle(),
-            ]);
-            return $categoryForm;
-        }
+//        $categoryForm = $this->handleCategoryForm();
+//        if ($categoryForm  instanceof RedirectResponse) {
+//            // Flash message will be shown at the top of the page.
+//            $this->addFlash('success', [
+//                'event-updated',
+//                $this->event->getDisplayTitle(),
+//            ]);
+//            return $categoryForm;
+//        }
+
+//        // Add blank category if none already exist, so there will be an emtpy row ready to fill out.
+//        if ($this->event->getNumCategories() === 0) {
+//            $categories[] = new EventCategory(new EventWiki($this->event));
+//        }
 
         /** @var EventRepository $eventRepo */
         $eventRepo = $this->em->getRepository(Event::class);
@@ -420,7 +427,7 @@ class EventController extends EntityController
         return $this->render('events/show.html.twig', [
             'gmTitle' => $this->event->getDisplayTitle(),
             'participantForm' => $participantForm->createView(),
-            'categoryForm' => $categoryForm->createView(),
+            'categoryForm' => $this->getCategoryForm($this->event)->createView(),
             'program' => $this->program,
             'event' => $this->event,
             'stats' => $this->getEventStats($this->event),

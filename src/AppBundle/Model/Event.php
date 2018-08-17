@@ -9,6 +9,7 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Model\Traits\EventStatTrait;
@@ -365,6 +366,22 @@ class Event
      **************/
 
     /**
+     * Get categories set on EventWikis associated with this Event.
+     * @return ArrayCollection of EventCategories.
+     */
+    public function getCategories()
+    {
+        /** @var EventCategory[] $categories */
+        $categories = [];
+
+        foreach ($this->getOrphanAndChildWikis() as $wikiFamily) {
+            $categories = array_merge($wikiFamily->getCategories()->toArray());
+        }
+
+        return new ArrayCollection($categories);
+    }
+
+    /**
      * Are there any categories set on EventWikis associated with this Event?
      * @return bool
      */
@@ -519,8 +536,7 @@ class Event
      ***************/
 
     /**
-     * Get all EventWikis belonging to the Event that represent
-     * a wiki family (*.wikipedia, *.wiktionary, etc).
+     * Get all EventWikis belonging to the Event that represent a wiki family (*.wikipedia, *.wiktionary, etc).
      * @return ArrayCollection of EventWikis
      */
     public function getFamilyWikis()
@@ -570,9 +586,8 @@ class Event
     }
 
     /**
-     * Get all EventWikis that are not part of a family that have been added
-     * to the Event. For instance, if there is an EventWiki for *.wikipedia
-     * (wikipedia family), a fr.wikipedia EventWiki is not returned, but it
+     * Get all EventWikis that are not part of a family that have been added to the Event. For instance,
+     * if there is an EventWiki for *.wikipedia (wikipedia family), a fr.wikipedia EventWiki is not returned, but it
      * will if there is not a *.wikipedia EventWiki.
      * @return ArrayCollection of EventWikis
      */
@@ -589,6 +604,18 @@ class Event
     }
 
     /**
+     * Get child and orphan wikis.
+     * @return ArrayCollection
+     */
+    public function getOrphanAndChildWikis()
+    {
+        return new ArrayCollection(array_merge(
+            $this->getChildWikis()->toArray(),
+            $this->getOrphanWikis()->toArray()
+        ));
+    }
+
+    /**
      * Remove all associated EventWikis that belong to a family.
      */
     public function clearChildWikis()
@@ -600,8 +627,7 @@ class Event
     }
 
     /**
-     * Get EventWikis that are represent a wiki family, or an individual wiki
-     * that is not part of a family.
+     * Get EventWikis that are represent a wiki family, or an individual wiki that is not part of a family.
      * @return ArrayCollection Containing EventWikis
      */
     public function getOrphanWikisAndFamilies()
