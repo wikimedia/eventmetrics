@@ -57,6 +57,7 @@
 	"logout": "Zakończenie sesji",
 	"my-programs": "Moje programy",
 	"new-editors": "Nowi edytorzy",
+	"new-editors-desc": "Liczba nowoutworzonych kont, w tym użytkowników, którzy zarejestrowali się {{PLURAL:$1|jeden dzień|$1 dni}} przed wydarzeniem (na dowolnej wiki).",
 	"no-events": "Brak wydarzeń w tym programie!",
 	"no-programs": "Nie utworzyłeś żadnych programów.",
 	"no-results": "Brak wyników",
@@ -88,6 +89,7 @@
 	"show-section": "Pokaż tę sekcję",
 	"start-date": "Data początkowa",
 	"start-time": "Czas rozpoczęcia",
+	"statistics": "Statystyki",
 	"submit": "Wyślij",
 	"time": "Czas",
 	"timezone": "Strefa czasowa",
@@ -99,6 +101,7 @@
 	"username": "Nazwa użytkownika",
 	"view-all-data": "Wyświetl wszystkie dane",
 	"view-source": "Kod źródłowy",
+	"welcome": "Witamy w Grant Metrics",
 	"wiki": "Wiki",
 	"wikis": "Wiki"
 }
