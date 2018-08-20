@@ -1,39 +1,52 @@
 {% import 'macros/layout.html.twig' as layout %}
+{% import _self as forms %}
+
+{% macro categoryRow(index, category = null, template = false) %}
+    <div class="category-row row form-inline form-group{% if template %} category-row__template hidden{% endif %}">
+        <div class="form-group col-sm-4">
+            <input type="text" id="categoryForm_title_{{ index }}"
+                   name="categoryForm[categories][{{ index }}]"
+                   class="category-input form-control"
+                   value="{{ category is not null ? category.title : '' }}"
+                   placeholder="Hip hop groups from New York City">
+        </div>
+        <div class="form-group col-sm-2">
+            <input type="text" id="categoryForm_wiki_{{ index }}"
+                   name="categoryForm[wiki][{{ index }}]"
+                   class="event-wiki-input form-control"
+                   value="{{ category is not null ? category.wiki.domain : '' }}"
+                   placeholder="en.wikipedia">
+        </div>
+        <div class="form-group col-sm-2">
+            <button type="button" class="btn btn-default remove-category form-control">
+                {{ msg('remove') }}
+            </button>
+        </div>
+    </div>
+{% endmacro %}
 
 {% set content %}
     {% if isOrganizer %}
-        {{ form_errors(form) }}
+        {#{{ form_errors(form) }}#}
 
-        {{ form_start(form, {'method': 'post', 'name': 'categoryForm', 'attr': {'class': 'save-categories-form', 'autocomplete': 'off'}}) }}
+        <form name="categoryForm" method="post" class="event__categories" autocomplete="off">
+            {{ forms.categoryRow(0, null, true) }}
+            {% for category in event.categories %}
+                {{ forms.categoryRow(loop.index0, category) }}
+            {% endfor %}
 
-        <div class="form-group">
-            <a href="#" class="add-category">
-                <div class="glyphicon glyphicon-plus-sign"></div>
-                {{ msg('add-category') }}
-            </a>
-        </div>
+            <div class="form-group">
+                <a href="#" class="add-category">
+                    <div class="glyphicon glyphicon-plus-sign"></div>
+                    {{ msg('add-category') }}
+                </a>
+            </div>
 
-        {{ dump(event.categories) }}
-
-        {{ form_widget(form.submit, {'label': msg('save-categories'), 'attr': {'value': 'categories', 'class': 'btn-primary'}}) }}
-
-        {{ form_row(form._token) }}
-        {{ form_end(form, {'render_rest': false}) }}
-        {#<form name="categoryForm" method="post" class="save-categories-form" autocomplete="off">#}
-            {#<div class="row">#}
-                {#{% for category in event.categories %}#}
-                    {#{% set invalidCategory = false %}#}
-                    {#{% if not(category.vars.valid) %}#}
-                        {#{% set invalidCategory = true %}#}
-                    {#{% endif %}#}
-
-                    {#{% set wikiRowClasses = (invalidCategory ? ' has-error') ~ (loop.index == 1 ? ' category-row__template') %}#}
-
-                    {#{{ form_widget(category, {'attr': {'class': 'user-input', 'readonly': isViewingOrganizer}}) }}#}
-                {#{% endfor %}#}
-            {#</div>#}
-            {#<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">#}
-        {#</form>#}
+            <button class="btn btn-primary" value="categories">
+                {{ msg('save-categories') }}
+            </button>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        </form>
     {% else %}{# if not the organizer #}
         {% for category in event.categories %}
             <div class="category-row">

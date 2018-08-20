@@ -12,6 +12,7 @@ $(function () {
     // Add/remove participants hooks for when viewing an event.
     if ($('body').hasClass('event-show')) {
         setupAddRemove('event', 'participant');
+        setupAddRemove('event', 'category');
     }
 
     var startDate = moment($('#form_start').val()).utc(),
@@ -58,7 +59,8 @@ $(function () {
     });
 
     populateValidWikis().then(function (validWikis) {
-        $('.event__wikis').on('focus', '.event-wiki-input', function () {
+        // For the 'edit event' form, and the 'category' form on the Event Page.
+        $('.event__wikis, .save-categories-form').on('focus', '.event-wiki-input', function () {
             if ($(this).data().typeahead) {
                 return;
             }

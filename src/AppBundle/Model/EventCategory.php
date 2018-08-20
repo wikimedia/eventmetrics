@@ -88,6 +88,15 @@ class EventCategory
     }
 
     /**
+     * Set the ID of the category in the MediaWiki database.
+     * @param int $id
+     */
+    public function setCategoryId($id)
+    {
+        $this->categoryId = $id;
+    }
+
+    /**
      * ID of the category in the MediaWiki database.
      * @return int
      */
@@ -98,7 +107,7 @@ class EventCategory
 
     /**
      * Set the title of the category. This value is not persisted to the database.
-     * @param $title
+     * @param string $title
      */
     public function setTitle($title)
     {

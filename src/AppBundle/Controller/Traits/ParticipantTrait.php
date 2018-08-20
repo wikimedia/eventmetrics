@@ -69,8 +69,6 @@ trait ParticipantTrait
         $form = $this->getParticipantForm($this->event);
         $form->handleRequest($this->request);
 
-        dump($form->getExtraData());
-
         if ($form->isSubmitted() && $form->isValid()) {
             $event = $form->getData();
             // Clear statistics and child wikis as the data will now be stale.

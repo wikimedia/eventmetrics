@@ -40,13 +40,15 @@ $(function () {
 /**
  * Setup form handling for adding/removing arbitrary number of text fields.
  * This is used for adding/removing organizers to a program, and wikis to an event.
- * @param  {string} model  Model name, either 'program' or 'event'.
- * @param  {string} column Column name, either 'organizer' or 'wiki'.
+ * @param {string} model  Model name, either 'program' or 'event'.
+ * @param {string} column Column name, either 'organizer' or 'wiki'.
  */
 function setupAddRemove(model, column)
 {
-    // Keep track of how many fields have been rendered.
-    var rowCount = $('.' + model + '__' + column + 's .' + column + '-row').length;
+    // Keep track of how many fields have been rendered. This expects each row (e.g. 'participant-row') to be a child
+    // of a container with the model and pluralized column, e.g. 'event__participants'.
+    var columnPluralized = column.substr(-1) === 'y' ? column.replace(/y$/, 'ies') : column + 's',
+        rowCount = $('.' + model + '__' + columnPluralized + ' .' + column + '-row').length;
 
     // Class name for the individual rows.
     var rowClass = '.' + column + '-row';
@@ -62,22 +64,28 @@ function setupAddRemove(model, column)
         e.preventDefault();
 
         // Clone the template row and correct CSS classes.
-        var $template = $("<div class='form-group " + column + "-row'>" +
-            $(rowClass + '__template').html() +
-            "</div>");
+        var template = $($(rowClass + '__template')[0].outerHTML)
+            .removeClass('hidden ' + column + '-row__template')[0].outerHTML;
 
         // Insert after the last row.
-        $(rowClass + ':last').after($template);
+        $(rowClass + ':last').after(template);
 
         var $newRow = $(rowClass + ':last');
 
-        // Add name attribute to the input of the new row and remove unwanted inner elements.
-        $newRow.find('input').prop('name', 'form[' + column + 's][' + rowCount + ']')
-            .prop('id', 'form_' + column + 's_' + rowCount)
-            .val('');
+        // Go through all the inputs and update the indexing in the name and id attributes.
+        $newRow.find('input').toArray().forEach(function (el) {
+            var name = $(el).prop('name'),
+                id = $(el).prop('id');
+            $(el).prop('name', name.replace(/\[\d+]/, '[' + rowCount + ']'))
+                .prop('id', id.replace(/_\d+$/, '_' + rowCount))
+                // Clear out existing value.
+                .val('');
+        });
+
+        // Remove unwanted inner elements.
         $newRow.find('.invalid-input').remove();
 
-        // Increment count so the next added row will have the correct name attribute.
+        // Increment count so the next added row will have the correct index in the name and id attributes.
         rowCount++;
 
         // Add listener to remove the row.
@@ -98,7 +106,7 @@ function setupAddRemove(model, column)
 function setupAutocompletion($userInput)
 {
     if ($userInput === undefined) {
-        var $userInput = $('.user-input');
+        $userInput = $('.user-input');
     }
 
     // Make sure typeahead-compatible fields are present.

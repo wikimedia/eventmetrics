@@ -40,21 +40,21 @@ trait CategoryTrait
 //            $categories[] = new EventCategory(new EventWiki($event));
 //        }
 
-        $builder->add('categories', CollectionType::class, [
-                'entry_type' => CategoryType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'empty_data' => '',
-                'required' => false,
-                'constraints' => [new Valid()],
-//                'data' => [],
-//                'data_class' => null,
-            ])
-            ->add('submit', SubmitType::class);
-//            ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onCategoryPreSubmit']);
-
-        $builder->get('categories')
-            ->addModelTransformer($this->getCategoryCallbackTransformer($event));
+//        $builder->add('categories', CollectionType::class, [
+//                'entry_type' => CategoryType::class,
+//                'allow_add' => true,
+//                'allow_delete' => true,
+//                'empty_data' => '',
+//                'required' => false,
+//                'constraints' => [new Valid()],
+////                'data' => [],
+////                'data_class' => null,
+//            ])
+//            ->add('submit', SubmitType::class);
+////            ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onCategoryPreSubmit']);
+//
+//        $builder->get('categories')
+//            ->addModelTransformer($this->getCategoryCallbackTransformer($event));
 
         return $builder->getForm();
     }
