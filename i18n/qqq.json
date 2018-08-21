@@ -18,6 +18,7 @@
 	"calculate-totals": "Label for button to calculate the statistics for an event.",
 	"cancel": "Label for button\n{{Identical|Cancel}}",
 	"categories": "Label for section showing MediaWiki categories associated with an Event.\n{{Identical|Category}}",
+	"category-name": "Placeholder for input to enter the name of a category.",
 	"close": "Button text to close a modal.\n{{Identical|Close}}",
 	"confirm-deletion": "Popup message confirming the user wants to delete the program or event. $1 is the name of the program or event.",
 	"copy": "Text for link to copy a program or event.\n{{Identical|Copy}}",

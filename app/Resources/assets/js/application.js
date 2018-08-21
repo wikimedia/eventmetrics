@@ -40,11 +40,15 @@ $(function () {
 /**
  * Setup form handling for adding/removing arbitrary number of text fields.
  * This is used for adding/removing organizers to a program, and wikis to an event.
- * @param {string} model  Model name, either 'program' or 'event'.
+ * @param {string} model Model name, either 'program' or 'event'.
  * @param {string} column Column name, either 'organizer' or 'wiki'.
+ * @param {function} autocompletion Callback to re-init autocompletion. This function is given one arguemnt,
+ *     which is a jQuery selector for the element that needs to have autocompletion added to it.
  */
-function setupAddRemove(model, column)
+function setupAddRemove(model, column, autocompletion)
 {
+    autocompletion = autocompletion || 'setupUserAutocompletion';
+
     // Keep track of how many fields have been rendered. This expects each row (e.g. 'participant-row') to be a child
     // of a container with the model and pluralized column, e.g. 'event__participants'.
     var columnPluralized = column.substr(-1) === 'y' ? column.replace(/y$/, 'ies') : column + 's',
@@ -95,32 +99,83 @@ function setupAddRemove(model, column)
 
         // Setup autocompletion on the new row (must use a fresh selector).
         if ($newRow.find('input').hasClass('user-input')) {
-            setupAutocompletion($(rowClass + ':last').find('input'));
+            var $newInput = $(rowClass + ':last').find('input');
+            window[autocompletion]();
+            setupUserAutocompletion($newInput);
         }
     });
 }
 
 /**
- * Setup autocompletion of pages if a page input field is present.
+ * Convenience wrapper for setting up autocompletion. All this does is (a) handle when there are no valid inputs to
+ * attach the typeahead to, and (b) destroy existing typeaheads on focus.
+ * @param {jQuery} $input Target selector.
+ * @param {Function} init Code that initializes typeahead.
  */
-function setupAutocompletion($userInput)
+function setupAutocompletion($input, init)
 {
-    if ($userInput === undefined) {
-        $userInput = $('.user-input');
-    }
+    $input = $input || $('.user-input');
 
     // Make sure typeahead-compatible fields are present.
-    if (!$userInput[0]) {
+    if (!$input[0]) {
         return;
     }
 
-    // Initialize only on focus, since there can be a ton of usernames.
-    $userInput.one('focus', function () {
+    // Initialize only on focus, since there can be a ton of inputs.
+    $input.one('focus', function () {
         // Destroy any existing instances.
         if ($(this).data('typeahead')) {
             $(this).data('typeahead').destroy();
         }
 
+        init();
+
+        // Needed because of https://github.com/bassjobsen/Bootstrap-3-Typeahead/issues/150
+        $(this).trigger('focus');
+    });
+}
+
+function setupPageAutocompletion($input)
+{
+    $input = $input || $('.page-input');
+
+    return setupAutocompletion($input, function () {
+        $input.typeahead({
+            ajax: {
+                url: 'https://' + wiki.replace(/\.org$/, ''),
+                timeout: 200,
+                triggerLength: 1,
+                method: 'get',
+                preDispatch: function (query) {
+                    query = query.charAt(0).toUpperCase() + query.slice(1);
+                    return {
+                        action: 'query',
+                        list: 'prefixsearch',
+                        format: 'json',
+                        pssearch: query,
+                        psnamespace: $input.data('nsId'),
+                        origin: '*'
+                    };
+                },
+                preProcess:  function (data) {
+                    return data.query.prefixsearch.map(function (elem) {
+                        return elem.name.replace(
+                            new RegExp('^' + $input.data('nsName') + ':', '')
+                        );
+                    });
+                }
+            }
+        });
+    });
+}
+
+/**
+ * Setup autocompletion of pages if a page input field is present.
+ * @param {jQuery} $input jQuery object of inputs to attach autocompletion to.
+ */
+function setupUserAutocompletion($input)
+{
+    return setupAutocompletion($input, function () {
         // Defaults for typeahead options. preDispatch and preProcess will be
         // set accordingly for each typeahead instance.
         var typeaheadOpts = {
@@ -130,7 +185,7 @@ function setupAutocompletion($userInput)
             method: 'get'
         };
 
-        $userInput.typeahead({
+        $input.typeahead({
             ajax: Object.assign(typeaheadOpts, {
                 preDispatch: function (query) {
                     query = query.charAt(0).toUpperCase() + query.slice(1);
@@ -149,9 +204,6 @@ function setupAutocompletion($userInput)
                 }
             })
         });
-
-        // Needed because of https://github.com/bassjobsen/Bootstrap-3-Typeahead/issues/150
-        $(this).trigger('focus');
     });
 }
 

@@ -9,10 +9,15 @@ $(function () {
         setupAddRemove('event', 'wiki');
     }
 
-    // Add/remove participants hooks for when viewing an event.
     if ($('body').hasClass('event-show')) {
+        // Add/remove participants hooks for when viewing an event.
         setupAddRemove('event', 'participant');
-        setupAddRemove('event', 'category');
+        setupAddRemove('event', 'category', function ($input) {
+
+        });
+
+        // // Add category search on event page.
+        // setupPageAutocompletion();
     }
 
     var startDate = moment($('#form_start').val()).utc(),
@@ -37,8 +42,8 @@ $(function () {
         }
     });
 
-    // Attempt to default the timezone to the user's timezone.
     if ($('body').hasClass('event-new')) {
+        // Attempt to default the timezone to the user's timezone.
         var timezome = 'UTC';
         try {
             timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -128,7 +133,7 @@ $(function () {
         e.preventDefault();
     });
 
-    setupAutocompletion();
+    setupUserAutocompletion();
     setupColumnSorting();
 
     $('[data-toggle="tooltip"]').tooltip();

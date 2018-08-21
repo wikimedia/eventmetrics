@@ -1,7 +1,7 @@
 $(function () {
     if ($('body').hasClass('program-new') || $('body').hasClass('program-edit')) {
         setupAddRemove('program', 'organizer');
-        setupAutocompletion();
+        setupUserAutocompletion();
     }
 
     $('.program-action__delete, .event-action__delete').on('click', function (e) {
@@ -15,6 +15,6 @@ $(function () {
         }
     });
 
-    setupAutocompletion();
+    setupUserAutocompletion();
     setupColumnSorting();
 });
