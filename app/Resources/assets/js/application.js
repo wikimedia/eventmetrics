@@ -187,3 +187,16 @@ function setupColumnSorting()
         $table.find('tbody').html($(entries));
     });
 }
+
+/**
+ * Prevent the insertion of emojis etc.
+ * See also TitleUserTrait::setTitle() for the same replacement being made server-side.
+ */
+$(function () {
+    function replaceHighUtf8Strings()
+    {
+        var newVal = $(this).val().replace(/[\u{010000}-\u{10FFFF}]/gu, String.fromCodePoint(0xFFFD));
+        $(this).val(newVal);
+    }
+    $('input, textarea').on({ keydown: replaceHighUtf8Strings, change: replaceHighUtf8Strings });
+});

@@ -51,6 +51,10 @@ trait TitleUserTrait
      */
     public function setTitle($title)
     {
+        // Remove 4-byte unicode characters (replace with the "replacement character" �).
+        // Kudos https://stackoverflow.com/a/24672780
+        // More info http://unicode.org/reports/tr36/#Deletion_of_Noncharacters
+        $title = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xEF\xBF\xBD", $title);
         // Use underscores instead of spaces.
         $this->title = str_replace(' ', '_', trim($title));
     }
