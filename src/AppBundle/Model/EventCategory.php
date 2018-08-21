@@ -6,6 +6,7 @@
 namespace AppBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * An EventCategory is a wiki category tied to an EventWiki, and hence a single Event.
@@ -48,6 +49,7 @@ class EventCategory
     /**
      * Associated ID of the category in the `category` table on the replicas.
      * @ORM\Column(name="ec_category_id", type="integer", nullable=false)
+     * @Assert\NotBlank(message="")
      * @var int Corresponds to the `cat_id` column in `category` on the replicas.
      */
     protected $categoryId;

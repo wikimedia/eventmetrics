@@ -175,9 +175,9 @@ class EventWikiRepository extends Repository
         $conn = $this->getMetaConnection();
         $rqb = $conn->createQueryBuilder();
         $rqb->select([
-            "REGEXP_REPLACE(url, 'https?:\/\/(.*)\.org', '\\\\1')",
-            "CONCAT(dbname, '_p')",
-        ])
+                "REGEXP_REPLACE(url, 'https?:\/\/(.*)\.org', '\\\\1')",
+                "CONCAT(dbname, '_p')",
+            ])
             ->from('wiki')
             ->where('is_closed = 0')
             ->andWhere("url RLIKE '$validWikiRegex'");

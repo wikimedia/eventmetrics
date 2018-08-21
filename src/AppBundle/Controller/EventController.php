@@ -8,7 +8,6 @@ namespace AppBundle\Controller;
 use AppBundle\Controller\Traits\CategoryTrait;
 use AppBundle\Controller\Traits\ParticipantTrait;
 use AppBundle\Model\Event;
-use AppBundle\Model\EventCategory;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Participant;
@@ -397,29 +396,11 @@ class EventController extends EntityController
         // Handle the participant Form for the request.
         $participantForm = $this->handleParticipantForm();
         if ($participantForm instanceof RedirectResponse) {
-            // Flash message will be shown at the top of the page.
-            $this->addFlash('success', [
-                'event-updated',
-                $this->event->getDisplayTitle(),
-            ]);
             return $participantForm;
         }
 
-        // Handle the category Form for the request.
-//        $categoryForm = $this->handleCategoryForm();
-//        if ($categoryForm  instanceof RedirectResponse) {
-//            // Flash message will be shown at the top of the page.
-//            $this->addFlash('success', [
-//                'event-updated',
-//                $this->event->getDisplayTitle(),
-//            ]);
-//            return $categoryForm;
-//        }
-
-//        // Add blank category if none already exist, so there will be an emtpy row ready to fill out.
-//        if ($this->event->getNumCategories() === 0) {
-//            $categories[] = new EventCategory(new EventWiki($this->event));
-//        }
+        // Handle submission of the category form. Unlike for participants, this is not a Symfony Form (easier).
+        $this->handleCategoryFormSubmission();
 
         /** @var EventRepository $eventRepo */
         $eventRepo = $this->em->getRepository(Event::class);
@@ -427,7 +408,6 @@ class EventController extends EntityController
         return $this->render('events/show.html.twig', [
             'gmTitle' => $this->event->getDisplayTitle(),
             'participantForm' => $participantForm->createView(),
-            'categoryForm' => $this->getCategoryForm($this->event)->createView(),
             'program' => $this->program,
             'event' => $this->event,
             'stats' => $this->getEventStats($this->event),

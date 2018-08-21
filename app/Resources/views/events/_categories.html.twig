@@ -12,7 +12,7 @@
         </div>
         <div class="form-group col-sm-2">
             <input type="text" id="categoryForm_wiki_{{ index }}"
-                   name="categoryForm[wiki][{{ index }}]"
+                   name="categoryForm[wikis][{{ index }}]"
                    class="event-wiki-input form-control"
                    value="{{ category is not null ? category.wiki.domain : '' }}"
                    placeholder="en.wikipedia">
@@ -26,34 +26,24 @@
 {% endmacro %}
 
 {% set content %}
-    {% if isOrganizer %}
-        {#{{ form_errors(form) }}#}
-
-        <form name="categoryForm" method="post" class="event__categories" autocomplete="off">
-            {{ forms.categoryRow(0, null, true) }}
-            {% for category in event.categories %}
-                {{ forms.categoryRow(loop.index0, category) }}
-            {% endfor %}
-
-            <div class="form-group">
-                <a href="#" class="add-category">
-                    <div class="glyphicon glyphicon-plus-sign"></div>
-                    {{ msg('add-category') }}
-                </a>
-            </div>
-
-            <button class="btn btn-primary" value="categories">
-                {{ msg('save-categories') }}
-            </button>
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        </form>
-    {% else %}{# if not the organizer #}
+    <form name="categoryForm" method="post" class="event__categories" autocomplete="off">
+        {{ forms.categoryRow(0, null, true) }}
         {% for category in event.categories %}
-            <div class="category-row">
-                {{ category.title }}
-            </div>
+            {{ forms.categoryRow(loop.index0, category) }}
         {% endfor %}
-    {% endif %}
+
+        <div class="form-group">
+            <a href="#" class="add-category">
+                <div class="glyphicon glyphicon-plus-sign"></div>
+                {{ msg('add-category') }}
+            </a>
+        </div>
+
+        <button class="btn btn-primary" value="categories">
+            {{ msg('save-categories') }}
+        </button>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    </form>
 {% endset %}
 
 {{

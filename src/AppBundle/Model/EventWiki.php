@@ -83,6 +83,8 @@ class EventWiki
     /**
      * One EventWiki has many EventCategory's.
      * @ORM\OneToMany(targetEntity="EventCategory", mappedBy="wiki", orphanRemoval=true, cascade={"persist"})
+     * @Assert\Valid This is not normally needed, but we do manual validations on EventCategories. This constraint
+     *   causes the errors to bubble up to the EventWiki (which are also bubbled up to the Event).
      * @var ArrayCollection|EventCategory[] Categories for this EventWiki.
      */
     protected $categories;

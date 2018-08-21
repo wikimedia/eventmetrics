@@ -57,6 +57,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->familyWikiSpec();
         $this->showSpec();
         $this->participantsSpec();
+        $this->categoriesSpec();
         $this->cloneSpec();
         $this->deleteSpec();
     }
@@ -222,7 +223,6 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
     /**
      * Test how child wikis are handled when a family wiki is added, and when stats are generated.
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function familyWikiSpec()
     {
@@ -348,6 +348,26 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             [10584730], // User ID of MusikAnimal.
             $event->getParticipantIds()
         );
+    }
+
+    /**
+     * Adding/removing categories to an Event.
+     */
+    private function categoriesSpec()
+    {
+        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Pinocchio');
+        $form = $this->crawler->selectButton('Save categories')->form();
+
+        // FIXME: Add category with Category: prefix, should get stripped out.
+
+        $form['categoryForm[categories][0]'] = 'Living people';
+        $form['categoryForm[wikis][0]'] = 'en.wikipedia';
+        $this->crawler = $this->client->submit($form);
+
+        $eventCategory = $this->entityManager
+            ->getRepository('Model:EventCategory')
+            ->findOneBy(['categoryId' => 173]); // 173 = Living_people
+        static::assertNotNull($eventCategory);
     }
 
     /**

@@ -115,6 +115,8 @@ class Event
     /**
      * One Event has many EventWikis.
      * @ORM\OneToMany(targetEntity="EventWiki", mappedBy="event", orphanRemoval=true, cascade={"persist"})
+     * @Assert\Valid This is not normally needed, but we do manual validations on EventCategories, which belong to
+     *   EventWikis. This constraint causes the errors to bubble up to the Event.
      * @var ArrayCollection|EventWiki[] Wikis that this event takes place on.
      */
     protected $wikis;
@@ -529,6 +531,33 @@ class Event
             return;
         }
         $this->wikis->removeElement($wiki);
+    }
+
+    /**
+     * Get the regex pattern for valid wikis.
+     * @return string
+     * @static
+     *
+     * No need to test a hard-coded string.
+     * @codeCoverageIgnore
+     */
+    public static function getValidWikiPattern()
+    {
+        return EventWiki::VALID_WIKI_PATTERN;
+    }
+
+    /**
+     * Get the regex pattern for wikis defined on the Event.
+     * @return string
+     */
+    public function getAvailableWikiPattern()
+    {
+        $regex = implode('|', $this->getOrphanWikisAndFamilies()->map(function (EventWiki $wiki) {
+            // Regex-ify the domain name.
+            return str_replace('\*', '\w+', preg_quote($wiki->getDomain()));
+        })->toArray());
+
+        return "/$regex/";
     }
 
     /***************

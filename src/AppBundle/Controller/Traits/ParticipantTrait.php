@@ -76,6 +76,13 @@ trait ParticipantTrait
             $event->clearChildWikis();
             $this->em->persist($event);
             $this->em->flush();
+
+            // Flash message will be shown at the top of the page.
+            $this->addFlash('success', [
+                'event-updated',
+                $this->event->getDisplayTitle(),
+            ]);
+
             return $this->redirectToRoute('Event', [
                 'programTitle' => $event->getProgram()->getTitle(),
                 'eventTitle' => $event->getTitle(),
