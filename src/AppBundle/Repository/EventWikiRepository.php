@@ -25,7 +25,7 @@ class EventWikiRepository extends Repository
 
     /**
      * Get the wiki's domain name without the .org given a database name or domain.
-     * @param  string $value
+     * @param string $value
      * @return string|null Null if no wiki was found.
      */
     public function getDomainFromEventWikiInput($value)
@@ -66,7 +66,7 @@ class EventWikiRepository extends Repository
     /**
      * This effectively validates the given name as a wiki family
      * (wikipedia, wiktionary, etc). Null is returned if invalid.
-     * @param  string $value The wiki family name.
+     * @param string $value The wiki family name.
      * @return string|null The wiki family name, or null if invalid.
      */
     public function getWikiFamilyName($value)
@@ -82,7 +82,7 @@ class EventWikiRepository extends Repository
 
     /**
      * Get the database name of the given EventWiki.
-     * @param  EventWiki $wiki
+     * @param EventWiki $wiki
      * @return string
      */
     public function getDbName(EventWiki $wiki)
@@ -157,5 +157,29 @@ class EventWikiRepository extends Repository
         }
 
         return $wikitext;
+    }
+
+    /**
+     * Get all available wikis on the replicas, as defined by EventWiki::VALID_WIKI_PATTERN.
+     * @return array With domain as the keys, database name as the values.
+     */
+    public function getAvailableWikis()
+    {
+        /** @var string $validWikiRegex Regex-escaped and without surrounding forward slashes. */
+        $validWikiRegex = str_replace(
+            '\\',
+            '\\\\',
+            trim(EventWiki::VALID_WIKI_PATTERN, '/')
+        );
+        $conn = $this->getMetaConnection();
+        $rqb = $conn->createQueryBuilder();
+        $rqb->select([
+            "REGEXP_REPLACE(url, 'https?:\/\/(.*)\.org', '\\\\1')",
+            "CONCAT(dbname, '_p')",
+        ])
+            ->from('wiki')
+            ->where('is_closed = 0')
+            ->andWhere("url RLIKE '$validWikiRegex'");
+        return $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 }
