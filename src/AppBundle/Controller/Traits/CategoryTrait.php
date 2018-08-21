@@ -42,11 +42,17 @@ trait CategoryTrait
     {
         foreach ($formData['categories'] as $index => $title) {
             $wiki = $event->getWikiByDomain($formData['wikis'][$index]);
+
             $category = new EventCategory($wiki);
             $category->setTitle($title);
         }
 
-        $errors = $this->validator->validate($event);
+        if ($this->validator->validate($event)) {
+            dump($event->getCategories());
+            die();
+            $this->event = $event;
+            return;
+        }
 
         // Clear statistics as the data will now be stale.
         $event->clearStatistics();
