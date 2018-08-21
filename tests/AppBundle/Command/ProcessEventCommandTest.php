@@ -115,6 +115,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
         $this->pagesImprovedSpec();
         $this->filesUploadedSpec();
         $this->fileUsageSpec();
+        $this->itemsCreatedAndImprovedSpec();
         $this->retentionSpec();
         $this->jobFinishedSpec();
     }
@@ -136,7 +137,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findAll(['event' => $this->event]);
-        static::assertEquals(6, count($eventStats));
+        static::assertEquals(8, count($eventStats));
     }
 
     /**
@@ -189,7 +190,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(6, $eventStat->getValue());
+        static::assertEquals(7, $eventStat->getValue());
 
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
@@ -197,7 +198,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
                 'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(6, $eventWikiStat->getValue());
+        static::assertEquals(7, $eventWikiStat->getValue());
     }
 
     /**
@@ -243,6 +244,29 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
                 'metric' => 'file-usage',
             ]);
         static::assertGreaterThan(0, $eventWikiStat->getValue());
+    }
+
+    /**
+     * Items created and improved (should be the same for event and event-wiki).
+     * @covers \AppBundle\Service\EventProcessor::setItemsCreatedOrImprovedOnWikidata()
+     */
+    protected function itemsCreatedAndImprovedSpec()
+    {
+        $eventStat = $this->entityManager->getRepository('Model:EventStat');
+        $eventWikiStat = $this->entityManager->getRepository('Model:EventWikiStat');
+
+        // Event-wiki stats.
+        $wikidata = $this->event->getWikiByDomain('www.wikidata');
+        $ewItemsCreatedStat = $eventWikiStat->findOneBy(['wiki' => $wikidata, 'metric' => 'items-created']);
+        static::assertEquals(3, $ewItemsCreatedStat->getValue());
+        $ewItemsImprovedStat = $eventWikiStat->findOneBy(['wiki' => $wikidata, 'metric' => 'items-improved']);
+        static::assertEquals(5, $ewItemsImprovedStat->getValue());
+
+        // Event stats.
+        $eItemsCreatedStat = $eventStat->findOneBy(['event' => $this->event, 'metric' => 'items-created']);
+        static::assertEquals(3, $eItemsCreatedStat->getValue());
+        $eItemsImprovedStat = $eventStat->findOneBy(['event' => $this->event, 'metric' => 'items-improved']);
+        static::assertEquals(5, $eItemsImprovedStat->getValue());
     }
 
     /**

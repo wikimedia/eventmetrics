@@ -32,7 +32,7 @@ class EventWiki
     /**
      * Regex pattern of the supported wikis.
      */
-    const VALID_WIKI_PATTERN = '/\w+\.wikipedia|commons\.wikimedia/';
+    const VALID_WIKI_PATTERN = '/\w+\.wikipedia|commons\.wikimedia|www\.wikidata/';
 
     /**
      * Valid names of wiki families, or singular orphan wikis like commons.
@@ -40,6 +40,7 @@ class EventWiki
     const FAMILY_NAMES = [
         'wikipedia',
         'commons',
+        'wikidata',
     ];
 
     /**

@@ -50,6 +50,10 @@ class EventStat
         // For Commons
         'files-uploaded',
         'file-usage',
+
+        // For Wikidata. These are the same metric as pages-created and -improved, but only stored per-event.
+        'items-created',
+        'items-improved',
     ];
 
     /**

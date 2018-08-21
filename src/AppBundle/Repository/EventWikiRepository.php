@@ -47,12 +47,16 @@ class EventWikiRepository extends Repository
             ->setParameter('projectUrl2', "https://$value.org");
         $ret = $this->executeQueryBuilder($rqb)->fetch();
 
+        // No matches found.
+        if (!$ret) {
+            return null;
+        }
+
+        // Extract and return just the domain name without '.org' suffix.
         $matches = [];
         preg_match('/^https?\:\/\/(.*)\.org$/', $ret['url'], $matches);
-        $domain = isset($matches[1]) ? str_replace('www.', '', $matches[1]) : null;
-
-        if (preg_match(EventWiki::getValidPattern(), $domain)) {
-            return $domain;
+        if (isset($matches[1]) && preg_match(EventWiki::getValidPattern(), $matches[1])) {
+            return $matches[1];
         } else {
             // Entity will be considered invalid and won't be saved.
             return null;
