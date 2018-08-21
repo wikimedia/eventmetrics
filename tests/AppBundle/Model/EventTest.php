@@ -343,7 +343,7 @@ class EventTest extends GrantMetricsTestCase
     }
 
     /**
-     * @covers Event::getWikisByFamily()
+     * @covers \AppBundle\Model\Event::getWikisByFamily()
      */
     public function testWikisByFamily()
     {
