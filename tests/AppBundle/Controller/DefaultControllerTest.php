@@ -53,10 +53,27 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
      */
     public function testOAuthCallback()
     {
-        $client = static::createClient();
-        $client->request('GET', '/oauth_callback');
+        $this->client->request('GET', '/oauth_callback');
 
         // Callback should 404 since we didn't give it anything.
-        static::assertEquals(404, $client->getResponse()->getStatusCode());
+        static::assertEquals(404, $this->client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * The wikis API.
+     */
+    public function testWikisApi()
+    {
+        $this->client->request('GET', '/api/wikis');
+        $this->response = $this->client->getResponse();
+
+        static::assertArraySubset(
+            [
+                'de.wikipedia' => 'dewiki_p',
+                'www.wikidata' => 'wikidatawiki_p',
+                'commons.wikimedia' => 'commonswiki_p',
+            ],
+            json_decode($this->response->getContent(), true)
+        );
     }
 }
