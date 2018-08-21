@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * The EntityController sets class-level properties and
@@ -46,23 +47,29 @@ abstract class EntityController extends Controller
     /** @var Event The Event being requested. */
     protected $event;
 
+    /** @var ValidatorInterface Used when manually validating Models, as opposed to using Symfony Forms. */
+    protected $validator;
+
     /**
      * Constructor for the abstract EntityController.
      * @param RequestStack $requestStack
      * @param ContainerInterface $container
      * @param SessionInterface $session
      * @param EntityManagerInterface $em
+     * @param ValidatorInterface $validator
      */
     public function __construct(
         RequestStack $requestStack,
         ContainerInterface $container,
         SessionInterface $session,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ValidatorInterface $validator
     ) {
         $this->request = $requestStack->getCurrentRequest();
         $this->container = $container;
         $this->em = $em;
         $this->session = $session;
+        $this->validator = $validator;
 
         $this->validateUser();
         $this->setProgramAndEvent();
