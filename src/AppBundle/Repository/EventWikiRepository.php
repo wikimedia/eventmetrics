@@ -171,6 +171,7 @@ class EventWikiRepository extends Repository
             '\\\\',
             trim(EventWiki::VALID_WIKI_PATTERN, '/')
         );
+
         $conn = $this->getMetaConnection();
         $rqb = $conn->createQueryBuilder();
         $rqb->select([
@@ -180,6 +181,7 @@ class EventWikiRepository extends Repository
             ->from('wiki')
             ->where('is_closed = 0')
             ->andWhere("url RLIKE '$validWikiRegex'");
+
         return $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 }
