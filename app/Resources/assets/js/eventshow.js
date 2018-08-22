@@ -7,7 +7,17 @@ $(function () {
     }
 
     grantmetrics.application.setupAddRemove('event', 'participant');
-    grantmetrics.application.setupAddRemove('event', 'category');
+    grantmetrics.application.setupAddRemove('event', 'category', function ($newRow) {
+        // Fill in the wiki with the last valid one.
+        var lastWiki = $(".event__categories .wiki-input[value!='']").val();
+
+        if (lastWiki) {
+            $newRow.find('.wiki-input').val(lastWiki);
+            $newRow.find('.category-input').focus();
+        } else {
+            $newRow.find('.wiki-input').focus();
+        }
+    });
     grantmetrics.application.setupAutocompletion();
 
     // The event page contains multiple forms. Here we jump to the one with errors,
@@ -20,6 +30,7 @@ $(function () {
     // Setup column sorting for stats.
     grantmetrics.application.setupColumnSorting();
 
+    grantmetrics.eventshow.setupWikiInputs();
     grantmetrics.eventshow.setupCalculateStats();
 });
 
@@ -61,5 +72,24 @@ grantmetrics.eventshow.setupCalculateStats = function () {
         $('.event-process-btn').trigger('click');
         $('.event-wiki-stats--empty').html('&nbsp;');
         e.preventDefault();
+    });
+};
+
+/**
+ * Attach typeaheads to the wiki inputs. These will only autocomplete to wikis configured on the Event.
+ */
+grantmetrics.eventshow.setupWikiInputs = function () {
+    grantmetrics.application.populateValidWikis().then(function (validWikis) {
+        $('.event__categories').on('focus', '.wiki-input', function () {
+            if ($(this).data().typeahead) {
+                return;
+            }
+
+            $(this).typeahead({
+                source: validWikis.filter(function (wiki) {
+                    return grantmetrics.eventshow.availableWikiPattern.test(wiki);
+                })
+            });
+        });
     });
 };

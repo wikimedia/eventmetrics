@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace AppBundle\Controller;
 
 use AppBundle\Model\Event;
+use AppBundle\Model\EventCategory;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Participant;
@@ -120,6 +121,11 @@ class EventController extends EntityController
             new Participant($event, $participant->getUserId());
         }
 
+        /** @var EventCategory $category */
+        foreach ($this->event->getCategories()->getIterator() as $category) {
+            new EventCategory($event, $category->getTitle(), $category->getDomain());
+        }
+
         /** @var EventWiki $wiki */
         foreach ($this->event->getWikis()->getIterator() as $wiki) {
             // Don't copy child wikis, instead we'll be copying the parent family wiki.
@@ -169,11 +175,22 @@ class EventController extends EntityController
      */
     public function showAction(EventRepository $eventRepo): Response
     {
+        // Add blank EventCategory in the form if one doesn't already exist.
+        // @fixme: There is probably a better place to do this than here.
+        if ($this->event->getCategories()->isEmpty()) {
+            $firstWiki = $this->event->getWikis()->first();
+            $defaultDomain = 1 === $this->event->getWikis()->count() &&  !$firstWiki->isFamilyWiki()
+                ? $firstWiki->getDomain()
+                : '';
+            $category = new EventCategory($this->event, '', $defaultDomain);
+            $this->event->addCategory($category);
+        }
+
         /** @var FormView[] $forms */
         $forms = [];
 
-        // Handle each form type (participants, etc.).
-        foreach (['Participants'] as $formType) {
+        // Handle each form type (participants, categories, etc.).
+        foreach (['Participants', 'Categories'] as $formType) {
             $form = $this->handleFormSubmission($this->event, $formType);
 
             if ($form instanceof RedirectResponse) {
@@ -232,7 +249,7 @@ class EventController extends EntityController
     /**
      * Handle submission of the given form type.
      * @param Event $event
-     * @param string $type Plural form, matching AppBundle\Form\*, e.g. 'Participants'.
+     * @param string $type Plural form, matching AppBundle\Form\*, e.g. 'Participants' or 'Categories'.
      * @param string $redirect
      * @return FormInterface|RedirectResponse
      */
@@ -278,7 +295,7 @@ class EventController extends EntityController
     {
         // @see TitleUserTrait::validateUsers() for where errors are assigned for invalid participants.
         // TODO: Probably would be nice to do the error assignments in one place (maybe not possible).
-        foreach (['wikis'] as $type) {
+        foreach (['wikis', 'categories'] as $type) {
             // Each form may not contain all fields we're consolidating errors for.
             if (!isset($form[$type])) {
                 continue;
