@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Tests\AppBundle\Controller;
 
 use AppBundle\DataFixtures\ORM\LoadFixtures;
+use AppBundle\Model\EventCategory;
 
 /**
  * Integration/functional tests for the EventDataController.
@@ -49,7 +50,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         static::assertEquals(302, $this->response->getStatusCode());
 
         // Set updated attribute then try again.
-        $event->setUpdated(new \DateTime('2014-01-24T00:00:00Z'));
+        $event->setUpdated(new \DateTime('2018-09-24T00:00:00Z'));
         $this->entityManager->persist($event);
         $this->entityManager->flush();
         $this->crawler = $this->client->request(
@@ -64,7 +65,15 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             $this->crawler->filter('.event-revisions')->text()
         );
 
-        // Wikitext format.
+        $this->wikitextSpec();
+        $this->csvSpec();
+    }
+
+    /**
+     * Test wikitext export.
+     */
+    private function wikitextSpec(): void
+    {
         $this->crawler = $this->client->request(
             'GET',
             '/programs/My_fun_program/Oliver_and_Company/revisions?format=wikitext'
@@ -76,8 +85,13 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             '/en\.wikipedia, www\.wikidata.*Samwilson.*MusikAnimal/s',
             $this->response->getContent()
         );
+    }
 
-        // CSV
+    /**
+     * Test CSV export.
+     */
+    private function csvSpec(): void
+    {
         $this->crawler = $this->client->request(
             'GET',
             '/programs/My_fun_program/Oliver_and_Company/revisions?format=csv'
@@ -88,6 +102,44 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         static::assertRegExp(
             '/en\.wikipedia.*MusikAnimal.*wikidata\.org.*Samwilson/s',
             $this->response->getContent()
+        );
+    }
+
+    /**
+     * Introduce a category then test the revision output is filtered accordingly.
+     */
+    public function testCategory(): void
+    {
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Oliver_and_Company']);
+        new EventCategory($event, 'Parks in Brooklyn', 'en.wikipedia');
+
+        // Also set updated attribute, otherwise revision browser won't show.
+        $event->setUpdated(new \DateTime('2018-09-24T00:00:00Z'));
+
+        $this->entityManager->persist($event);
+        $this->entityManager->flush();
+
+        $this->crawler = $this->client->request(
+            'GET',
+            '/programs/My_fun_program/Oliver_and_Company/revisions'
+        );
+        $this->response = $this->client->getResponse();
+
+        // Exactly 31 edits.
+        static::assertEquals(31, $this->crawler->filter('.event-revision')->count());
+
+        // 12 edits to enwiki.
+        static::assertEquals(
+            12,
+            substr_count($this->response->getContent(), '<td class="text-nowrap">en.wikipedia</td>')
+        );
+
+        // All are to [[Domino Park]].
+        static::assertEquals(
+            12,
+            substr_count($this->response->getContent(), 'https://en.wikipedia.org/wiki/Domino Park')
         );
     }
 

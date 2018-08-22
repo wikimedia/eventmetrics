@@ -85,9 +85,9 @@ class EventWikiRepository extends Repository
     /**
      * Get the database name of the given EventWiki.
      * @param string $domain
-     * @return string
+     * @return string|null Null if not found.
      */
-    public function getDbNameFromDomain(string $domain): string
+    public function getDbNameFromDomain(string $domain): ?string
     {
         $projectUrl = "https://$domain.org";
 

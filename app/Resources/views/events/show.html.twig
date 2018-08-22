@@ -103,6 +103,7 @@
             {% endif %}
         {% else %}
             <div class="text-center event-wiki-stats--empty">
+                {# FIXME: check for event.numCategories == 0 and add msg('categories') once T194707#4620358 is resolved #}
                 {% if event.numParticipants == 0 %}
                     {{ msg('event-misconfig', [msg('participants')]) }}
                 {% elseif event.startWithTimezone > date() %}
@@ -117,9 +118,15 @@
         </section><!-- #stats -->
 
         {### FORMS ###}
+
         {% for formType, form in forms %}
             {% form_theme form 'blocks/forms.html.twig' %}
             {% include ('events/_' ~ formType|lower ~ '.html.twig') with {'form': form, 'event': event, 'isOrganizer': isOrganizer} %}
         {% endfor %}
     </div>
+
+    {# This is used for autocompletion on the wiki inputs. #}
+    <script>
+        grantmetrics.eventshow.availableWikiPattern = {{ event.availableWikiPattern }};
+    </script>
 {% endblock %}
