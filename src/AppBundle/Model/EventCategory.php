@@ -53,11 +53,16 @@ class EventCategory
     protected $categoryId;
 
     /**
+     * @var string Category title fetched from the ID.
+     */
+    protected $title;
+
+    /**
      * EventCategory constructor.
      * @param EventWiki $wiki
-     * @param int $categoryId
+     * @param int|null $categoryId
      */
-    public function __construct(EventWiki $wiki, $categoryId)
+    public function __construct(EventWiki $wiki, $categoryId = null)
     {
         $this->wiki = $wiki;
         $this->wiki->addCategory($this);
@@ -83,11 +88,38 @@ class EventCategory
     }
 
     /**
+     * Set the ID of the category in the MediaWiki database.
+     * @param int $id
+     */
+    public function setCategoryId($id)
+    {
+        $this->categoryId = $id;
+    }
+
+    /**
      * ID of the category in the MediaWiki database.
      * @return int
      */
     public function getCategoryId()
     {
         return $this->categoryId;
+    }
+
+    /**
+     * Set the title of the category. This value is not persisted to the database.
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * Get the title of the category.
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

@@ -323,6 +323,11 @@ class EventTest extends GrantMetricsTestCase
             array_values($event->getOrphanWikisAndFamilies()->toArray())
         );
 
+        static::assertEquals(
+            [$child, $orphan],
+            array_values($event->getOrphanAndChildWikis()->toArray())
+        );
+
         static::assertEquals([$child], array_values($event->getChildWikis()->toArray()));
         $event->clearChildWikis();
         static::assertEquals(0, $event->getChildWikis()->count());

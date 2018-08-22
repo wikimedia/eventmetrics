@@ -36,12 +36,18 @@ class EventCategoryTest extends GrantMetricsTestCase
 
         static::assertFalse($event->hasCategories());
 
-        $eventCategory = new EventCategory($wiki, 500);
+        $eventCategory = new EventCategory($wiki);
+        $eventCategory->setTitle('Foo bar');
+        $eventCategory->setCategoryId(500);
 
         static::assertTrue($event->hasCategories());
+        static::assertCount(1, $event->getCategories());
+        static::assertEquals(1, $event->getNumCategories());
 
         // Getters.
         static::assertEquals($event, $eventCategory->getEvent());
         static::assertEquals($wiki, $eventCategory->getWiki());
+        static::assertEquals('Foo bar', $eventCategory->getTitle());
+        static::assertEquals(500, $eventCategory->getCategoryId());
     }
 }

@@ -365,6 +365,23 @@ class Event
      **************/
 
     /**
+     * Get categories set on EventWikis associated with this Event.
+     * @return ArrayCollection of EventCategories.
+     */
+    public function getCategories()
+    {
+        /** @var EventCategory[] $categories */
+        $categories = [];
+
+        // Orphan and children only. Categories can't be assigned to *.wikipedia, etc.
+        foreach ($this->getOrphanAndChildWikis() as $wiki) {
+            $categories = array_merge($categories, $wiki->getCategories()->toArray());
+        }
+
+        return new ArrayCollection($categories);
+    }
+
+    /**
      * Are there any categories set on EventWikis associated with this Event?
      * @return bool
      */
@@ -376,6 +393,17 @@ class Event
             }
         }
         return false;
+    }
+
+    /**
+     * Get the number of categories associated with this Event, across all EventWikis.
+     * @return int
+     */
+    public function getNumCategories()
+    {
+        return array_sum($this->getWikis()->map(function (EventWiki $wiki) {
+            return count($wiki->getCategories());
+        })->toArray());
     }
 
     /****************
@@ -575,6 +603,18 @@ class Event
             return null === $wiki->getDomain()
                 || !$familyNames->contains($wiki->getFamilyName());
         });
+    }
+
+    /**
+     * Get child and orphan wikis.
+     * @return ArrayCollection of EventWikis.
+     */
+    public function getOrphanAndChildWikis()
+    {
+        return new ArrayCollection(array_merge(
+            $this->getChildWikis()->toArray(),
+            $this->getOrphanWikis()->toArray()
+        ));
     }
 
     /**
