@@ -22,14 +22,7 @@
 
         {% block javascripts %}
             <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-            {% javascripts
-                '@jquery_i18n'
-                '%kernel.root_dir%/Resources/assets/js/*'
-                '@bootstrap_typeahead'
-                output='js/application.js'
-            %}
-            <script type="text/javascript" src="{{ asset_url }}"></script>
-            {% endjavascripts %}
+            <script type="text/javascript" src="{{ asset('assets/app.js') }}"></script>
             <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
             <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.19.4/moment.min.js"></script>
             <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-daterangepicker/2.1.27/daterangepicker.min.js"></script>
@@ -38,12 +31,7 @@
             <link rel="stylesheet" type="text/css" media="screen" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
             <link rel="stylesheet" type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
             <link rel="stylesheet" type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-daterangepicker/2.1.27/daterangepicker.min.css">
-            {% stylesheets '%kernel.root_dir%/Resources/assets/css/*'
-                 filter='scssphp,cssrewrite'
-                 output='css/application.css'
-            %}
-            <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
-            {% endstylesheets %}
+            <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/app.css') }}">
         {% endblock %}
     </head>
     <body class="{% if exception is not defined %}{{ getControllerName() }} {{ getControllerName() }}-{{ getActionName() }}{% endif %}{% if isRTL() %} rtl{% endif %}">

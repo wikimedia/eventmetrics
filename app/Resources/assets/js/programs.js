@@ -1,7 +1,7 @@
 $(function () {
     if ($('body').hasClass('program-new') || $('body').hasClass('program-edit')) {
-        setupAddRemove('program', 'organizer');
-        setupAutocompletion();
+        grantmetrics.application.setupAddRemove('program', 'organizer');
+        grantmetrics.application.setupAutocompletion();
     }
 
     $('.program-action__delete, .event-action__delete').on('click', function (e) {
@@ -15,6 +15,6 @@ $(function () {
         }
     });
 
-    setupAutocompletion();
-    setupColumnSorting();
+    grantmetrics.application.setupAutocompletion();
+    grantmetrics.application.setupColumnSorting();
 });

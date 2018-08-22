@@ -1,3 +1,7 @@
+grantmetrics = {};
+
+grantmetrics.application = {};
+
 /**
  * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
  */
@@ -43,8 +47,7 @@ $(function () {
  * @param  {string} model  Model name, either 'program' or 'event'.
  * @param  {string} column Column name, either 'organizer' or 'wiki'.
  */
-function setupAddRemove(model, column)
-{
+grantmetrics.application.setupAddRemove = function (model, column) {
     // Keep track of how many fields have been rendered.
     var rowCount = $('.' + model + '__' + column + 's .' + column + '-row').length;
 
@@ -87,16 +90,15 @@ function setupAddRemove(model, column)
 
         // Setup autocompletion on the new row (must use a fresh selector).
         if ($newRow.find('input').hasClass('user-input')) {
-            setupAutocompletion($(rowClass + ':last').find('input'));
+            grantmetrics.application.setupAutocompletion($(rowClass + ':last').find('input'));
         }
     });
-}
+};
 
 /**
  * Setup autocompletion of pages if a page input field is present.
  */
-function setupAutocompletion($userInput)
-{
+grantmetrics.application.setupAutocompletion = function ($userInput) {
     if ($userInput === undefined) {
         var $userInput = $('.user-input');
     }
@@ -145,10 +147,9 @@ function setupAutocompletion($userInput)
         // Needed because of https://github.com/bassjobsen/Bootstrap-3-Typeahead/issues/150
         $(this).trigger('focus');
     });
-}
+};
 
-function setupColumnSorting()
-{
+grantmetrics.application.setupColumnSorting = function () {
     var sortDirection, sortColumn;
 
     $('.sort-link').on('click', function () {
@@ -186,7 +187,7 @@ function setupColumnSorting()
 
         $table.find('tbody').html($(entries));
     });
-}
+};
 
 /**
  * Prevent the insertion of emojis etc.

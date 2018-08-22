@@ -1,3 +1,5 @@
+grantmetrics.events = {};
+
 $(function () {
     // Only run on event pages.
     if (!$('body').hasClass('event')) {
@@ -6,12 +8,12 @@ $(function () {
 
     // Setup the add/remove wiki fields when creating or editing a new event.
     if ($('body').hasClass('event-new') || $('body').hasClass('event-edit') || $('body').hasClass('event-copy')) {
-        setupAddRemove('event', 'wiki');
+        grantmetrics.application.setupAddRemove('event', 'wiki');
     }
 
     // Add/remove participants hooks for when viewing an event.
     if ($('body').hasClass('event-show')) {
-        setupAddRemove('event', 'participant');
+        grantmetrics.application.setupAddRemove('event', 'participant');
     }
 
     var startDate = moment($('#form_start').val()).utc(),
@@ -23,16 +25,16 @@ $(function () {
 
     $('#form_time').daterangepicker({
         timePicker: true,
-        timePicker24Hour: is24HourFormat(),
+        timePicker24Hour: grantmetrics.dateLocales.is24HourFormat(),
         startDate: startDate,
         endDate: endDate,
         locale: {
-            format: getLocaleDatePattern() + ' ' + getLocaleTimePattern(),
+            format: grantmetrics.dateLocales.getLocaleDatePattern() + ' ' + grantmetrics.dateLocales.getLocaleTimePattern(),
             applyLabel: $.i18n('apply'),
             cancelLabel: $.i18n('cancel'),
             customRangeLabel: $.i18n('custom-range'),
-            daysOfWeek: getWeekdayNames(),
-            monthNames: getMonthNames()
+            daysOfWeek: grantmetrics.dateLocales.getWeekdayNames(),
+            monthNames: grantmetrics.dateLocales.getMonthNames()
         }
     });
 
@@ -57,7 +59,7 @@ $(function () {
         $('#form_end').val(rangeData.endDate.format('YYYY-MM-DDTHH:mm:00-00:00'));
     });
 
-    populateValidWikis().then(function (validWikis) {
+    grantmetrics.events.populateValidWikis().then(function (validWikis) {
         $('.event__wikis').on('focus', '.event-wiki-input', function () {
             if ($(this).data().typeahead) {
                 return;
@@ -126,8 +128,8 @@ $(function () {
         e.preventDefault();
     });
 
-    setupAutocompletion();
-    setupColumnSorting();
+    grantmetrics.application.setupAutocompletion();
+    grantmetrics.application.setupColumnSorting();
 
     $('[data-toggle="tooltip"]').tooltip();
 });
@@ -137,8 +139,7 @@ $(function () {
  * that resolves with the shortened domain names of all the Wikipedias.
  * @return {Deferred}
  */
-function populateValidWikis()
-{
+grantmetrics.events.populateValidWikis = function () {
     var dfd = $.Deferred();
 
     $.ajax({
