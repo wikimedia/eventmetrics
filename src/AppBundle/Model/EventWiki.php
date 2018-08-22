@@ -67,6 +67,13 @@ class EventWiki
     protected $domain;
 
     /**
+     * The database name of the wiki. This is not persisted but can be stored here for convenience when
+     * passing around EventWikis and running queries on them.
+     * @var string
+     */
+    protected $dbName;
+
+    /**
      * One EventWiki has many EventStats.
      * @ORM\OneToMany(targetEntity="EventWikiStat", mappedBy="wiki", orphanRemoval=true, cascade={"persist"})
      * @var ArrayCollection|EventStat[] Statistics for this EventWiki.
@@ -76,6 +83,8 @@ class EventWiki
     /**
      * One EventWiki has many EventCategory's.
      * @ORM\OneToMany(targetEntity="EventCategory", mappedBy="wiki", orphanRemoval=true, cascade={"persist"})
+     * @Assert\Valid This is not normally needed, but we do manual validations on EventCategories. This constraint
+     *   causes the errors to bubble up to the EventWiki (which are also bubbled up to the Event).
      * @var ArrayCollection|EventCategory[] Categories for this EventWiki.
      */
     protected $categories;
@@ -110,6 +119,24 @@ class EventWiki
     public function getDomain()
     {
         return $this->domain;
+    }
+
+    /**
+     * Get the database name of the wiki, if it has been provided.
+     * @return string
+     */
+    public function getDbName()
+    {
+        return $this->dbName;
+    }
+
+    /**
+     * Set the database name of the wiki.
+     * @param $dbName
+     */
+    public function setDbName($dbName)
+    {
+        $this->dbName = $dbName;
     }
 
     /**

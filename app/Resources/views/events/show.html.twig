@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/layout.html.twig' as layout %}
-{% form_theme form 'blocks/forms.html.twig' %}
+{% form_theme participantForm 'blocks/forms.html.twig' %}
 
 {% block breadcrumb %}
     <ol class="breadcrumb">
@@ -117,8 +117,15 @@
         {% endif %}
         </section><!-- #stats -->
 
+        <script>
+            window.availableWikiPattern = {{ event.availableWikiPattern }};
+        </script>
+
         {# Participants accordian #}
-        {% include 'events/_participants.html.twig' with {'form': form, 'event': event, 'isOrganizer': isOrganizer} %}
+        {% include 'events/_participants.html.twig' with {'form': participantForm, 'event': event, 'isOrganizer': isOrganizer} %}
+
+        {# Categories accordian #}
+        {% include 'events/_categories.html.twig' with {'event': event, 'isOrganizer': isOrganizer} %}
 
     </div>
 {% endblock %}

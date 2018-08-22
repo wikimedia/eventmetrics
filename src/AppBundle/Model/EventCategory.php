@@ -6,6 +6,7 @@
 namespace AppBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * An EventCategory is a wiki category tied to an EventWiki, and hence a single Event.
@@ -48,16 +49,22 @@ class EventCategory
     /**
      * Associated ID of the category in the `category` table on the replicas.
      * @ORM\Column(name="ec_category_id", type="integer", nullable=false)
+     * @Assert\NotBlank(message="")
      * @var int Corresponds to the `cat_id` column in `category` on the replicas.
      */
     protected $categoryId;
 
     /**
+     * @var string Category title fetched from the ID.
+     */
+    protected $title;
+
+    /**
      * EventCategory constructor.
      * @param EventWiki $wiki
-     * @param int $categoryId
+     * @param int|null $categoryId
      */
-    public function __construct(EventWiki $wiki, $categoryId)
+    public function __construct(EventWiki $wiki, $categoryId = null)
     {
         $this->wiki = $wiki;
         $this->wiki->addCategory($this);
@@ -83,11 +90,38 @@ class EventCategory
     }
 
     /**
+     * Set the ID of the category in the MediaWiki database.
+     * @param int $id
+     */
+    public function setCategoryId($id)
+    {
+        $this->categoryId = $id;
+    }
+
+    /**
      * ID of the category in the MediaWiki database.
      * @return int
      */
     public function getCategoryId()
     {
         return $this->categoryId;
+    }
+
+    /**
+     * Set the title of the category. This value is not persisted to the database.
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * Get the title of the category.
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

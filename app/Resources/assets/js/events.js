@@ -9,9 +9,15 @@ $(function () {
         setupAddRemove('event', 'wiki');
     }
 
-    // Add/remove participants hooks for when viewing an event.
     if ($('body').hasClass('event-show')) {
+        // Add/remove participants hooks for when viewing an event.
         setupAddRemove('event', 'participant');
+        setupAddRemove('event', 'category', function ($input) {
+
+        });
+
+        // // Add category search on event page.
+        // setupPageAutocompletion();
     }
 
     var startDate = moment($('#form_start').val()).utc(),
@@ -36,8 +42,8 @@ $(function () {
         }
     });
 
-    // Attempt to default the timezone to the user's timezone.
     if ($('body').hasClass('event-new')) {
+        // Attempt to default the timezone to the user's timezone.
         var timezome = 'UTC';
         try {
             timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -58,7 +64,8 @@ $(function () {
     });
 
     populateValidWikis().then(function (validWikis) {
-        $('.event__wikis').on('focus', '.event-wiki-input', function () {
+        // For the 'edit event' form, and the 'category' form on the Event Page.
+        $('.event__wikis, .event__categories').on('focus', '.event-wiki-input', function () {
             if ($(this).data().typeahead) {
                 return;
             }
@@ -126,7 +133,7 @@ $(function () {
         e.preventDefault();
     });
 
-    setupAutocompletion();
+    setupUserAutocompletion();
     setupColumnSorting();
 
     $('[data-toggle="tooltip"]').tooltip();
@@ -141,34 +148,18 @@ function populateValidWikis()
 {
     var dfd = $.Deferred();
 
-    $.ajax({
-        url: 'https://meta.wikimedia.org/w/api.php?action=sitematrix&' +
-            'formatversion=2&smsiteprop=url&smlangprop=site&format=json',
-        dataType: 'jsonp'
-    }).then(function (ret) {
-        delete ret.sitematrix.count;
-        var validWikis = [];
+    $.ajax({url: baseUrl + 'api/wikis'}).then(function (sites) {
+        var validWikis = Object.keys(sites);
 
-        for (var lang in ret.sitematrix) {
-            var family = ret.sitematrix[lang];
-            if (!family.site) {
-                continue;
-            }
-
-            family.site.forEach(function (site) {
-                if (!site.closed && site.url.indexOf('.wikipedia.org') !== -1) {
-                    validWikis.push(
-                        site.url.replace(/\.org$/, '').replace(/^https?:\/\//, '')
-                    );
-                }
-            })
+        if ($('body').hasClass('event-show')) {
+            // On the event page, wiki inputs should only autocomplete to those that are configured on the Event.
+            validWikis = validWikis.filter(function (wiki) {
+                return window.availableWikiPattern.test(wiki);
+            });
+        } else {
+            // Include 'All Wikipedias' except on Event show page (categories can't be assigned to wiki families).
+            validWikis.push('*.wikipedia');
         }
-
-        // 'All Wikipedias' option
-        validWikis.push('*.wikipedia');
-
-        // Commons & Wikidata.
-        validWikis.push('commons.wikimedia', 'www.wikidata');
 
         dfd.resolve(validWikis);
     });

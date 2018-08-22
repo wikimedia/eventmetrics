@@ -6,7 +6,6 @@
 namespace AppBundle\EventSubscriber;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Psr\Container\ContainerInterface;
 use AppBundle\Model\Organizer;
@@ -14,8 +13,7 @@ use AppBundle\Model\Participant;
 use AppBundle\Repository\Repository;
 
 /**
- * UserSubscriber does post-processing after
- * fetching Organizers and Participants.
+ * UserSubscriber does post-processing after fetching Organizers and Participants.
  */
 class UserSubscriber
 {
@@ -32,8 +30,7 @@ class UserSubscriber
     }
 
     /**
-     * This is automatically called by Doctrine when loading an entity,
-     * or directly with EventManager::dispatchEvent().
+     * This is automatically called by Doctrine when loading an entity, or directly with EventManager::dispatchEvent().
      * @param LifecycleEventArgs $event Doctrine lifecycle event arguments.
      */
     public function postLoad(LifecycleEventArgs $event)
@@ -52,8 +49,7 @@ class UserSubscriber
     }
 
     /**
-     * Set the user ID on the Organizer or Participant.
-     * for display purposes.
+     * Set the user ID on the Organizer or Participant for display purposes.
      * @param LifecycleEventArgs $event Doctrine lifecycle event arguments.
      */
     public function prePersist(LifecycleEventArgs $event)
@@ -79,7 +75,7 @@ class UserSubscriber
 
     /**
      * Is the entity an Organizer or Participant?
-     * @param  mixed $entity
+     * @param mixed $entity
      * @return boolean
      */
     private function isUserType($entity)

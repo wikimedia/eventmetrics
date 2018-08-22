@@ -1,0 +1,55 @@
+{% import 'macros/layout.html.twig' as layout %}
+{% import _self as forms %}
+
+{% macro categoryRow(index, category = null, template = false) %}
+    <div class="category-row row form-inline form-group{% if template %} category-row__template hidden{% endif %}">
+        <div class="form-group col-sm-4">
+            <input type="text" id="categoryForm_title_{{ index }}"
+                   name="categoryForm[categories][{{ index }}]"
+                   class="page-input form-control"
+                   value="{{ category is not null ? category.title : '' }}"
+                   placeholder="{{ msg('category-name') }}">
+        </div>
+        <div class="form-group col-sm-2">
+            <input type="text" id="categoryForm_wiki_{{ index }}"
+                   name="categoryForm[wikis][{{ index }}]"
+                   class="event-wiki-input form-control"
+                   value="{{ category is not null ? category.wiki.domain : '' }}"
+                   placeholder="en.wikipedia">
+        </div>
+        <div class="form-group col-sm-2">
+            <button type="button" class="btn btn-default remove-category form-control">
+                {{ msg('remove') }}
+            </button>
+        </div>
+    </div>
+{% endmacro %}
+
+{% set content %}
+    <form name="categoryForm" method="post" class="event__categories" autocomplete="off">
+        {{ forms.categoryRow(0, null, true) }}
+        {% for category in event.categories %}
+            {{ forms.categoryRow(loop.index0, category) }}
+        {% endfor %}
+
+        <div class="form-group">
+            <a href="#" class="add-category">
+                <div class="glyphicon glyphicon-plus-sign"></div>
+                {{ msg('add-category') }}
+            </a>
+        </div>
+
+        <button class="btn btn-primary" value="categories">
+            {{ msg('save-categories') }}
+        </button>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    </form>
+{% endset %}
+
+{{
+    layout.panel(
+        'categories',
+        event.numCategories ~ ' ' ~ msg('num-categories', [event.numCategories]),
+        content
+    )
+}}

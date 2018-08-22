@@ -7,7 +7,7 @@
         {# Valid participants should be shown below invalid ones. #}
         {% set validParticipants = [] %}
 
-        {{ form_start(form, {'method': 'post', 'attr': {'class': 'save-participants-form', 'autocomplete': 'off'}}) }}
+        {{ form_start(form, {'method': 'post', 'name': 'participantForm', 'attr': {'class': 'event__participants', 'autocomplete': 'off'}}) }}
         <div class="row">
             {# This form comprises two columns, the first for the participants list and fields, the 2nd for the submit button. #}
             <div class="col-sm-6">
@@ -60,10 +60,13 @@
             </div>{# End participants column. #}
 
             <div class="col-sm-6 save-participants-btn">
-                {{ form_widget(form.submit, {'label': msg('save-participants'), 'attr': {'class': 'btn-primary'}}) }}
+                {#<input class="btn btn-primary" name="form[type]" type="submit" value="{{ msg('save-participants') }}" />#}
+                {#<input class="btn btn-primary" name="form[type]" type="submit" value="{{ msg('save-categories') }}" />#}
+                {{ form_widget(form.submit, {'label': msg('save-participants'), 'attr': {'value': 'participants', 'class': 'btn-primary'}}) }}
             </div>
 
         </div>{# End row #}
+
         {{ form_row(form._token) }}
         {{ form_end(form, {'render_rest': false}) }}
 

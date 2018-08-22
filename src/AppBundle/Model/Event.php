@@ -9,6 +9,7 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Model\Traits\EventStatTrait;
@@ -114,6 +115,8 @@ class Event
     /**
      * One Event has many EventWikis.
      * @ORM\OneToMany(targetEntity="EventWiki", mappedBy="event", orphanRemoval=true, cascade={"persist"})
+     * @Assert\Valid This is not normally needed, but we do manual validations on EventCategories, which belong to
+     *   EventWikis. This constraint causes the errors to bubble up to the Event.
      * @var ArrayCollection|EventWiki[] Wikis that this event takes place on.
      */
     protected $wikis;
@@ -365,6 +368,22 @@ class Event
      **************/
 
     /**
+     * Get categories set on EventWikis associated with this Event.
+     * @return ArrayCollection of EventCategories.
+     */
+    public function getCategories()
+    {
+        /** @var EventCategory[] $categories */
+        $categories = [];
+
+        foreach ($this->getOrphanAndChildWikis() as $wikiFamily) {
+            $categories = array_merge($wikiFamily->getCategories()->toArray());
+        }
+
+        return new ArrayCollection($categories);
+    }
+
+    /**
      * Are there any categories set on EventWikis associated with this Event?
      * @return bool
      */
@@ -376,6 +395,17 @@ class Event
             }
         }
         return false;
+    }
+
+    /**
+     * Get the number of categories associated with this Event, across all EventWikis.
+     * @return int
+     */
+    public function getNumCategories()
+    {
+        return array_sum($this->getWikis()->map(function (EventWiki $wiki) {
+            return count($wiki->getCategories());
+        })->toArray());
     }
 
     /****************
@@ -503,13 +533,39 @@ class Event
         $this->wikis->removeElement($wiki);
     }
 
+    /**
+     * Get the regex pattern for valid wikis.
+     * @return string
+     * @static
+     *
+     * No need to test a hard-coded string.
+     * @codeCoverageIgnore
+     */
+    public static function getValidWikiPattern()
+    {
+        return EventWiki::VALID_WIKI_PATTERN;
+    }
+
+    /**
+     * Get the regex pattern for wikis defined on the Event.
+     * @return string
+     */
+    public function getAvailableWikiPattern()
+    {
+        $regex = implode('|', $this->getOrphanWikisAndFamilies()->map(function (EventWiki $wiki) {
+            // Regex-ify the domain name.
+            return str_replace('\*', '\w+', preg_quote($wiki->getDomain()));
+        })->toArray());
+
+        return "/$regex/";
+    }
+
     /***************
      * WIKI FAMILY *
      ***************/
 
     /**
-     * Get all EventWikis belonging to the Event that represent
-     * a wiki family (*.wikipedia, *.wiktionary, etc).
+     * Get all EventWikis belonging to the Event that represent a wiki family (*.wikipedia, *.wiktionary, etc).
      * @return ArrayCollection of EventWikis
      */
     public function getFamilyWikis()
@@ -559,9 +615,8 @@ class Event
     }
 
     /**
-     * Get all EventWikis that are not part of a family that have been added
-     * to the Event. For instance, if there is an EventWiki for *.wikipedia
-     * (wikipedia family), a fr.wikipedia EventWiki is not returned, but it
+     * Get all EventWikis that are not part of a family that have been added to the Event. For instance,
+     * if there is an EventWiki for *.wikipedia (wikipedia family), a fr.wikipedia EventWiki is not returned, but it
      * will if there is not a *.wikipedia EventWiki.
      * @return ArrayCollection of EventWikis
      */
@@ -578,6 +633,18 @@ class Event
     }
 
     /**
+     * Get child and orphan wikis.
+     * @return ArrayCollection
+     */
+    public function getOrphanAndChildWikis()
+    {
+        return new ArrayCollection(array_merge(
+            $this->getChildWikis()->toArray(),
+            $this->getOrphanWikis()->toArray()
+        ));
+    }
+
+    /**
      * Remove all associated EventWikis that belong to a family.
      */
     public function clearChildWikis()
@@ -589,8 +656,7 @@ class Event
     }
 
     /**
-     * Get EventWikis that are represent a wiki family, or an individual wiki
-     * that is not part of a family.
+     * Get EventWikis that are represent a wiki family, or an individual wiki that is not part of a family.
      * @return ArrayCollection Containing EventWikis
      */
     public function getOrphanWikisAndFamilies()

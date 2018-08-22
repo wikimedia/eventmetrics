@@ -25,7 +25,7 @@ class ParticipantRepository extends Repository
 
     /**
      * Fetch participant SQL rows.
-     * @param  string[] $usernames
+     * @param string[] $usernames
      * @return string[] with keys 'user_name' and 'user_id'. 'user_id' is
      *                  null if no record was found in `centralauth_p.globaluser`.
      */
@@ -39,8 +39,7 @@ class ParticipantRepository extends Repository
         // Usernames that were requested but not found in CentralAuth.
         $notFoundUsernames = array_diff($usernames, $foundUsernames);
 
-        // Back fill $userRows with the missing usernames,
-        // using null as their `user_id`.
+        // Back fill $userRows with the missing usernames, using null as their `user_id`.
         foreach ($notFoundUsernames as $username) {
             $userRows[] = [
                 'user_name' => $username,

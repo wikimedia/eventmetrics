@@ -4,6 +4,7 @@
 			"MusikAnimal"
 		]
 	},
+	"add-category": "Link to add a new category to an event.",
 	"add-more-participants": "Label for text area input to enter in multiple participants for an event.",
 	"add-organizer": "Link to add a new organizer to a program.",
 	"add-wiki": "Link to add a wiki (also known as a 'project') to an event.\n{{Identical|Wiki}}",
@@ -16,6 +17,8 @@
 	"attribution-font-awesome": "Text giving credit to the author of the Font Awsome icon set. $1 is a link to the font homepage, $2 is a link to the license, and $3 is a link to the author.",
 	"calculate-totals": "Label for button to calculate the statistics for an event.",
 	"cancel": "Label for button\n{{Identical|Cancel}}",
+	"categories": "Label for section showing MediaWiki categories associated with an Event.\n{{Identical|Category}}",
+	"category-name": "Placeholder for input to enter the name of a category.",
 	"close": "Button text to close a modal.\n{{Identical|Close}}",
 	"confirm-deletion": "Popup message confirming the user wants to delete the program or event. $1 is the name of the program or event.",
 	"copy": "Text for link to copy a program or event.\n{{Identical|Copy}}",
@@ -82,6 +85,7 @@
 	"no-events": "Message shown on the Programs page when the user has not created any events yet.",
 	"no-programs": "Message shown when the user has not created any programs yet.",
 	"no-results": "Notice telling the user that no results were found",
+	"num-categories": "Conditional PLURAL form of 'category', as in a MediaWiki category. $1 is the number.\n{{Identical|Category}}",
 	"num-days": "Conditional PLURAL form of 'day'. $1 is the number.\n{{Identical|Day}}",
 	"num-hours": "Conditional PLURAL form of 'hour'. $1 is the number.\n{{Identical|Hour}}",
 	"num-minutes": "Conditional PLURAL form of 'minute'. $1 is the number.\n{{Identical|Minute}}",
@@ -110,6 +114,7 @@
 	"retention": "Heading for the column listing the N-day retention of participants of a program. Shown in the 'My Programs' table. $1 is the number of days.",
 	"retention-desc": "Description for the 'retention' metric. $1 is a number of days.",
 	"return-to-my-programs": "Text for link going back to the My Programs page.",
+	"save-categories": "Label for button to save the categories on an event.",
 	"save-participants": "Label for button to save the participants to an event.",
 	"show-section": "Tooltip text for the header of hidden panels, to toggle them open",
 	"start-date": "Label for the start date input field.",

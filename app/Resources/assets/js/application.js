@@ -40,13 +40,19 @@ $(function () {
 /**
  * Setup form handling for adding/removing arbitrary number of text fields.
  * This is used for adding/removing organizers to a program, and wikis to an event.
- * @param  {string} model  Model name, either 'program' or 'event'.
- * @param  {string} column Column name, either 'organizer' or 'wiki'.
+ * @param {string} model Model name, either 'program' or 'event'.
+ * @param {string} column Column name, either 'organizer' or 'wiki'.
+ * @param {function} autocompletion Callback to re-init autocompletion. This function is given one arguemnt,
+ *     which is a jQuery selector for the element that needs to have autocompletion added to it.
  */
-function setupAddRemove(model, column)
+function setupAddRemove(model, column, autocompletion)
 {
-    // Keep track of how many fields have been rendered.
-    var rowCount = $('.' + model + '__' + column + 's .' + column + '-row').length;
+    autocompletion = autocompletion || 'setupUserAutocompletion';
+
+    // Keep track of how many fields have been rendered. This expects each row (e.g. 'participant-row') to be a child
+    // of a container with the model and pluralized column, e.g. 'event__participants'.
+    var columnPluralized = column.substr(-1) === 'y' ? column.replace(/y$/, 'ies') : column + 's',
+        rowCount = $('.' + model + '__' + columnPluralized + ' .' + column + '-row').length;
 
     // Class name for the individual rows.
     var rowClass = '.' + column + '-row';
@@ -62,22 +68,28 @@ function setupAddRemove(model, column)
         e.preventDefault();
 
         // Clone the template row and correct CSS classes.
-        var $template = $("<div class='form-group " + column + "-row'>" +
-            $(rowClass + '__template').html() +
-            "</div>");
+        var template = $($(rowClass + '__template')[0].outerHTML)
+            .removeClass('hidden ' + column + '-row__template')[0].outerHTML;
 
         // Insert after the last row.
-        $(rowClass + ':last').after($template);
+        $(rowClass + ':last').after(template);
 
         var $newRow = $(rowClass + ':last');
 
-        // Add name attribute to the input of the new row and remove unwanted inner elements.
-        $newRow.find('input').prop('name', 'form[' + column + 's][' + rowCount + ']')
-            .prop('id', 'form_' + column + 's_' + rowCount)
-            .val('');
+        // Go through all the inputs and update the indexing in the name and id attributes.
+        $newRow.find('input').toArray().forEach(function (el) {
+            var name = $(el).prop('name'),
+                id = $(el).prop('id');
+            $(el).prop('name', name.replace(/\[\d+]/, '[' + rowCount + ']'))
+                .prop('id', id.replace(/_\d+$/, '_' + rowCount))
+                // Clear out existing value.
+                .val('');
+        });
+
+        // Remove unwanted inner elements.
         $newRow.find('.invalid-input').remove();
 
-        // Increment count so the next added row will have the correct name attribute.
+        // Increment count so the next added row will have the correct index in the name and id attributes.
         rowCount++;
 
         // Add listener to remove the row.
@@ -87,32 +99,83 @@ function setupAddRemove(model, column)
 
         // Setup autocompletion on the new row (must use a fresh selector).
         if ($newRow.find('input').hasClass('user-input')) {
-            setupAutocompletion($(rowClass + ':last').find('input'));
+            var $newInput = $(rowClass + ':last').find('input');
+            window[autocompletion]();
+            setupUserAutocompletion($newInput);
         }
     });
 }
 
 /**
- * Setup autocompletion of pages if a page input field is present.
+ * Convenience wrapper for setting up autocompletion. All this does is (a) handle when there are no valid inputs to
+ * attach the typeahead to, and (b) destroy existing typeaheads on focus.
+ * @param {jQuery} $input Target selector.
+ * @param {Function} init Code that initializes typeahead.
  */
-function setupAutocompletion($userInput)
+function setupAutocompletion($input, init)
 {
-    if ($userInput === undefined) {
-        var $userInput = $('.user-input');
-    }
+    $input = $input || $('.user-input');
 
     // Make sure typeahead-compatible fields are present.
-    if (!$userInput[0]) {
+    if (!$input[0]) {
         return;
     }
 
-    // Initialize only on focus, since there can be a ton of usernames.
-    $userInput.one('focus', function () {
+    // Initialize only on focus, since there can be a ton of inputs.
+    $input.one('focus', function () {
         // Destroy any existing instances.
         if ($(this).data('typeahead')) {
             $(this).data('typeahead').destroy();
         }
 
+        init();
+
+        // Needed because of https://github.com/bassjobsen/Bootstrap-3-Typeahead/issues/150
+        $(this).trigger('focus');
+    });
+}
+
+function setupPageAutocompletion($input)
+{
+    $input = $input || $('.page-input');
+
+    return setupAutocompletion($input, function () {
+        $input.typeahead({
+            ajax: {
+                url: 'https://' + wiki.replace(/\.org$/, ''),
+                timeout: 200,
+                triggerLength: 1,
+                method: 'get',
+                preDispatch: function (query) {
+                    query = query.charAt(0).toUpperCase() + query.slice(1);
+                    return {
+                        action: 'query',
+                        list: 'prefixsearch',
+                        format: 'json',
+                        pssearch: query,
+                        psnamespace: $input.data('nsId'),
+                        origin: '*'
+                    };
+                },
+                preProcess:  function (data) {
+                    return data.query.prefixsearch.map(function (elem) {
+                        return elem.name.replace(
+                            new RegExp('^' + $input.data('nsName') + ':', '')
+                        );
+                    });
+                }
+            }
+        });
+    });
+}
+
+/**
+ * Setup autocompletion of pages if a page input field is present.
+ * @param {jQuery} $input jQuery object of inputs to attach autocompletion to.
+ */
+function setupUserAutocompletion($input)
+{
+    return setupAutocompletion($input, function () {
         // Defaults for typeahead options. preDispatch and preProcess will be
         // set accordingly for each typeahead instance.
         var typeaheadOpts = {
@@ -122,7 +185,7 @@ function setupAutocompletion($userInput)
             method: 'get'
         };
 
-        $userInput.typeahead({
+        $input.typeahead({
             ajax: Object.assign(typeaheadOpts, {
                 preDispatch: function (query) {
                     query = query.charAt(0).toUpperCase() + query.slice(1);
@@ -141,9 +204,6 @@ function setupAutocompletion($userInput)
                 }
             })
         });
-
-        // Needed because of https://github.com/bassjobsen/Bootstrap-3-Typeahead/issues/150
-        $(this).trigger('focus');
     });
 }
 

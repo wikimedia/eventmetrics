@@ -4,6 +4,7 @@
 			"MusikAnimal"
 		]
 	},
+	"add-category": "Add category",
 	"add-more-participants": "Add more participants, one per line",
 	"add-organizer": "Add organizer",
 	"add-wiki": "Add wiki",
@@ -16,6 +17,8 @@
 	"attribution-font-awesome": "$1 icons released under $2 courtesy of $3",
 	"calculate-totals": "Calculate totals",
 	"cancel": "Cancel",
+	"categories": "Categories",
+	"category-name": "Category name",
 	"close": "Close",
 	"confirm-deletion": "Are you sure you want to delete '$1'?",
 	"copy": "Copy",
@@ -82,6 +85,7 @@
 	"no-events": "No events in this program yet!",
 	"no-programs": "You have not created any programs.",
 	"no-results": "No results found",
+	"num-categories": "{{PLURAL:$1|category|categories}}",
 	"num-days": "{{PLURAL:$1|day|days}}",
 	"num-hours": "{{PLURAL:$1|hour|hours}}",
 	"num-minutes": "{{PLURAL:$1|minute|minutes}}",
@@ -110,6 +114,7 @@
 	"retention": "$1 day retention",
 	"retention-desc": "The number of new editors who make at least one edit, in any Wikimedia project (in any namespace), between $1 {{PLURAL:$1|day|days}} after the event and the time that the report is run.",
 	"return-to-my-programs": "Return to My Programs",
+	"save-categories": "Save categories",
 	"save-participants": "Save participants",
 	"show-section": "Show this section",
 	"start-date": "Start date",
