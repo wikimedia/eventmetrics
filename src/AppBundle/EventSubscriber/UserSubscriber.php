@@ -6,16 +6,18 @@
 namespace AppBundle\EventSubscriber;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Psr\Container\ContainerInterface;
 use AppBundle\Model\Organizer;
-use AppBundle\Model\Participant;
 use AppBundle\Repository\Repository;
+use Symfony\Component\Serializer\Tests\Model;
 
 /**
- * UserSubscriber does post-processing after
- * fetching Organizers and Participants.
+ * UserSubscriber automatically sets the username on Organizers after the entity is loaded from the grantmetrics
+ * database. Similarly it will automatically set the user_id when a Organizer is persisted.
+ *
+ * This class used to also do the same for Participant, but there can hundreds of these loaded at once,
+ * so we instead run a single query to batch-fetch the usernames.
  */
 class UserSubscriber
 {
@@ -38,9 +40,9 @@ class UserSubscriber
      */
     public function postLoad(LifecycleEventArgs $event)
     {
-        /** @var mixed $entity One of the AppBundle\Model classes. */
+        /** @var Model $entity One of the AppBundle\Model classes. */
         $entity = $event->getEntity();
-        if (!$this->isUserType($entity)) {
+        if (!($entity instanceof Organizer)) {
             return;
         }
 
@@ -52,15 +54,14 @@ class UserSubscriber
     }
 
     /**
-     * Set the user ID on the Organizer or Participant.
-     * for display purposes.
+     * Set the user ID on the Organizer.
      * @param LifecycleEventArgs $event Doctrine lifecycle event arguments.
      */
     public function prePersist(LifecycleEventArgs $event)
     {
-        /** @var mixed $entity One of AppBundle\Model classes. */
+        /** @var Model $entity One of AppBundle\Model classes. */
         $entity = $event->getEntity();
-        if (!$this->isUserType($entity)) {
+        if (!($entity instanceof Organizer)) {
             return;
         }
 
@@ -78,20 +79,8 @@ class UserSubscriber
     }
 
     /**
-     * Is the entity an Organizer or Participant?
-     * @param  mixed $entity
-     * @return boolean
-     */
-    private function isUserType($entity)
-    {
-        // NOTE: Participant usernames are now loaded with a single query.
-        // We'll at some point do the same for Organizers.
-        return $entity instanceof Organizer;
-    }
-
-    /**
-     * Set the username on the Organizer or Participant for display purposes.
-     * @param Organizer|Participant $entity
+     * Set the username on the Organizer for display purposes.
+     * @param Organizer $entity
      * @param Repository $repo
      */
     private function setUsername($entity, $repo)
@@ -102,8 +91,8 @@ class UserSubscriber
     }
 
     /**
-     * Set the user ID on the Organizer or Participant.
-     * @param Organizer|Participant $entity
+     * Set the user ID on the Organizer.
+     * @param Organizer $entity
      * @param Repository $repo
      */
     private function setUserId($entity, $repo)
@@ -115,7 +104,7 @@ class UserSubscriber
 
     /**
      * Get the entity and corresponding Repository, given the lifecycle event.
-     * @param Organizer|Participant $entity
+     * @param Organizer $entity
      * @param LifecycleEventArgs $event
      * @return Repository
      */
