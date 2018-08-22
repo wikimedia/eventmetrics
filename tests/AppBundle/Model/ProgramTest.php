@@ -9,6 +9,7 @@ use AppBundle\Model\Program;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\Organizer;
+use Doctrine\ORM\EntityManagerInterface;
 use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
@@ -193,5 +194,22 @@ class ProgramTest extends GrantMetricsTestCase
             ],
             $this->program->getStatistics()
         );
+    }
+
+    /**
+     * Test that 4-byte characters in titles are removed. This is because we're using MySQL's utf8 encoding,
+     * which only permits 3-byte characters and issues a warning and truncates at the first longer character.
+     * @link https://phabricator.wikimedia.org/T201388
+     */
+    public function testTitleWithExtendedCharacters()
+    {
+        $this->bootKernel();
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = static::$kernel->getContainer()->get('doctrine')->getManager();
+        $this->program->setTitle('Iñtërnâtiônàlizætiønd 🙇 Iñtërnâtiônàlizætiøn');
+        $entityManager->persist($this->program);
+        $entityManager->flush();
+        static::assertEquals('Iñtërnâtiônàlizætiønd_�_Iñtërnâtiônàlizætiøn', $this->program->getTitle());
+        static::assertEquals('Iñtërnâtiônàlizætiønd � Iñtërnâtiônàlizætiøn', $this->program->getDisplayTitle());
     }
 }
