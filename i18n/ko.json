@@ -57,6 +57,8 @@
 	"help": "도움말",
 	"help-translate": "변역 돕기",
 	"hide-section": "이 문단 숨기기",
+	"items-created-desc": "작성된 새 위키데이터 항목 수입니다.",
+	"items-improved-desc": "기존 위키데이터 항목의 편집 수입니다.",
 	"last-updated": "$1 마지막 업데이트",
 	"login-with-oauth": "OAuth로 로그인",
 	"logout": "로그아웃",
