@@ -102,13 +102,25 @@
         margin-top: 8px;
     }
 
-    .event-new-participants {
-        max-height: 120px;
-    }
+    .save-participants-form {
+        .event-new-participants {
+            max-height: 120px;
+        }
 
-    .save-participants-btn {
-        // Move the save button down to line up with the textarea to its left.
-        margin-top: 25px;
+        .save-participants-btn {
+            // Move the save button down to line up with the textarea to its left.
+            margin-top: 25px;
+        }
+
+        // Scroll the participants' rows if there are very many.
+        .participants-rows {
+            max-height: 400px;
+            overflow: auto;
+        }
+        .participants-rows .row {
+            // Keep the text boxes lined up at the left side.
+            margin-right: 0;
+        }
     }
 
     .event-revisions {
