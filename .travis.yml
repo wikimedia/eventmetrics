@@ -23,6 +23,8 @@ before_install:
   - ./build/ci/ssh-tunnel.sh
   - wget https://github.com/phpDocumentor/phpDocumentor2/releases/download/v3.0.0-alpha.2-nightly-gdff5545/phpDocumentor.phar
   - wget https://github.com/phpDocumentor/phpDocumentor2/releases/download/v3.0.0-alpha.2-nightly-gdff5545/phpDocumentor.phar.pubkey
+  - phpenv config-rm xdebug.ini # ran before installing ext-redis
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini # Install ext-redis
 
 install:
   - composer install
