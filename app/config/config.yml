@@ -119,7 +119,7 @@ swiftmailer:
     password: '%mailer.password%'
     spool: { type: memory }
 
-guzzle:
+eight_points_guzzle:
     # (de)activate logging/profiler; default: %kernel.debug%
     logging: true
 

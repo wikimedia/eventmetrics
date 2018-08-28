@@ -18,8 +18,6 @@ use Tests\AppBundle\GrantMetricsTestCase;
  */
 class FormatExtensionTest extends GrantMetricsTestCase
 {
-    /** @var Container The Symfony container. */
-    protected $container;
 
     /** @var \AppBundle\Twig\FormatExtension Instance of class */
     protected $formatExtension;
@@ -30,13 +28,11 @@ class FormatExtensionTest extends GrantMetricsTestCase
     public function setUp()
     {
         parent::setUp();
-
-        $client = static::createClient();
-        $this->container = $client->getContainer();
+        static::bootKernel();
         $stack = new RequestStack();
         $session = new Session();
         $intuition = new Intuition();
-        $this->formatExtension = new FormatExtension($this->container, $stack, $session, $intuition);
+        $this->formatExtension = new FormatExtension(static::$container, $stack, $session, $intuition);
     }
 
     /**

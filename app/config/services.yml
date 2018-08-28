@@ -31,8 +31,8 @@ services:
 
     # EntityController is separately defined so that we can inject the validator.
     AppBundle\Controller\EntityController:
-        call:
-            - ['setValidator', '@validator']
+        calls:
+            - [setValidator, ['@validator']]
         tags: ['controller.service_arguments']
 
     AppBundle\EventSubscriber\UserSubscriber:

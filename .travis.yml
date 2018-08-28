@@ -27,9 +27,9 @@ before_install:
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini # Install ext-redis
 
 install:
+  - cp app/config/parameters-travis.yml.dist app/config/parameters.yml
   - composer install
   - npm install
-  - cp app/config/parameters-travis.yml.dist app/config/parameters.yml
   - php bin/console doctrine:database:create --env=test --no-interaction --quiet
   - php bin/console doctrine:migrations:migrate --env=test --no-interaction --quiet
   - node_modules/.bin/encore production
