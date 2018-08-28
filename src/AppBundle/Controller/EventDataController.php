@@ -54,7 +54,7 @@ class EventDataController extends EntityController
 
         $limit = $offset = null;
 
-        // If the format is not HTML, we show all reivions, and don't need an overall COUNT.
+        // If the format is not HTML, we show all revisions, and don't need an overall COUNT.
         $format = $this->request->query->get('format', 'html');
         if ($format === 'html' || $format == '') {
             // The get() default above doesn't work when the 'format' parameter is blank.

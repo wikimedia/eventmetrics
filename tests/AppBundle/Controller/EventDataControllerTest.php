@@ -61,6 +61,32 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             'MusikAnimal',
             $this->crawler->filter('.event-revisions')->text()
         );
+
+        // Wikitext format.
+        $this->crawler = $this->client->request(
+            'GET',
+            '/programs/My_fun_program/Oliver_and_Company/revisions?format=wikitext'
+        );
+        $this->response = $this->client->getResponse();
+        static::assertEquals(200, $this->response->getStatusCode());
+        static::assertContains('text/plain', $this->response->headers->get('content-type'));
+        static::assertRegExp(
+            '/en\.wikipedia, www\.wikidata.*Samwilson.*MusikAnimal/s',
+            $this->response->getContent()
+        );
+
+        // CSV
+        $this->crawler = $this->client->request(
+            'GET',
+            '/programs/My_fun_program/Oliver_and_Company/revisions?format=csv'
+        );
+        $this->response = $this->client->getResponse();
+        static::assertEquals(200, $this->response->getStatusCode());
+        static::assertContains('text/csv', $this->response->headers->get('content-type'));
+        static::assertRegExp(
+            '/en\.wikipedia.*MusikAnimal.*wikidata\.org.*Samwilson/s',
+            $this->response->getContent()
+        );
     }
 
     /**
