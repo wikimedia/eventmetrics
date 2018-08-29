@@ -54,11 +54,14 @@ $organizerRepo->setContainer($this->container);
 
 ## Assets
 
-Local CSS and JavaScript live in [app/Resources/assets](https://github.com/wikimedia/grantmetrics/tree/master/app/Resources/assets). Fonts and vendor assets must be defined in [config.yml](https://github.com/wikimedia/grantmetrics/blob/master/app/config/config.yml#L44), and if needed, sourced in the `<head>` of [base.html.twig](https://github.com/wikimedia/grantmetrics/blob/master/app/Resources/views/base.html.twig).
+Assets are managed with [Webpack Encore](https://github.com/symfony/webpack-encore).
+Local CSS and JavaScript live in [app/Resources/assets](https://github.com/wikimedia/grantmetrics/tree/master/app/Resources/assets).
+Fonts and vendor assets must be defined in [webpack.config.js](https://github.com/wikimedia/grantmetrics/blob/master/webpack.config.js),
+and if needed, sourced in the `<head>` of [base.html.twig](https://github.com/wikimedia/grantmetrics/blob/master/app/Resources/views/base.html.twig).
 
-Ultimately all compiled assets are copied to the web/ directory (publicly accessible). This should happen automatically, but if not try dumping the assets with `php bin/console assetic:dump`. If you find you have to keep doing this regularly, you can continually watch for changes with `php bin/console assetic:watch`.
-
-When committing new asset changes, be sure to bump the version number in [config.yml](https://github.com/wikimedia/grantmetrics/blob/master/app/config/config.yml) under framework/assets/version. This will force the cache to be invalidated in production so that users download the newest assets.
+On compilation, all assets are copied to the `web/assets/` directory (publicly accessible).
+This happens by running `./node_modules/.bin/encore production` (or `dev` if you don't want the files to be minified and versioned).
+You can also continually watch for file changes with `./node_modules/.bin/encore production --watch`.
 
 ## i18n
 

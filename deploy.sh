@@ -8,6 +8,8 @@ else
   git checkout master
   git pull origin master
 fi
+SYMFONY_ENV=prod
 composer install
+npm install
 php bin/console cache:clear --env=prod --no-warmup
-php bin/console assetic:dump --env=prod
+./node_modules/.bin/encore production

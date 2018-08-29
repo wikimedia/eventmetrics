@@ -1,14 +1,14 @@
 /**
  * This file contains helpers to get localization settings.
  */
+grantmetrics.dateLocales = {};
 
 /**
  * Get the date pattern for the user's locale.
  * Defaults to ISO 8601 if window.navigator.language is undefined.
  * @return {string}
  */
-function getLocaleDatePattern()
-{
+grantmetrics.dateLocales.getLocaleDatePattern = function () {
     var defaultFormat = 'YYYY-MM-DD';
 
     if (!window.navigator.language) {
@@ -230,7 +230,7 @@ function getLocaleDatePattern()
 
     var key = window.navigator.language.toLowerCase();
     return formats[key] || defaultFormat;
-}
+};
 
 /**
  * Get the time pattern based on whether the locale uses 12 or 24-hour format.
@@ -239,18 +239,16 @@ function getLocaleDatePattern()
  * E.g. we can't just use Date.prototype.toLocaleTimeString().
  * @return {string}
  */
-function getLocaleTimePattern()
-{
-    return is24HourFormat() ? 'HH:mm' : 'h:mm A';
-}
+grantmetrics.dateLocales.getLocaleTimePattern = function () {
+    return this.is24HourFormat() ? 'HH:mm' : 'h:mm A';
+};
 
 /**
  * Does the client prefer 24-hour time format?
  * This is hard-coded to return false for various English languages.
  * @return {boolean}
  */
-function is24HourFormat()
-{
+grantmetrics.dateLocales.is24HourFormat = function () {
     if (!window.navigator.language) {
         return true;
     }
@@ -259,15 +257,14 @@ function is24HourFormat()
 
     var key = window.navigator.language.toLowerCase();
     return !langCodes.includes(key);
-}
+};
 
 /**
  * Get the translations for the abbreviated name of each weekday.
  * Uses Date.prototype.toLocaleString(), meaning no IE support.
  * @return {array}
  */
-function getWeekdayNames()
-{
+grantmetrics.dateLocales.getWeekdayNames = function () {
     var daysOfWeek = [];
     for (var i = 0; i < 7; i++) {
         daysOfWeek.push(
@@ -280,19 +277,18 @@ function getWeekdayNames()
     }
 
     return daysOfWeek;
-}
+};
 
 /**
  * Get the translations for the full name of each month.
  * Uses Date.prototype.toLocaleString(), meaning no IE support.
  * @return {array}
  */
-function getMonthNames()
-{
+grantmetrics.dateLocales.getMonthNames = function () {
     var monthNames = [];
     for (var i = 0; i < 12; i++) {
         monthNames.push(
             moment().month(i).toDate().toLocaleString(window.navigator.language, {month: 'long'})
         );
     }
-}
+};

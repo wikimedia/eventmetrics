@@ -13,10 +13,9 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
+/node_modules/
 /web/bundles/
-/web/js/
-/web/css/
-/web/assetic/
+/web/assets/
 /web/fonts/
 /output/
 /docs/api/
@@ -26,3 +25,4 @@
 .DS_Store
 i18n_helper.js
 phpDocumentor.phar
+
