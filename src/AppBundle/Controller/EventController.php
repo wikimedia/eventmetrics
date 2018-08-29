@@ -384,7 +384,7 @@ class EventController extends EntityController
      * })
      * @return Response
      */
-    public function showAction()
+    public function showAction(EventRepository $eventRepo)
     {
         // Handle the Form for the request.
         $form = $this->handleParticipantForm();
@@ -396,9 +396,6 @@ class EventController extends EntityController
             ]);
             return $form;
         }
-
-        /** @var EventRepository $eventRepo */
-        $eventRepo = $this->em->getRepository(Event::class);
 
         return $this->render('events/show.html.twig', [
             'gmTitle' => $this->event->getDisplayTitle(),
