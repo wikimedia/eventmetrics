@@ -10,6 +10,4 @@ else
 fi
 SYMFONY_ENV=prod
 composer install
-npm install
 php bin/console cache:clear --env=prod --no-warmup
-./node_modules/.bin/encore production
