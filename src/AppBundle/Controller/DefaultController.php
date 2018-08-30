@@ -214,15 +214,8 @@ class DefaultController extends Controller
      * @Route("/api/wikis", name="WikisApi")
      * @return JsonResponse
      */
-    public function wikisApiAction()
+    public function wikisApiAction(EventWikiRepository $ewRepo)
     {
-        /** @var EntityManager $em */
-        $em = $this->container->get('doctrine')->getManager();
-
-        /** @var EventWikiRepository $ewRepo */
-        $ewRepo = $em->getRepository(EventWiki::class);
-        $ewRepo->setContainer($this->container);
-
         return $this->json($ewRepo->getAvailableWikis());
     }
 }

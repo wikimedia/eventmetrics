@@ -32,18 +32,9 @@ class ProgramController extends EntityController
      * @Route("/programs/", name="ProgramsSlash")
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(ProgramRepository $programRepo, OrganizerRepository $organizerRepo)
     {
-        // FIXME: workaround to avoid calling the UserSubscriber when Participant objects are loaded.
-        /** @var ProgramRepository $programRepo */
-        $programRepo = $this->em->getRepository(Program::class);
-        $programRepo->setContainer($this->container);
-
         $organizer = $this->getOrganizer();
-
-        /** @var OrganizerRepository $organizerRepo */
-        $organizerRepo = $this->em->getRepository(Organizer::class);
-        $organizerRepo->setContainer($this->container);
 
         if ($this->userIsAdmin()) {
             $programs = $programRepo->findAll();
@@ -139,12 +130,8 @@ class ProgramController extends EntityController
      * @Route("/programs/{programTitle}/", name="ProgramSlash")
      * @return Response
      */
-    public function showAction()
+    public function showAction(ProgramRepository $programRepo)
     {
-        /** @var ProgramRepository $programRepo */
-        $programRepo = $this->em->getRepository(Program::class);
-        $programRepo->setContainer($this->container);
-
         return $this->render('programs/show.html.twig', [
             'program' => $this->program,
             'metrics' => $programRepo->getUniqueMetrics($this->program),

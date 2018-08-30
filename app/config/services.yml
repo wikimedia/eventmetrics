@@ -43,6 +43,14 @@ services:
             - { name: kernel.event_listener, event: kernel.exception }
         arguments: ['@templating', '@logger', '%kernel.environment%']
 
+    AppBundle\Repository\:
+        resource: '../../src/AppBundle/Repository/*'
+        arguments: ['@doctrine.orm.entity_manager']
+        calls:
+        - [setContainer, ["@service_container"]]
+        - [setLogger, ['@logger']]
+        - [setCachePool, ["@cache.app"]]
+
     AppBundle\Service\EventProcessor:
         public: true
 

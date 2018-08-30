@@ -44,13 +44,9 @@ There is one internal [Symfony bundle](https://symfony.com/doc/current/bundles.h
 
 Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the `grantmetrics` database. Database interaction should generally be done with Doctrine's `EntityManager`.
 
-Repositories are responsible for querying the replicas, MediaWiki API, file system, etc., wherever external data lives. They do not do any post-processing. Repositories should automatically be assigned to the models, but you may need to set the DI container too. The process would look something like:
-
-```php
-$em = $this->container->get('doctrine')->getManager();
-$organizerRepo = new OrganizerRepository($em);
-$organizerRepo->setContainer($this->container);
-```
+Repositories are responsible for querying the replicas, MediaWiki API, file system, etc., wherever external data lives.
+They do not do any post-processing.
+Repositories should automatically be assigned to the models, and can be injected wherever they're required (via type-hinted parameters).
 
 ## Assets
 

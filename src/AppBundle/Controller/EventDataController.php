@@ -31,7 +31,7 @@ class EventDataController extends EntityController
      * @Route("/programs/{programTitle}/{eventTitle}/revisions/", name="RevisionsSlash")
      * @return Response
      */
-    public function revisionsAction()
+    public function revisionsAction(EventRepository $eventRepo)
     {
         // Redirect to event page if statistics have not yet been generated.
         if (null === $this->event->getUpdated()) {
@@ -40,10 +40,6 @@ class EventDataController extends EntityController
                 'eventTitle' => $this->event->getTitle(),
             ]);
         }
-
-        /** @var EventRepository $eventRepo */
-        $eventRepo = $this->em->getRepository(Event::class);
-        $eventRepo->setContainer($this->container);
 
         $ret = [
             'gmTitle' => $this->event->getDisplayTitle(),
@@ -120,7 +116,7 @@ class EventDataController extends EntityController
      * Coverage done on the ProcessEventCommand itself to avoid overhead of the request stack,
      * and also because this action can only be called via AJAX.
      */
-    public function generateStatsAction(JobHandler $jobHandler, $eventId)
+    public function generateStatsAction(JobHandler $jobHandler, $eventId, EventRepository $eventRepo)
     {
         // Only respond to AJAX.
         if (!$this->request->isXmlHttpRequest()) {
@@ -129,8 +125,7 @@ class EventDataController extends EntityController
 
         // Find the Event.
         /** @var Event $event */
-        $event = $this->em->getRepository(Event::class)
-            ->findOneBy(['id' => $eventId]);
+        $event = $eventRepo->findOneBy(['id' => $eventId]);
 
         if ($event === null) {
             throw new NotFoundHttpException();

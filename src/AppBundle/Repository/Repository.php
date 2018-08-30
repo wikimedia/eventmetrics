@@ -21,7 +21,6 @@ use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
-use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * A Repository is responsible for retrieving data from wherever it lives
@@ -41,9 +40,6 @@ abstract class Repository extends EntityRepository
 
     /** @var LoggerInterface The log. */
     protected $log;
-
-    /** @var Stopwatch The stopwatch for time profiling. */
-    protected $stopwatch;
 
     /** @var Connection The connection to the grantmetrics database. */
     private $grantmetricsConnection;
@@ -88,16 +84,12 @@ abstract class Repository extends EntityRepository
     abstract public function getEntityClass();
 
     /**
-     * Set the DI container and assign the cache, log, and
-     * stopwatch adapters, which are accessed via the Container.
+     * Set the DI container.
      * @param Container|ContainerInterface $container
      */
     public function setContainer(Container $container)
     {
         $this->container = $container;
-        $this->cache = $container->get('cache.app');
-        $this->log = $container->get('logger');
-        $this->stopwatch = $container->get('debug.stopwatch');
     }
 
     /**
@@ -107,6 +99,24 @@ abstract class Repository extends EntityRepository
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Set the cache item pool.
+     * @param CacheItemPoolInterface $cache
+     */
+    public function setCachePool(CacheItemPoolInterface $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
+     * Set the logger.
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->log = $logger;
     }
 
     /*******************
