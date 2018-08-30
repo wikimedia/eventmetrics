@@ -55,6 +55,10 @@ class EventWikiTest extends GrantMetricsTestCase
 
         // Make sure the association was made on the Event object, too.
         static::assertEquals($wiki, $this->event->getWikis()[0]);
+
+        // Basic setters/getters.
+        $wiki->setDbName('enwiki_p');
+        static::assertEquals('enwiki_p', $wiki->getDbName());
     }
 
     /**

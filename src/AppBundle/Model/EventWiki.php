@@ -67,6 +67,13 @@ class EventWiki
     protected $domain;
 
     /**
+     * The database name of the wiki. This is not persisted but can be stored here for convenience when
+     * passing around EventWikis and running queries on them.
+     * @var string
+     */
+    protected $dbName;
+
+    /**
      * One EventWiki has many EventStats.
      * @ORM\OneToMany(targetEntity="EventWikiStat", mappedBy="wiki", orphanRemoval=true, cascade={"persist"})
      * @var ArrayCollection|EventStat[] Statistics for this EventWiki.
@@ -110,6 +117,24 @@ class EventWiki
     public function getDomain()
     {
         return $this->domain;
+    }
+
+    /**
+     * Get the database name of the wiki, if it has been provided.
+     * @return string
+     */
+    public function getDbName()
+    {
+        return $this->dbName;
+    }
+
+    /**
+     * Set the database name of the wiki.
+     * @param $dbName
+     */
+    public function setDbName($dbName)
+    {
+        $this->dbName = $dbName;
     }
 
     /**
