@@ -6,7 +6,7 @@ Encore
     .setOutputPath('./web/assets/')
 
     // Public URL path used by the web server to access the output path.
-    .setPublicPath('/assets/')
+    .setPublicPath('assets/')
 
     /*
      * ENTRY CONFIG
