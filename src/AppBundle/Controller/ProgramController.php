@@ -5,21 +5,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\ProgramType;
 use AppBundle\Model\Program;
-use AppBundle\Model\Organizer;
 use AppBundle\Repository\OrganizerRepository;
 use AppBundle\Repository\ProgramRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * The ProgramController handles listing, creating and editing programs.
@@ -30,6 +23,8 @@ class ProgramController extends EntityController
      * Display a list of the programs.
      * @Route("/programs", name="Programs")
      * @Route("/programs/", name="ProgramsSlash")
+     * @param ProgramRepository $programRepo
+     * @param OrganizerRepository $organizerRepo
      * @return Response
      */
     public function indexAction(ProgramRepository $programRepo, OrganizerRepository $organizerRepo)
@@ -128,6 +123,7 @@ class ProgramController extends EntityController
      * Show a specific program, listing all of its events.
      * @Route("/programs/{programTitle}", name="Program")
      * @Route("/programs/{programTitle}/", name="ProgramSlash")
+     * @param ProgramRepository $programRepo
      * @return Response
      */
     public function showAction(ProgramRepository $programRepo)
@@ -142,11 +138,11 @@ class ProgramController extends EntityController
     /**
      * Handle creation or updating of a Program on form submission.
      * @param Program $program
-     * @return Form|RedirectResponse
+     * @return FormInterface|RedirectResponse
      */
     private function handleFormSubmission(Program $program)
     {
-        $form = $this->getFormForProgram($program);
+        $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -158,58 +154,5 @@ class ProgramController extends EntityController
         }
 
         return $form;
-    }
-
-    /**
-     * Build a form for the given program.
-     * @param Program $program
-     * @return FormInterface
-     */
-    private function getFormForProgram(Program $program)
-    {
-        $builder = $this->createFormBuilder($program)
-            ->add('title', TextType::class, [
-                'constraints' => [
-                    new NotBlank(),
-                ]
-            ])
-            ->add('organizers', CollectionType::class, [
-                'entry_type' => TextType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'constraints' => [new Valid()],
-            ])
-            ->add('submit', SubmitType::class);
-
-        $builder->get('organizers')
-            ->addModelTransformer($this->getCallbackTransformer());
-
-        return $builder->getForm();
-    }
-
-    /**
-     * Transform organizer data to or from the form.
-     * This essentially pulls in the username from the user ID,
-     * and sets the user ID before persisting so that the username
-     * can be validated.
-     * @return CallbackTransformer
-     */
-    private function getCallbackTransformer()
-    {
-        return new CallbackTransformer(
-            function ($organizerObjects) {
-                return array_map(function (Organizer $organizer) {
-                    return $organizer->getUsername();
-                }, $organizerObjects->toArray());
-            },
-            function ($organizerNames) {
-                return array_map(function ($organizerName) {
-                    /** @var OrganizerRepository $organizerRepo */
-                    $organizerRepo = $this->em->getRepository(Organizer::class);
-                    $organizerRepo->setContainer($this->container);
-                    return $organizerRepo->getOrganizerByUsername($organizerName);
-                }, $organizerNames);
-            }
-        );
     }
 }
