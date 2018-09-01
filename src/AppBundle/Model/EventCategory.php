@@ -3,20 +3,23 @@
  * This file contains only the EventCategory class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * An EventCategory is a wiki category tied to an EventWiki, and hence a single Event.
+ * An EventCategory is a wiki category tied to an Event.
  * @ORM\Entity
  * @ORM\Table(
  *     name="event_category",
  *     indexes={
- *         @ORM\Index(name="ec_event_wiki", columns={"ec_event_wiki_id"})
+ *         @ORM\Index(name="ec_event", columns={"ec_event_id"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="ec_wikis", columns={"ec_category_id", "ec_event_wiki_id"})
+ *         @ORM\UniqueConstraint(name="ec_domains", columns={"ec_title", "ec_domain"})
  *     },
  *     options={"engine":"InnoDB"}
  * )
@@ -38,56 +41,103 @@ class EventCategory
     protected $id;
 
     /**
-     * Many EventCategory's belong to one EventWiki.
-     * @ORM\ManyToOne(targetEntity="EventWiki", inversedBy="categories")
-     * @ORM\JoinColumn(name="ec_event_wiki_id", referencedColumnName="ew_id", nullable=false)
-     * @var EventWiki EventWiki this EventWikiCategory belongs to.
+     * Many EventCategory's belong to one Event.
+     * @ORM\ManyToOne(targetEntity="Event", inversedBy="categories")
+     * @ORM\JoinColumn(name="ec_event_id", referencedColumnName="event_id", nullable=false)
+     * @var Event Event this EventCategory belongs to.
      */
-    protected $wiki;
+    protected $event;
 
     /**
-     * Associated ID of the category in the `category` table on the replicas.
-     * @ORM\Column(name="ec_category_id", type="integer", nullable=false)
-     * @var int Corresponds to the `cat_id` column in `category` on the replicas.
+     * @ORM\Column(name="ec_title", type="string", length=255)
+     * @Assert\Type("string")
+     * @Assert\Length(max=255)
+     * @var string Category title.
      */
-    protected $categoryId;
+    protected $title;
+
+    /**
+     * @ORM\Column(name="ec_domain", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="")
+     * @var string Domain of the wiki, without the .org.
+     */
+    protected $domain;
 
     /**
      * EventCategory constructor.
-     * @param EventWiki $wiki
-     * @param int $categoryId
+     * @param Event $event
+     * @param string $title
+     * @param string $domain Without .org, such as en.wikipedia
      */
-    public function __construct(EventWiki $wiki, $categoryId)
+    public function __construct(Event $event, $title, $domain)
     {
-        $this->wiki = $wiki;
-        $this->wiki->addCategory($this);
-        $this->categoryId = $categoryId;
+        $this->event = $event;
+        $this->event->addCategory($this);
+        $this->setTitle($title);
+        $this->domain = $domain;
     }
 
     /**
-     * Get the Event this EventWiki applies to.
+     * Get the Event this EventCategory belongs to.
      * @return Event
      */
     public function getEvent()
     {
-        return $this->wiki->getEvent();
+        return $this->event;
     }
 
     /**
-     * Get the EventWiki this EventWiki applies to.
-     * @return EventWiki
+     * Set the Event this EventCategory belongs to.
+     * @param Event $event
      */
-    public function getWiki()
+    public function setEvent(Event $event)
     {
-        return $this->wiki;
+        $this->event = $event;
     }
 
     /**
-     * ID of the category in the MediaWiki database.
-     * @return int
+     * Get the wiki domain this EventCategory applies to.
+     * @return string
      */
-    public function getCategoryId()
+    public function getDomain()
     {
-        return $this->categoryId;
+        return $this->domain;
+    }
+
+    /**
+     * Set the wiki domain this EventCategory applies to.
+     * @param string $domain
+     */
+    public function setDomain(string $domain)
+    {
+        $this->domain = $domain;
+    }
+
+    /**
+     * Set the title of the category. This value is not persisted to the database.
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        // Use underscores instead of spaces, as they will have to be when querying the replicas.
+        $this->title = str_replace(' ', '_', trim($title));
+    }
+
+    /**
+     * Get the title of the category.
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Get the display variant of the program title.
+     * @return string
+     */
+    public function getDisplayTitle()
+    {
+        return str_replace('_', ' ', $this->title);
     }
 }

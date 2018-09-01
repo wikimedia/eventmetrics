@@ -63,7 +63,7 @@ class EventRepository extends Repository
      * @param DateTime $start
      * @param DateTime $end
      * @param string[] $usernames
-     * @param int[] $categoryIds Only search within given categories.
+     * @param string[] $categoryTitles Only search within given categories.
      * @return array With keys 'edited' and 'created'.
      */
     public function getNumPagesEdited(
@@ -71,9 +71,9 @@ class EventRepository extends Repository
         DateTime $start,
         DateTime $end,
         array $usernames = [],
-        array $categoryIds = []
+        array $categoryTitles = []
     ) {
-        if (empty($usernames) && empty($categoryIds)) {
+        if (empty($usernames) && empty($categoryTitles)) {
             // FIXME: This should throw an Exception or something so we can print an error message.
             return [
                 'edited' => 0,
@@ -102,7 +102,7 @@ class EventRepository extends Repository
             $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
                 ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
         }
-        if (count($categoryIds) > 0) {
+        if (count($categoryTitles) > 0) {
             $catRepo = $this->em->getRepository('Model:EventCategory');
             $catRepo->setContainer($this->container);
             $rqb->andWhere(
@@ -111,10 +111,10 @@ class EventRepository extends Repository
                     // null is used to remove the LIMIT, since our version of MariaDB doesn't support LIMIT
                     // within a subquery. This should (maybe?) still be performant, since we're not putting all the
                     // categories in local memory.
-                    $catRepo->getPagesInCategories($dbName, $categoryIds, true, null)->getSQL()
+                    $catRepo->getPagesInCategories($dbName, $categoryTitles, true, null)->getSQL()
                 )
             );
-            $rqb->setParameter('categoryIds', $categoryIds, Connection::PARAM_INT_ARRAY);
+            $rqb->setParameter('categoryTitles', $categoryTitles, Connection::PARAM_STR_ARRAY);
         }
 
         $rqb->setParameter('start', $start)
@@ -296,7 +296,7 @@ class EventRepository extends Repository
     private function getRevisionsData(Event $event, $offset, $limit, $count)
     {
         $sql = 'SELECT '.($count ? 'COUNT(id)' : '*').' FROM ('.
-                    $this->getRevisionsInnerSql($event)."
+                $this->getRevisionsInnerSql($event)."
                 ) a";
 
         if ($count === false) {

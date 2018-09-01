@@ -17,8 +17,6 @@ filter:
         - '*.min.js'
 
 build_failure_conditions:
-    - 'elements.rating(< D).exists'                # No classes/methods with a rating of F
-
     - 'patches.label("Doc Comments").exists'       # No doc comments patches allowed
     - 'patches.label("Spacing").new.count > 1'     # More than 1 new spacing patch
 
@@ -26,4 +24,3 @@ build_failure_conditions:
     - 'issues.severity(>= MAJOR).new.exists'       # New issues of major or higher severity
 
     - 'project.metric("scrutinizer.quality", < 9)' # Code Quality Rating drops below 9
-    - 'project.metric("scrutinizer.test_coverage", < 0.80)' # Code Coverage drops below 80%
