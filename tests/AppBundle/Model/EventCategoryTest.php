@@ -7,7 +7,6 @@ namespace Tests\AppBundle\Model;
 
 use AppBundle\Model\Event;
 use AppBundle\Model\EventCategory;
-use AppBundle\Model\EventWiki;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use Tests\AppBundle\GrantMetricsTestCase;
@@ -18,30 +17,67 @@ use Tests\AppBundle\GrantMetricsTestCase;
  */
 class EventCategoryTest extends GrantMetricsTestCase
 {
-    /**
-     * Tests constructor and basic getters.
-     */
-    public function testConstructor()
+    /** @var Event The Event that the EventCategory belongs to. */
+    protected $event;
+
+    public function setUp()
     {
+        parent::setUp();
+
         $organizer = new Organizer(50);
         $program = new Program($organizer);
-        $event = new Event(
+        $this->event = new Event(
             $program,
             'My event',
             '2017-01-01',
             new \DateTime('2017-03-01'),
             'America/New_York'
         );
-        $wiki = new EventWiki($event, 'test.wikipedia');
+    }
 
-        static::assertFalse($event->hasCategories());
+    /**
+     * Tests constructor and basic getters.
+     */
+    public function testConstructor()
+    {
+        $eventCategory = new EventCategory($this->event, ' Foo_bar ', 'test.wikipedia');
 
-        $eventCategory = new EventCategory($wiki, 500);
-
-        static::assertTrue($event->hasCategories());
+        static::assertCount(1, $this->event->getCategories());
+        static::assertEquals(1, $this->event->getNumCategories());
 
         // Getters.
-        static::assertEquals($event, $eventCategory->getEvent());
-        static::assertEquals($wiki, $eventCategory->getWiki());
+        static::assertEquals($this->event, $eventCategory->getEvent());
+        static::assertEquals('Foo_bar', $eventCategory->getTitle());
+        static::assertEquals('Foo bar', $eventCategory->getDisplayTitle());
+    }
+
+    /**
+     * Test adding and removing categories.
+     */
+    public function testAddRemoveCategories()
+    {
+        static::assertEquals(0, count($this->event->getCategories()));
+
+        // Add an EventCategory.
+        $cat = new EventCategory($this->event, 'Foo bar', 'test.wikipedia');
+
+        static::assertEquals($cat, $this->event->getCategories()[0]);
+
+        // Try adding the same one, which shouldn't duplicate.
+        $this->event->addCategory($cat);
+        static::assertEquals(1, count($this->event->getCategories()));
+
+        // Removing the statistic.
+        $this->event->removeCategory($cat);
+        static::assertEquals(0, count($this->event->getCategories()));
+
+        // Double-remove shouldn't error out.
+        $this->event->removeCategory($cat);
+
+        // Clearing statistics.
+        $this->event->addCategory($cat);
+        static::assertEquals(1, $this->event->getCategories()->count());
+        $this->event->clearCategories();
+        static::assertEquals(0, $this->event->getCategories()->count());
     }
 }

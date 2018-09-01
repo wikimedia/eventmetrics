@@ -301,11 +301,9 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
      */
     public function testCategories()
     {
-        $ew = $this->event->getWikiByDomain('en.wikipedia');
-
         // Add https://en.wikipedia.org/wiki/Category:Parks_in_Brooklyn.
         // This will include [[Domino Park]] created and edited by MusikAnimal.
-        new EventCategory($ew, 234634);
+        new EventCategory($this->event, 'Parks in Brooklyn', 'en.wikipedia');
 
         // Create a Job for the Event and flush it to the database.
         $job = new Job($this->event);

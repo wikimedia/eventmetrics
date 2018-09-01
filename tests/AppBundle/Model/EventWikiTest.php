@@ -5,7 +5,6 @@
 
 namespace Tests\AppBundle\Model;
 
-use AppBundle\Model\EventCategory;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Program;
@@ -89,38 +88,6 @@ class EventWikiTest extends GrantMetricsTestCase
         static::assertEquals(1, $wiki->getStatistics()->count());
         $wiki->clearStatistics();
         static::assertEquals(0, $wiki->getStatistics()->count());
-    }
-
-    /**
-     * Test adding and removing categories.
-     */
-    public function testAddRemoveCategories()
-    {
-        $wiki = new EventWiki($this->event, 'test.wikipedia');
-
-        static::assertEquals(0, count($wiki->getCategories()));
-
-        // Add an EventCategory.
-        $cat = new EventCategory($wiki, 500);
-
-        static::assertEquals($cat, $wiki->getCategories()[0]);
-
-        // Try adding the same one, which shouldn't duplicate.
-        $wiki->addCategory($cat);
-        static::assertEquals(1, count($wiki->getCategories()));
-
-        // Removing the statistic.
-        $wiki->removeCategory($cat);
-        static::assertEquals(0, count($wiki->getCategories()));
-
-        // Double-remove shouldn't error out.
-        $wiki->removeCategory($cat);
-
-        // Clearing statistics.
-        $wiki->addCategory($cat);
-        static::assertEquals(1, $wiki->getCategories()->count());
-        $wiki->clearCategories();
-        static::assertEquals(0, $wiki->getCategories()->count());
     }
 
     /**

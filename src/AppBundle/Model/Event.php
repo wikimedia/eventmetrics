@@ -69,8 +69,7 @@ class Event
     ];
 
     /**
-     * NOTE: Some methods pertaining to titles and Participants
-     * live in the TitleUserTrait trait.
+     * NOTE: Some methods pertaining to titles and Participants live in the TitleUserTrait trait.
      */
     use TitleUserTrait;
 
@@ -117,6 +116,13 @@ class Event
      * @var ArrayCollection|EventWiki[] Wikis that this event takes place on.
      */
     protected $wikis;
+
+    /**
+     * One Event has many EventCategories.
+     * @ORM\OneToMany(targetEntity="EventCategory", mappedBy="event", orphanRemoval=true, cascade={"persist"})
+     * @var ArrayCollection|EventCategory[] Categories that this event takes place on.
+     */
+    protected $categories;
 
     /**
      * @ORM\Column(name="event_title", type="string", length=255, unique=true)
@@ -185,6 +191,7 @@ class Event
         $this->participants = new ArrayCollection();
         $this->stats = new ArrayCollection();
         $this->wikis = new ArrayCollection();
+        $this->categories = new ArrayCollection();
         $this->jobs = new ArrayCollection();
     }
 
@@ -365,17 +372,67 @@ class Event
      **************/
 
     /**
-     * Are there any categories set on EventWikis associated with this Event?
-     * @return bool
+     * Get categories belonging to this Event.
+     * @return ArrayCollection of EventCategories.
      */
-    public function hasCategories()
+    public function getCategories()
     {
-        foreach ($this->wikis as $wiki) {
-            if (count($wiki->getCategories()) > 0) {
-                return true;
-            }
+        return $this->categories;
+    }
+
+    /**
+     * Get the number of categories belonging to this Event.
+     * @return int
+     */
+    public function getNumCategories()
+    {
+        return count($this->categories);
+    }
+
+    /**
+     * Get the titles of categories belonging to this Event that are for the specified wiki.
+     * @param EventWiki $wiki
+     * @return string[]
+     */
+    public function getCategoryTitlesForWiki(EventWiki $wiki)
+    {
+        return $this->categories->filter(function (EventCategory $category) use ($wiki) {
+            return $category->getDomain() === $wiki->getDomain();
+        })->map(function (EventCategory $category) {
+            return $category->getTitle();
+        })->toArray();
+    }
+
+    /**
+     * Add an EventCategory to the Event.
+     * @param EventCategory $category
+     */
+    public function addCategory(EventCategory $category)
+    {
+        if ($this->categories->contains($category)) {
+            return;
         }
-        return false;
+        $this->categories->add($category);
+    }
+
+    /**
+     * Remove an EventCategory from the Event.
+     * @param EventCategory $category
+     */
+    public function removeCategory(EventCategory $category)
+    {
+        if (!$this->categories->contains($category)) {
+            return;
+        }
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Remove all categories.
+     */
+    public function clearCategories()
+    {
+        $this->categories->clear();
     }
 
     /****************

@@ -8,7 +8,6 @@ namespace AppBundle\Service;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
-use AppBundle\Repository\EventCategoryRepository;
 use AppBundle\Repository\EventWikiRepository;
 use AppBundle\Model\EventWikiStat;
 use AppBundle\Repository\EventRepository;
@@ -273,7 +272,7 @@ class EventProcessor
             $this->event->getStartWithTimezone(),
             $this->event->getEndWithTimezone(),
             $this->getParticipantNames(),
-            $wiki->getCategoryIds()
+            $this->event->getCategoryTitlesForWiki($wiki)
         );
         $pagesCreated += $ret['created'];
         $pagesImproved += $ret['edited'];
@@ -320,7 +319,7 @@ class EventProcessor
             $this->event->getStartWithTimezone(),
             $this->event->getEndWithTimezone(),
             $this->getParticipantNames(),
-            $wiki->getCategoryIds()
+            $this->event->getCategoryTitlesForWiki($wiki)
         );
         // Report the counts, and record them both for this wiki and the event (there's only ever one Wikidata wiki).
         $this->log(">> <info>Items created: {$ret['created']}</info>");
