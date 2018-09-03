@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"BadDog"
+			"BadDog",
+			"Zoranzoki21"
 		]
 	},
 	"add-wiki": "Додај вики",
@@ -24,6 +25,10 @@
 	"help": "Помоћ",
 	"help-translate": "Преведи",
 	"hide-section": "Сакријте овај одељак",
+	"items-created": "Направљене ставке",
+	"items-created-desc": "Број новонаправљених ставки на Википодацима.",
+	"items-improved": "Побољшане ставке",
+	"items-improved-desc": "Број измена направљених на постојећим ставкама на Википодацима.",
 	"logout": "Одјава",
 	"my-programs": "Моји програми",
 	"new-editors": "Нови уређивачи",
