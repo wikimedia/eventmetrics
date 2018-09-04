@@ -10,21 +10,17 @@ AppBundle\Model\Program:
         title: 'Foo_bar'
 AppBundle\Model\Event:
     event1:
-        __construct: ['@program1']
-        title: 'Oliver and Company'
+        __construct: ['@program1', 'Oliver and Company']
         timezone: 'America/New_York'
         start: '2018-06-09T00:00:00Z'
         end: '2018-06-11T23:59:59Z'
 AppBundle\Model\EventWiki:
     eventwiki1:
-        __construct: ['@event1']
-        domain: 'en.wikipedia'
+        __construct: ['@event1', 'en.wikipedia']
     eventWiki2:
-        __construct: ['@event1']
-        domain: 'commons.wikimedia'
+        __construct: ['@event1', 'commons.wikimedia']
     eventWiki3:
-        __construct: ['@event1']
-        domain: 'www.wikidata'
+        __construct: ['@event1', 'www.wikidata']
 AppBundle\Model\Participant:
     MusikAnimal:
         # See https://en.wikipedia.org/wiki/Special:Contribs/MusikAnimal?namespace=0&start=2018-06-10&end=2018-06-11
