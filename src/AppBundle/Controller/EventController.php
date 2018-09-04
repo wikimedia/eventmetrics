@@ -55,10 +55,7 @@ class EventController extends EntityController
 
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
-            $this->addFlash('success', [
-                'event-created',
-                $event->getDisplayTitle(),
-            ]);
+            $this->addFlashMessage('success', 'event-created', [$event->getDisplayTitle()]);
             return $form;
         }
 
@@ -87,10 +84,7 @@ class EventController extends EntityController
         $form = $this->handleFormSubmission($this->event);
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
-            $this->addFlash('success', [
-                'event-updated',
-                $this->event->getDisplayTitle(),
-            ]);
+            $this->addFlashMessage('success', 'event-updated', [$this->event->getDisplayTitle()]);
             return $form;
         }
 
@@ -141,10 +135,7 @@ class EventController extends EntityController
     public function deleteAction()
     {
         // Flash message will be shown at the top of the page.
-        $this->addFlash('danger', [
-            'event-deleted',
-            $this->event->getDisplayTitle(),
-        ]);
+        $this->addFlashMessage('danger', 'event-deleted', [$this->event->getDisplayTitle()]);
 
         $this->em->remove($this->event);
         $this->em->flush();
@@ -227,10 +218,7 @@ class EventController extends EntityController
         $participantForm = $this->handleParticipantForm();
         if ($participantForm instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
-            $this->addFlash('success', [
-                'event-updated',
-                $this->event->getDisplayTitle(),
-            ]);
+            $this->addFlashMessage('success', 'event-updated', [$this->event->getDisplayTitle()]);
             return $participantForm;
         }
 

@@ -60,10 +60,7 @@ class ProgramController extends EntityController
         $form = $this->handleFormSubmission($program);
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
-            $this->addFlash('success', /** @scrutinizer ignore-type */ [
-                'program-created',
-                $program->getDisplayTitle(),
-            ]);
+            $this->addFlashMessage('success', 'program-created', [$program->getDisplayTitle()]);
             return $form;
         }
 
@@ -85,10 +82,7 @@ class ProgramController extends EntityController
         $form = $this->handleFormSubmission($this->program);
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
-            $this->addFlash('success', /** @scrutinizer ignore-type */ [
-                'program-updated',
-                $this->program->getDisplayTitle(),
-            ]);
+            $this->addFlashMessage('success', 'program-updated', [$this->program->getDisplayTitle()]);
             return $form;
         }
 
@@ -108,10 +102,7 @@ class ProgramController extends EntityController
     public function deleteAction()
     {
         // Flash message will be shown at the top of the page.
-        $this->addFlash('danger', /** @scrutinizer ignore-type */ [
-            'program-deleted',
-            $this->program->getDisplayTitle(),
-        ]);
+        $this->addFlashMessage('danger', 'program-deleted', [$this->program->getDisplayTitle()]);
 
         $this->em->remove($this->program);
         $this->em->flush();

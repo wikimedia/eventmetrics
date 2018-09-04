@@ -6,7 +6,7 @@
         {% if app.session.flashBag.has('danger') %}
             {# Only happens when forced to login. #}
             <h4 class="text-danger">
-                {{ msg(app.session.flashBag.get('danger')[0][0]) }}
+                {{ msg(app.session.flashBag.get('danger')[0]) }}
             </h4>
         {% endif %}
         <a class="btn btn-default splash-dialog__login" href="{{ path('login') }}">

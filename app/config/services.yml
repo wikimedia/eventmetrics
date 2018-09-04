@@ -29,6 +29,12 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
+    # EntityController is separately defined so that we can inject the validator.
+    AppBundle\Controller\EntityController:
+        call:
+            - ['setValidator', '@validator']
+        tags: ['controller.service_arguments']
+
     AppBundle\EventSubscriber\UserSubscriber:
         tags:
             - { name: doctrine.event_listener, event: postLoad }
@@ -57,7 +63,10 @@ services:
     AppBundle\Service\JobHandler:
         public: true
 
-    # add more services, or override services that need manual wiring
-    # AppBundle\Service\ExampleService:
-    #     arguments:
-    #         $someArgument: 'some_value'
+    # Intuition i18n library.
+    # The service class is a subclass of Intuition.
+    # Also define an alias, for use above injecting into Controllers.
+    Krinkle\Intuition\Intuition:
+        factory: ['AppBundle\Service\Intuition', serviceFactory]
+        arguments: ["@request_stack", "@session", "%kernel.root_dir%"]
+    intuition: '@Krinkle\Intuition\Intuition'
