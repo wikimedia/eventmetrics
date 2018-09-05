@@ -212,6 +212,7 @@ class DefaultController extends Controller
      * We do not use the Sitematrix API because (a) it's format is hard to parse, and moreover (b) newly introduced
      * wikis may be in production but not on the replicas, which will cause Grant Metrics to error out.
      * @Route("/api/wikis", name="WikisApi")
+     * @param EventWikiRepository $ewRepo
      * @return JsonResponse
      */
     public function wikisApiAction(EventWikiRepository $ewRepo)

@@ -96,7 +96,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         );
         static::assertContains(
             'MusikAnimal',
-            $this->crawler->filter('#form_organizers_0')->attr('value')
+            $this->crawler->filter('#program_organizers_0')->attr('value')
         );
     }
 
@@ -106,7 +106,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     private function createSpec()
     {
         $form = $this->crawler->selectButton('Submit')->form();
-        $form['form[title]'] = ' My test program ';
+        $form['program[title]'] = ' My test program ';
         $this->crawler = $this->client->submit($form);
 
         $this->response = $this->client->getResponse();
@@ -126,7 +126,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     {
         $this->crawler = $this->client->request('GET', '/programs/edit/My_test_program');
         $form = $this->crawler->selectButton('Submit')->form();
-        $form['form[title]'] = 'The Lion King';
+        $form['program[title]'] = 'The Lion King';
         $this->crawler = $this->client->submit($form);
 
         $program = $this->entityManager

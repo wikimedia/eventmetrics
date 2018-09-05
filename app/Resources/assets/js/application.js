@@ -44,8 +44,8 @@ $(function () {
 /**
  * Setup form handling for adding/removing arbitrary number of text fields.
  * This is used for adding/removing organizers to a program, and wikis to an event.
- * @param  {string} model  Model name, either 'program' or 'event'.
- * @param  {string} column Column name, either 'organizer' or 'wiki'.
+ * @param {string} model Model name, either 'program' or 'event'.
+ * @param {string} column Column name, either 'organizer' or 'wiki'.
  */
 grantmetrics.application.setupAddRemove = function (model, column) {
     // Keep track of how many fields have been rendered.
@@ -75,8 +75,8 @@ grantmetrics.application.setupAddRemove = function (model, column) {
         var $newRow = $(rowClass + ':last');
 
         // Add name attribute to the input of the new row and remove unwanted inner elements.
-        $newRow.find('input').prop('name', 'form[' + column + 's][' + rowCount + ']')
-            .prop('id', 'form_' + column + 's_' + rowCount)
+        $newRow.find('input').prop('name', model + '[' + column + 's][' + rowCount + ']')
+            .prop('id', model + '_' + column + 's_' + rowCount)
             .val('');
         $newRow.find('.invalid-input').remove();
 

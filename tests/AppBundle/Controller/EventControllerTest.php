@@ -132,16 +132,17 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     private function createSpec()
     {
         $form = $this->crawler->selectButton('Submit')->form();
-        $form['form[title]'] = ' The Lion King ';
-        $form['form[wikis][0]'] = 'dewiki';
-        $form['form[start]'] = '2017-01-01 18:00';
-        $form['form[end]'] = '2017-02-01 21:00';
-        $form['form[timezone]'] = 'America/New_York';
+        $form['event[title]'] = ' The Lion King ';
+        $form['event[wikis][0]'] = 'dewiki';
+        $form['event[start]'] = '2017-01-01 18:00';
+        $form['event[end]'] = '2017-02-01 21:00';
+        $form['event[timezone]'] = 'America/New_York';
         $this->crawler = $this->client->submit($form);
 
         $this->response = $this->client->getResponse();
         static::assertEquals(302, $this->response->getStatusCode());
 
+        /** @var Event $event */
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'The_Lion_King']);
@@ -189,8 +190,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         $form = $this->crawler->selectButton('Submit')->form();
 
-        $form['form[title]'] = 'Pinocchio';
-        $form['form[wikis][0]'] = 'en.wikipedia';
+        $form['event[title]'] = 'Pinocchio';
+        $form['event[wikis][0]'] = 'en.wikipedia';
         $this->crawler = $this->client->submit($form);
 
         $event = $this->entityManager
@@ -244,13 +245,13 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/Pinocchio');
 
         // Make sure the three wikis are in the form.
-        static::assertEquals('commons.wikimedia', $this->crawler->filter('#form_wikis_0')->attr('value'));
-        static::assertEquals('en.wikipedia', $this->crawler->filter('#form_wikis_1')->attr('value'));
-        static::assertEquals('fr.wikipedia', $this->crawler->filter('#form_wikis_2')->attr('value'));
+        static::assertEquals('commons.wikimedia', $this->crawler->filter('#event_wikis_0')->attr('value'));
+        static::assertEquals('en.wikipedia', $this->crawler->filter('#event_wikis_1')->attr('value'));
+        static::assertEquals('fr.wikipedia', $this->crawler->filter('#event_wikis_2')->attr('value'));
 
         // Change en.wikipedia to all Wikipedias, and save.
         $form = $this->crawler->selectButton('Submit')->form();
-        $form['form[wikis][1]'] = '*.wikipedia';
+        $form['event[wikis][1]'] = '*.wikipedia';
         $this->crawler = $this->client->submit($form);
 
         // Both en.wikipedia and fr.wikipedia should have been deleted.
@@ -282,7 +283,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $this->crawler->selectButton('Submit')->form();
-        $form['form[wikis][0]'] = 'invalid_wiki';
+        $form['event[wikis][0]'] = 'invalid_wiki';
         $this->crawler = $this->client->submit($form);
 
         static::assertContains(
@@ -316,7 +317,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         // Add four usernames: a valid user (twice, with different capitalization), a non-existent user,
         // and an invalid username. Some with leading and trailing spaces, and with different line breaks.
-        $form['form[new_participants]'] = "  MusikAnimal\nmusikAnimal \r\nUser_does_not_exist_1234\ninvalid|username";
+        $form['participantForm[new_participants]'] =
+            "  MusikAnimal\nmusikAnimal \r\nUser_does_not_exist_1234\ninvalid|username";
         $this->crawler = $this->client->submit($form);
 
         static::assertContains(
@@ -334,8 +336,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         static::assertEquals('MusikAnimal', $inputs->eq(2)->attr('value'));
 
         // Remove invalid users and submit again. Inputs are indexed in alphabetical order.
-        unset($form['form[participants][0]']);
-        unset($form['form[participants][2]']);
+        unset($form['participantForm[participants][0]']);
+        unset($form['participantForm[participants][2]']);
         $this->crawler = $this->client->submit($form);
 
         $this->response = $this->client->getResponse();
@@ -359,7 +361,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $this->crawler->selectButton('Submit')->form();
-        $form['form[title]'] = 'Pinocchio II';
+        $form['event[title]'] = 'Pinocchio II';
         $this->crawler = $this->client->submit($form);
 
         $this->response = $this->client->getResponse();

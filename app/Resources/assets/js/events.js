@@ -16,14 +16,14 @@ $(function () {
         grantmetrics.application.setupAddRemove('event', 'participant');
     }
 
-    var startDate = moment($('#form_start').val()).utc(),
-        endDate = moment($('#form_end').val()).utc();
+    var startDate = moment($('#event_start').val()).utc(),
+        endDate = moment($('#event_end').val()).utc();
 
     // Set defaults if invalid or blank -- next week.
     startDate = startDate.isValid() ? startDate : moment().add(7, 'days').startOf('week');
     endDate = endDate.isValid() ? endDate : moment().add(7, 'days').endOf('week');
 
-    $('#form_time').daterangepicker({
+    $('#event_time').daterangepicker({
         timePicker: true,
         timePicker24Hour: grantmetrics.dateLocales.is24HourFormat(),
         startDate: startDate,
@@ -43,8 +43,8 @@ $(function () {
         var timezome = 'UTC';
         try {
             timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            if ($("#form_timezone option[value='" + timezone + "']").length) {
-                $('#form_timezone').val(timezone);
+            if ($("#event_timezone option[value='" + timezone + "']").length) {
+                $('#event_timezone').val(timezone);
             }
         } catch (_error) {
         }
@@ -54,9 +54,9 @@ $(function () {
      * Populate hidden start/end datetime fields on form submission.
      */
     $('#event_form').on('submit', function () {
-        var rangeData = $('#form_time').data().daterangepicker;
-        $('#form_start').val(rangeData.startDate.format('YYYY-MM-DDTHH:mm:00-00:00'));
-        $('#form_end').val(rangeData.endDate.format('YYYY-MM-DDTHH:mm:00-00:00'));
+        var rangeData = $('#event_time').data().daterangepicker;
+        $('#event_start').val(rangeData.startDate.format('YYYY-MM-DDTHH:mm:00-00:00'));
+        $('#event_end').val(rangeData.endDate.format('YYYY-MM-DDTHH:mm:00-00:00'));
     });
 
     grantmetrics.events.populateValidWikis().then(function (validWikis) {
