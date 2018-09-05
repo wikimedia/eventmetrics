@@ -18,9 +18,13 @@
 /public/fonts/
 /output/
 /docs/api/
+/public/docs/
+/build/api-cache/
 /.idea/
 
 *.swp
 .DS_Store
 i18n_helper.js
 phpDocumentor.phar*
+/bin/phpdoc*
+

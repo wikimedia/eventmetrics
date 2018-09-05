@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor>
+    <!--
+    For some reason, in the beta of phpdoc 3 this title is being ignored,
+    so we're setting it in composer.json instead.
+    -->
+    <title>GrantMetrics Documentation</title>
+    <parser>
+        <target>var/docs-cache</target>
+        <default-package-name>Wikimedia/GrantMetrics</default-package-name>
+        <markers>
+            <item>TODO</item>
+            <item>FIXME</item>
+            <item>HACK</item>
+        </markers>
+        <extensions>
+            <extension>php</extension>
+            <extension>js</extension>
+        </extensions>
+    </parser>
+    <transformer>
+        <target>public/docs/</target>
+    </transformer>
+    <transformations>
+        <template name="clean" />
+        <template name="checkstyle" />
+    </transformations>
+    <files>
+        <directory>app</directory>
+        <directory>src</directory>
+        <directory>tests</directory>
+        <directory>public</directory>
+    </files>
+</phpdocumentor>

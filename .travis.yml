@@ -21,8 +21,7 @@ before_install:
   - sudo apt-get install expect
   - chmod +x ./build/ci/ssh-tunnel.sh
   - ./build/ci/ssh-tunnel.sh
-  - wget https://github.com/phpDocumentor/phpDocumentor2/releases/download/v3.0.0-alpha.2-nightly-gdff5545/phpDocumentor.phar
-  - wget https://github.com/phpDocumentor/phpDocumentor2/releases/download/v3.0.0-alpha.2-nightly-gdff5545/phpDocumentor.phar.pubkey
+  #- ./build/phpdoc-install.php # Disabled until we need PhpDocumentor, see below.
   - phpenv config-rm xdebug.ini # ran before installing ext-redis
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini # Install ext-redis
 
@@ -41,7 +40,7 @@ before_script:
 
 script:
   - composer lint
-  - php phpDocumentor.phar run -d src -t docs/api --template="checkstyle" # Different than `composer docs` for CI build.
+  #- composer docs # Disabled for now, until PhpDocumentor 3 supports checkstyle again.
   - composer unit
 
 after_script:
