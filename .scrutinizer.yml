@@ -2,6 +2,10 @@ build:
     environment:
         php:
             version: 7.2
+    dependencies:
+        override:
+            # Disable the inferred commands.
+            - true
     tests:
         override:
             # Disables tests. We're only using Scrutinizer for inspections.

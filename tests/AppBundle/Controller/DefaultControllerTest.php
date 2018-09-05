@@ -44,7 +44,7 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
         static::assertEquals(302, $this->response->getStatusCode());
         static::assertNull(
-            $this->container->get('session')->get('logged_in_user')
+            static::$container->get('session')->get('logged_in_user')
         );
     }
 

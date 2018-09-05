@@ -17,8 +17,6 @@ use Tests\AppBundle\GrantMetricsTestCase;
  */
 class AppExtensionTest extends GrantMetricsTestCase
 {
-    /** @var Container The Symfony container. */
-    protected $container;
 
     /** @var \AppBundle\Twig\AppExtension Instance of class */
     protected $appExtension;
@@ -30,12 +28,11 @@ class AppExtensionTest extends GrantMetricsTestCase
     {
         parent::setUp();
 
-        $client = static::createClient();
-        $this->container = $client->getContainer();
+        static::bootKernel();
         $stack = new RequestStack();
         $session = new Session();
         $intuition = new Intuition();
-        $this->appExtension = new AppExtension($this->container, $stack, $session, $intuition);
+        $this->appExtension = new AppExtension(static::$container, $stack, $session, $intuition);
     }
 
     /**

@@ -34,9 +34,6 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
      */
     private $fixtureLoader;
 
-    /** @var ContainerInterface The Symfony container. */
-    protected $container;
-
     /** @var Client The Symfony client. */
     protected $client;
 
@@ -67,8 +64,7 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
         self::bootKernel();
 
         $this->client = static::createClient();
-        $this->container = $this->client->getContainer();
-        $this->session = $this->container->get('session');
+        $this->session = static::$container->get('session');
     }
 
     public function suppressErrors()
