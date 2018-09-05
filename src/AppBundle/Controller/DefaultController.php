@@ -79,7 +79,7 @@ class DefaultController extends Controller
         }
 
         /** @var GuzzleClient $client */
-        $client = $this->get('guzzle.client.commons');
+        $client = $this->get('eight_points_guzzle.client.commons');
 
         $res = $client->get('', ['query' => $params])
             ->getBody()
