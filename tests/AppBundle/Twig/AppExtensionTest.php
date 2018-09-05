@@ -5,6 +5,7 @@
 
 namespace AppBundle\Twig;
 
+use Krinkle\Intuition\Intuition;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -33,7 +34,8 @@ class AppExtensionTest extends GrantMetricsTestCase
         $this->container = $client->getContainer();
         $stack = new RequestStack();
         $session = new Session();
-        $this->appExtension = new AppExtension($this->container, $stack, $session);
+        $intuition = new Intuition();
+        $this->appExtension = new AppExtension($this->container, $stack, $session, $intuition);
     }
 
     /**

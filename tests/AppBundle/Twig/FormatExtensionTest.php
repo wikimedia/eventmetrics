@@ -5,6 +5,7 @@
 
 namespace AppBundle\Twig;
 
+use Krinkle\Intuition\Intuition;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -34,7 +35,8 @@ class FormatExtensionTest extends GrantMetricsTestCase
         $this->container = $client->getContainer();
         $stack = new RequestStack();
         $session = new Session();
-        $this->formatExtension = new FormatExtension($this->container, $stack, $session);
+        $intuition = new Intuition();
+        $this->formatExtension = new FormatExtension($this->container, $stack, $session, $intuition);
     }
 
     /**

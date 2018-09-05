@@ -10,10 +10,9 @@ use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use AppBundle\Repository\OrganizerRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Krinkle\Intuition\Intuition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -29,26 +28,15 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 abstract class EntityController extends Controller
 {
-    /** @var ContainerInterface Symfony's container interface. */
-    protected $container;
 
-    /** @var Request The request object. */
-    protected $request;
-
-    /** @var SessionInterface Symfony's session interface. */
-    protected $session;
-
-    /** @var EntityManagerInterface The Doctrine entity manager. */
-    protected $em;
+    /** @var ValidatorInterface Used when manually validating Models, as opposed to using Symfony Forms. */
+    protected $validator;
 
     /** @var Program The Program being requested. */
     protected $program;
 
     /** @var Event The Event being requested. */
     protected $event;
-
-    /** @var ValidatorInterface Used when manually validating Models, as opposed to using Symfony Forms. */
-    protected $validator;
 
     /**
      * Constructor for the abstract EntityController.
@@ -57,23 +45,28 @@ abstract class EntityController extends Controller
      * @param SessionInterface $session
      * @param EntityManagerInterface $em
      * @param ValidatorInterface $validator
+     * @param Intuition $intuition
      */
     public function __construct(
         RequestStack $requestStack,
         ContainerInterface $container,
         SessionInterface $session,
         EntityManagerInterface $em,
-        ValidatorInterface $validator
+        Intuition $intuition
     ) {
-        $this->request = $requestStack->getCurrentRequest();
-        $this->container = $container;
-        $this->em = $em;
-        $this->session = $session;
-        $this->validator = $validator;
-
+        parent::__construct($requestStack, $container, $session, $em, $intuition);
         $this->validateUser();
         $this->setProgramAndEvent();
         $this->validateOrganizer();
+    }
+
+    /**
+     * Service injection point, configured in services.yml
+     * @param ValidatorInterface $validator
+     */
+    public function setValidator(ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
     }
 
     /**
@@ -183,13 +176,8 @@ abstract class EntityController extends Controller
         if ($this->session->get('logged_in_user') != '') {
             return;
         }
-
-        $this->addFlash('danger', [
-            'please-login',
-        ]);
-
+        $this->addFlashMessage('danger', 'please-login');
         $rootPath = $this->container->getParameter('app.root_path');
-
         throw new HttpException(
             Response::HTTP_TEMPORARY_REDIRECT,
             null,

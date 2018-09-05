@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Intuition;
+use Krinkle\Intuition\Intuition;
 use Twig_Extension;
 
 /**
@@ -35,12 +35,18 @@ abstract class Extension extends Twig_Extension
      * @param ContainerInterface $container The DI container.
      * @param RequestStack $requestStack The request stack.
      * @param SessionInterface $session
+     * @param Intuition $intuition
      */
-    public function __construct(ContainerInterface $container, RequestStack $requestStack, SessionInterface $session)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        RequestStack $requestStack,
+        SessionInterface $session,
+        Intuition $intuition
+    ) {
         $this->container = $container;
         $this->requestStack = $requestStack;
         $this->session = $session;
+        $this->intuition = $intuition;
     }
 
     /**
@@ -51,31 +57,7 @@ abstract class Extension extends Twig_Extension
      */
     protected function getIntuition()
     {
-        // Don't recreate the object.
-        if ($this->intuition instanceof Intuition) {
-            return $this->intuition;
-        }
-
-        $useLang = 'en';
-
-        // Current request doesn't exist in unit tests, in which case we'll fall back to English.
-        if ($this->requestStack->getCurrentRequest() !== null) {
-            $useLang = $this->getIntuitionLang();
-
-            // Save the language to the session.
-            if ($this->session->get('lang') !== $useLang) {
-                $this->session->set('lang', $useLang);
-            }
-        }
-
-        // Set up Intuition, using the selected language.
-        $intuition = new Intuition('grantmetrics');
-        $path = $this->container->getParameter('kernel.root_dir').'/../i18n';
-        $intuition->registerDomain('grantmetrics', $path);
-        $intuition->setLang(strtolower($useLang));
-
-        $this->intuition = $intuition;
-        return $intuition;
+        return $this->intuition;
     }
 
     /**
