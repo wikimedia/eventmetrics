@@ -40,6 +40,10 @@ class Intuition extends KrinkleIntuition
         $intuition = new static('grantmetrics');
         $intuition->registerDomain('grantmetrics', $rootDir.'/../i18n');
         $intuition->setLang(strtolower($useLang));
+
+        // Also add US English, so we can access the locale information (e.g. for date formatting).
+        $intuition->addAvailableLang('en-us', 'US English');
+
         return $intuition;
     }
 }

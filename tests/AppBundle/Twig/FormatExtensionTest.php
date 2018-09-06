@@ -22,6 +22,9 @@ class FormatExtensionTest extends GrantMetricsTestCase
     /** @var \AppBundle\Twig\FormatExtension Instance of class */
     protected $formatExtension;
 
+    /** @var Intuition */
+    protected $intuition;
+
     /**
      * Set class instance.
      */
@@ -31,8 +34,8 @@ class FormatExtensionTest extends GrantMetricsTestCase
         static::bootKernel();
         $stack = new RequestStack();
         $session = new Session();
-        $intuition = new Intuition();
-        $this->formatExtension = new FormatExtension(static::$container, $stack, $session, $intuition);
+        $this->intuition = new Intuition();
+        $this->formatExtension = new FormatExtension(static::$container, $stack, $session, $this->intuition);
     }
 
     /**
@@ -107,17 +110,31 @@ class FormatExtensionTest extends GrantMetricsTestCase
      */
     public function testDateFormat()
     {
-        // Localized.
+        // Default of English uses ISO8601 format.
+        $this->assertEquals('en', $this->intuition->getLang());
         static::assertEquals(
-            '2/1/17, 11:45 PM',
+            '2017-02-01 23:45',
             $this->formatExtension->dateFormat(new DateTime('2017-02-01 23:45:34'))
         );
+        // Change to another locale and check format.
+        $this->intuition->setLang('pl');
+        // As a Datetime object.
         static::assertEquals(
-            '8/12/15, 11:45 AM',
+            '01.02.2017, 23:45',
+            $this->formatExtension->dateFormat(new DateTime('2017-02-01 23:45:34'))
+        );
+        // As a string.
+        static::assertEquals(
+            '12.08.2015, 11:45',
             $this->formatExtension->dateFormat('2015-08-12 11:45:50')
         );
+    }
 
-        // ISO 8601.
+    /**
+     * Format a date according to ISO8601.
+     */
+    public function testDateFormatStd()
+    {
         static::assertEquals(
             '2017-02-01 23:45',
             $this->formatExtension->dateFormatStd(new DateTime('2017-02-01 23:45:34'))
