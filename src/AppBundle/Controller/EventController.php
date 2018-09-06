@@ -12,11 +12,11 @@ use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Participant;
 use AppBundle\Repository\EventRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The EventController handles showing, creating and editing events.
