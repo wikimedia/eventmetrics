@@ -9,10 +9,10 @@ use AppBundle\Form\ProgramType;
 use AppBundle\Model\Program;
 use AppBundle\Repository\OrganizerRepository;
 use AppBundle\Repository\ProgramRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The ProgramController handles listing, creating and editing programs.

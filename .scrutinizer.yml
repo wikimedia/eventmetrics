@@ -6,6 +6,9 @@ build:
         override:
             # Disable the inferred commands.
             - true
+        before:
+            # Install the minimum in order to have dependency classes loaded for inspection.
+            - composer install --no-scripts
     tests:
         override:
             # Disables tests. We're only using Scrutinizer for inspections.
@@ -17,8 +20,9 @@ filter:
         - 'app/*'
         - 'tests/*'
         - 'bin/*'
-        - 'vendor/*'
         - '*.min.js'
+    dependency_paths:
+        - 'vendor/*'
 
 build_failure_conditions:
     - 'patches.label("Doc Comments").exists'       # No doc comments patches allowed

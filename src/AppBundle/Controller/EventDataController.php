@@ -9,11 +9,11 @@ use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * The EventDataController handles the event data page, export options,
