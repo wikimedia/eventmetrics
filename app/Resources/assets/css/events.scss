@@ -103,15 +103,13 @@
     }
 
     .save-participants-form {
+        .new-participants-label label::after {
+            // @TODO Other labels should be updated to include the colon.
+            content: '';
+        }
         .event-new-participants {
             max-height: 120px;
         }
-
-        .save-participants-btn {
-            // Move the save button down to line up with the textarea to its left.
-            margin-top: 25px;
-        }
-
         // Scroll the participants' rows if there are very many.
         .participants-rows {
             max-height: 400px;

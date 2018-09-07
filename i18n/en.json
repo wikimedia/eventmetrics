@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"MusikAnimal"
+			"MusikAnimal",
+			"Samwilson"
 		]
 	},
-	"add-more-participants": "Add more participants, one per line",
+	"add-more-participants": "Add more participants, one per line. You can copy/paste directly from an on-wiki list.",
+	"add-more-participants-tooltip": "Read more about how to enter participant usernames",
 	"add-organizer": "Add organizer",
 	"add-wiki": "Add wiki",
 	"all": "All",

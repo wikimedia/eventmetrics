@@ -8,11 +8,17 @@
         {% set validParticipants = [] %}
 
         {{ form_start(form, {'method': 'post', 'attr': {'class': 'save-participants-form', 'autocomplete': 'off'}}) }}
+        <p class="new-participants-label">
+            <label for="form_new_participants">{{ msg('add-more-participants') }}</label>
+            <a href="https://meta.wikimedia.org/wiki/Special:MyLanguage/Grant_Metrics_tool#adding-participants"
+               title="{{ msg('add-more-participants-tooltip') }}" class="help-link" target="_blank">
+                <span class="glyphicon glyphicon glyphicon-question-sign"></span>
+            </a>
+        </p>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group event-add-participants">
-                    <label for="form_new_participants">{{ msg('add-more-participants') }}</label>
-                    {{ form_widget(form.new_participants, {'attr': {'class': 'event-new-participants', 'rows': 10}}) }}
+                    {{ form_widget(form.new_participants, {'attr': {'class': 'event-new-participants', 'id': 'form_new_participants', 'rows': 10}}) }}
                 </div>
             </div>
             <div class="col-sm-6 save-participants-btn">
