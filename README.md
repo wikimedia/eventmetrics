@@ -13,7 +13,7 @@ A Wikimedia Foundation tool that provides grantees a simple, easy to use interfa
 
 Prerequesites:
 
-* PHP 5.6 and MySQL.
+* PHP 7.2 and MySQL.
 * A [Wikimedia developer account](https://wikitech.wikimedia.org/wiki/Help:Create_a_Wikimedia_developer_account) with which to access the Wikimedia database replicas.
 
 After cloning the repository:
@@ -112,5 +112,5 @@ The application currently is running on WMF's Toolforge environment at https://t
 
 You'll need to run deploy cammands in the bash shell for the Kubernetes container:
 
-* `webservice --backend=kubernetes php5.6 shell`
+* `webservice --backend=kubernetes php7.2 shell`
 * `sh deploy.sh`
