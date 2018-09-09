@@ -9,6 +9,7 @@
     <exclude-pattern>public_html/</exclude-pattern>
     <exclude-pattern>*.min.js</exclude-pattern>
     <exclude-pattern>app/DoctrineMigrations/</exclude-pattern>
+    <exclude-pattern>build/api-cache</exclude-pattern>
 
     <rule ref="Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps">
         <exclude name="Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore"/>
