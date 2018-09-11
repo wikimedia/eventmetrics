@@ -16,6 +16,8 @@
 /node_modules/
 /public/bundles/
 /public/fonts/
+/public/assets/app.css
+/public/assets/app.js
 /output/
 /docs/api/
 /public/docs/

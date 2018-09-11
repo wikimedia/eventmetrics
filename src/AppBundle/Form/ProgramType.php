@@ -50,6 +50,8 @@ class ProgramType extends AbstractType
                 'entry_type' => TextType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
+                'delete_empty' => true,
+                'required' => false,
                 'constraints' => [new Valid()],
             ])
             ->add('submit', SubmitType::class);
