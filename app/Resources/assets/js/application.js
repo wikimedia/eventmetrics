@@ -107,7 +107,7 @@ grantmetrics.application.setupAddRemove = function (model, column) {
  */
 grantmetrics.application.setupAutocompletion = function ($userInput) {
     if ($userInput === undefined) {
-        var $userInput = $('.user-input');
+        $userInput = $('.user-input');
     }
 
     // Make sure typeahead-compatible fields are present.
