@@ -43,13 +43,14 @@ $(function () {
 
 /**
  * Setup form handling for adding/removing arbitrary number of text fields.
- * This is used for adding/removing organizers to a program, and wikis to an event.
+ * This is used for adding/removing organizers to a program, wikis to an event, etc.
  * @param {string} model Model name, either 'program' or 'event'.
  * @param {string} column Column name, either 'organizer' or 'wiki'.
  */
 grantmetrics.application.setupAddRemove = function (model, column) {
     // Keep track of how many fields have been rendered.
-    var rowCount = $('.' + model + '__' + column + 's .' + column + '-row').length;
+    var columnPluralized = column.substr(-1) === 'y' ? column.replace(/y$/, 'ies') : column + 's',
+        rowCount = $('.' + model + '__' + columnPluralized + ' .' + column + '-row').length;
 
     // Class name for the individual rows.
     var rowClass = '.' + column + '-row';
@@ -64,23 +65,29 @@ grantmetrics.application.setupAddRemove = function (model, column) {
     $('.add-' + column).on('click', function (e) {
         e.preventDefault();
 
-        // Clone the template row and correct CSS classes.
-        var $template = $("<div class='form-group " + column + "-row'>" +
-            $(rowClass + '__template').html() +
-            "</div>");
+        // Clone the template row, correct CSS classes, then insert after the last row.
+        var $newRow = $(rowClass + '__template').clone()
+            .removeClass('hidden ' + column + '-row__template')
+            .insertAfter(rowClass + ':last');
 
-        // Insert after the last row.
-        $(rowClass + ':last').after($template);
+        // Go through all the inputs and update the indexing in the name and id attributes.
+        $newRow.find('input').each(function (_index, el) {
+            var name = $(el).prop('name'),
+                id = $(el).prop('id');
 
-        var $newRow = $(rowClass + ':last');
+            // Bump the index in the 'id' and 'name' attributes (rowCount should be one more than there is already).
+            // This has the caveat that numbers cannot be in the name of the form, model, or column, but I don't think
+            // we'd ever want to do that.
+            $(el).prop('name', name.replace(/\[\d+]/, '[' + rowCount + ']'))
+                .prop('id', id.replace(/_\d+/, '_' + rowCount))
+                // Clear out existing value.
+                .val('');
+        });
 
-        // Add name attribute to the input of the new row and remove unwanted inner elements.
-        $newRow.find('input').prop('name', model + '[' + column + 's][' + rowCount + ']')
-            .prop('id', model + '_' + column + 's_' + rowCount)
-            .val('');
+        // Remove unwanted inner elements.
         $newRow.find('.invalid-input').remove();
 
-        // Increment count so the next added row will have the correct name attribute.
+        // Increment count so the next added row will have the correct index in the name and id attributes.
         rowCount++;
 
         // Add listener to remove the row.

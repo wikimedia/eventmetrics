@@ -5,9 +5,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Model\EventWiki;
 use AppBundle\Repository\EventWikiRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -7,9 +7,10 @@
 </fieldset>
 
 {# This is what gets copied when they add a new organizer row. #}
-<div class="organizer-row__template hidden">
+<div class="form-group organizer-row organizer-row__template hidden">
     <div class="col-sm-8 col-lg-offset-2">
-        <input class="form-control user-input">
+        {# Index value of id and name attributes gets rewritten when copied. #}
+        <input class="form-control user-input" id="program_organizers_999" name="program[organizers][999]" autocomplete="off">
     </div>
     <div class="col-sm-2">
         <button type="button" class="btn btn-default remove-organizer">
@@ -34,7 +35,7 @@
                 <div class="col-sm-2"></div>
             {% endif %}
             <div class="col-sm-8">
-                {{ form_widget(organizer, {'attr': {'class': 'user-input', 'readonly': isViewingOrganizer}}) }}
+                {{ form_widget(organizer, {'attr': {'class': 'user-input', 'autocomplete': 'off', 'readonly': isViewingOrganizer}}) }}
                 {% if invalidUsername %}
                     <span class="font-awesome invalid-input">&#xf071;</span>
                 {% endif %}
