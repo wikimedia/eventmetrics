@@ -25,7 +25,9 @@ parameters:
     cache.redis_dsn: ''
 
     mailer.transport: smtp
-    mailer.host: 127.0.0.1
+    mailer.from_email: 'tools.grantmetrics@tools.wmflabs.org'
+    mailer.to_email: 'tools.grantmetrics@tools.wmflabs.org'
+    mailer.host: mail.tools.wmflabs.org
     mailer.user: ~
     mailer.password: ~
 
