@@ -19,19 +19,18 @@ before_install:
   - echo "  User communitytech" > ~/.ssh/config
   - ssh-keyscan -t rsa tools-dev.wmflabs.org >> ~/.ssh/known_hosts
   - sudo apt-get install expect
-  - chmod +x ./build/ci/ssh-tunnel.sh
   - ./build/ci/ssh-tunnel.sh
   #- ./build/phpdoc-install.php # Disabled until we need PhpDocumentor, see below.
   - phpenv config-rm xdebug.ini # ran before installing ext-redis
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini # Install ext-redis
+  - npm -g install npm # Upgrade npm so we can use the ci install command.
 
 install:
   - cp app/config/parameters-travis.yml.dist app/config/parameters.yml
   - composer install
-  - npm install
+  - npm ci
   - php bin/console doctrine:database:create --env=test --no-interaction --quiet
   - php bin/console doctrine:migrations:migrate --env=test --no-interaction --quiet
-  - node_modules/.bin/encore production
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -39,6 +38,9 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
+  # Compile assets, and make sure nothing's changed in Git.
+  - node_modules/.bin/encore production
+  - git status | grep "nothing to commit, working tree clean"
   - composer lint
   #- composer docs # Disabled for now, until PhpDocumentor 3 supports checkstyle again.
   - composer unit
