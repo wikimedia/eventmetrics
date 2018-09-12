@@ -16,7 +16,7 @@
             <h1>{{ msg('edit-program') }}</h1>
         </div>
 
-        {{ form_start(form, {'method': 'post'}) }}
+        {{ form_start(form, {'method': 'post', 'attr': {'autocomplete': 'off'}}) }}
             {% include 'programs/_form.html.twig' with {'form': form} %}
         {{ form_end(form) }}
     </div>

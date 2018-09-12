@@ -16,7 +16,7 @@
             <h1>{{ msg('edit-event') }}</h1>
         </div>
 
-        {{ form_start(form, {'method': 'post', 'attr': {'id': 'event_form'}}) }}
+        {{ form_start(form, {'method': 'post', 'attr': {'id': 'event_form', 'autocomplete': 'off'}}) }}
             {% include 'events/_form.html.twig' with {'form': form} %}
         {{ form_end(form, {'render_rest': false}) }}
     </div>

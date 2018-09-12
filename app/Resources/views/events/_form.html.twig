@@ -8,23 +8,14 @@
 
 <fieldset class="event__wikis">
     {% for wiki in form.wikis %}
-        {% set invalidWiki = false %}
-        {% if form_errors(wiki)|length > 0 %}
-            {% set invalidWiki = true %}
-        {% endif %}
-
-        {% set wikiRowClasses = (invalidWiki ? ' has-error') ~ (loop.index == 1 ? ' wiki-row__template') %}
-        <div class="form-group wiki-row{{ wikiRowClasses }}">
+        <div class="form-group wiki-row{{ loop.index == 1 ? ' wiki-row__template' }}">
             <div class="col-sm-2 text-right label-group">
                 {{ form_label(wiki, msg('wikis'),
                     {'attr': {'class': form_errors(form.wikis) ? ' text-danger'}})
                 }}
             </div>
-            <div class="col-sm-8">
-                {{ form_widget(wiki, {'attr': {'class': 'event-wiki-input', 'autocomplete': 'off'}}) }}
-                {% if invalidWiki %}
-                    <span class="font-awesome invalid-input">&#xf071;</span>
-                {% endif %}
+            <div class="col-sm-8{{ form_errors(wiki) ? ' has-error' }}">
+                {{ form_widget(wiki, {'attr': {'class': 'event-wiki-input'}}) }}
             </div>
             <div class="col-sm-2">
                 <button type="button" class="btn btn-default remove-wiki">
@@ -50,13 +41,13 @@
 </div>
 
 <fieldset class="event__time">
-    <div class="form-group{% if form_errors(form.start) or form_errors(form.end) %} has-error{% endif %}">
+    <div class="form-group">
         <div class="col-sm-2 text-right">
             <label class="control-label">{% spaceless %}
                 {{ msg('time') }}
             {% endspaceless %}</label>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-8{% if form_errors(form.start) or form_errors(form.end) %} has-error{% endif %}">
             {{ form_widget(form.time) }}
         </div>
         <div class="hidden">
@@ -64,8 +55,8 @@
             {{ form_widget(form.end) }}
         </div>
     </div>
-    <div class="form-group{% if form_errors(form.timezone) %} has-error{% endif %}">
-        <div class="col-sm-2 text-right">
+    <div class="form-group">
+        <div class="col-sm-2 text-right{% if form_errors(form.timezone) %} has-error{% endif %}">
             {{ form_label(form.timezone, msg('timezone')) }}
         </div>
         <div class="col-sm-8">
