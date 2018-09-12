@@ -94,6 +94,13 @@ class FormatExtension extends Extension
      */
     public function dateFormat($datetime)
     {
+        // If the language is 'en' with no country code,
+        // override the US English format that's provided by ICU.
+        if ($this->getIntuition()->getLang() === 'en') {
+            return $this->dateFormatStd($datetime);
+        }
+
+        // Otherwise, format it according to the current locale.
         if (!isset($this->dateFormatter)) {
             $this->dateFormatter = new IntlDateFormatter(
                 $this->getIntuition()->getLang(),
