@@ -28,12 +28,10 @@
                 {% endif %}
 
                 {% set participantRow %}
-                    <div class="row participant-row{% if invalidParticipant %} has-error{% endif %}">
-                        <div class="col-sm-4 form-group">
+                    <div class="row participant-row">
+                        <div class="col-sm-4 form-group{% if invalidParticipant %} has-error{% endif %}">
                             {{ form_widget(participant, {'attr': {'class': 'user-input'}}) }}
-                            {% if invalidParticipant %}
-                                <span class="font-awesome invalid-input">&#xf071;</span>
-                            {% else %}
+                            {% if not(invalidParticipant) %}
                                 <span class="font-awesome valid-input">&#xf05d;</span>
                             {% endif %}
                         </div>

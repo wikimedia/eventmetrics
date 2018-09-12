@@ -160,9 +160,15 @@ body {
         right: 24px;
         top: 6px;
     }
+}
 
-    .invalid-input {
+.has-error {
+    position: relative;
+
+    &::after {
         color: $bootstrap-danger-text;
+        content: '\f071';
+        font-family: 'FontAwesome';
         font-size: 18px;
         position: absolute;
         right: 24px;

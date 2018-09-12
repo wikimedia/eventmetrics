@@ -14,6 +14,13 @@ $(function () {
     // Add/remove participants hooks for when viewing an event.
     if ($('body').hasClass('event-show')) {
         grantmetrics.application.setupAddRemove('event', 'participant');
+
+        // The event page contains multiple forms. Here we jump to the one with errors,
+        // if any, since the user may otherwise not see it.
+        var erroneousForm = $('.has-error').parents('.panel').get(0);
+        if (erroneousForm) {
+            erroneousForm.scrollIntoView();
+        }
     }
 
     var startDate = moment($('#event_start').val()).utc(),

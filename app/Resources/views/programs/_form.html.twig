@@ -10,7 +10,7 @@
 <div class="form-group organizer-row organizer-row__template hidden">
     <div class="col-sm-8 col-lg-offset-2">
         {# Index value of id and name attributes gets rewritten when copied. #}
-        <input class="form-control user-input" id="program_organizers_999" name="program[organizers][999]" autocomplete="off">
+        <input class="form-control user-input" id="program_organizers_999" name="program[organizers][999]">
     </div>
     <div class="col-sm-2">
         <button type="button" class="btn btn-default remove-organizer">
@@ -23,22 +23,15 @@
     {# The organizer currently viewing the program cannot remove or rename themself. #}
     {% for organizer in form.organizers %}
         {% set isViewingOrganizer = organizer.vars.value == loggedInUser().username %}
-        {% set invalidUsername = false %}
-        {% if form_errors(organizer)|length > 0 %}
-            {% set invalidUsername = true %}
-        {% endif %}
 
-        <div class="form-group organizer-row{% if invalidUsername %} has-error{% endif %}">
+        <div class="form-group organizer-row">
             {% if loop.index == 1 %}
                 <label for="form_organizers_1" class="col-sm-2 control-label{% if form_errors(form.organizers) %} text-danger{% endif %}">{{ msg('organizers') }}</label>
             {% else %}
                 <div class="col-sm-2"></div>
             {% endif %}
-            <div class="col-sm-8">
-                {{ form_widget(organizer, {'attr': {'class': 'user-input', 'autocomplete': 'off', 'readonly': isViewingOrganizer}}) }}
-                {% if invalidUsername %}
-                    <span class="font-awesome invalid-input">&#xf071;</span>
-                {% endif %}
+            <div class="col-sm-8{% if form_errors(organizer) %} has-error{% endif %}">
+                {{ form_widget(organizer, {'attr': {'class': 'user-input', 'readonly': isViewingOrganizer}}) }}
             </div>
             <div class="col-sm-2">
                 <button type="button" class="btn btn-default remove-organizer"{% if isViewingOrganizer %} disabled="disabled"{% endif %}>
