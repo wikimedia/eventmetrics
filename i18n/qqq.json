@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"MusikAnimal"
+			"MusikAnimal",
+			"Samwilson"
 		]
 	},
 	"add-more-participants": "Label for text area input to enter in multiple participants for an event.",
+	"add-more-participants-tooltip": "Tooltip text for the help icon near the add-more-participants label.",
 	"add-organizer": "Link to add a new organizer to a program.",
 	"add-wiki": "Link to add a wiki (also known as a 'project') to an event.\n{{Identical|Wiki}}",
 	"all": "Label for the wiki when all wikis have been selected.\n{{Identical|All}}",
