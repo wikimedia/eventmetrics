@@ -4,7 +4,8 @@
 			"Metalhead64"
 		]
 	},
-	"add-more-participants": "Weitere Teilnehmer hinzufügen, einen pro Zeile",
+	"add-more-participants": "Weitere Teilnehmer hinzufügen, einen pro Zeile. Du kannst direkt von einer Wikiliste kopieren und einfügen.",
+	"add-more-participants-tooltip": "Mehr über die Eingabe von Benutzernamen der Teilnehmer erfahren",
 	"add-organizer": "Organisator hinzufügen",
 	"add-wiki": "Wiki hinzufügen",
 	"all": "Alle",

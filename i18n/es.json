@@ -4,10 +4,12 @@
 			"Fitoschido",
 			"Jelou",
 			"MarcoAurelio",
-			"Tiberius1701"
+			"Tiberius1701",
+			"Vanbasten 23"
 		]
 	},
-	"add-more-participants": "Añade más participantes, uno por renglón",
+	"add-more-participants": "Añade más participantes, uno por línea. Puedes copiar/pegar directamente de una lista wiki.",
+	"add-more-participants-tooltip": "Lee más sobre cómo introducir nombres de usuario de los participantes",
 	"all": "Todas",
 	"all-wikipedias": "Todas las Wikipedias",
 	"apply": "Aplicar",

@@ -4,7 +4,8 @@
 			"Kly"
 		]
 	},
-	"add-more-participants": "添加更多的參與者（每行一個）",
+	"add-more-participants": "添加更多的參與者（每行一個）。您可以直接從在 wiki 裡的清單複製/貼上。",
+	"add-more-participants-tooltip": "閱讀更多如何來輸入參與使用者名稱",
 	"add-organizer": "添加籌辦者",
 	"add-wiki": "添加 wiki",
 	"all": "所有",

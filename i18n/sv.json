@@ -4,7 +4,8 @@
 			"WikiPhoenix"
 		]
 	},
-	"add-more-participants": "Lägg till fler deltagare, en per rad",
+	"add-more-participants": "Lägg till fler deltagare, en per rad. Du kan kopiera/klistra in direkt från en wikilista.",
+	"add-more-participants-tooltip": "Läs mer om hur man anger användarnamn på deltagare",
 	"add-organizer": "Lägg till organiserare",
 	"add-wiki": "Lägg till wiki",
 	"all": "Alla",

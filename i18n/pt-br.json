@@ -4,7 +4,8 @@
 			"Eduardo Addad de Oliveira"
 		]
 	},
-	"add-more-participants": "Adicionar participantes, um por linha",
+	"add-more-participants": "Adicionar mais participantes, um por linha. Pode copiar e inseri-los diretamente de uma lista na wiki.",
+	"add-more-participants-tooltip": "Ler mais sobre como introduzir os nomes de usuários dos participantes",
 	"add-organizer": "Adicionar um organizador",
 	"add-wiki": "Adicionar wiki",
 	"all": "Todas",

@@ -4,7 +4,8 @@
 			"Hamilton Abreu"
 		]
 	},
-	"add-more-participants": "Adicionar participantes, um por linha",
+	"add-more-participants": "Adicionar mais participantes, um por linha. Pode copiar e inseri-los diretamente de uma lista na wiki.",
+	"add-more-participants-tooltip": "Ler mais sobre como introduzir os nomes de utilizador dos participantes",
 	"add-organizer": "Adicionar organizador",
 	"add-wiki": "Adicionar wiki",
 	"all": "Todas",

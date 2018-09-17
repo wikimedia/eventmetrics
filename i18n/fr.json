@@ -5,7 +5,8 @@
 			"Gomoko"
 		]
 	},
-	"add-more-participants": "Ajouter davantage de participants, un par ligne",
+	"add-more-participants": "Ajouter davantage de participants, un par ligne. Vous pouvez copier/coller directement à partir d'une liste du wiki.",
+	"add-more-participants-tooltip": "Lire davantage sur la façon de saisir les noms d'utilisateur des participants",
 	"add-organizer": "Ajouter un organisateur",
 	"add-wiki": "Ajouter un wiki",
 	"all": "Tous",
