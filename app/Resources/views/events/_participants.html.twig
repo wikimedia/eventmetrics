@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="participants-rows">
+        <div class="event__participants">
             {% for participant in form.participants %}
                 {% set invalidParticipant = false %}
                 {% if not(participant.vars.valid) %}
@@ -64,7 +64,7 @@
             {% for row in validParticipants %}
                 {{ row }}
             {% endfor %}
-        </div>{# .participants-rows #}
+        </div>{# .event__participants #}
 
         {{ form_row(form._token) }}
         {{ form_end(form, {'render_rest': false}) }}
