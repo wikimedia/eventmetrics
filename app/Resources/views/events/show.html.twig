@@ -83,7 +83,7 @@
                         <tr>
                             <th scope="row">
                                 {{ msg(metric, [stat.offset]) }}:
-                                {% if msgExists(stat.metric ~ '-desc', [stat.offset]) %}
+                                {% if msg_exists(stat.metric ~ '-desc', [stat.offset]) %}
                                     <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"></span>
                                 {% endif %}
                             </th>

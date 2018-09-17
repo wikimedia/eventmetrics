@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace AppBundle\Twig;
 
+use Krinkle\Intuition\Intuition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Krinkle\Intuition\Intuition;
 use Twig_Extension;
 
 /**
@@ -30,7 +30,7 @@ abstract class Extension extends Twig_Extension
     protected $session;
 
     /** @var Intuition The i18n object. */
-    private $intuition;
+    protected $intuition;
 
     /**
      * Extension constructor.
@@ -52,17 +52,6 @@ abstract class Extension extends Twig_Extension
     }
 
     /**
-     * Get an Intuition object, set to the current language based on the query string or session
-     * of the current request.
-     * @return Intuition
-     * @throws \Exception If the 'i18n/en.json' file doesn't exist (as it's the default).
-     */
-    protected function getIntuition(): Intuition
-    {
-        return $this->intuition;
-    }
-
-    /**
      * Shorthand to get the current request from the request stack.
      * @return Request
      * There is no request stack in the tests.
@@ -71,24 +60,5 @@ abstract class Extension extends Twig_Extension
     protected function getCurrentRequest(): Request
     {
         return $this->container->get('request_stack')->getCurrentRequest();
-    }
-
-    /**
-     * Get an i18n message.
-     * @param string|array $message
-     * @param array $vars
-     * @return mixed|null|string
-     */
-    public function msg($message = '', $vars = [])
-    {
-        if (is_array($message)) {
-            $vars = $message;
-            $message = $message[0];
-            $vars = array_slice($vars, 1);
-        }
-        return $this->getIntuition()->msg($message, [
-            'domain' => 'grantmetrics',
-            'variables' => $vars
-        ]);
     }
 }

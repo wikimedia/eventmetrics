@@ -32,6 +32,7 @@ Encore
         './app/Resources/assets/css/default.scss',
         './app/Resources/assets/css/events.scss',
         './app/Resources/assets/css/programs.scss',
+        './vendor/wikimedia/toolforge-bundle/Resources/assets/toolforge.js',
     ])
 
     // Other options.
