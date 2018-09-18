@@ -3,15 +3,17 @@
  * This file contains only the EventWiki class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * An EventWiki belongs to an Event, and also connects an EventStat
- * to a specific wiki and event.
+ * An EventWiki belongs to an Event, and also connects an EventStat to a specific wiki and event.
  * @ORM\Entity
  * @ORM\Table(
  *     name="event_wiki",
@@ -90,16 +92,16 @@ class EventWiki
      * Get the Event this EventWiki belongs to.
      * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
     /**
      * Get the domain name.
-     * @return string
+     * @return string|null
      */
-    public function getDomain()
+    public function getDomain(): ?string
     {
         return $this->domain;
     }
@@ -112,7 +114,7 @@ class EventWiki
      * No need to test a hard-coded string.
      * @codeCoverageIgnore
      */
-    public static function getValidPattern()
+    public static function getValidPattern(): string
     {
         return self::VALID_WIKI_PATTERN;
     }
@@ -125,7 +127,7 @@ class EventWiki
      * Does this EventWiki represent a wiki family? e.g. *.wikipedia, *.wiktionary
      * @return bool
      */
-    public function isFamilyWiki()
+    public function isFamilyWiki(): bool
     {
         return substr($this->domain, 0, 2) === '*.';
     }
@@ -134,7 +136,7 @@ class EventWiki
      * Get the family name of this wiki ('wikipedia', 'commons', etc.).
      * @return string|null
      */
-    public function getFamilyName()
+    public function getFamilyName(): ?string
     {
         foreach (self::FAMILY_NAMES as $family) {
             if (strpos($this->domain, $family) !== false) {
@@ -150,7 +152,7 @@ class EventWiki
      * If this EventWiki represents a family, return all EventWikis of the Event that belong to the family.
      * @return ArrayCollection of EventWikis
      */
-    public function getChildWikis()
+    public function getChildWikis(): Collection
     {
         if (!$this->isFamilyWiki()) {
             return new ArrayCollection([]);
@@ -169,7 +171,7 @@ class EventWiki
      * Is this EventWiki a child of a family EventWiki that belongs to the same Event?
      * @return bool
      */
-    public function isChildWiki()
+    public function isChildWiki(): bool
     {
         return !$this->isFamilyWiki() && !$this->event->getOrphanWikis()->contains($this);
     }
@@ -182,7 +184,7 @@ class EventWiki
      * Get statistics about this EventWiki.
      * @return ArrayCollection|EventWikiStat[]
      */
-    public function getStatistics()
+    public function getStatistics(): Collection
     {
         return $this->stats;
     }
@@ -192,19 +194,19 @@ class EventWiki
      * @param string $metric Name of metric, one of EventWikiStat::METRIC_TYPES.
      * @return EventWikiStat|null Null if no EventWikiStat with given metric was found.
      */
-    public function getStatistic($metric)
+    public function getStatistic(string $metric): ?EventWikiStat
     {
-        $ewStats = array_filter($this->stats->toArray(), function (EventWikiStat $stat) use ($metric) {
+        $ewStats = $this->stats->filter(function (EventWikiStat $stat) use ($metric) {
             return $stat->getMetric() === $metric;
         });
-        return count($ewStats) > 0 ? reset($ewStats) : null;
+        return $ewStats->count() > 0 ? $ewStats->first() : null;
     }
 
     /**
      * Add an EventWikiStat to this EventWiki.
      * @param EventWikiStat $eventWikiStat
      */
-    public function addStatistic(EventWikiStat $eventWikiStat)
+    public function addStatistic(EventWikiStat $eventWikiStat): void
     {
         if ($this->stats->contains($eventWikiStat)) {
             return;
@@ -216,7 +218,7 @@ class EventWiki
      * Remove an EventWikiStat from this EventWiki.
      * @param EventWikiStat $eventWikiStat
      */
-    public function removeStatistic(EventWikiStat $eventWikiStat)
+    public function removeStatistic(EventWikiStat $eventWikiStat): void
     {
         if (!$this->stats->contains($eventWikiStat)) {
             return;
@@ -227,7 +229,7 @@ class EventWiki
     /**
      * Clear all associated statistics.
      */
-    public function clearStatistics()
+    public function clearStatistics(): void
     {
         $this->stats->clear();
     }

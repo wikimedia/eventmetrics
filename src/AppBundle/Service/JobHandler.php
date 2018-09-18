@@ -3,6 +3,8 @@
  * This file contains only the JobHandler class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Service;
 
 use AppBundle\Model\Job;
@@ -54,14 +56,12 @@ class JobHandler
     }
 
     /**
-     * Query the job queue and spawn Jobs, attempting no more than what
-     * is permitted with our quota.
-     * @param OutputInterface &$output Used by Commands so that the output
-     *   can be controlled by the parent process. If this is null,
-     *   a local LoggerInterface is used instead.
+     * Query the job queue and spawn Jobs, attempting no more than what is permitted with our quota.
+     * @param OutputInterface &$output Used by Commands so that the output can be controlled by the parent process.
+     *   If this is null, a local LoggerInterface is used instead.
      * @return int The number of jobs processed.
      */
-    public function spawnAll(OutputInterface &$output = null)
+    public function spawnAll(OutputInterface &$output = null): int
     {
         $this->output = $output;
 
@@ -72,7 +72,7 @@ class JobHandler
          */
         if ($this->getQuota() === 0) {
             $this->log(
-                "<error>Not enough datbase quota to run any jobs. Please try again later.</error>"
+                "<error>Not enough database quota to run any jobs. Please try again later.</error>"
             );
         }
         // @codeCoverageIgnoreEnd
@@ -127,7 +127,7 @@ class JobHandler
      * @return array|null Generated stats, or null if queued or failed.
      * @codeCoverageIgnore
      */
-    private function processJob(Job $job)
+    private function processJob(Job $job): ?array
     {
         // Flag the job as started. This must be flushed to the database
         // immediately to avoid conflicts with the cron job, and to ensure
@@ -145,7 +145,7 @@ class JobHandler
      * self::DATABASE_QUOTA and the current number of open connections.
      * @return Job[]
      */
-    private function getQueuedJobs()
+    private function getQueuedJobs(): array
     {
         /** @var int Number of jobs to fire. This shouldn't be a negative number :) */
         $limit = $this->getQuota();
@@ -156,11 +156,10 @@ class JobHandler
     }
 
     /**
-     * Get the number of jobs we can run concurrently, based on
-     * how many queries are already running and our quota.
+     * Get the number of jobs we can run concurrently, based on how many queries are already running and our quota.
      * @return int
      */
-    private function getQuota()
+    private function getQuota(): int
     {
         return max([self::DATABASE_QUOTA - $this->getNumOpenConnections(), 0]);
     }
@@ -169,7 +168,7 @@ class JobHandler
      * Get the number of open connections to the replicas database.
      * @return int
      */
-    private function getNumOpenConnections()
+    private function getNumOpenConnections(): int
     {
         $conn = $this->container
             ->get('doctrine')
@@ -190,7 +189,7 @@ class JobHandler
      * be tested, but the output via $this->output does have test coverage.
      * @codeCoverageIgnore
      */
-    private function log($message)
+    private function log($message): void
     {
         if ($this->output === null) {
             $this->logger->info($message);

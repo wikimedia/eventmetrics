@@ -3,21 +3,21 @@
  * This file contains only the TitleUserTrait trait.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\Traits;
 
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * The TitleUserTrait refactors out common methods between
- * Program and Event. These methods pertain to titles of the entity,
- * and the associated user class (Organizer or Participant).
+ * The TitleUserTrait refactors out common methods between Program and Event. These methods pertain to titles of the
+ * entity, and the associated user class (Organizer or Participant).
  */
 trait TitleUserTrait
 {
     /**
-     * The class name of users associated with Events,
-     * either 'Organizer' or 'Participant'.
+     * The class name of users associated with Events, either 'Organizer' or 'Participant'.
      * @abstract
      * @return string
      */
@@ -29,9 +29,9 @@ trait TitleUserTrait
 
     /**
      * Get the title of this Program.
-     * @return string
+     * @return string|null
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -40,16 +40,16 @@ trait TitleUserTrait
      * Get the display variant of the program title.
      * @return string
      */
-    public function getDisplayTitle()
+    public function getDisplayTitle(): string
     {
         return str_replace('_', ' ', $this->title);
     }
 
     /**
      * Set the title of this Program.
-     * @param string $title
+     * @param string|null $title
      */
-    public function setTitle($title)
+    public function setTitle(?string $title): void
     {
         // Remove 4-byte unicode characters (replace with the "replacement character" �).
         // Kudos https://stackoverflow.com/a/24672780
@@ -64,7 +64,7 @@ trait TitleUserTrait
      * @Assert\Callback
      * @param ExecutionContext $context Supplied by Symfony.
      */
-    public function validateUnreservedTitle(ExecutionContext $context)
+    public function validateUnreservedTitle(ExecutionContext $context): void
     {
         if (in_array($this->title, ['edit', 'new', 'delete', 'process', 'api', 'revisions'])) {
             $context->buildViolation('error-title-reserved')
@@ -80,7 +80,7 @@ trait TitleUserTrait
      * @Assert\Callback
      * @param ExecutionContext $context Supplied by Symfony.
      */
-    public function validateCharacters(ExecutionContext $context)
+    public function validateCharacters(ExecutionContext $context): void
     {
         if (preg_match('/[\/]/', $this->title) === 1) {
             $context->buildViolation('error-title-invalid-chars')
@@ -99,7 +99,7 @@ trait TitleUserTrait
      * @Assert\Callback
      * @param ExecutionContext $context Supplied by Symfony.
      */
-    public function validateUsers(ExecutionContext $context)
+    public function validateUsers(ExecutionContext $context): void
     {
         $userIds = $this->{'get'.$this->getUserClassName().'Ids'}();
         $numEmpty = count($userIds) - count(array_filter($userIds));

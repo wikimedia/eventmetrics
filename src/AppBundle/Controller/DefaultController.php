@@ -3,6 +3,8 @@
  * This file contains only the DefaultController class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Controller;
 
 use AppBundle\Repository\EventWikiRepository;
@@ -212,7 +214,7 @@ class DefaultController extends Controller
      * @param EventWikiRepository $ewRepo
      * @return JsonResponse
      */
-    public function wikisApiAction(EventWikiRepository $ewRepo)
+    public function wikisApiAction(EventWikiRepository $ewRepo): JsonResponse
     {
         return $this->json($ewRepo->getAvailableWikis());
     }

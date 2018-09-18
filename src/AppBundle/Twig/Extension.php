@@ -3,6 +3,8 @@
  * This file contains only the Extension class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -55,7 +57,7 @@ abstract class Extension extends Twig_Extension
      * @return Intuition
      * @throws \Exception If the 'i18n/en.json' file doesn't exist (as it's the default).
      */
-    protected function getIntuition()
+    protected function getIntuition(): Intuition
     {
         return $this->intuition;
     }
@@ -66,28 +68,9 @@ abstract class Extension extends Twig_Extension
      * There is no request stack in the tests.
      * @codeCoverageIgnore
      */
-    protected function getCurrentRequest()
+    protected function getCurrentRequest(): Request
     {
         return $this->container->get('request_stack')->getCurrentRequest();
-    }
-
-    /**
-     * Determine the interface language, either from the current request or session.
-     * @return string
-     */
-    private function getIntuitionLang()
-    {
-        $queryLang = $this->requestStack->getCurrentRequest()->query->get('uselang');
-        $sessionLang = $this->session->get('lang');
-
-        if (!empty($queryLang)) {
-            return $queryLang;
-        } elseif (!empty($sessionLang)) {
-            return $sessionLang;
-        }
-
-        // English as default.
-        return 'en';
     }
 
     /**

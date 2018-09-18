@@ -3,6 +3,8 @@
  * This file contains only the EventDataController class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Controller;
 
 use AppBundle\Model\Event;
@@ -29,9 +31,10 @@ class EventDataController extends EntityController
      * Lists individual revisions that make up the Event.
      * @Route("/programs/{programTitle}/{eventTitle}/revisions", name="Revisions")
      * @Route("/programs/{programTitle}/{eventTitle}/revisions/", name="RevisionsSlash")
+     * @param EventRepository $eventRepo
      * @return Response
      */
-    public function revisionsAction(EventRepository $eventRepo)
+    public function revisionsAction(EventRepository $eventRepo): Response
     {
         // Redirect to event page if statistics have not yet been generated.
         if (null === $this->event->getUpdated()) {
@@ -83,7 +86,7 @@ class EventDataController extends EntityController
      * @param array $ret Data that should be passed to the view.
      * @return Response
      */
-    private function getFormattedRevisionsResponse($format, array $ret)
+    private function getFormattedRevisionsResponse(string $format, array $ret): Response
     {
         $formatMap = [
             'wikitext' => 'text/plain',
@@ -110,13 +113,14 @@ class EventDataController extends EntityController
      * @Route("/events/process/{eventId}/", name="EventProcessSlash", requirements={"id" = "\d+"})
      * @param JobHandler $jobHandler The job handler service, provided by Symfony dependency injection.
      * @param int $eventId The ID of the event to process.
+     * @param EventRepository $eventRepo
      * @return JsonResponse
      * @throws AccessDeniedHttpException
      * @throws NotFoundHttpException
      * Coverage done on the ProcessEventCommand itself to avoid overhead of the request stack,
      * and also because this action can only be called via AJAX.
      */
-    public function generateStatsAction(JobHandler $jobHandler, $eventId, EventRepository $eventRepo)
+    public function generateStatsAction(JobHandler $jobHandler, int $eventId, EventRepository $eventRepo): JsonResponse
     {
         // Only respond to AJAX.
         if (!$this->request->isXmlHttpRequest()) {
@@ -162,7 +166,7 @@ class EventDataController extends EntityController
      * and also because this action can only be called via AJAX.
      * @codeCoverageIgnore
      */
-    private function createJobAndGetResponse(JobHandler $jobHandler, Event $event)
+    private function createJobAndGetResponse(JobHandler $jobHandler, Event $event): JsonResponse
     {
         // Create a new Job for the Event, and flush to the database.
         $job = new Job($event);

@@ -11,6 +11,7 @@ use AppBundle\Model\Event;
 use AppBundle\Model\Participant;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -92,7 +93,7 @@ class ParticipantsType extends AbstractType
      * Format data before the participant form is submitted.
      * @param FormEvent $formEvent
      */
-    public function onParticipantPreSubmit(FormEvent $formEvent)
+    public function onParticipantPreSubmit(FormEvent $formEvent): void
     {
         $event = $formEvent->getData();
 
@@ -135,11 +136,11 @@ class ParticipantsType extends AbstractType
      * @param Event $event
      * @return CallbackTransformer
      */
-    private function getParticipantCallbackTransformer(Event $event)
+    private function getParticipantCallbackTransformer(Event $event): CallbackTransformer
     {
         return new CallbackTransformer(
             // Transform to the form.
-            function (Collection $participantObjects) {
+            function (Collection $participantObjects): array {
                 $parIds = array_map(function (Participant $participant) {
                     return $participant->getUserId();
                 }, $participantObjects->toArray());
@@ -149,7 +150,7 @@ class ParticipantsType extends AbstractType
                 return $usernames;
             },
             // Transform from the form.
-            function (array $participantNames) use ($event) {
+            function (array $participantNames) use ($event): Collection {
                 // Get the rows for each requested username.
                 $rows = $this->participantRepo->getRowsFromUsernames($participantNames);
 
@@ -159,13 +160,13 @@ class ParticipantsType extends AbstractType
                     return strnatcmp($a['user_name'], $b['user_name']);
                 });
 
-                $participants = [];
+                $participants = new ArrayCollection();
 
                 // Create or get Participants from the usernames.
                 foreach ($rows as $row) {
                     $participant = $this->getParticipantFromRow($event, $row);
                     $event->addParticipant($participant);
-                    $participants[] = $participant;
+                    $participants->add($participant);
                 }
 
                 return $participants;
@@ -179,9 +180,9 @@ class ParticipantsType extends AbstractType
      * @param array $row As fetched from ParticipantRepository::getRowsFromUsernames().
      * @return Participant
      */
-    private function getParticipantFromRow(Event $event, array $row)
+    private function getParticipantFromRow(Event $event, array $row): Participant
     {
-        if ($row['user_id'] === null) {
+        if (null === $row['user_id']) {
             // Username is invalid, so just return a new Participant
             // without a user ID so that the form can produce errors.
             $participant = new Participant($event);
@@ -192,11 +193,11 @@ class ParticipantsType extends AbstractType
                 'event' => $event,
             ]);
 
-            if ($participant === null) {
+            if (null === $participant) {
                 // Participant doesn't exist in grantmetrics yet,
                 // so we'll create a new, blank Participant.
                 $participant = new Participant($event);
-                $participant->setUserId($row['user_id']);
+                $participant->setUserId((int)$row['user_id']);
             }
         }
 

@@ -3,6 +3,8 @@
  * This file contains only the ProgramController class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Controller;
 
 use AppBundle\Form\ProgramType;
@@ -27,7 +29,7 @@ class ProgramController extends EntityController
      * @param OrganizerRepository $organizerRepo
      * @return Response
      */
-    public function indexAction(ProgramRepository $programRepo, OrganizerRepository $organizerRepo)
+    public function indexAction(ProgramRepository $programRepo, OrganizerRepository $organizerRepo): Response
     {
         $organizer = $this->getOrganizer();
 
@@ -51,7 +53,7 @@ class ProgramController extends EntityController
      * @Route("/programs/new/", name="NewProgramSlash")
      * @return Response|RedirectResponse
      */
-    public function newAction()
+    public function newAction(): Response
     {
         $organizer = $this->getOrganizer();
         $program = new Program($organizer);
@@ -76,7 +78,7 @@ class ProgramController extends EntityController
      * @Route("/programs/edit/{programTitle}/", name="EditProgramSlash")
      * @return Response|RedirectResponse
      */
-    public function editAction()
+    public function editAction(): Response
     {
         // Handle the Form for the request, and redirect if they submitted.
         $form = $this->handleFormSubmission($this->program);
@@ -99,7 +101,7 @@ class ProgramController extends EntityController
      * @Route("/programs/delete/{programTitle}/", name="DeleteProgramSlash")
      * @return RedirectResponse
      */
-    public function deleteAction()
+    public function deleteAction(): RedirectResponse
     {
         // Flash message will be shown at the top of the page.
         $this->addFlashMessage('danger', 'program-deleted', [$this->program->getDisplayTitle()]);
@@ -117,7 +119,7 @@ class ProgramController extends EntityController
      * @param ProgramRepository $programRepo
      * @return Response
      */
-    public function showAction(ProgramRepository $programRepo)
+    public function showAction(ProgramRepository $programRepo): Response
     {
         return $this->render('programs/show.html.twig', [
             'program' => $this->program,

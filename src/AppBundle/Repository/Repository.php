@@ -3,12 +3,15 @@
  * This file contains only the Repository class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Repository;
 
 use DateInterval;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManager;
@@ -23,8 +26,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 /**
- * A Repository is responsible for retrieving data from wherever it lives
- * (databases, APIs, filesystems, etc.).
+ * A Repository is responsible for retrieving data from wherever it lives (databases, APIs, filesystems, etc.).
  *
  * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
  *
@@ -60,9 +62,8 @@ abstract class Repository extends EntityRepository
     protected $em;
 
     /**
-     * Create a new Repository with a null logger.
-     * Each Repository should define getEntityClass(), which gets
-     * passed into the parent EntityRepository construct.
+     * Create a new Repository with a null logger. Each Repository should define getEntityClass(),
+     * which gets passed into the parent EntityRepository construct.
      * @param EntityManager $em The Doctrine entity manager.
      */
     public function __construct(EntityManager $em)
@@ -75,19 +76,18 @@ abstract class Repository extends EntityRepository
     }
 
     /**
-     * The name of the Entity class associated with the Repository
-     * (such as Program, Organizer, etc.). This must be defined
-     * in every Repository class.
+     * The name of the Entity class associated with the Repository (such as Program, Organizer, etc.).
+     * This must be defined in every Repository class.
      * @abstract
      * @return string
      */
-    abstract public function getEntityClass();
+    abstract public function getEntityClass(): string;
 
     /**
      * Set the DI container.
      * @param Container|ContainerInterface $container
      */
-    public function setContainer(Container $container)
+    public function setContainer(Container $container): void
     {
         $this->container = $container;
     }
@@ -96,7 +96,7 @@ abstract class Repository extends EntityRepository
      * Get the DI container.
      * @return Container
      */
-    public function getContainer()
+    public function getContainer(): ContainerInterface
     {
         return $this->container;
     }
@@ -105,7 +105,7 @@ abstract class Repository extends EntityRepository
      * Set the cache item pool.
      * @param CacheItemPoolInterface $cache
      */
-    public function setCachePool(CacheItemPoolInterface $cache)
+    public function setCachePool(CacheItemPoolInterface $cache): void
     {
         $this->cache = $cache;
     }
@@ -114,7 +114,7 @@ abstract class Repository extends EntityRepository
      * Set the logger.
      * @param LoggerInterface $logger
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->log = $logger;
     }
@@ -134,7 +134,7 @@ abstract class Repository extends EntityRepository
      *   is used, which is determined using `debug_backtrace`.
      * @return string
      */
-    public function getCacheKey($args, $key = null)
+    public function getCacheKey($args, $key = null): string
     {
         if ($key === null) {
             $key = debug_backtrace()[1]['function'];
@@ -162,10 +162,10 @@ abstract class Repository extends EntityRepository
 
     /**
      * Get a cache-friendly string given an argument.
-     * @param  mixed $arg
+     * @param mixed $arg
      * @return string
      */
-    private function getCacheKeyFromArg($arg)
+    private function getCacheKeyFromArg($arg): string
     {
         if (method_exists($arg, 'getCacheKey')) {
             return '.'.$arg->getCacheKey();
@@ -174,7 +174,7 @@ abstract class Repository extends EntityRepository
             return '.'.join('', $arg);
         } else {
             // Assumed to be a string, number or boolean.
-            return '.'.md5($arg);
+            return '.'.md5((string)$arg);
         }
     }
 
@@ -185,7 +185,7 @@ abstract class Repository extends EntityRepository
      * @param string $duration Valid DateInterval string.
      * @return mixed The given $value.
      */
-    public function setCache($cacheKey, $value, $duration = 'PT10M')
+    public function setCache(string $cacheKey, $value, string $duration = 'PT10M')
     {
         $cacheItem = $this->cache
             ->getItem($cacheKey)
@@ -203,7 +203,7 @@ abstract class Repository extends EntityRepository
      * Get the database connection for the 'grantmetrics' database.
      * @return Connection
      */
-    protected function getGrantMetricsConnection()
+    protected function getGrantMetricsConnection(): Connection
     {
         if (!$this->grantmetricsConnection instanceof Connection) {
             $this->grantmetricsConnection = $this->container
@@ -218,7 +218,7 @@ abstract class Repository extends EntityRepository
      * Get the database connection for the replicas.
      * @return Connection
      */
-    protected function getCentralAuthConnection()
+    protected function getCentralAuthConnection(): Connection
     {
         if (!$this->centralAuthConnection instanceof Connection) {
             $this->centralAuthConnection = $this->getContainer()
@@ -233,7 +233,7 @@ abstract class Repository extends EntityRepository
      * Get the database connection for the replicas.
      * @return Connection
      */
-    protected function getMetaConnection()
+    protected function getMetaConnection(): Connection
     {
         if (!$this->metaConnection instanceof Connection) {
             $this->metaConnection = $this->getContainer()
@@ -248,7 +248,7 @@ abstract class Repository extends EntityRepository
      * Get the database connection for the replicas.
      * @return Connection
      */
-    protected function getReplicaConnection()
+    protected function getReplicaConnection(): Connection
     {
         if (!$this->replicaConnection instanceof Connection) {
             $this->replicaConnection = $this->container
@@ -263,7 +263,7 @@ abstract class Repository extends EntityRepository
      * Get connection to the redis server.
      * @return RedisCache|null Null if not configured.
      */
-    protected function getRedisConnection()
+    protected function getRedisConnection(): ?RedisCache
     {
         if ($this->redisConnection instanceof RedisCache) {
             return $this->redisConnection;
@@ -288,13 +288,12 @@ abstract class Repository extends EntityRepository
      *************/
 
     /**
-     * Get the global user IDs for multiple users,
-     * based on the central auth database.
+     * Get the global user IDs for multiple users, based on the central auth database.
      * @param string[] $usernames Usernames to query for.
      * @return array with keys 'user_name' and 'user_id'.
      * FIXME: add caching.
      */
-    public function getUserIdsFromNames($usernames)
+    public function getUserIdsFromNames(array $usernames): array
     {
         $rqb = $this->getCentralAuthConnection()->createQueryBuilder();
         $rqb->select(['gu_name AS user_name', 'gu_id AS user_id'])
@@ -309,20 +308,19 @@ abstract class Repository extends EntityRepository
      * @param string $username
      * @return int|null
      */
-    public function getUserIdFromName($username)
+    public function getUserIdFromName(string $username): ?int
     {
         $ret = $this->getUserIdsFromNames([$username]);
-        return isset($ret[0]['user_id']) ? $ret[0]['user_id'] : null;
+        return isset($ret[0]['user_id']) ? (int)$ret[0]['user_id'] : null;
     }
 
     /**
-     * Get the usernames given multiple global user IDs,
-     * based on the central auth database.
+     * Get the usernames given multiple global user IDs, based on the central auth database.
      * @param int[] $userIds User IDs to query for.
      * @return array with keys 'user_name' and 'user_id'.
      * FIXME: add caching.
      */
-    public function getUsernamesFromIds($userIds)
+    public function getUsernamesFromIds(array $userIds): array
     {
         $rqb = $this->getCentralAuthConnection()->createQueryBuilder();
         $rqb->select(['gu_name AS user_name', 'gu_id AS user_id'])
@@ -339,7 +337,7 @@ abstract class Repository extends EntityRepository
      * @param int $userId
      * @return string|null
      */
-    public function getUsernameFromId($userId)
+    public function getUsernameFromId(int $userId): ?string
     {
         $ret = $this->getUsernamesFromIds([$userId]);
         return isset($ret[0]['user_name']) ? $ret[0]['user_name'] : null;
@@ -356,7 +354,7 @@ abstract class Repository extends EntityRepository
      * @param string $suffix Suffix to use instead of _userindex.
      * @return string
      */
-    protected function getTableName($name, $suffix = null)
+    protected function getTableName(string $name, $suffix = null): string
     {
         if ($suffix !== null) {
             return $name.'_'.$suffix;
@@ -378,17 +376,17 @@ abstract class Repository extends EntityRepository
      * @param array $params Parameters to bound to the prepared query.
      * @param int|null|false $timeout Maximum statement time in seconds. null will use the
      *   default specified by the app.query_timeout config parameter. false will set no timeout.
-     * @return \Doctrine\DBAL\Driver\Statement
+     * @return ResultStatement
      * @throws DriverException
      * @throws DBALException
      */
-    public function executeReplicaQuery($sql, $params = [], $timeout = null)
+    public function executeReplicaQuery(string $sql, array $params = [], $timeout = null): ResultStatement
     {
         try {
             $sql = $this->getQueryTimeoutClause($timeout).$sql;
             return $this->getReplicaConnection()->executeQuery($sql, $params);
         } catch (DriverException $e) {
-            return $this->handleDriverError($e, $timeout);
+            $this->handleDriverError($e, $timeout);
         }
     }
 
@@ -397,29 +395,29 @@ abstract class Repository extends EntityRepository
      * @param QueryBuilder $qb
      * @param int|null|false $timeout Maximum statement time in seconds. null will use the
      *   default specified by the app.query_timeout config parameter. false will set no timeout.
-     * @return \Doctrine\DBAL\Driver\Statement
+     * @return ResultStatement
      * @throws DriverException
      * @throws DBALException
      */
-    public function executeQueryBuilder(QueryBuilder $qb, $timeout = null)
+    public function executeQueryBuilder(QueryBuilder $qb, $timeout = null): ResultStatement
     {
         try {
             $sql = $this->getQueryTimeoutClause($timeout).$qb->getSQL();
             return $qb->getConnection()
                 ->executeQuery($sql, $qb->getParameters(), $qb->getParameterTypes());
         } catch (DriverException $e) {
-            return $this->handleDriverError($e, $timeout);
+            $this->handleDriverError($e, $timeout);
         }
     }
 
     /**
      * Special handling of some DriverExceptions, otherwise original Exception is thrown.
      * @param DriverException $e
-     * @param int $timeout Timeout value, if applicable. This is passed to the i18n message.
+     * @param int|null $timeout Timeout value, if applicable. This is passed to the i18n message.
      * @throws ServiceUnavailableHttpException
      * @throws DriverException
      */
-    private function handleDriverError(DriverException $e, $timeout)
+    private function handleDriverError(DriverException $e, ?int $timeout): void
     {
         // If no value was passed for the $timeout, it must be the default.
         if ($timeout === null) {
@@ -441,7 +439,7 @@ abstract class Repository extends EntityRepository
      *     the app.query_timeout config parameter. false will not set a timeout.
      * @return string The SQL fragment to prepended to the query.
      */
-    public function getQueryTimeoutClause($timeout = null)
+    public function getQueryTimeoutClause($timeout = null): string
     {
         if (false === $timeout) {
             return '';

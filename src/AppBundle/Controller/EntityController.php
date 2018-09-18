@@ -3,6 +3,8 @@
  * This file contains the abstract EntityController.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Controller;
 
 use AppBundle\Model\Event;
@@ -44,7 +46,6 @@ abstract class EntityController extends Controller
      * @param ContainerInterface $container
      * @param SessionInterface $session
      * @param EntityManagerInterface $em
-     * @param ValidatorInterface $validator
      * @param Intuition $intuition
      */
     public function __construct(
@@ -73,7 +74,7 @@ abstract class EntityController extends Controller
      * Check the request and if there are parameters for eventTitle or programTitle,
      * find and set class properties for the corresponding entity.
      */
-    private function setProgramAndEvent()
+    private function setProgramAndEvent(): void
     {
         $this->setProgram();
         $this->setEvent();
@@ -82,8 +83,9 @@ abstract class EntityController extends Controller
     /**
      * Check the request and if the programTitle is set, find and set
      * $this->program with the corresponding entity.
+     * @throws NotFoundHttpException
      */
-    private function setProgram()
+    private function setProgram(): void
     {
         $programTitle = $this->request->get('programTitle');
         if ($programTitle) {
@@ -99,8 +101,9 @@ abstract class EntityController extends Controller
     /**
      * Check the request and if the eventTitle is set, find and set
      * $this->event with the corresponding entity.
+     * @throws NotFoundHttpException
      */
-    private function setEvent()
+    private function setEvent(): void
     {
         $eventTitle = $this->request->get('eventTitle');
         if ($eventTitle) {
@@ -120,7 +123,7 @@ abstract class EntityController extends Controller
      * Get the Organizer based on username stored in the session.
      * @return Organizer
      */
-    protected function getOrganizer()
+    protected function getOrganizer(): Organizer
     {
         /** @var OrganizerRepository $organizerRepo */
         $organizerRepo = $this->em->getRepository(Organizer::class);
@@ -134,10 +137,10 @@ abstract class EntityController extends Controller
     /**
      * Is the logged in user an organizer of the given Program? This returns
      * true for admins, who are defined with the app.admins config parameter.
-     * @param  Program $program
+     * @param Program $program
      * @return bool
      */
-    protected function authUserIsOrganizer(Program $program)
+    protected function authUserIsOrganizer(Program $program): bool
     {
         $username = $this->session->get('logged_in_user')->username;
 
@@ -149,7 +152,7 @@ abstract class EntityController extends Controller
      * Is the current user an admin?
      * @return bool
      */
-    protected function userIsAdmin()
+    protected function userIsAdmin(): bool
     {
         $username = $this->session->get('logged_in_user')->username;
         return in_array($username, $this->container->getParameter('app.admins'));
@@ -160,7 +163,7 @@ abstract class EntityController extends Controller
      * and if not throw an exception (they should never be able to navigate here).
      * @throws AccessDeniedHttpException
      */
-    private function validateOrganizer()
+    private function validateOrganizer(): void
     {
         if (isset($this->program) && !$this->authUserIsOrganizer($this->program)) {
             throw new AccessDeniedHttpException('error-non-organizer');
@@ -171,7 +174,7 @@ abstract class EntityController extends Controller
      * Redirect to /login if the user is logged out.
      * @throws HttpException
      */
-    private function validateUser()
+    private function validateUser(): void
     {
         if ($this->session->get('logged_in_user') != '') {
             return;

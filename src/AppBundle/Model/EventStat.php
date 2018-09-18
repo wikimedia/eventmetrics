@@ -3,6 +3,8 @@
  * This file contains only the EventStat class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model;
 
 use AppBundle\Model\Traits\StatTrait;
@@ -30,13 +32,9 @@ class EventStat
     use StatTrait;
 
     /**
-     * Allowed metric types. Keys are the i18n key for the metric, and is what
-     * is stored in the database. Values are the applicable wikis for that type
-     * of metric, with null meaning all wikis.
-     *
-     * These also serve as the defaults when no EventStats are associated with
-     * an Event, based on the configured wiki(s).
-     *
+     * Allowed metric types. Keys are the i18n key for the metric, and is what is stored in the database.
+     * Values are the applicable wikis for that type of metric, with null meaning all wikis. These also serve as the
+     * defaults when no EventStats are associated with an Event, based on the configured wiki(s).
      * @see StatTrait Shared methods that use this constant.
      */
     const METRIC_TYPES = [
@@ -99,7 +97,7 @@ class EventStat
      * @param mixed $value Value of the associated metric.
      * @param int $offset Offset value associated with the metric, such as number of days retention.
      */
-    public function __construct(Event $event, $metric, $value, $offset = null)
+    public function __construct(Event $event, string $metric, $value, $offset = null)
     {
         $this->event = $event;
         $this->event->addStatistic($this);
@@ -112,7 +110,7 @@ class EventStat
      * Get the Event this EventStat applies to.
      * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }

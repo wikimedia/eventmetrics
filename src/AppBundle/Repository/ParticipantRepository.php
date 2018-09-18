@@ -3,6 +3,8 @@
  * This file contains only the ParticipantRepository class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Repository;
 
 use AppBundle\Model\Participant;
@@ -18,18 +20,18 @@ class ParticipantRepository extends Repository
      * Implements Repository::getEntityClass
      * @return string
      */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return Participant::class;
     }
 
     /**
      * Fetch participant SQL rows.
-     * @param  string[] $usernames
+     * @param string[] $usernames
      * @return string[] with keys 'user_name' and 'user_id'. 'user_id' is
      *                  null if no record was found in `centralauth_p.globaluser`.
      */
-    public function getRowsFromUsernames($usernames)
+    public function getRowsFromUsernames(array $usernames): array
     {
         $userRows = $this->getUserIdsFromNames($usernames);
 

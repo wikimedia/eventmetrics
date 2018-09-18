@@ -3,6 +3,8 @@
  * This file contains only the ExceptionSubscriber class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\EventSubscriber;
 
 use Psr\Log\LoggerInterface;
@@ -45,7 +47,7 @@ class ExceptionSubscriber
      * @param GetResponseForExceptionEvent $event
      * @throws \Exception
      */
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(GetResponseForExceptionEvent $event): void
     {
         $exception = $event->getException();
 

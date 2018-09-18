@@ -1,4 +1,9 @@
 <?php
+/**
+ * This file contains only the Controller abstract class.
+ */
+
+declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
@@ -9,7 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * This is the parent Controller for all controllers in this application.
@@ -38,7 +42,6 @@ abstract class Controller extends SymfonyController
      * @param ContainerInterface $container
      * @param SessionInterface $session
      * @param EntityManagerInterface $em
-     * @param ValidatorInterface $validator
      * @param Intuition $intuition
      */
     public function __construct(
@@ -61,7 +64,7 @@ abstract class Controller extends SymfonyController
      * @param string $messageName
      * @param array $vars
      */
-    public function addFlashMessage(string $type, string $messageName, array $vars = [])
+    public function addFlashMessage(string $type, string $messageName, array $vars = []): void
     {
         $options = [
             'domain' => 'grantmetrics',

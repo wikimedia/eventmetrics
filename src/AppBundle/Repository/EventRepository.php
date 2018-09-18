@@ -3,6 +3,8 @@
  * This file contains only the EventRepository class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Repository;
 
 use AppBundle\Model\Event;
@@ -24,7 +26,7 @@ class EventRepository extends Repository
      * Implements Repository::getEntityClass
      * @return string
      */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return Event::class;
     }
@@ -34,7 +36,7 @@ class EventRepository extends Repository
      * @param Event $event The Event in question.
      * @return string[] Usernames of new editors.
      */
-    public function getNewEditors(Event $event)
+    public function getNewEditors(Event $event): array
     {
         $userIds = $event->getParticipantIds();
         $offset = Event::getAllAvailableMetrics()['new-editors'];
@@ -67,12 +69,12 @@ class EventRepository extends Repository
      * @return array With keys 'edited' and 'created'.
      */
     public function getNumPagesEdited(
-        $dbName,
+        string $dbName,
         DateTime $start,
         DateTime $end,
         array $usernames = [],
         array $categoryTitles = []
-    ) {
+    ): array {
         if (empty($usernames) && empty($categoryTitles)) {
             // FIXME: This should throw an Exception or something so we can print an error message.
             return [
@@ -130,7 +132,7 @@ class EventRepository extends Repository
      * @param string[] $usernames
      * @return int
      */
-    public function getFilesUploadedCommons(DateTime $start, DateTime $end, array $usernames)
+    public function getFilesUploadedCommons(DateTime $start, DateTime $end, array $usernames): int
     {
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
@@ -179,12 +181,11 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get database names of wikis attached to the global accounts
-     * with the given usernames.
+     * Get database names of wikis attached to the global accounts with the given usernames.
      * @param string[] $usernames
      * @return string[]
      */
-    public function getCommonWikis($usernames)
+    public function getCommonWikis(array $usernames): array
     {
         $conn = $this->getCentralAuthConnection();
         $rqb = $conn->createQueryBuilder();
@@ -204,7 +205,7 @@ class EventRepository extends Repository
      * @param string $family
      * @return string[] Domain names in the format of lang.project, e.g. en.wiktionary
      */
-    public function getCommonLangWikiDomains(array $usernames, $family)
+    public function getCommonLangWikiDomains(array $usernames, $family): array
     {
         $conn = $this->getCentralAuthConnection();
         $rqb = $conn->createQueryBuilder();
@@ -229,7 +230,7 @@ class EventRepository extends Repository
      * @param string[] $usernames
      * @return string[]
      */
-    public function getUsersRetained($dbName, DateTime $start, array $usernames)
+    public function getUsersRetained(string $dbName, DateTime $start, array $usernames): array
     {
         $start = $start->format('YmdHis');
         $conn = $this->getReplicaConnection();
@@ -257,7 +258,7 @@ class EventRepository extends Repository
      * @return int|string[] Count of revisions, or string array with keys 'id',
      *     'timestamp', 'page', 'wiki', 'username', 'summary'.
      */
-    public function getRevisions(Event $event, $offset = 0, $limit = 50, $count = false)
+    public function getRevisions(Event $event, ?int $offset = 0, ?int $limit = 50, bool $count = false)
     {
         /** @var int TTL of cache, in seconds. */
         $cacheDuration = 300;
@@ -293,7 +294,7 @@ class EventRepository extends Repository
      * @return int|string[] Count of revisions, or string array with keys 'id',
      *     'timestamp', 'page', 'wiki', 'username', 'summary'.
      */
-    private function getRevisionsData(Event $event, $offset, $limit, $count)
+    private function getRevisionsData(Event $event, ?int $offset, ?int $limit, bool $count)
     {
         $sql = 'SELECT '.($count ? 'COUNT(id)' : '*').' FROM ('.
                 $this->getRevisionsInnerSql($event)."
@@ -326,7 +327,7 @@ class EventRepository extends Repository
      * @param Event $event
      * @return int
      */
-    public function getNumRevisions(Event $event)
+    public function getNumRevisions(Event $event): int
     {
         return $this->getRevisions($event, null, null, true);
     }
@@ -336,7 +337,7 @@ class EventRepository extends Repository
      * @param Event $event
      * @return string
      */
-    private function getRevisionsInnerSql(Event $event)
+    private function getRevisionsInnerSql(Event $event): string
     {
         if (isset($this->revisionsInnerSql)) {
             return $this->revisionsInnerSql;
@@ -388,7 +389,7 @@ class EventRepository extends Repository
      * @param Event $event
      * @return string
      */
-    private function getUsernamesSql(Event $event)
+    private function getUsernamesSql(Event $event): string
     {
         $userIds = $event->getParticipantIds();
         $usernames = array_column($this->getUsernamesFromIds($userIds), 'user_name');
@@ -406,7 +407,7 @@ class EventRepository extends Repository
      * @param Event $event
      * @return bool|null true if job has been started, false if queued, null if nonexistent.
      */
-    public function getJobStatus(Event $event)
+    public function getJobStatus(Event $event): ?bool
     {
         $conn = $this->getGrantMetricsConnection();
         $rqb = $conn->createQueryBuilder();

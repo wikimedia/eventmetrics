@@ -3,6 +3,8 @@
  * This file contains only the ControllerActionExtension class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Twig;
 
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -30,7 +32,7 @@ class ControllerActionExtension extends Twig_Extension
      * Get the name of this extension.
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'controller_action_twig_extension';
     }
@@ -39,7 +41,7 @@ class ControllerActionExtension extends Twig_Extension
      * Get all functions that this class provides.
      * @return array
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new \Twig_SimpleFunction('getControllerName', [$this, 'getControllerName']),
@@ -53,7 +55,7 @@ class ControllerActionExtension extends Twig_Extension
      * There is no request stack in unit tests.
      * @codeCoverageIgnore
      */
-    public function getControllerName()
+    public function getControllerName(): string
     {
         $request = $this->requestStack->getCurrentRequest();
 
@@ -72,7 +74,7 @@ class ControllerActionExtension extends Twig_Extension
      * There is no request stack in unit tests.
      * @codeCoverageIgnore
      */
-    public function getActionName()
+    public function getActionName(): string
     {
         $request = $this->requestStack->getCurrentRequest();
 

@@ -3,6 +3,8 @@
  * This file contains only the ProgramRepository class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Repository;
 
 use AppBundle\Model\Event;
@@ -21,7 +23,7 @@ class ProgramRepository extends Repository
      * Implements Repository::getEntityClass
      * @return string
      */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return Program::class;
     }
@@ -33,7 +35,7 @@ class ProgramRepository extends Repository
      * @param Program $program
      * @return string[]
      */
-    public function getUniqueMetrics(Program $program)
+    public function getUniqueMetrics(Program $program): array
     {
         $rqb = $this->getGrantMetricsConnection()->createQueryBuilder();
 
@@ -71,7 +73,7 @@ class ProgramRepository extends Repository
      * @param int[] $eventIds
      * @return array With metric names as the keys.
      */
-    private function getEventWikiMetrics(QueryBuilder $rqb, array $eventIds)
+    private function getEventWikiMetrics(QueryBuilder $rqb, array $eventIds): array
     {
         $eventWikiIds = $rqb->select(['DISTINCT(ew_id)'])
             ->from('event_wiki')
@@ -94,7 +96,7 @@ class ProgramRepository extends Repository
      * @param Program $program
      * @return int
      */
-    public function getNumParticipants(Program $program)
+    public function getNumParticipants(Program $program): int
     {
         $rqb = $this->getGrantMetricsConnection()->createQueryBuilder();
 
@@ -105,7 +107,7 @@ class ProgramRepository extends Repository
             return 0;
         }
 
-        return $rqb->select(['COUNT(DISTINCT(par_user_id))'])
+        return (int)$rqb->select(['COUNT(DISTINCT(par_user_id))'])
             ->from('participant')
             ->where('par_event_id IN (:eventIds)')
             ->setParameter('eventIds', $eventIds, Connection::PARAM_INT_ARRAY)

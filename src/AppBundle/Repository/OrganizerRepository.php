@@ -3,6 +3,8 @@
  * This file contains only the OrganizerRepository class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Repository;
 
 use AppBundle\Model\Organizer;
@@ -19,17 +21,17 @@ class OrganizerRepository extends Repository
      * Implements Repository::getEntityClass
      * @return string
      */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return Organizer::class;
     }
 
     /**
      * Fetch an Organizer by the given username.
-     * @param  string $username
+     * @param string $username
      * @return Organizer
      */
-    public function getOrganizerByUsername($username)
+    public function getOrganizerByUsername(string $username): Organizer
     {
         $userId = $this->getUserIdFromName($username);
 
@@ -55,10 +57,10 @@ class OrganizerRepository extends Repository
 
     /**
      * Get unique metrics for all Programs created by this Organizer.
-     * @param  Organizer $organizer
+     * @param Organizer $organizer
      * @return string[]
      */
-    public function getUniqueMetrics(Organizer $organizer)
+    public function getUniqueMetrics(Organizer $organizer): array
     {
         $programRepo = new ProgramRepository($this->em);
         $programRepo->setContainer($this->container);

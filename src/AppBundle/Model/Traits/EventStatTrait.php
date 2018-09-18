@@ -3,18 +3,25 @@
  * This file contains only the EventStatTrait trait.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model\Traits;
 
 use AppBundle\Model\EventStat;
+use AppBundle\Model\EventWiki;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * The EventStatTrait contains methods dealing with statistics
- * of a specific Event. This class is chiefly to extract out
- * logic and move it to a dedicated file for readability.
- * (or show me the correct way to make that file less massive... :)
+ * The EventStatTrait contains methods dealing with statistics of a specific Event. This trait is chiefly to extract out
+ * logic and move it to a dedicated file for readability (or show me the correct way to make that file less massive :).
+ *
+ * These are here to assist IDE inspections, since the properties are defined in Event.
+ * @property ArrayCollection|EventStat[] $stats
+ * @property ArrayCollection|EventWiki[] $wikis
+ * @property DateTime $updated
  */
 trait EventStatTrait
 {
@@ -22,7 +29,7 @@ trait EventStatTrait
      * Get statistics about this Event.
      * @return ArrayCollection|EventStat[]
      */
-    public function getStatistics()
+    public function getStatistics(): Collection
     {
         return $this->stats;
     }
@@ -32,10 +39,10 @@ trait EventStatTrait
      * @param string $metric Name of metric, one of EventStat::METRIC_TYPES.
      * @return EventStat|null Null if no EventStat with given metric was found.
      */
-    public function getStatistic($metric)
+    public function getStatistic($metric): ?EventStat
     {
         /** @var ArrayCollection $ewStats of EventStats. */
-        $ewStats = $this->stats->filter(function ($stat) use ($metric) {
+        $ewStats = $this->stats->filter(function (EventStat $stat) use ($metric) {
             return $stat->getMetric() === $metric;
         });
         return $ewStats->count() > 0 ? $ewStats->first() : null;
@@ -45,7 +52,7 @@ trait EventStatTrait
      * Add an EventStat to this Event.
      * @param EventStat $eventStat
      */
-    public function addStatistic(EventStat $eventStat)
+    public function addStatistic(EventStat $eventStat): void
     {
         if ($this->stats->contains($eventStat)) {
             return;
@@ -57,7 +64,7 @@ trait EventStatTrait
      * Remove an eventStat from this Event.
      * @param EventStat $eventStat
      */
-    public function removeStatistic(EventStat $eventStat)
+    public function removeStatistic(EventStat $eventStat): void
     {
         if (!$this->stats->contains($eventStat)) {
             return;
@@ -66,26 +73,24 @@ trait EventStatTrait
     }
 
     /**
-     * Clear all associated statistics, including EventWikiStats,
-     * and set the updated attribute to null.
+     * Clear all associated statistics, including EventWikiStats, and set the updated attribute to null.
      */
-    public function clearStatistics()
+    public function clearStatistics(): void
     {
         $this->stats->clear();
         $this->setUpdated(null);
 
-        foreach ($this->wikis->toArray() as $wiki) {
+        foreach ($this->wikis->getIterator() as $wiki) {
             $wiki->clearStatistics();
         }
     }
 
     /**
-     * Get the metric types available to this event, based on associated wikis,
-     * and their default offset values.
+     * Get the metric types available to this event, based on associated wikis, and their default offset values.
      * @param string|null $family Only return metrics available to given wiki family.
      * @return array
      */
-    public function getAvailableMetrics($family = null)
+    public function getAvailableMetrics($family = null): array
     {
         $metricMap = self::WIKI_FAMILY_METRIC_MAP;
 
@@ -104,7 +109,7 @@ trait EventStatTrait
         }
 
         // Return as associative array with the offsets as the values.
-        return array_filter(self::AVAILABLE_METRICS, function ($offset, $metric) use ($metricKeys) {
+        return array_filter(self::AVAILABLE_METRICS, function ($offset, $metric) use ($metricKeys): bool {
             return in_array($metric, $metricKeys);
         }, ARRAY_FILTER_USE_BOTH);
     }
@@ -113,16 +118,16 @@ trait EventStatTrait
      * Get all metrics available to all events, regardless of associated wikis.
      * @return string[]
      */
-    public static function getAllAvailableMetrics()
+    public static function getAllAvailableMetrics(): array
     {
         return self::AVAILABLE_METRICS;
     }
 
     /**
      * Get the date of the last time the EventStat's were refreshed.
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getUpdated()
+    public function getUpdated(): ?DateTime
     {
         return $this->updated;
     }
@@ -131,7 +136,7 @@ trait EventStatTrait
      * Get the update at value adjusted with the Event's timezone.
      * @return DateTime
      */
-    public function getUpdatedWithTimezone()
+    public function getUpdatedWithTimezone(): DateTime
     {
         $this->updated->setTimezone(new DateTimeZone($this->timezone));
         return new DateTime(
@@ -141,11 +146,10 @@ trait EventStatTrait
     }
 
     /**
-     * Set the 'update' attribute, to be set after EventStats
-     * have been refreshed.
+     * Set the 'update' attribute, to be set after EventStats have been refreshed.
      * @param DateTime|null $datestamp
      */
-    public function setUpdated($datestamp)
+    public function setUpdated(?DateTime $datestamp): void
     {
         $this->updated = $datestamp;
     }

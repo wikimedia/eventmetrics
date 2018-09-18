@@ -3,6 +3,8 @@
  * This file contains only the EventProcessor class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Service;
 
 use AppBundle\Model\Event;
@@ -64,13 +66,12 @@ class EventProcessor
     /**
      * Generate and store statistics for the given event.
      * @param Event $event
-     * @param OutputInterface|null &$output Used by Commands so that the output
-     *   can be controlled by the parent process. If this is null,
-     *   a local LoggerInterface is used instead.
+     * @param OutputInterface|null &$output Used by Commands so that the output can be controlled by the parent process.
+     *   If this is null, a local LoggerInterface is used instead.
      * @return array Statistics, keyed by metric, along with 'wikis' which
      *   is a similar array of statistics, but keyed by the wiki's domain.
      */
-    public function process(Event $event, OutputInterface &$output = null)
+    public function process(Event $event, OutputInterface &$output = null): array
     {
         $this->loadEvent($event);
 
@@ -112,7 +113,7 @@ class EventProcessor
      * Load the Event and EventRepository.
      * @param Event $event
      */
-    private function loadEvent(Event $event)
+    private function loadEvent(Event $event): void
     {
         $this->event = $event;
         $this->eventRepo = $this->entityManager->getRepository('Model:Event');
@@ -123,7 +124,7 @@ class EventProcessor
      * Check if there are EventWikis that represent a family (*.wikipedia, *.wiktionary, etc.)
      * and if so, create EventWikis for the ones where participants have made edits.
      */
-    private function createEventWikisFromLang()
+    private function createEventWikisFromLang(): void
     {
         foreach ($this->event->getFamilyWikis() as $wikiFamily) {
             $domains = $this->eventRepo->getCommonLangWikiDomains(
@@ -147,24 +148,24 @@ class EventProcessor
     }
 
     /**
-     * After we've created the EventWikiStats from $this->setPagesEdited(),
-     * we want to remove any with zero values that are associated to a family EventWiki.
-     * This is because on the event page, we don't want to show zero values for *every*
-     * language that is part of a wiki family.
+     * After we've created the EventWikiStats from $this->setPagesEdited(), we want to remove any with zero values
+     * that are associated to a family EventWiki. This is because on the event page, we don't want to show zero values
+     * for *every* language that is part of a wiki family.
      */
-    private function removeEventWikisWithNoStats()
+    private function removeEventWikisWithNoStats(): void
     {
         // Find EventWikis that represent a family, but have no stats, and remove them.
         foreach ($this->event->getFamilyWikis() as $wikiFamily) {
             $wikis = $wikiFamily->getChildWikis();
 
+            /** @var EventWiki $wiki */
             foreach ($wikis as $wiki) {
                 // Sum all the stats, effectively telling us if there are any stats.
-                $statsSum = array_sum(array_map(function ($stat) {
+                $statsSum = array_sum($wiki->getStatistics()->map(function (EventWikiStat $stat) {
                     return $stat->getValue();
-                }, $wiki->getStatistics()->toArray()));
+                }));
 
-                if ($statsSum === 0) {
+                if (0 === $statsSum) {
                     // $this->process() returns $this->stats, which gets returned in
                     // the JSON response, so we need to remove them here.
                     unset($this->stats['wikis'][$wiki->getDomain()]);
@@ -180,7 +181,7 @@ class EventProcessor
     /**
      * Compute and persist a new EventStat for the number of new editors.
      */
-    private function setNewEditors()
+    private function setNewEditors(): void
     {
         $this->log("\nFetching number of new editors...");
         $numNewEditors = count($this->getNewEditors());
@@ -193,7 +194,7 @@ class EventProcessor
      * Get the usernames of the new editors.
      * @return string[]
      */
-    private function getNewEditors()
+    private function getNewEditors(): array
     {
         if (!is_array($this->newEditors)) {
             $this->newEditors = $this->eventRepo->getNewEditors($this->event);
@@ -205,7 +206,7 @@ class EventProcessor
      * Compute and persist a new EventStat and EventWikiStats
      * for the number of pages created/improved.
      */
-    private function setPagesEdited()
+    private function setPagesEdited(): void
     {
         $this->log("\nFetching number of pages created or improved...");
 
@@ -263,7 +264,7 @@ class EventProcessor
         EventWikiRepository $ewRepo,
         &$pagesCreated,
         &$pagesImproved
-    ) {
+    ): void {
         $dbName = $ewRepo->getDbName($wiki);
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
 
@@ -285,7 +286,7 @@ class EventProcessor
      * Set the number of files uploaded on Commons.
      * @param EventWiki $wiki
      */
-    private function setFilesUploadedCommons(EventWiki $wiki)
+    private function setFilesUploadedCommons(EventWiki $wiki): void
     {
         $this->log("> Fetching files uploaded on Commons and global file usage...");
 
@@ -309,7 +310,7 @@ class EventProcessor
      * Retrieve counts of Wikidata Items created or improved and save them as both event and event-wiki stats.
      * @param EventWiki $wiki The wiki (must always be Wikidata).
      */
-    private function setItemsCreatedOrImprovedOnWikidata(EventWiki $wiki)
+    private function setItemsCreatedOrImprovedOnWikidata(EventWiki $wiki): void
     {
         $this->log("> Fetching items created or improved on Wikidata...");
         // Re-use the same metric calculator as is used for Wikipedia pages above,
@@ -334,7 +335,7 @@ class EventProcessor
      * Get the usernames of the participants of the Event.
      * @return string[]
      */
-    private function getParticipantNames()
+    private function getParticipantNames(): array
     {
         // Quick cache.
         static $parUsernames = null;
@@ -353,7 +354,7 @@ class EventProcessor
     /**
      * Compute and persist the number of users who met the retention threshold.
      */
-    private function setRetention()
+    private function setRetention(): void
     {
         $this->log("\nFetching retention...");
 
@@ -385,16 +386,16 @@ class EventProcessor
      * @param string[] $usernames Usernames to search for.
      * @return int
      */
-    private function getNumUsersRetained(array $dbNames, $end, array $usernames)
+    private function getNumUsersRetained(array $dbNames, DateTime $end, array $usernames): int
     {
         // Create and display progress bar for looping through wikis.
-        if ($this->output !== null) {
-            $progress = new ProgressBar($this->output, count($dbNames));
-            $progress->setFormatDefinition(
+        if (null !== $this->output) {
+            ProgressBar::setFormatDefinition(
                 'custom',
                 " <comment>%message%</comment>\n".
                 " %current%/%max% [%bar%] %percent:3s%% %elapsed:6s% %memory:6s%\n"
             );
+            $progress = new ProgressBar($this->output, count($dbNames));
             $progress->setFormat('custom');
             $progress->start();
         }
@@ -402,12 +403,12 @@ class EventProcessor
         $usersRetained = $this->getNumUsersRetainedInner($dbNames, $usernames, $end, $progress);
 
         // Clear out progress bar if we're running this from a Command.
-        if ($this->output !== null) {
+        if (null !== $this->output) {
             $progress->setMessage('');
             $progress->finish();
         }
 
-        if ($usersRetained === true) {
+        if (true === $usersRetained) {
             $this->log(
                 " <comment>Short-circuiting, all users have met retention threshold.</comment>\n"
             );
@@ -418,21 +419,20 @@ class EventProcessor
     }
 
     /**
-     * Loop through the given databases and determine how many of the given
-     * users have made at least one edit after the given date. If all users have
-     * met the retention threshold, the looping short-circuits and `true` is returned.
+     * Loop through the given databases and determine how many of the given users have made at least one edit after
+     * the given date. If all users have met the retention threshold, the looping short-circuits and `true` is returned.
      * @param string[] $dbNames
      * @param string[] $usernames
      * @param DateTime $end
      * @param ProgressBar &$progress The progress bar, used when running from a Command.
-     * @return int Number of users retained.
+     * @return int|bool Number of users retained, or true if all users have met the retention threshold.
      */
-    private function getNumUsersRetainedInner(array $dbNames, array $usernames, $end, &$progress)
+    private function getNumUsersRetainedInner(array $dbNames, array $usernames, DateTime $end, ?ProgressBar &$progress)
     {
         $usersRetained = [];
 
         foreach ($dbNames as $dbName) {
-            if ($this->output !== null) {
+            if (null !== $this->output && null !== $progress) {
                 $progress->setMessage($dbName);
                 $progress->advance();
             }
@@ -450,15 +450,13 @@ class EventProcessor
     }
 
     /**
-     * Persist an EventStat with given metric and value, or update the
-     * existing one, if present.
+     * Persist an EventStat with given metric and value, or update the existing one, if present.
      * @param string $metric
      * @param mixed $value
-     * @param int $offset Offset value associated with the metric,
-     *   such as the number of days in evaluating retention.
+     * @param int $offset Offset value associated with the metric, such as the number of days in evaluating retention.
      * @return EventStat
      */
-    private function createOrUpdateEventStat($metric, $value, $offset = null)
+    private function createOrUpdateEventStat(string $metric, $value, ?int $offset = null): EventStat
     {
         // Update class property.
         $this->stats[$metric] = [
@@ -491,12 +489,15 @@ class EventProcessor
      * @param EventWiki $wiki
      * @param string $metric
      * @param mixed $value
-     * @param int $offset Offset value associated with the metric,
-     *   such as the number of days in evaluating retention.
+     * @param int $offset Offset value associated with the metric, such as the number of days in evaluating retention.
      * @return EventWikiStat
      */
-    private function createOrUpdateEventWikiStat(EventWiki $wiki, $metric, $value, $offset = null)
-    {
+    private function createOrUpdateEventWikiStat(
+        EventWiki $wiki,
+        string $metric,
+        $value,
+        ?int $offset = null
+    ): EventWikiStat {
         $domain = $wiki->getDomain();
 
         // Update class property.
@@ -533,7 +534,7 @@ class EventProcessor
      * @param string[] $usernames
      * @return string[] Database names, ready to be used in a query.
      */
-    private function getCommonWikis(array $usernames)
+    private function getCommonWikis(array $usernames): array
     {
         if (isset($this->commonWikis)) {
             return $this->commonWikis;
@@ -554,7 +555,7 @@ class EventProcessor
      * be tested, but the output via $this->output does have test coverage.
      * @codeCoverageIgnore
      */
-    private function log($message)
+    private function log(string $message): void
     {
         if ($this->output === null) {
             $this->logger->info($message);
