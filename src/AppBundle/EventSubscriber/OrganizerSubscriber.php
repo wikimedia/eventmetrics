@@ -3,6 +3,8 @@
  * This file contains only the UserSubscriber class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\EventSubscriber;
 
 use Doctrine\ORM\EntityManager;
@@ -13,13 +15,13 @@ use AppBundle\Repository\Repository;
 use Symfony\Component\Serializer\Tests\Model;
 
 /**
- * UserSubscriber automatically sets the username on Organizers after the entity is loaded from the grantmetrics
+ * OrganizerSubscriber automatically sets the username on Organizers after the entity is loaded from the grantmetrics
  * database. Similarly it will automatically set the user_id when a Organizer is persisted.
  *
  * This class used to also do the same for Participant, but there can hundreds of these loaded at once,
  * so we instead run a single query to batch-fetch the usernames.
  */
-class UserSubscriber
+class OrganizerSubscriber
 {
     /** @var ContainerInterface The application's container interface. */
     private $container;
@@ -38,7 +40,7 @@ class UserSubscriber
      * or directly with EventManager::dispatchEvent().
      * @param LifecycleEventArgs $event Doctrine lifecycle event arguments.
      */
-    public function postLoad(LifecycleEventArgs $event)
+    public function postLoad(LifecycleEventArgs $event): void
     {
         /** @var Model $entity One of the AppBundle\Model classes. */
         $entity = $event->getEntity();
@@ -57,7 +59,7 @@ class UserSubscriber
      * Set the user ID on the Organizer.
      * @param LifecycleEventArgs $event Doctrine lifecycle event arguments.
      */
-    public function prePersist(LifecycleEventArgs $event)
+    public function prePersist(LifecycleEventArgs $event): void
     {
         /** @var Model $entity One of AppBundle\Model classes. */
         $entity = $event->getEntity();
@@ -83,7 +85,7 @@ class UserSubscriber
      * @param Organizer $entity
      * @param Repository $repo
      */
-    private function setUsername($entity, $repo)
+    private function setUsername($entity, $repo): void
     {
         $userId = $entity->getUserId();
         $username = $repo->getUsernameFromId($userId);
@@ -95,7 +97,7 @@ class UserSubscriber
      * @param Organizer $entity
      * @param Repository $repo
      */
-    private function setUserId($entity, $repo)
+    private function setUserId($entity, $repo): void
     {
         $username = $entity->getUsername();
         $userId = $repo->getUserIdFromName($username);
@@ -108,7 +110,7 @@ class UserSubscriber
      * @param LifecycleEventArgs $event
      * @return Repository
      */
-    private function getRepository($entity, LifecycleEventArgs $event)
+    private function getRepository($entity, LifecycleEventArgs $event): Repository
     {
         /** @var EntityManager $em */
         $em = $event->getEntityManager();

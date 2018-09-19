@@ -3,6 +3,8 @@
  * This file contains only the FormatExtension class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Twig;
 
 use AppBundle\Repository\EventWikiRepository;
@@ -26,7 +28,7 @@ class FormatExtension extends Extension
      * Get the name of this extension.
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'format_extension';
     }
@@ -37,7 +39,7 @@ class FormatExtension extends Extension
      * Get all functions that this class provides.
      * @return array
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new \Twig_SimpleFunction('formatDuration', [$this, 'formatDuration']),
@@ -51,7 +53,7 @@ class FormatExtension extends Extension
      * Get all filters for this extension.
      * @return array
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new \Twig_SimpleFilter('ucfirst', [$this, 'ucfirst']),
@@ -66,11 +68,11 @@ class FormatExtension extends Extension
 
     /**
      * Format a number based on language settings.
-     * @param  int|float $number
-     * @param  int $decimals Number of decimals to format to.
+     * @param int|float $number
+     * @param int $decimals Number of decimals to format to.
      * @return string
      */
-    public function numberFormat($number, $decimals = 0)
+    public function numberFormat($number, int $decimals = 0): string
     {
         if (!isset($this->numFormatter)) {
             $lang = $this->getIntuition()->getLang();
@@ -89,10 +91,10 @@ class FormatExtension extends Extension
 
     /**
      * Localize the given date based on language settings.
-     * @param  string|DateTime $datetime
+     * @param string|DateTime $datetime
      * @return string
      */
-    public function dateFormat($datetime)
+    public function dateFormat($datetime): string
     {
         // If the language is 'en' with no country code,
         // override the US English format that's provided by ICU.
@@ -118,10 +120,10 @@ class FormatExtension extends Extension
 
     /**
      * Format the given date to ISO 8601.
-     * @param  string|DateTime $datetime
+     * @param string|DateTime $datetime
      * @return string
      */
-    public function dateFormatStd($datetime)
+    public function dateFormatStd($datetime): string
     {
         if (is_string($datetime) || is_int($datetime)) {
             $datetime = new DateTime($datetime);
@@ -133,22 +135,22 @@ class FormatExtension extends Extension
     /**
      * Mysteriously missing Twig helper to capitalize only the first character.
      * E.g. used for table headings for translated messages.
-     * @param  string $str The string
-     * @return string      The string, capitalized
+     * @param string $str The string
+     * @return string The string, capitalized
      */
-    public function ucfirst($str)
+    public function ucfirst($str): string
     {
         return ucfirst($str);
     }
 
     /**
      * Format a given number or fraction as a percentage.
-     * @param  number  $numerator   Numerator or single fraction if denominator is ommitted.
-     * @param  number  $denominator Denominator.
-     * @param  integer $precision   Number of decimal places to show.
-     * @return string               Formatted percentage.
+     * @param int|float $numerator Numerator or single fraction if denominator is omitted.
+     * @param int|float $denominator Denominator.
+     * @param int $precision Number of decimal places to show.
+     * @return string Formatted percentage.
      */
-    public function percentFormat($numerator, $denominator = null, $precision = 1)
+    public function percentFormat($numerator, $denominator = null, int $precision = 1)
     {
         if (!$denominator) {
             $quotient = $numerator;
@@ -160,11 +162,11 @@ class FormatExtension extends Extension
     }
 
     /**
-     * Format a given number as a diff, colouring it green if it's postive, red if negative, gary if zero
-     * @param  number $size Diff size
-     * @return string       Markup with formatted number
+     * Format a given number as a diff, colouring it green if it's positive, red if negative, gary if zero.
+     * @param int $size Diff size
+     * @return string Markup with formatted number
      */
-    public function diffFormat($size)
+    public function diffFormat(int $size): string
     {
         if ($size < 0) {
             $class = 'diff-neg';
@@ -187,7 +189,7 @@ class FormatExtension extends Extension
      * @return string|array Examples: '30 seconds', '2 minutes', '15 hours', '500 days',
      *   or [30, 'num-seconds'] (etc.) if $translate is false.
      */
-    public function formatDuration($seconds, $translate = true)
+    public function formatDuration(int $seconds, bool $translate = true)
     {
         list($val, $key) = $this->getDurationMessageKey($seconds);
 
@@ -200,10 +202,10 @@ class FormatExtension extends Extension
 
     /**
      * Given a time duration in seconds, generate a i18n message key and value.
-     * @param  int $seconds Number of seconds.
+     * @param int $seconds Number of seconds.
      * @return array [int - message value, string - message key]
      */
-    private function getDurationMessageKey($seconds)
+    private function getDurationMessageKey(int $seconds): array
     {
         /** @var int Value to show in message */
         $val = $seconds;
@@ -235,7 +237,7 @@ class FormatExtension extends Extension
      * @param string $pageTitle Page title including namespace.
      * @return string
      */
-    public function wikify($wikitext, $domain, $pageTitle = null)
+    public function wikify(string $wikitext, string $domain, ?string $pageTitle = null): string
     {
         return EventWikiRepository::wikifyString($wikitext, $domain, $pageTitle);
     }

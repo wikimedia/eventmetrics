@@ -3,8 +3,11 @@
  * This file contains only the Organizer class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -71,9 +74,9 @@ class Organizer
 
     /**
      * Get the ID of the organizer.
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -82,7 +85,7 @@ class Organizer
      * Does this organizer already exists in the database?
      * @return bool
      */
-    public function exists()
+    public function exists(): bool
     {
         return isset($this->id);
     }
@@ -90,9 +93,9 @@ class Organizer
     /**
      * Get the user ID of the Organizer.
      * Corresponds with `gu_id` on `centralauth`.`globaluser`.
-     * @return int
+     * @return int|null
      */
-    public function getUserId()
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
@@ -102,16 +105,16 @@ class Organizer
      * Corresponds with `gu_id` on `centralauth`.`globaluser`.
      * @param int $userId
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
 
     /**
      * Get the username.
-     * @return string
+     * @return string|null
      */
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -120,7 +123,7 @@ class Organizer
      * Set the username.
      * @param string $username
      */
-    public function setUsername($username)
+    public function setUsername(string $username)
     {
         $this->username = $username;
     }
@@ -129,7 +132,7 @@ class Organizer
      * Get a list of programs that this organizer oversees.
      * @return ArrayCollection|Program[]
      */
-    public function getPrograms()
+    public function getPrograms(): Collection
     {
         return $this->programs;
     }
@@ -138,7 +141,7 @@ class Organizer
      * Associate this Organizer with a program.
      * @param Program $program
      */
-    public function addProgram(Program $program)
+    public function addProgram(Program $program): void
     {
         if ($this->programs->contains($program)) {
             return;
@@ -151,7 +154,7 @@ class Organizer
      * Remove association of this Organizer with the given program.
      * @param Program $program
      */
-    public function removeProgram(Program $program)
+    public function removeProgram(Program $program): void
     {
         if (!$this->programs->contains($program)) {
             return;

@@ -3,6 +3,8 @@
  * This file contains only the ProgramSubscriber class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\EventSubscriber;
 
 use AppBundle\Model\Program;
@@ -31,7 +33,7 @@ class ProgramSubscriber
      * or directly with EventManager::dispatchEvent().
      * @param LifecycleEventArgs $lifecycleEvent Doctrine lifecycle event arguments.
      */
-    public function postLoad(LifecycleEventArgs $lifecycleEvent)
+    public function postLoad(LifecycleEventArgs $lifecycleEvent): void
     {
         $program = $lifecycleEvent->getEntity();
 

@@ -3,6 +3,8 @@
  * This file contains only the Job class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -67,9 +69,9 @@ class Job
 
     /**
      * Get the ID of this Job.
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -78,16 +80,16 @@ class Job
      * Get the Event this Job applies to.
      * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
     /**
      * When the Job was submitted.
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getSubmitted()
+    public function getSubmitted(): ?DateTime
     {
         return $this->submitted;
     }
@@ -96,7 +98,7 @@ class Job
      * Whether or not the Job has been initiated by the daemon.
      * @return bool
      */
-    public function getStarted()
+    public function getStarted(): bool
     {
         return $this->started;
     }
@@ -105,7 +107,7 @@ class Job
      * Flag the Job as having been initiated, or false if specified.
      * @param bool $state
      */
-    public function setStarted($state = true)
+    public function setStarted(bool $state = true): void
     {
         $this->started = $state;
     }
@@ -114,7 +116,7 @@ class Job
      * Set the submitted attribute when persisting.
      * @ORM\PrePersist
      */
-    public function setSubmitted()
+    public function setSubmitted(): void
     {
         $this->submitted = new DateTime();
     }

@@ -3,8 +3,11 @@
  * This file contains only the Program class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -93,20 +96,19 @@ class Program
 
     /**
      * Get the ID of the program.
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * The class name of users associated with Events.
-     * This is referenced in TitleUserTrait.
+     * The class name of users associated with Events. This is referenced in TitleUserTrait.
      * @see TitleUserTrait
      * @return string
      */
-    public function getUserClassName()
+    public function getUserClassName(): string
     {
         return 'Organizer';
     }
@@ -119,7 +121,7 @@ class Program
      * Get Organizers of this Program.
      * @return ArrayCollection|Organizer[]
      */
-    public function getOrganizers()
+    public function getOrganizers(): Collection
     {
         return $this->organizers;
     }
@@ -128,38 +130,38 @@ class Program
      * Get the number of Organizers of this Program.
      * @return int
      */
-    public function getNumOrganizers()
+    public function getNumOrganizers(): int
     {
-        return count($this->organizers);
+        return $this->organizers->count();
     }
 
     /**
      * Get the user IDs of all the organizers of this program.
      * @return int[]
      */
-    public function getOrganizerIds()
+    public function getOrganizerIds(): array
     {
-        return array_map(function (Organizer $organizer) {
+        return $this->organizers->map(function (Organizer $organizer) {
             return $organizer->getUserId();
-        }, $this->organizers->toArray());
+        })->toArray();
     }
 
     /**
      * Get the usernames of the Organizers of this Program.
      * @return string[]
      */
-    public function getOrganizerNames()
+    public function getOrganizerNames(): array
     {
-        return array_map(function (Organizer $organizer) {
+        return $this->organizers->map(function (Organizer $organizer) {
             return $organizer->getUsername();
-        }, $this->organizers->toArray());
+        })->toArray();
     }
 
     /**
      * Set the Organizers of this Program with the given usernames.
      * @param array $usernames Usernames of the organizers.
      */
-    public function setOrganizerNames(array $usernames)
+    public function setOrganizerNames(array $usernames): void
     {
         // Clear out existing organizers.
         $this->organizers->clear();
@@ -172,11 +174,10 @@ class Program
     }
 
     /**
-     * Sort the organizers collection alphabetically, and put the organizer
-     * with the given username ($primary) first.
+     * Sort the organizers collection alphabetically, and put the organizer with the given username ($primary) first.
      * @param string $primary Username of organizer who should come first.
      */
-    public function sortOrganizers($primary)
+    public function sortOrganizers(string $primary): void
     {
         $primaryOrg = null;
         $nonPrimaryOrgs = [];
@@ -193,9 +194,8 @@ class Program
             return strnatcmp($a->getUsername(), $b->getUsername());
         });
 
-        // $primary could be a non-organizer if say someone is viewing
-        // someone else's programs.
-        if ($primaryOrg !== null) {
+        // $primary could be a non-organizer if say someone is viewing someone else's programs.
+        if (null !== $primaryOrg) {
             $this->organizers = new ArrayCollection(
                 array_merge([$primaryOrg], $nonPrimaryOrgs)
             );
@@ -206,7 +206,7 @@ class Program
      * Add an organizer to this Program.
      * @param Organizer $organizer
      */
-    public function addOrganizer(Organizer $organizer)
+    public function addOrganizer(Organizer $organizer): void
     {
         if ($this->organizers->contains($organizer)) {
             return;
@@ -219,7 +219,7 @@ class Program
      * Remove an organizer from this Program.
      * @param Organizer $organizer
      */
-    public function removeOrganizer(Organizer $organizer)
+    public function removeOrganizer(Organizer $organizer): void
     {
         if (!$this->organizers->contains($organizer)) {
             return;
@@ -236,7 +236,7 @@ class Program
      * Get Events belonging to this Program.
      * @return ArrayCollection|Event[]
      */
-    public function getEvents()
+    public function getEvents(): Collection
     {
         return $this->events;
     }
@@ -245,11 +245,11 @@ class Program
      * Get the events IDs of all the Events of this Program.
      * @return int[]
      */
-    public function getEventIds()
+    public function getEventIds(): array
     {
-        return array_map(function (Event $event) {
+        return $this->events->map(function (Event $event) {
             return $event->getId();
-        }, $this->events->toArray());
+        })->toArray();
     }
 
     /**
@@ -258,14 +258,14 @@ class Program
      */
     public function getNumEvents()
     {
-        return count($this->events);
+        return $this->events->count();
     }
 
     /**
      * Add an event to this Program.
      * @param Event $event
      */
-    public function addEvent(Event $event)
+    public function addEvent(Event $event): void
     {
         if ($this->events->contains($event)) {
             return;
@@ -277,7 +277,7 @@ class Program
      * Remove an event from this Program.
      * @param Event $event
      */
-    public function removeEvent(Event $event)
+    public function removeEvent(Event $event): void
     {
         if (!$this->events->contains($event)) {
             return;
@@ -293,7 +293,7 @@ class Program
      * Get combined statistics about all Events that make up this Program.
      * @return array Keyed by metric.
      */
-    public function getStatistics()
+    public function getStatistics(): array
     {
         if (isset($this->statistics)) {
             return $this->statistics;
@@ -301,8 +301,10 @@ class Program
 
         $this->statistics = [];
 
-        foreach ($this->events->toArray() as $event) {
-            foreach ($event->getStatistics()->toArray() as $eventStat) {
+        /** @var Event $event */
+        foreach ($this->events->getIterator() as $event) {
+            /** @var EventStat $eventStat */
+            foreach ($event->getStatistics()->getIterator() as $eventStat) {
                 $metric = $eventStat->getMetric();
 
                 if (!isset($this->statistics[$metric])) {
@@ -319,7 +321,7 @@ class Program
     /**
      * Get a combined statistic about all Events in this Program with the given metric.
      * @param string $metric Name of metric, one of EventStat::METRIC_TYPES.
-     * @return int|null Will be null if metric was not found.
+     * @return mixed|null Will be null if metric was not found.
      */
     public function getStatistic($metric)
     {

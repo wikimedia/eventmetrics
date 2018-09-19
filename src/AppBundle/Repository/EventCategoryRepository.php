@@ -3,6 +3,8 @@
  * This file contains only the EventCategoryRepository class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Repository;
 
 use AppBundle\Model\EventCategory;
@@ -20,7 +22,7 @@ class EventCategoryRepository extends Repository
      * Implements Repository::getEntityClass
      * @return string
      */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return EventCategory::class;
     }
@@ -33,7 +35,7 @@ class EventCategoryRepository extends Repository
      * @param int|null $limit Max number of pages. null for no limit, but only do this if used in a subquery.
      * @return array|QueryBuilder Page IDs or the QueryBuilder object.
      */
-    public function getPagesInCategories($dbName, array $titles, $queryBuilder = false, $limit = 20000)
+    public function getPagesInCategories($dbName, array $titles, bool $queryBuilder = false, ?int $limit = 20000)
     {
         $rqb = $this->getReplicaConnection()->createQueryBuilder();
         $rqb->select(['DISTINCT(cl_from)'])

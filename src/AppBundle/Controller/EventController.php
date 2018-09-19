@@ -3,6 +3,8 @@
  * This file contains only the EventController class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Controller;
 
 use AppBundle\Form\EventType;
@@ -12,6 +14,8 @@ use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Participant;
 use AppBundle\Repository\EventRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -29,7 +33,7 @@ class EventController extends EntityController
      * @Route("/events/", name="EventsSlash")
      * @return RedirectResponse
      */
-    public function indexAction()
+    public function indexAction(): RedirectResponse
     {
         return new RedirectResponse($this->generateUrl('Programs'));
     }
@@ -41,7 +45,7 @@ class EventController extends EntityController
      * @param Event $event Event to copy.
      * @return Response|RedirectResponse
      */
-    public function newAction($event = null)
+    public function newAction($event = null): Response
     {
         // $event is not null when copying an Event.
         if ($event === null) {
@@ -72,7 +76,7 @@ class EventController extends EntityController
      * @Route("/programs/{programTitle}/edit/{eventTitle}/", name="EditEventSlash")
      * @return Response|RedirectResponse
      */
-    public function editAction()
+    public function editAction(): Response
     {
         // Add blank EventWiki in the form if one doesn't already exist.
         if ($this->event->getWikis()->isEmpty()) {
@@ -102,7 +106,7 @@ class EventController extends EntityController
      * @Route("/programs/{programTitle}/copy/{eventTitle}/", name="CopyEventSlash")
      * @return Response|RedirectResponse
      */
-    public function copyAction()
+    public function copyAction(): Response
     {
         $event = new Event(
             $this->program,
@@ -112,11 +116,11 @@ class EventController extends EntityController
             $this->event->getTimezone()
         );
 
-        foreach ($this->event->getParticipants()->toArray() as $participant) {
+        foreach ($this->event->getParticipants()->getIterator() as $participant) {
             new Participant($event, $participant->getUserId());
         }
 
-        foreach ($this->event->getWikis()->toArray() as $wiki) {
+        foreach ($this->event->getWikis()->getIterator() as $wiki) {
             // Don't copy child wikis, instead we'll be copying the parent family wiki.
             if (!$wiki->isChildWiki()) {
                 new EventWiki($event, $wiki->getDomain());
@@ -132,7 +136,7 @@ class EventController extends EntityController
      * @Route("/programs/{programTitle}/delete/{eventTitle}/", name="DeleteEventSlash")
      * @return RedirectResponse
      */
-    public function deleteAction()
+    public function deleteAction(): RedirectResponse
     {
         // Flash message will be shown at the top of the page.
         $this->addFlashMessage('danger', 'event-deleted', [$this->event->getDisplayTitle()]);
@@ -181,7 +185,7 @@ class EventController extends EntityController
      * Consolidate errors of wikis associated with the event.
      * @param FormInterface $form
      */
-    private function handleEventWikiErrors(FormInterface $form)
+    private function handleEventWikiErrors(FormInterface $form): void
     {
         $numWikiErrors = count($form['wikis']->getErrors(true));
         if ($numWikiErrors > 0) {
@@ -212,7 +216,7 @@ class EventController extends EntityController
      * @param EventRepository $eventRepo
      * @return Response
      */
-    public function showAction(EventRepository $eventRepo)
+    public function showAction(EventRepository $eventRepo): Response
     {
         // Handle the participants form for the request.
         $participantForm = $this->handleParticipantForm();
@@ -239,23 +243,25 @@ class EventController extends EntityController
      * with the default 'offset' values specified by Event::getAvailableMetrics().
      * This way we can show placeholders in the view.
      * @param Event $event
-     * @return EventStat[]
+     * @return Collection|EventStat[]
      */
-    private function getEventStats(Event $event)
+    private function getEventStats(Event $event): Collection
     {
         if (count($event->getStatistics()) > 0) {
             return $event->getStatistics();
         }
 
         $availableMetrics = $event->getAvailableMetrics();
-        $stats = [];
+        $stats = new ArrayCollection();
 
         foreach (EventStat::getMetricTypes() as $metric) {
             if (!in_array($metric, array_keys($availableMetrics))) {
                 continue;
             }
 
-            $stats[] = new EventStat($event, $metric, null, $availableMetrics[$metric]);
+            $stats->add(
+                new EventStat($event, $metric, null, $availableMetrics[$metric])
+            );
         }
 
         return $stats;

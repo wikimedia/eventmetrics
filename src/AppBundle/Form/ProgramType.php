@@ -9,6 +9,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Model\Organizer;
 use AppBundle\Repository\OrganizerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -65,20 +66,20 @@ class ProgramType extends AbstractType
      * and sets the user ID before persisting so that the username can be validated.
      * @return CallbackTransformer
      */
-    private function getCallbackTransformer()
+    private function getCallbackTransformer(): CallbackTransformer
     {
         return new CallbackTransformer(
             // Transform to the form.
-            function (Collection $organizerObjects) {
+            function (Collection $organizerObjects): array {
                 return array_map(function (Organizer $organizer) {
                     return $organizer->getUsername();
                 }, $organizerObjects->toArray());
             },
             // Transform from the form.
-            function (array $organizerNames) {
-                return array_map(function ($organizerName) {
+            function (array $organizerNames): Collection {
+                return (new ArrayCollection($organizerNames))->map(function (string $organizerName) {
                     return $this->organizerRepo->getOrganizerByUsername($organizerName);
-                }, $organizerNames);
+                });
             }
         );
     }

@@ -35,7 +35,7 @@ services:
             - [setValidator, ['@validator']]
         tags: ['controller.service_arguments']
 
-    AppBundle\EventSubscriber\UserSubscriber:
+    AppBundle\EventSubscriber\OrganizerSubscriber:
         tags:
             - { name: doctrine.event_listener, event: postLoad }
             - { name: doctrine.event_listener, event: prePersist }

@@ -3,10 +3,13 @@
  * This file contains only the Event class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model;
 
 use DateTime;
 use DateTimeZone;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -201,16 +204,16 @@ class Event
      * @see TitleUserTrait
      * @return string
      */
-    public function getUserClassName()
+    public function getUserClassName(): string
     {
         return 'Participant';
     }
 
     /**
      * Get the ID of the event.
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -220,7 +223,7 @@ class Event
      * used when making expensive queries against the replicas.
      * @return string
      */
-    public function getCacheKey()
+    public function getCacheKey(): string
     {
         return (string)$this->id;
     }
@@ -229,7 +232,7 @@ class Event
      * Is the Event valid? If false, statistics will not be able to be generated.
      * @return bool
      */
-    public function isValid()
+    public function isValid(): bool
     {
         return $this->wikis->count() > 0 &&
             $this->start !== null &&
@@ -246,7 +249,7 @@ class Event
      * Get the Program associated with this Event.
      * @return Program
      */
-    public function getProgram()
+    public function getProgram(): Program
     {
         return $this->program;
     }
@@ -257,9 +260,9 @@ class Event
 
     /**
      * Get the start date of this Event.
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getStart()
+    public function getStart(): ?DateTime
     {
         return $this->start;
     }
@@ -268,7 +271,7 @@ class Event
      * Set the start date of this Event.
      * @param DateTime|string|null $value
      */
-    public function setStart($value)
+    public function setStart($value): void
     {
         $this->assignDate('start', $value);
     }
@@ -277,7 +280,7 @@ class Event
      * Get the start date adjusted with the Event's timezone.
      * @return DateTime
      */
-    public function getStartWithTimezone()
+    public function getStartWithTimezone(): DateTime
     {
         $dateStr = $this->start->format('YmdHis');
         $dt = new DateTime($dateStr, new DateTimeZone($this->timezone));
@@ -287,9 +290,9 @@ class Event
 
     /**
      * Get the end date of this Event.
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getEnd()
+    public function getEnd(): ?DateTime
     {
         return $this->end;
     }
@@ -298,7 +301,7 @@ class Event
      * Get the end date adjusted with the Event's timezone.
      * @return DateTime
      */
-    public function getEndWithTimezone()
+    public function getEndWithTimezone(): DateTime
     {
         $dateStr = $this->end->format('YmdHis');
         $dt = new DateTime($dateStr, new DateTimeZone($this->timezone));
@@ -310,17 +313,17 @@ class Event
      * Set the end date of this Event.
      * @param DateTime|string|null $value
      */
-    public function setEnd($value)
+    public function setEnd($value): void
     {
         $this->assignDate('end', $value);
     }
 
     /**
      * Convert the given date argument to a DateTime and save to class property.
-     * @param  string $key 'start' or 'end'.
-     * @param  DateTime|string $value
+     * @param string $key 'start' or 'end'.
+     * @param DateTime|string $value
      */
-    private function assignDate($key, $value)
+    private function assignDate(string $key, $value): void
     {
         if ($value instanceof DateTime) {
             $this->{$key} = $value;
@@ -338,7 +341,7 @@ class Event
      * Get the end date of this Event.
      * @return string
      */
-    public function getTimezone()
+    public function getTimezone(): string
     {
         return $this->timezone;
     }
@@ -347,7 +350,7 @@ class Event
      * Get the display variant of the timezone.
      * @return string
      */
-    public function getDisplayTimezone()
+    public function getDisplayTimezone(): string
     {
         return str_replace('_', ' ', $this->timezone);
     }
@@ -356,7 +359,7 @@ class Event
      * Get the end date of this Event.
      * @param string $timezone Official timezone code within the tz database.
      */
-    public function setTimezone($timezone)
+    public function setTimezone(string $timezone): void
     {
         $this->timezone = $timezone;
     }
@@ -375,7 +378,7 @@ class Event
      * Get categories belonging to this Event.
      * @return ArrayCollection of EventCategories.
      */
-    public function getCategories()
+    public function getCategories(): Collection
     {
         return $this->categories;
     }
@@ -384,9 +387,9 @@ class Event
      * Get the number of categories belonging to this Event.
      * @return int
      */
-    public function getNumCategories()
+    public function getNumCategories(): int
     {
-        return count($this->categories);
+        return $this->categories->count();
     }
 
     /**
@@ -394,7 +397,7 @@ class Event
      * @param EventWiki $wiki
      * @return string[]
      */
-    public function getCategoryTitlesForWiki(EventWiki $wiki)
+    public function getCategoryTitlesForWiki(EventWiki $wiki): array
     {
         return $this->categories->filter(function (EventCategory $category) use ($wiki) {
             // First get EventCategories that are for the given EventWiki (have the same domain).
@@ -409,7 +412,7 @@ class Event
      * Add an EventCategory to the Event.
      * @param EventCategory $category
      */
-    public function addCategory(EventCategory $category)
+    public function addCategory(EventCategory $category): void
     {
         if ($this->categories->contains($category)) {
             return;
@@ -421,7 +424,7 @@ class Event
      * Remove an EventCategory from the Event.
      * @param EventCategory $category
      */
-    public function removeCategory(EventCategory $category)
+    public function removeCategory(EventCategory $category): void
     {
         if (!$this->categories->contains($category)) {
             return;
@@ -445,7 +448,7 @@ class Event
      * Get participants of this Event.
      * @return ArrayCollection of Participants.
      */
-    public function getParticipants()
+    public function getParticipants(): Collection
     {
         return $this->participants;
     }
@@ -454,16 +457,16 @@ class Event
      * Get the number of participants of this Event.
      * @return int
      */
-    public function getNumParticipants()
+    public function getNumParticipants(): int
     {
-        return count($this->participants);
+        return $this->participants->count();
     }
 
     /**
      * Add an Participant to this Event.
      * @param Participant $participant
      */
-    public function addParticipant(Participant $participant)
+    public function addParticipant(Participant $participant): void
     {
         if ($this->participants->contains($participant)) {
             return;
@@ -475,7 +478,7 @@ class Event
      * Remove a Participant from this Event.
      * @param Participant $participant
      */
-    public function removeParticipant(Participant $participant)
+    public function removeParticipant(Participant $participant): void
     {
         if (!$this->participants->contains($participant)) {
             return;
@@ -487,28 +490,28 @@ class Event
      * Get the user IDs of all the Participants of this Event.
      * @return int[]
      */
-    public function getParticipantIds()
+    public function getParticipantIds(): array
     {
-        return array_map(function (Participant $participant) {
+        return $this->participants->map(function (Participant $participant) {
             return $participant->getUserId();
-        }, $this->participants->toArray());
+        })->toArray();
     }
 
     /**
      * Get the usernames of the Participants of this Event.
      * @return string[]
      */
-    public function getParticipantNames()
+    public function getParticipantNames(): array
     {
-        return array_map(function (Participant $participant) {
+        return $this->participants->map(function (Participant $participant) {
             return $participant->getUsername();
-        }, $this->participants->toArray());
+        })->toArray();
     }
 
     /**
      * Remove all Participants.
      */
-    public function clearParticipants()
+    public function clearParticipants(): void
     {
         $this->participants->clear();
     }
@@ -521,17 +524,17 @@ class Event
      * Get wikis this event is taking place on.
      * @return ArrayCollection|EventWiki[]
      */
-    public function getWikis()
+    public function getWikis(): Collection
     {
         return $this->wikis;
     }
 
     /**
      * Get the EventWiki with the given domain that belongs to this Event.
-     * @param $domain
+     * @param string $domain
      * @return EventWiki
      */
-    public function getWikiByDomain($domain)
+    public function getWikiByDomain(string $domain): EventWiki
     {
         return $this->wikis->filter(function (EventWiki $wiki) use ($domain) {
             return $wiki->getDomain() === $domain;
@@ -542,7 +545,7 @@ class Event
      * Add an EventWiki to this Event.
      * @param EventWiki $wiki
      */
-    public function addWiki(EventWiki $wiki)
+    public function addWiki(EventWiki $wiki): void
     {
         if ($this->wikis->contains($wiki)) {
             return;
@@ -554,7 +557,7 @@ class Event
      * Remove an EventWiki from this Event.
      * @param EventWiki $wiki
      */
-    public function removeWiki(EventWiki $wiki)
+    public function removeWiki(EventWiki $wiki): void
     {
         if (!$this->wikis->contains($wiki)) {
             return;
@@ -571,10 +574,10 @@ class Event
      * a wiki family (*.wikipedia, *.wiktionary, etc).
      * @return ArrayCollection of EventWikis
      */
-    public function getFamilyWikis()
+    public function getFamilyWikis(): Collection
     {
         return $this->wikis->filter(function (EventWiki $wiki) {
-            return substr($wiki->getDomain(), 0, 2) === '*.';
+            return substr((string)$wiki->getDomain(), 0, 2) === '*.';
         });
     }
 
@@ -586,11 +589,11 @@ class Event
      * it is not included in the 'wikipedia' group.
      * @return array
      */
-    public function getWikisByFamily()
+    public function getWikisByFamily(): array
     {
         $wikisByFamily = [];
 
-        foreach ($this->wikis->toArray() as $wiki) {
+        foreach ($this->wikis->getIterator() as $wiki) {
             if ($wiki->isFamilyWiki()) {
                 continue;
             }
@@ -610,7 +613,7 @@ class Event
      * Get all associated EventWikis that belong to a family.
      * @return ArrayCollection of EventWikis
      */
-    public function getChildWikis()
+    public function getChildWikis(): Collection
     {
         return $this->wikis->filter(function (EventWiki $wiki) {
             return $wiki->isChildWiki();
@@ -624,7 +627,7 @@ class Event
      * will if there is not a *.wikipedia EventWiki.
      * @return ArrayCollection of EventWikis
      */
-    public function getOrphanWikis()
+    public function getOrphanWikis(): Collection
     {
         $familyNames = $this->getFamilyWikis()->map(function (EventWiki $eventWiki) {
             return $eventWiki->getFamilyName();
@@ -639,7 +642,7 @@ class Event
     /**
      * Remove all associated EventWikis that belong to a family.
      */
-    public function clearChildWikis()
+    public function clearChildWikis(): void
     {
         $children = $this->getChildWikis()->toArray();
         foreach ($children as $child) {
@@ -648,11 +651,10 @@ class Event
     }
 
     /**
-     * Get EventWikis that are represent a wiki family, or an individual wiki
-     * that is not part of a family.
+     * Get EventWikis that are represent a wiki family, or an individual wiki that is not part of a family.
      * @return ArrayCollection Containing EventWikis
      */
-    public function getOrphanWikisAndFamilies()
+    public function getOrphanWikisAndFamilies(): ArrayCollection
     {
         return new ArrayCollection(array_merge(
             $this->getFamilyWikis()->toArray(),
@@ -668,7 +670,7 @@ class Event
      * Add a Job for this Event.
      * @param Job $job
      */
-    public function addJob(Job $job)
+    public function addJob(Job $job): void
     {
         if ($this->jobs->contains($job)) {
             return;
@@ -678,28 +680,27 @@ class Event
 
     /**
      * Get jobs associated with this Event (in theory there should be only one).
-     * @return Job[]
+     * @return Collection of Jobs.
      */
-    public function getJobs()
+    public function getJobs(): Collection
     {
         return $this->jobs;
     }
 
     /**
-     * Get the number of jobs associated with this Event.
-     * (Ideally there'd only be one, but this is here just in case.)
+     * Get the number of jobs associated with this Event. (Ideally there'd only be one, but this is here just in case.)
      * @return int
      */
-    public function getNumJobs()
+    public function getNumJobs(): int
     {
-        return count($this->jobs);
+        return $this->jobs->count();
     }
 
     /**
      * Is there a job associated with this Event?
      * @return boolean
      */
-    public function hasJob()
+    public function hasJob(): bool
     {
         return $this->getNumJobs() > 0;
     }
@@ -707,7 +708,7 @@ class Event
     /**
      * Remove all Jobs from this Event.
      */
-    public function removeJobs()
+    public function removeJobs(): void
     {
         $this->jobs->clear();
     }

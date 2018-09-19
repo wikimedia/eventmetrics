@@ -3,6 +3,8 @@
  * This file contains only the EventWikiRepository class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Repository;
 
 use AppBundle\Model\EventWiki;
@@ -18,7 +20,7 @@ class EventWikiRepository extends Repository
      * Implements Repository::getEntityClass
      * @return string
      */
-    public function getEntityClass()
+    public function getEntityClass(): string
     {
         return EventWiki::class;
     }
@@ -28,7 +30,7 @@ class EventWikiRepository extends Repository
      * @param string $value
      * @return string|null Null if no wiki was found.
      */
-    public function getDomainFromEventWikiInput($value)
+    public function getDomainFromEventWikiInput(string $value): ?string
     {
         if (substr($value, 0, 2) === '*.') {
             $ret = $this->getWikiFamilyName(substr($value, 2));
@@ -40,8 +42,8 @@ class EventWikiRepository extends Repository
         $rqb->select(['dbname, url'])
             ->from('wiki')
             ->where($rqb->expr()->eq('dbname', ':project'))
-            ->orwhere($rqb->expr()->like('url', ':projectUrl'))
-            ->orwhere($rqb->expr()->like('url', ':projectUrl2'))
+            ->orWhere($rqb->expr()->like('url', ':projectUrl'))
+            ->orWhere($rqb->expr()->like('url', ':projectUrl2'))
             ->setParameter('project', $value)
             ->setParameter('projectUrl', "https://$value")
             ->setParameter('projectUrl2', "https://$value.org");
@@ -69,7 +71,7 @@ class EventWikiRepository extends Repository
      * @param string $value The wiki family name.
      * @return string|null The wiki family name, or null if invalid.
      */
-    public function getWikiFamilyName($value)
+    public function getWikiFamilyName(string $value): ?string
     {
         $conn = $this->getMetaConnection();
         $rqb = $conn->createQueryBuilder();
@@ -85,7 +87,7 @@ class EventWikiRepository extends Repository
      * @param EventWiki $wiki
      * @return string
      */
-    public function getDbName(EventWiki $wiki)
+    public function getDbName(EventWiki $wiki): string
     {
         $projectUrl = 'https://'.$wiki->getDomain().'.org';
 
@@ -109,7 +111,7 @@ class EventWikiRepository extends Repository
      * @return string
      * @static
      */
-    public static function wikifyString($wikitext, $domain, $pageTitle = null)
+    public static function wikifyString(string $wikitext, string $domain, $pageTitle = null): string
     {
         $wikitext = htmlspecialchars(html_entity_decode($wikitext), ENT_NOQUOTES);
         $sectionMatch = null;
@@ -138,7 +140,7 @@ class EventWikiRepository extends Repository
      * @return string Updated wikitext.
      * @static
      */
-    private static function wikifyInternalLinks($wikitext, $domain)
+    private static function wikifyInternalLinks(string $wikitext, string $domain): string
     {
         $pagePath = "https://$domain.org/wiki/";
         $linkMatch = null;
@@ -163,7 +165,7 @@ class EventWikiRepository extends Repository
      * Get all available wikis on the replicas, as defined by EventWiki::VALID_WIKI_PATTERN.
      * @return array With domain as the keys, database name as the values.
      */
-    public function getAvailableWikis()
+    public function getAvailableWikis(): array
     {
         /** @var string $validWikiRegex Regex-escaped and without surrounding forward slashes. */
         $validWikiRegex = str_replace(

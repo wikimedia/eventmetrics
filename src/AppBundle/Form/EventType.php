@@ -107,7 +107,7 @@ class EventType extends AbstractType
      * Get options for the timezone dropdown, grouping by region and also prefixing each option with the region.
      * @return string[]
      */
-    private function getTimezones()
+    private function getTimezones(): array
     {
         $timezones = [
             'UTC' => 'UTC',
@@ -137,7 +137,7 @@ class EventType extends AbstractType
      * Normalize the form data before submitting.
      * @param FormEvent $formEvent
      */
-    public function onEventPreSubmit(FormEvent $formEvent)
+    public function onEventPreSubmit(FormEvent $formEvent): void
     {
         $event = $formEvent->getData();
 
@@ -152,7 +152,7 @@ class EventType extends AbstractType
      * @param Event $event
      * @return CallbackTransformer
      */
-    private function getWikiCallbackTransformer(Event $event)
+    private function getWikiCallbackTransformer(Event $event): CallbackTransformer
     {
         return new CallbackTransformer(
             // Transform to the form.
@@ -166,7 +166,7 @@ class EventType extends AbstractType
             // Transform from the form.
             function (array $wikis) use ($event) {
                 return array_filter(
-                    $this->normalizeEventWikis($wikis, $event, $this->ewRepo)
+                    $this->normalizeEventWikis($wikis, $event)
                 );
             }
         );
@@ -177,15 +177,14 @@ class EventType extends AbstractType
      * to the domain (en.wikipedia). This method then instantiates a new EventWiki if one did not already exist.
      * @param string[] $wikis As retrieved by the form.
      * @param Event $event
-     * @param EventWikiRepository $eventWikiRepo
      * @return EventWiki[]
      */
-    private function normalizeEventWikis($wikis, Event $event, EventWikiRepository $eventWikiRepo)
+    private function normalizeEventWikis(array $wikis, Event $event): array
     {
-        return array_map(function ($wiki) use ($event, $eventWikiRepo) {
-            $domain = $eventWikiRepo->getDomainFromEventWikiInput($wiki);
+        return array_map(function ($wiki) use ($event) {
+            $domain = $this->ewRepo->getDomainFromEventWikiInput($wiki);
 
-            $eventWiki = $eventWikiRepo->findOneBy([
+            $eventWiki = $this->ewRepo->findOneBy([
                 'event' => $event,
                 'domain' => $domain,
             ]);

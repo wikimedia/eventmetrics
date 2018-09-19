@@ -3,6 +3,8 @@
  * This file contains only the Participant class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -67,7 +69,7 @@ class Participant
      * @param Event $event Event the Participant is participating in.
      * @param int $userId ID of the user, corresponds with `centralauth`.`globaluser`.
      */
-    public function __construct(Event $event, $userId = null)
+    public function __construct(Event $event, int $userId = null)
     {
         $this->event = $event;
         $this->event->addParticipant($this);
@@ -76,16 +78,18 @@ class Participant
 
     /**
      * Get the Event the Participant is participating in.
+     * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
     /**
      * Get the user ID of the Participant.
+     * @return int|null
      */
-    public function getUserId()
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
@@ -95,16 +99,16 @@ class Participant
      * Corresponds with `gu_id` on `centralauth`.`globaluser`.
      * @param int $userId
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
 
     /**
      * Get the username.
-     * @return string
+     * @return string|null
      */
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -113,7 +117,7 @@ class Participant
      * Set the username.
      * @param string $username
      */
-    public function setUsername($username)
+    public function setUsername(string $username): void
     {
         $this->username = $username;
     }

@@ -81,7 +81,7 @@ class EventCategory
      * Get the Event this EventCategory belongs to.
      * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->event;
     }
@@ -90,7 +90,7 @@ class EventCategory
      * Set the Event this EventCategory belongs to.
      * @param Event $event
      */
-    public function setEvent(Event $event)
+    public function setEvent(Event $event): void
     {
         $this->event = $event;
     }
@@ -99,7 +99,7 @@ class EventCategory
      * Get the wiki domain this EventCategory applies to.
      * @return string
      */
-    public function getDomain()
+    public function getDomain(): string
     {
         return $this->domain;
     }
@@ -108,16 +108,16 @@ class EventCategory
      * Set the wiki domain this EventCategory applies to.
      * @param string $domain
      */
-    public function setDomain(string $domain)
+    public function setDomain(string $domain): void
     {
         $this->domain = $domain;
     }
 
     /**
-     * Set the title of the category. This value is not persisted to the database.
+     * Set the title of the category.
      * @param string $title
      */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         // Use underscores instead of spaces, as they will have to be when querying the replicas.
         $this->title = str_replace(' ', '_', trim($title));
@@ -127,7 +127,7 @@ class EventCategory
      * Get the title of the category.
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -136,7 +136,7 @@ class EventCategory
      * Get the display variant of the program title.
      * @return string
      */
-    public function getDisplayTitle()
+    public function getDisplayTitle(): string
     {
         return str_replace('_', ' ', $this->title);
     }
