@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="ec_event", columns={"ec_event_id"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="ec_domains", columns={"ec_title", "ec_domain"})
+ *         @ORM\UniqueConstraint(name="ec_event_domains", columns={"ec_event_id", "ec_title", "ec_domain"})
  *     },
  *     options={"engine":"InnoDB"}
  * )
