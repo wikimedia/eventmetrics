@@ -111,13 +111,14 @@
             max-height: 120px;
         }
         // Scroll the participants' rows if there are very many.
-        .participants-rows {
+        .event__participants {
             max-height: 400px;
             overflow: auto;
-        }
-        .participants-rows .row {
-            // Keep the text boxes lined up at the left side.
-            margin-right: 0;
+
+            .row {
+                // Keep the text boxes lined up at the left side.
+                margin-right: 0;
+            }
         }
     }
 

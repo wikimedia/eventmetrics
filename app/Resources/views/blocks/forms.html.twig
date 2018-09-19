@@ -37,9 +37,6 @@
         {{- form_label(form, null, {'label_attr': {'class': 'col-sm-2'}}) -}}
         <div class="col-sm-8{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
             {{- form_widget(form) -}}
-            {% if not valid %}
-                <span class="font-awesome invalid-input">&#xf071;</span>
-            {% endif %}
         </div>
     </div>
 {% endblock %}
