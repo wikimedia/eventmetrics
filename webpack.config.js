@@ -18,8 +18,8 @@ Encore
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
     .addEntry('app', [
+        './app/Resources/assets/vendor/jquery.i18n.dist.js',
         './app/Resources/assets/vendor/bootstrap-typeahead.min',
-        './app/Resources/assets/vendor/jquery.i18n.min.js',
         './app/Resources/assets/js/application.js',
         './app/Resources/assets/js/dateLocales.js',
         './app/Resources/assets/js/default.js',
