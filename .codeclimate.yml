@@ -34,3 +34,5 @@ exclude_patterns:
     - "var/"
     - "app/DoctrineMigrations/"
     - "tests/"
+    - "app/Resources/assets/vendor/"
+
