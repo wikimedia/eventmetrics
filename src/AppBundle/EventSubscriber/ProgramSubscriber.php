@@ -29,8 +29,7 @@ class ProgramSubscriber
     }
 
     /**
-     * This is automatically called by Doctrine when loading an entity,
-     * or directly with EventManager::dispatchEvent().
+     * This is automatically called by Doctrine when loading an entity, or directly with EventManager::dispatchEvent().
      * @param LifecycleEventArgs $lifecycleEvent Doctrine lifecycle event arguments.
      */
     public function postLoad(LifecycleEventArgs $lifecycleEvent): void

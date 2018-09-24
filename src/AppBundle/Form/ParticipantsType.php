@@ -80,6 +80,9 @@ class ParticipantsType extends AbstractType
     }
 
     /**
+     * In EventController, we pass in a reference to the Event object. We must configure it as a valid form 'option'.
+     * @see https://symfony.com/doc/current/form/use_empty_data.html
+     *
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
