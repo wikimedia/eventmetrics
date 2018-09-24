@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\EventType;
-use AppBundle\Form\ParticipantsType;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
@@ -18,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,7 +54,7 @@ class EventController extends EntityController
         }
 
         // Handle the Form for the request, and redirect if they submitted.
-        $form = $this->handleFormSubmission($event);
+        $form = $this->handleFormSubmission($event, 'Event', 'Program');
 
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
@@ -85,7 +84,7 @@ class EventController extends EntityController
         }
 
         // Handle the Form for the request, and redirect if they submitted.
-        $form = $this->handleFormSubmission($this->event);
+        $form = $this->handleFormSubmission($this->event, 'Event', 'Program');
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
             $this->addFlashMessage('success', 'event-updated', [$this->event->getDisplayTitle()]);
@@ -116,10 +115,12 @@ class EventController extends EntityController
             $this->event->getTimezone()
         );
 
+        /** @var Participant $participant */
         foreach ($this->event->getParticipants()->getIterator() as $participant) {
             new Participant($event, $participant->getUserId());
         }
 
+        /** @var EventWiki $wiki */
         foreach ($this->event->getWikis()->getIterator() as $wiki) {
             // Don't copy child wikis, instead we'll be copying the parent family wiki.
             if (!$wiki->isChildWiki()) {
@@ -149,56 +150,6 @@ class EventController extends EntityController
         ]);
     }
 
-    /**
-     * Handle creation or updating of an Event on form submission.
-     * @param Event $event
-     * @return FormInterface|RedirectResponse
-     */
-    private function handleFormSubmission(Event $event)
-    {
-        $form = $this->createForm(EventType::class, $event, [
-            'event' => $event,
-        ]);
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $event = $form->getData();
-
-            // Clear statistics and child wikis as the data will now be stale.
-            $event->clearStatistics();
-            $event->clearChildWikis();
-
-            $this->em->persist($event);
-            $this->em->flush();
-
-            return $this->redirectToRoute('Program', [
-                'programTitle' => $this->program->getTitle(),
-            ]);
-        } elseif ($form->isSubmitted() && !$form->isValid()) {
-            $this->handleEventWikiErrors($form);
-        }
-
-        return $form;
-    }
-
-    /**
-     * Consolidate errors of wikis associated with the event.
-     * @param FormInterface $form
-     */
-    private function handleEventWikiErrors(FormInterface $form): void
-    {
-        $numWikiErrors = count($form['wikis']->getErrors(true));
-        if ($numWikiErrors > 0) {
-            $form->addError(new FormError(
-                // For the model-level, doesn't actually get rendered in the view.
-                "$numWikiErrors wikis are invalid",
-                // i18n arguments.
-                'error-wikis',
-                [$numWikiErrors]
-            ));
-        }
-    }
-
     /**************
      * EVENT PAGE *
      **************/
@@ -218,17 +169,25 @@ class EventController extends EntityController
      */
     public function showAction(EventRepository $eventRepo): Response
     {
-        // Handle the participants form for the request.
-        $participantForm = $this->handleParticipantForm();
-        if ($participantForm instanceof RedirectResponse) {
-            // Flash message will be shown at the top of the page.
-            $this->addFlashMessage('success', 'event-updated', [$this->event->getDisplayTitle()]);
-            return $participantForm;
+        /** @var FormView[] $forms */
+        $forms = [];
+
+        // Handle each form type (participants, etc.).
+        foreach (['Participants'] as $formType) {
+            $form = $this->handleFormSubmission($this->event, $formType);
+
+            if ($form instanceof RedirectResponse) {
+                // Save was successful. Flash message will be shown at the top of the page.
+                $this->addFlashMessage('success', 'event-updated', [$this->event->getDisplayTitle()]);
+                return $form;
+            }
+
+            $forms[$formType] = $form->createView();
         }
 
         return $this->render('events/show.html.twig', [
             'gmTitle' => $this->event->getDisplayTitle(),
-            'participantForm' => $participantForm->createView(),
+            'forms' => $forms,
             'program' => $this->program,
             'event' => $this->event,
             'stats' => $this->getEventStats($this->event),
@@ -238,9 +197,8 @@ class EventController extends EntityController
     }
 
     /**
-     * Get EventStats from the given Event. If there are none, empty EventStats
-     * are returned for each metric type specified by EventStat::METRIC_TYPES,
-     * with the default 'offset' values specified by Event::getAvailableMetrics().
+     * Get EventStats from the given Event. If there are none, empty EventStats are returned for each metric type
+     * specified by EventStat::METRIC_TYPES, with the default 'offset' values specified by Event::getAvailableMetrics().
      * This way we can show placeholders in the view.
      * @param Event $event
      * @return Collection|EventStat[]
@@ -267,18 +225,28 @@ class EventController extends EntityController
         return $stats;
     }
 
+    /****************
+     * FORM HELPERS *
+     ****************/
+
     /**
-     * Handle submission of form to add/remove participants.
+     * Handle submission of the given form type.
+     * @param Event $event
+     * @param string $type Plural form, matching AppBundle\Form\*, e.g. 'Participants'.
+     * @param string $redirect
      * @return FormInterface|RedirectResponse
      */
-    private function handleParticipantForm()
+    private function handleFormSubmission(Event $event, string $type, string $redirect = 'Event')
     {
-        $form = $this->createForm(ParticipantsType::class, $this->event, [
-            'event' => $this->event,
+        $form = $this->createForm('AppBundle\Form\\'.$type.'Type', $event, [
+            // Used because for some types (ParticipantsType), a reference to the Event is needed in form handling.
+            // This is different than the 2nd argument to createForm(), which is used only to fill in the factory.
+            'event' => $event,
         ]);
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Event $event */
             $event = $form->getData();
 
             // Clear statistics and child wikis as the data will now be stale.
@@ -288,12 +256,53 @@ class EventController extends EntityController
             $this->em->persist($event);
             $this->em->flush();
 
-            return $this->redirectToRoute('Event', [
-                'programTitle' => $event->getProgram()->getTitle(),
-                'eventTitle' => $event->getTitle(),
-            ]);
+            // Only put 'eventTitle' if redirecting to event page (otherwise '?eventTitle=Foo' would be in the URL).
+            $urlParams = ['programTitle' => $event->getProgram()->getTitle()];
+            if ($redirect === 'Event') {
+                $urlParams['eventTitle'] = $event->getTitle();
+            }
+
+            return $this->redirectToRoute($redirect, $urlParams);
+        } elseif ($form->isSubmitted() && !$form->isValid()) {
+            $this->consolidateErrors($form);
         }
 
         return $form;
+    }
+
+    /**
+     * Consolidate errors of wikis associated with the Event.
+     * @param FormInterface $form
+     */
+    private function consolidateErrors(FormInterface $form): void
+    {
+        // @see TitleUserTrait::validateUsers() for where errors are assigned for invalid participants.
+        // TODO: Probably would be nice to do the error assignments in one place (maybe not possible).
+        foreach (['wikis'] as $type) {
+            // Each form may not contain all fields we're consolidating errors for.
+            if (!isset($form[$type])) {
+                continue;
+            }
+
+            // Count the child form elements that are invalid. We can't use Form::getErrors() because the violations
+            // may not exist on $form[$type]
+            // We intentionally don't use Form::getErrors()
+            $numErrors = 0;
+            foreach ($form->get($type) as $field) {
+                if (!$field->isValid()) {
+                    $numErrors++;
+                }
+            }
+
+            if ($numErrors > 0) {
+                $form->addError(new FormError(
+                    // For the model-level, doesn't actually get rendered in the view.
+                    "$numErrors $type are invalid",
+                    // i18n arguments.
+                    "error-$type",
+                    [$numErrors]
+                ));
+            }
+        }
     }
 }

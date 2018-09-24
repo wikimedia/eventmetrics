@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 {% import 'macros/layout.html.twig' as layout %}
-{% form_theme participantForm 'blocks/forms.html.twig' %}
 
 {% block breadcrumb %}
     <ol class="breadcrumb">
@@ -117,8 +116,10 @@
         {% endif %}
         </section><!-- #stats -->
 
-        {# Participants accordian #}
-        {% include 'events/_participants.html.twig' with {'form': participantForm, 'event': event, 'isOrganizer': isOrganizer} %}
-
+        {### FORMS ###}
+        {% for formType, form in forms %}
+            {% form_theme form 'blocks/forms.html.twig' %}
+            {% include ('events/_' ~ formType|lower ~ '.html.twig') with {'form': form, 'event': event, 'isOrganizer': isOrganizer} %}
+        {% endfor %}
     </div>
 {% endblock %}
