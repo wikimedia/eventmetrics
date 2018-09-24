@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * An EventCategory is a wiki category tied to an Event.
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EventCategoryRepository")
  * @ORM\Table(
  *     name="event_category",
  *     indexes={
@@ -23,7 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     options={"engine":"InnoDB"}
  * )
- * @ORM\Entity(repositoryClass="AppBundle\Repository\EventCategoryRepository")
  */
 class EventCategory
 {
@@ -58,6 +57,7 @@ class EventCategory
 
     /**
      * @ORM\Column(name="ec_domain", type="string", length=255, nullable=false)
+     * @Assert\Type("string")
      * @Assert\NotBlank(message="")
      * @var string Domain of the wiki, without the .org.
      */
@@ -75,6 +75,15 @@ class EventCategory
         $this->event->addCategory($this);
         $this->setTitle($title);
         $this->domain = $domain;
+    }
+
+    /**
+     * Get the ID of the EventCategory.
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**

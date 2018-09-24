@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace AppBundle\Model;
 
-use DateTime;
-use DateTimeZone;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Model\Traits\EventStatTrait;
 use AppBundle\Model\Traits\TitleUserTrait;
+use DateTime;
+use DateTimeZone;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * An Event belongs to one program, and has many participants.
@@ -102,28 +102,28 @@ class Event
      * @ORM\OneToMany(
      *     targetEntity="Participant", mappedBy="event", orphanRemoval=true, cascade={"persist"}, fetch="EXTRA_LAZY"
      * )
-     * @var ArrayCollection|Participant[] Participants of this Event.
+     * @var Collection|Participant[] Participants of this Event.
      */
     protected $participants;
 
     /**
      * One Event has many EventStats.
      * @ORM\OneToMany(targetEntity="EventStat", mappedBy="event", orphanRemoval=true)
-     * @var ArrayCollection|EventStat[] Statistics of this Event.
+     * @var Collection|EventStat[] Statistics of this Event.
      */
     protected $stats;
 
     /**
      * One Event has many EventWikis.
      * @ORM\OneToMany(targetEntity="EventWiki", mappedBy="event", orphanRemoval=true, cascade={"persist"})
-     * @var ArrayCollection|EventWiki[] Wikis that this event takes place on.
+     * @var Collection|EventWiki[] Wikis that this event takes place on.
      */
     protected $wikis;
 
     /**
      * One Event has many EventCategories.
      * @ORM\OneToMany(targetEntity="EventCategory", mappedBy="event", orphanRemoval=true, cascade={"persist"})
-     * @var ArrayCollection|EventCategory[] Categories that this event takes place on.
+     * @var Collection|EventCategory[] Categories that this event takes place on.
      */
     protected $categories;
 
@@ -171,7 +171,7 @@ class Event
     /**
      * One Event has many Jobs.
      * @ORM\OneToMany(targetEntity="Job", mappedBy="event", orphanRemoval=true)
-     * @var ArrayCollection|Job[] Jobs for this Event.
+     * @var Collection|Job[] Jobs for this Event.
      */
     protected $jobs;
 
@@ -376,7 +376,7 @@ class Event
 
     /**
      * Get categories belonging to this Event.
-     * @return ArrayCollection of EventCategories.
+     * @return Collection|EventCategory[]
      */
     public function getCategories(): Collection
     {
@@ -385,11 +385,18 @@ class Event
 
     /**
      * Get the number of categories belonging to this Event.
+     * @param bool $saved Whether to only count saved categories (have an ID).
      * @return int
      */
-    public function getNumCategories(): int
+    public function getNumCategories($saved = false): int
     {
-        return $this->categories->count();
+        if (false === $saved) {
+            return $this->categories->count();
+        }
+
+        return $this->categories->filter(function (EventCategory $category) {
+            return null !== $category->getId();
+        })->count();
     }
 
     /**
@@ -399,13 +406,21 @@ class Event
      */
     public function getCategoryTitlesForWiki(EventWiki $wiki): array
     {
-        return $this->categories->filter(function (EventCategory $category) use ($wiki) {
-            // First get EventCategories that are for the given EventWiki (have the same domain).
-            return $category->getDomain() === $wiki->getDomain();
-        })->map(function (EventCategory $category) {
-            // Loop through again to get their titles.
+        return $this->getCategoriesForWiki($wiki)->map(function (EventCategory $category) {
             return $category->getTitle();
         })->toArray();
+    }
+
+    /**
+     * Get categories belonging to this Event that are for the specified wiki.
+     * @param EventWiki $wiki
+     * @return Collection of EventCategories.
+     */
+    public function getCategoriesForWiki(EventWiki $wiki): Collection
+    {
+        return $this->categories->filter(function (EventCategory $category) use ($wiki) {
+            return $category->getDomain() === $wiki->getDomain();
+        });
     }
 
     /**
@@ -435,7 +450,7 @@ class Event
     /**
      * Remove all categories.
      */
-    public function clearCategories()
+    public function clearCategories(): void
     {
         $this->categories->clear();
     }
@@ -446,7 +461,7 @@ class Event
 
     /**
      * Get participants of this Event.
-     * @return ArrayCollection of Participants.
+     * @return Collection|Participant[]
      */
     public function getParticipants(): Collection
     {
@@ -522,7 +537,7 @@ class Event
 
     /**
      * Get wikis this event is taking place on.
-     * @return ArrayCollection|EventWiki[]
+     * @return Collection|EventWiki[]
      */
     public function getWikis(): Collection
     {
@@ -532,9 +547,9 @@ class Event
     /**
      * Get the EventWiki with the given domain that belongs to this Event.
      * @param string $domain
-     * @return EventWiki
+     * @return EventWiki|false False if not found.
      */
-    public function getWikiByDomain(string $domain): EventWiki
+    public function getWikiByDomain(string $domain)
     {
         return $this->wikis->filter(function (EventWiki $wiki) use ($domain) {
             return $wiki->getDomain() === $domain;
@@ -572,7 +587,7 @@ class Event
     /**
      * Get all EventWikis belonging to the Event that represent
      * a wiki family (*.wikipedia, *.wiktionary, etc).
-     * @return ArrayCollection of EventWikis
+     * @return Collection|EventWiki[]
      */
     public function getFamilyWikis(): Collection
     {
@@ -611,7 +626,7 @@ class Event
 
     /**
      * Get all associated EventWikis that belong to a family.
-     * @return ArrayCollection of EventWikis
+     * @return Collection|EventWiki[]
      */
     public function getChildWikis(): Collection
     {
@@ -625,7 +640,7 @@ class Event
      * to the Event. For instance, if there is an EventWiki for *.wikipedia
      * (wikipedia family), a fr.wikipedia EventWiki is not returned, but it
      * will if there is not a *.wikipedia EventWiki.
-     * @return ArrayCollection of EventWikis
+     * @return Collection|EventWiki[]
      */
     public function getOrphanWikis(): Collection
     {
@@ -652,9 +667,9 @@ class Event
 
     /**
      * Get EventWikis that are represent a wiki family, or an individual wiki that is not part of a family.
-     * @return ArrayCollection Containing EventWikis
+     * @return Collection containing EventWikis.
      */
-    public function getOrphanWikisAndFamilies(): ArrayCollection
+    public function getOrphanWikisAndFamilies(): Collection
     {
         return new ArrayCollection(array_merge(
             $this->getFamilyWikis()->toArray(),
