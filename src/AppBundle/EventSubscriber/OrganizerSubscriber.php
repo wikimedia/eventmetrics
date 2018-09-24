@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains only the UserSubscriber class.
+ * This file contains only the OrganizerSubscriber class.
  */
 
 declare(strict_types=1);
