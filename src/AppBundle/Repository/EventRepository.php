@@ -357,8 +357,8 @@ class EventRepository extends Repository
                 continue;
             }
 
-            $dbName = $eventWikiRepo->getDbName($wiki);
             $domain = $wiki->getDomain();
+            $dbName = $eventWikiRepo->getDbNameFromDomain($domain);
 
             $nsClause = $dbName === 'commonswiki_p'
                 ? '6 AND rev_parent_id = 0' // Only creations of File pages.

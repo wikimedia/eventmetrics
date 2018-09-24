@@ -265,7 +265,7 @@ class EventProcessor
         &$pagesCreated,
         &$pagesImproved
     ): void {
-        $dbName = $ewRepo->getDbName($wiki);
+        $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
 
         $ret = $this->eventRepo->getNumPagesEdited(
