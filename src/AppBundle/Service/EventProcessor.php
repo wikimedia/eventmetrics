@@ -163,7 +163,7 @@ class EventProcessor
                 // Sum all the stats, effectively telling us if there are any stats.
                 $statsSum = array_sum($wiki->getStatistics()->map(function (EventWikiStat $stat) {
                     return $stat->getValue();
-                }));
+                })->toArray());
 
                 if (0 === $statsSum) {
                     // $this->process() returns $this->stats, which gets returned in
