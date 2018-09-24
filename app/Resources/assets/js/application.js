@@ -63,8 +63,9 @@ grantmetrics.application.setupPanelTooltips = function () {
  *   '.column-row__template', such as '.category-row__template'. This template could be an existing, visible input.
  * @param {string} model Model name, either 'program' or 'event'.
  * @param {string} column Column name, either 'organizer' or 'wiki'.
+ * @param {Function} [callback] Optional callback that is executed after the new row is added, passing in $newRow.
  */
-grantmetrics.application.setupAddRemove = function (model, column) {
+grantmetrics.application.setupAddRemove = function (model, column, callback) {
     // Keep track of how many fields have been rendered.
     var columnPluralized = column.substr(-1) === 'y' ? column.replace(/y$/, 'ies') : column + 's',
         // Class name for the individual rows.
@@ -82,7 +83,7 @@ grantmetrics.application.setupAddRemove = function (model, column) {
     $('.add-' + column).on('click', function (e) {
         e.preventDefault();
 
-        // Clone the template row, correct CSS classes, then insert after the last row.
+        // Clone the template row, correct CSS classes, then insert at the end of the container.
         var $newRow = $(rowClass + '__template').clone()
             .removeClass('hidden ' + column + '-row__template')
             .appendTo('.' + model + '__' + columnPluralized);
@@ -120,6 +121,10 @@ grantmetrics.application.setupAddRemove = function (model, column) {
             // Re-init listeners for all inputs. Existing typeaheads are destroyed, but only when the input
             // has focus, so this shouldn't pose much of a performance overhead.
             grantmetrics.application.setupAutocompletion();
+        }
+
+        if (typeof callback === 'function') {
+            callback($newRow);
         }
     });
 };
