@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * An Organizer is a user who organizes one or more programs.
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\OrganizerRepository")
  * @ORM\Table(
  *     name="organizer",
  *     indexes={
@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="org_user_id_uniq", columns={"org_user_id"})},
  *     options={"engine":"InnoDB"}
  * )
- * @ORM\Entity(repositoryClass="AppBundle\Repository\OrganizerRepository")
+ * @ORM\EntityListeners({"AppBundle\EventSubscriber\OrganizerSubscriber"})
  */
 class Organizer
 {
@@ -53,7 +53,7 @@ class Organizer
      * Many Organizers have many Programs.
      * @ORM\ManyToMany(targetEntity="Program", mappedBy="organizers", cascade={"persist"}, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"id" = "DESC"})
-     * @var ArrayCollection|Program[] Programs overseen by this organizer.
+     * @var Collection|Program[] Programs overseen by this organizer.
      */
     protected $programs;
 
@@ -130,7 +130,7 @@ class Organizer
 
     /**
      * Get a list of programs that this organizer oversees.
-     * @return ArrayCollection|Program[]
+     * @return Collection|Program[]
      */
     public function getPrograms(): Collection
     {

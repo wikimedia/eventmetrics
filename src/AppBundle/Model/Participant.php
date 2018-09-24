@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * A Participant is a user who participates in an Event.
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ParticipantRepository")
  * @ORM\Table(
  *     name="participant",
  *     indexes={
@@ -24,7 +24,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     options={"engine":"InnoDB"}
  * )
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ParticipantRepository")
  */
 class Participant
 {

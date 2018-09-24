@@ -7,24 +7,24 @@ declare(strict_types=1);
 
 namespace AppBundle\Model;
 
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Model\Traits\TitleUserTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * A Program has its own title, with many organizers and many events.
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ProgramRepository")
  * @ORM\Table(
  *     name="program",
  *     indexes={@ORM\Index(name="program_title", columns={"program_title"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="program_title_uniq", columns={"program_title"})},
  *     options={"engine":"InnoDB"}
  * )
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ProgramRepository")
  * @UniqueEntity("title", message="error-program-title-dup")
+ * @ORM\EntityListeners({"AppBundle\EventSubscriber\ProgramSubscriber"})
  */
 class Program
 {
@@ -54,7 +54,7 @@ class Program
      * One Program has many Events.
      * @ORM\OneToMany(targetEntity="Event", mappedBy="program", orphanRemoval=true, fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"id" = "DESC"})
-     * @var ArrayCollection|Event[] Events that belong to this program.
+     * @var Collection|Event[] Events that belong to this program.
      */
     protected $events;
 
@@ -71,7 +71,7 @@ class Program
      *     }
      * )
      * @Assert\Count(min = 1)
-     * @var ArrayCollection|Organizer[] Organizers of this program.
+     * @var Collection|Organizer[] Organizers of this program.
      */
     protected $organizers;
 
@@ -119,7 +119,7 @@ class Program
 
     /**
      * Get Organizers of this Program.
-     * @return ArrayCollection|Organizer[]
+     * @return Collection|Organizer[]
      */
     public function getOrganizers(): Collection
     {
@@ -234,7 +234,7 @@ class Program
 
     /**
      * Get Events belonging to this Program.
-     * @return ArrayCollection|Event[]
+     * @return Collection|Event[]
      */
     public function getEvents(): Collection
     {
@@ -256,7 +256,7 @@ class Program
      * Get the number of Events belonging to this Program.
      * @return int
      */
-    public function getNumEvents()
+    public function getNumEvents(): int
     {
         return $this->events->count();
     }

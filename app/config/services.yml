@@ -37,12 +37,11 @@ services:
 
     AppBundle\EventSubscriber\OrganizerSubscriber:
         tags:
-            - { name: doctrine.event_listener, event: postLoad }
-            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.orm.entity_listener }
 
     AppBundle\EventSubscriber\ProgramSubscriber:
         tags:
-            - { name: doctrine.event_listener, event: postLoad }
+            - { name: doctrine.orm.entity_listener }
 
     AppBundle\EventSubscriber\ExceptionSubscriber:
         tags:

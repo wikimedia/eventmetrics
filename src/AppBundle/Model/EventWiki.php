@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * An EventWiki belongs to an Event, and also connects an EventStat to a specific wiki and event.
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EventWikiRepository")
  * @ORM\Table(
  *     name="event_wiki",
  *     indexes={
@@ -27,7 +27,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     options={"engine":"InnoDB"}
  * )
- * @ORM\Entity(repositoryClass="AppBundle\Repository\EventWikiRepository")
  */
 class EventWiki
 {
@@ -71,7 +70,7 @@ class EventWiki
     /**
      * One EventWiki has many EventStats.
      * @ORM\OneToMany(targetEntity="EventWikiStat", mappedBy="wiki", orphanRemoval=true, cascade={"persist"})
-     * @var ArrayCollection|EventStat[] Statistics for this EventWiki.
+     * @var Collection|EventStat[] Statistics for this EventWiki.
      */
     protected $stats;
 
@@ -150,7 +149,7 @@ class EventWiki
 
     /**
      * If this EventWiki represents a family, return all EventWikis of the Event that belong to the family.
-     * @return ArrayCollection of EventWikis
+     * @return Collection|EventWiki[]
      */
     public function getChildWikis(): Collection
     {
@@ -182,7 +181,7 @@ class EventWiki
 
     /**
      * Get statistics about this EventWiki.
-     * @return ArrayCollection|EventWikiStat[]
+     * @return Collection|EventWikiStat[]
      */
     public function getStatistics(): Collection
     {

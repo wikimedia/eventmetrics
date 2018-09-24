@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * An Event belongs to one program, and has many participants.
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EventRepository")
  * @ORM\Table(
  *     name="event",
  *     indexes={
@@ -34,7 +34,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     options={"engine":"InnoDB"}
  * )
  * @UniqueEntity("title", message="error-event-title-dup")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\EventRepository")
  */
 class Event
 {

@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace AppBundle\EventSubscriber;
 
-use Doctrine\ORM\EntityManager;
+use AppBundle\Model\Organizer;
+use AppBundle\Repository\OrganizerRepository;
+use AppBundle\Repository\Repository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Psr\Container\ContainerInterface;
-use AppBundle\Model\Organizer;
-use AppBundle\Repository\Repository;
-use Symfony\Component\Serializer\Tests\Model;
 
 /**
  * OrganizerSubscriber automatically sets the username on Organizers after the entity is loaded from the grantmetrics
@@ -26,57 +26,52 @@ class OrganizerSubscriber
     /** @var ContainerInterface The application's container interface. */
     private $container;
 
+    /** @var OrganizerRepository Repository for the Organizer class. */
+    private $repo;
+
     /**
      * Constructor for UserSubscriber.
      * @param ContainerInterface $container
+     * @param EntityManagerInterface $em
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, EntityManagerInterface $em)
     {
         $this->container = $container;
+        $this->repo = $em->getRepository(Organizer::class);
+        $this->repo->setContainer($this->container);
     }
 
     /**
      * This is automatically called by Doctrine when loading an entity,
      * or directly with EventManager::dispatchEvent().
+     * @param Organizer $organizer
      * @param LifecycleEventArgs $event Doctrine lifecycle event arguments.
      */
-    public function postLoad(LifecycleEventArgs $event): void
+    public function postLoad(Organizer $organizer, LifecycleEventArgs $event): void
     {
-        /** @var Model $entity One of the AppBundle\Model classes. */
-        $entity = $event->getEntity();
-        if (!($entity instanceof Organizer)) {
-            return;
-        }
-
         // Fetch and set the username on the entity.
-        $repo = $this->getRepository($entity, $event);
-        if ($entity->getUsername() === null) {
-            $this->setUsername($entity, $repo);
+        if (null === $organizer->getUsername()) {
+            $this->setUsername($organizer, $this->repo);
         }
     }
 
     /**
      * Set the user ID on the Organizer.
+     * @param Organizer $organizer
      * @param LifecycleEventArgs $event Doctrine lifecycle event arguments.
      */
-    public function prePersist(LifecycleEventArgs $event): void
+    public function prePersist(Organizer $organizer, LifecycleEventArgs $event): void
     {
-        /** @var Model $entity One of AppBundle\Model classes. */
-        $entity = $event->getEntity();
-        if (!($entity instanceof Organizer)) {
-            return;
-        }
-
-        $normalized = trim(str_replace('_', ' ', $entity->getUsername()));
-        $entity->setUsername(
+        $normalized = trim(str_replace('_', ' ', $organizer->getUsername()));
+        $organizer->setUsername(
             // Same as ucfirst but works on all locale settings. This is what MediaWiki wants.
             mb_strtoupper(mb_substr($normalized, 0, 1)).mb_substr($normalized, 1)
         );
 
         // Fetch and set the user ID on the entity.
-        $repo = $this->getRepository($entity, $event);
-        if ($entity->getUserId() === null) {
-            $this->setUserId($entity, $repo);
+        if ($organizer->getUserId() === null) {
+            $userId = $this->repo->getUserIdFromName($organizer->getUsername());
+            $organizer->setUserId($userId);
         }
     }
 
@@ -90,35 +85,5 @@ class OrganizerSubscriber
         $userId = $entity->getUserId();
         $username = $repo->getUsernameFromId($userId);
         $entity->setUsername($username);
-    }
-
-    /**
-     * Set the user ID on the Organizer.
-     * @param Organizer $entity
-     * @param Repository $repo
-     */
-    private function setUserId($entity, $repo): void
-    {
-        $username = $entity->getUsername();
-        $userId = $repo->getUserIdFromName($username);
-        $entity->setUserId($userId);
-    }
-
-    /**
-     * Get the entity and corresponding Repository, given the lifecycle event.
-     * @param Organizer $entity
-     * @param LifecycleEventArgs $event
-     * @return Repository
-     */
-    private function getRepository($entity, LifecycleEventArgs $event): Repository
-    {
-        /** @var EntityManager $em */
-        $em = $event->getEntityManager();
-
-        /** @var Repository $repo */
-        $repo = $em->getRepository(get_class($entity));
-        $repo->setContainer($this->container);
-
-        return $repo;
     }
 }

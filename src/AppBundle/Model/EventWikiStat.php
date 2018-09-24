@@ -3,6 +3,8 @@
  * This file contains only the EventWikiStat class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Model;
 
 use AppBundle\Model\Traits\StatTrait;
@@ -107,7 +109,7 @@ class EventWikiStat
      * Get the Event this EventWikiStat applies to.
      * @return Event
      */
-    public function getEvent()
+    public function getEvent(): Event
     {
         return $this->wiki->getEvent();
     }
@@ -116,7 +118,7 @@ class EventWikiStat
      * Get the EventWiki this EventWikiStat applies to.
      * @return EventWiki
      */
-    public function getWiki()
+    public function getWiki(): EventWiki
     {
         return $this->wiki;
     }

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace AppBundle\EventSubscriber;
 
 use AppBundle\Model\Program;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -30,16 +29,10 @@ class ProgramSubscriber
 
     /**
      * This is automatically called by Doctrine when loading an entity, or directly with EventManager::dispatchEvent().
-     * @param LifecycleEventArgs $lifecycleEvent Doctrine lifecycle event arguments.
+     * @param Program $program
      */
-    public function postLoad(LifecycleEventArgs $lifecycleEvent): void
+    public function postLoad(Program $program): void
     {
-        $program = $lifecycleEvent->getEntity();
-
-        if (!$program instanceof Program) {
-            return;
-        }
-
         // Sort the organizers alphabetically, putting the currently viewing organizer first.
         if ($this->container->get('session') && $this->container->get('session')->get('logged_in_user')) {
             $currentOrg = $this->container->get('session')->get('logged_in_user')->username;
