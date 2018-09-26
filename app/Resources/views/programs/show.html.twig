@@ -8,7 +8,7 @@
                 <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
             </li>
         {% endif %}
-        <li class="active">{{ program.displayTitle }}</li>
+        <li class="active">{{ bdi(program.displayTitle) }}</li>
     </ol>
 {% endblock %}
 
@@ -21,7 +21,7 @@
                 </a>
             {% endif %}
             <h1>
-                {{ program.displayTitle }}
+                {{ bdi(program.displayTitle) }}
                 {% if isOrganizer %}
                     <small>
                         (<a href="{{ path('EditProgram', {'programId': program.id}) }}">{{ msg('edit-program')|lower }}</a>)
@@ -68,7 +68,7 @@
                     {% for event in program.events %}
                         <tr class="event-entry">
                             <td class="sort-entry--event" data-value="{{ event.title }}">
-                                <a href="{{ path('Event', {'programId': program.id, 'eventId': event.id}) }}">{{ event.displayTitle }}</a>
+                                <a href="{{ path('Event', {'programId': program.id, 'eventId': event.id}) }}">{{ bdi(event.displayTitle) }}</a>
                             </td>
                             {% set numParticipants = event.numParticipants %}
                             {% if isOrganizer %}

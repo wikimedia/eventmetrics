@@ -37,7 +37,7 @@
         "symfony/symfony": "^4.0",
         "symfony/webpack-encore-pack": "^1.0",
         "twig/twig": "^2.0",
-        "wikimedia/toolforge-bundle": "^0.5"
+        "wikimedia/toolforge-bundle": "^0.7"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.0",

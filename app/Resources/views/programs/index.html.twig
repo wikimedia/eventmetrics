@@ -51,7 +51,7 @@
                     {% for program in programs %}
                         <tr class="program-entry">
                             <td class="sort-entry--program" data-value="{{ program.title }}">
-                                <a href="{{ path('Program', {'programId': program.id}) }}">{{ program.displayTitle }}</a>
+                                <a href="{{ path('Program', {'programId': program.id}) }}">{{ bdi(program.displayTitle) }}</a>
                             </td>
                             <td>
                                 {{ layout.actionButtons('Program', program, {'programId': program.id}, program.numEvents == 0) }}

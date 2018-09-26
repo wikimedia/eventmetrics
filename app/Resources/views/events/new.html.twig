@@ -7,7 +7,7 @@
             <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
         </li>
         <li>
-            <a href="{{ path('Program', {'programId': event.program.id}) }}">{{ event.program.displayTitle }}</a>
+            <a href="{{ path('Program', {'programId': event.program.id}) }}">{{ bdi(event.program.displayTitle) }}</a>
         </li>
         <li class="active">
             {{ msg('create-new-event') }}
