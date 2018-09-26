@@ -1,0 +1,81 @@
+{% import 'macros/layout.html.twig' as layout %}
+
+{% set content %}
+    {{ form_errors(form) }}
+
+    {# If there's only one wiki configured on the Event, we want to prefill the domain and disable the input. #}
+    {% if event.wikis|length == 1 and event.wikis.first.isFamilyWiki == false %}
+        {% set defaultWiki = event.wikis.first.domain %}
+    {% else %}
+        {% set defaultWiki = '' %}
+    {% endif %}
+
+    {# This is what gets copied when they add a new category row. The index values of the names and IDs will be overriden. #}
+    <div class="row category-row category-row__template form-group hidden">
+        <div class="col-sm-2">
+            <input type="text" id="categoryForm_categories_999_domain" name="categoryForm[categories][999][domain]"
+                   class="wiki-input form-control" placeholder="en.wikipedia"
+                   value="{{ defaultWiki }}"{% if defaultWiki is not empty %} readonly="readonly"{% endif %}>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" id="categoryForm_categories_999_title" name="categoryForm[categories][999][title]"
+                   class="category-input form-control" placeholder="{{ msg('category-name') }}">
+        </div>
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-default remove-category form-control">
+                {{ msg('remove') }}
+            </button>
+        </div>
+    </div>
+
+    {{ form_start(form, {'method': 'post', 'name': 'categoryForm', 'attr': {'class': 'save-categories-form', 'autocomplete': 'off'}}) }}
+    <p>{{ msg('category-description') }}</p>
+
+    <div class="event__categories">
+        {% for category in form.categories %}
+            {% set categoryRow %}
+                <div class="row category-row form-group">
+                    <div class="col-sm-2{{ form_errors(category.domain) ? ' has-error' }}">
+                        {% set attrs = {'class': 'wiki-input', 'placeholder': 'en.wikipedia'} %}
+                        {% if defaultWiki is not empty %}
+                            {% set attrs = attrs|merge({'readonly': 'readonly'}) %}
+                        {% endif %}
+                        {{ form_widget(category.domain, {'attr': attrs}) }}
+                    </div>
+                    <div class="col-sm-4{{ form_errors(category.title) ? ' has-error' }}">
+                        {{ form_widget(category.title, {'attr': {'class': 'category-input', 'placeholder': msg('category-name')}}) }}
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-default remove-category form-control">
+                            {{ msg('remove') }}
+                        </button>
+                    </div>
+                </div>
+            {% endset %}
+
+            {{ categoryRow }}
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        <a href="#" class="add-category">
+            <div class="glyphicon glyphicon-plus-sign"></div>
+            {{ msg('add-category') }}
+        </a>
+    </div>
+
+    <div class="save-categories-btn">
+        {{ form_widget(form.submit, {'label': msg('save-categories'), 'attr': {'class': 'btn-primary'}}) }}
+    </div>
+
+    {{ form_row(form._token) }}
+    {{ form_end(form, {'render_rest': false}) }}
+{% endset %}
+
+{{
+    layout.panel(
+        'categories',
+        event.numCategories(true) ~ ' ' ~ msg('num-categories', [event.numCategories(true)]),
+        content
+    )
+}}
