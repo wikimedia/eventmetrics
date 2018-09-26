@@ -8,7 +8,7 @@
                 <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
             </li>
         {% endif %}
-        <li class="active">{{ program.displayTitle }}</li>
+        <li class="active">{{ bdi(program.displayTitle) }}</li>
     </ol>
 {% endblock %}
 
@@ -21,7 +21,7 @@
                 </a>
             {% endif %}
             <h1>
-                {{ program.displayTitle }}
+                {{ bdi(program.displayTitle) }}
                 {% if isOrganizer %}
                     <small>
                         (<a href="{{ path('EditProgram', {'programTitle': program.title}) }}">{{ msg('edit-program')|lower }}</a>)

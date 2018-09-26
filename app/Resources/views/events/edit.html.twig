@@ -4,9 +4,9 @@
 {% block breadcrumb %}
     <ol class="breadcrumb">
         <li>
-            <a href="{{ path('Program', {'programTitle': event.program.title}) }}">{{ event.program.displayTitle }}</a>
+            <a href="{{ path('Program', {'programTitle': event.program.title}) }}">{{ bdi(event.program.displayTitle) }}</a>
         </li>
-        <li class="active">{{ event.displayTitle }}</li>
+        <li class="active">{{ bdi(event.displayTitle) }}</li>
     </ol>
 {% endblock %}
 

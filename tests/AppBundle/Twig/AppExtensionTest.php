@@ -45,4 +45,12 @@ class AppExtensionTest extends GrantMetricsTestCase
         static::assertEquals(7, strlen($this->appExtension->gitShortHash()));
         static::assertEquals(40, strlen($this->appExtension->gitHash()));
     }
+
+    /**
+     * Test bdi function
+     */
+    public function testBDI()
+    {
+        static::assertEquals('<bdi>Foo</bdi>', $this->appExtension->bdi('Foo'));
+    }
 }
