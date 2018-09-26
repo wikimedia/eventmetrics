@@ -154,7 +154,7 @@ class ProgramTest extends GrantMetricsTestCase
     {
         $organizer = new Organizer('');
         $program = new Program($organizer);
-        $program->setTitle('edit');
+        $program->setTitle('Foo bar');
 
         self::bootKernel();
         $validator = static::$kernel->getContainer()->get('validator');
@@ -163,12 +163,8 @@ class ProgramTest extends GrantMetricsTestCase
         $errors = $validator->validate($program);
 
         static::assertEquals(
-            'error-title-reserved',
-            $errors->get(0)->getMessage()
-        );
-        static::assertEquals(
             'error-usernames',
-            $errors->get(1)->getMessage()
+            $errors->get(0)->getMessage()
         );
     }
 

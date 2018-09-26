@@ -14,6 +14,9 @@ use AppBundle\DataFixtures\ORM\LoadFixtures;
  */
 class ProgramControllerTest extends DatabaseAwareWebTestCase
 {
+    /** @var int ID of the Program. */
+    private $programId;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -119,6 +122,9 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
             ->findOneBy(['title' => 'My_test_program']);
         static::assertNotNull($program);
         static::assertEquals(['MusikAnimal'], $program->getOrganizerNames());
+
+        // Used throughout the rest of the specs.
+        $this->programId = $program->getId();
     }
 
     /**
@@ -126,7 +132,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
      */
     private function updateSpec(): void
     {
-        $this->crawler = $this->client->request('GET', '/programs/edit/My_test_program');
+        $this->crawler = $this->client->request('GET', '/programs/'.$this->programId.'/edit');
         $form = $this->crawler->selectButton('Submit')->form();
         $form['program[title]'] = 'The Lion King';
         $this->crawler = $this->client->submit($form);
@@ -142,7 +148,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
      */
     private function showSpec(): void
     {
-        $this->crawler = $this->client->request('GET', '/programs/The_Lion_King');
+        $this->crawler = $this->client->request('GET', '/programs/'.$this->programId);
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
         static::assertContains(
@@ -171,7 +177,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
             $this->entityManager->getRepository('Model:Program')->findAll()
         );
 
-        $this->crawler = $this->client->request('GET', '/programs/delete/The_Lion_King');
+        $this->crawler = $this->client->request('GET', '/programs/'.$this->programId.'/delete');
         $this->response = $this->client->getResponse();
         static::assertEquals(302, $this->response->getStatusCode());
 

@@ -219,26 +219,25 @@ class EventTest extends GrantMetricsTestCase
      */
     public function testValidations(): void
     {
+        self::bootKernel();
+        $validator = static::$kernel->getContainer()->get('validator');
+
         $organizer = new Organizer('MusikAnimal');
         $organizer->setUserId(50);
         $program = new Program($organizer);
         $event = new Event($program);
-        $event->setTitle('delete');
-
-        self::bootKernel();
-
-        $validator = static::$kernel->getContainer()->get('validator');
-        $errors = $validator->validate($event);
-        static::assertEquals(
-            'error-title-reserved',
-            $errors->get(0)->getMessage()
-        );
 
         $event->setTitle('Foo/bar');
-        $validator = static::$kernel->getContainer()->get('validator');
         $errors = $validator->validate($event);
         static::assertEquals(
             'error-title-invalid-chars',
+            $errors->get(0)->getMessage()
+        );
+
+        $event->setTitle('123');
+        $errors = $validator->validate($event);
+        static::assertEquals(
+            'error-title-numeric',
             $errors->get(0)->getMessage()
         );
     }

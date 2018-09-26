@@ -9,7 +9,7 @@
             </li>
         {% endif %}
         <li>
-            <a href="{{ path('Program', {'programTitle': program.title}) }}">{{ program.displayTitle }}</a>
+            <a href="{{ path('Program', {'programId': program.id}) }}">{{ program.displayTitle }}</a>
         </li>
         <li class="active">
             {{ event.displayTitle }}
@@ -24,7 +24,7 @@
                 {{ event.displayTitle }}
                 {% if isOrganizer %}
                     <small>
-                        (<a href="{{ path('EditEvent', {'programTitle': program.title, 'eventTitle': event.title}) }}">{{ msg('edit-event')|lower }}</a>)
+                        (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('edit-event')|lower }}</a>)
                     </small>
                 {% endif %}
             </h1>
@@ -47,7 +47,7 @@
                 {% endif %}
                 {% if event.updated != null %}
                     <div class="btn-group event-export">
-                        <a href="{{ path('Revisions', {'programTitle': program.title, 'eventTitle': event.title}) }}" class="btn btn-default event-export-btn{% if jobStatus is not null %} disabled{% endif %}">
+                        <a href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id}) }}" class="btn btn-default event-export-btn{% if jobStatus is not null %} disabled{% endif %}">
                             <span class="glyphicon glyphicon-export"></span>
                             {{ msg('view-all-data') }}
                         </a>
@@ -110,7 +110,7 @@
                     {{ msg('event-misconfig', [msg('participants')]) }}
                 {% elseif event.startWithTimezone > date() %}
                     {{ msg('event-in-future') }}
-                    (<a href="{{ path('EditEvent', {'programTitle': program.title, 'eventTitle': event.title}) }}">{{ msg('edit-event')|lower }}</a>)
+                    (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('edit-event')|lower }}</a>)
                 {% else %}
                     {{ msg('event-no-data') }}
                     <a href="#" class="event-process-link">{{ msg('calculate-totals') }}</a>.

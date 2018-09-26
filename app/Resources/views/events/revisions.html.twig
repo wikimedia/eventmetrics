@@ -10,10 +10,10 @@
             </li>
         {% endif %}
         <li>
-            <a href="{{ path('Program', {'programTitle': program.title}) }}">{{ program.displayTitle }}</a>
+            <a href="{{ path('Program', {'programId': program.id}) }}">{{ program.displayTitle }}</a>
         </li>
         <li>
-            <a href="{{ path('Event', {'programTitle': program.title, 'eventTitle': event.title}) }}">{{ event.displayTitle }}</a>
+            <a href="{{ path('Event', {'programId': program.id, 'eventId': event.id}) }}">{{ event.displayTitle }}</a>
         </li>
         <li class="active">{{ msg('event-data') }}</li>
     </ol>
@@ -29,13 +29,13 @@
 
         <div class="pull-right text-right">
             <div class="btn-group event-export">
-                <a download="{{ program.displayTitle }} - {{ event.displayTitle }}.csv" href="{{ path('Revisions', {'programTitle': program.title, 'eventTitle': event.title, 'format': 'csv'}) }}" class="btn btn-default event-export-btn">
+                <a download="{{ program.displayTitle }} - {{ event.displayTitle }}.csv" href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id, 'format': 'csv'}) }}" class="btn btn-default event-export-btn">
                     <span class="glyphicon glyphicon-export"></span>
                     {{ msg('download-csv') }}
                 </a>
             </div>
             <div class="btn-group event-export">
-                <a target="_blank" href="{{ path('Revisions', {'programTitle': program.title, 'eventTitle': event.title, 'format': 'wikitext'}) }}" class="btn btn-default event-export-btn">
+                <a target="_blank" href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id, 'format': 'wikitext'}) }}" class="btn btn-default event-export-btn">
                     <span class="glyphicon glyphicon-export"></span>
                     {{ msg('download-wiki-table') }}
                 </a>
@@ -87,7 +87,7 @@
         {% if numPages > 1 %}
             {% set hasPrev = offset - 1 >= 1 %}
             {% set hasNext = offset + 1 < numPages + 1 %}
-            {% set pathVars = {'programTitle': program.title, 'eventTitle': event.title} %}
+            {% set pathVars = {'programId': program.id, 'eventId': event.id} %}
 
             <nav aria-label="..." class="text-center">
                 <ul class="pagination">

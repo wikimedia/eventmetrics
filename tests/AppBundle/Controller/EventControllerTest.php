@@ -17,6 +17,12 @@ use DateTime;
  */
 class EventControllerTest extends DatabaseAwareWebTestCase
 {
+    /** @var int ID of the Program, used for routing. */
+    private $programId;
+
+    /** @var int ID of the Event, used for routing. */
+    private $eventId;
+
     /**
      * Called before each test.
      */
@@ -24,8 +30,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     {
         parent::setUp();
 
-        // This tests runs code that throws exceptions, and we don't
-        // want that in the test output.
+        // This tests runs code that throws exceptions, and we don't want that in the test output.
         $this->suppressErrors();
     }
 
@@ -41,6 +46,49 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     }
 
     /**
+     * Test that ID/title routes both work. We cannot use a data provider here because we need to programmatically
+     * get the event and program IDs.
+     */
+    public function testRouting(): void
+    {
+        $this->loginUser();
+
+        // Load extended fixtures.
+        $this->addFixture(new LoadFixtures('extended'));
+        $this->executeFixtures();
+
+        /** @var Event $event */
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Oliver_and_Company']);
+        $eventId = $event->getId();
+        $programId = $event->getProgram()->getId();
+
+        $validRoutes = [
+            // Historical routes that should still work.
+            "/programs/My_fun_program",
+            "/programs/My_fun_program/",
+            "/programs/My_fun_program/Oliver_and_Company",
+            "/programs/My_fun_program/Oliver_and_Company/",
+
+            // Historical routes except with IDs.
+            "/programs/$programId/$eventId",
+
+            // New routes.
+            "/programs/$programId",
+            "/programs/$programId/",
+            "/programs/$programId/edit",
+            "/programs/$programId/events/$eventId",
+            "/programs/$programId/events/$eventId/edit",
+        ];
+
+        foreach ($validRoutes as $route) {
+            $this->client->request('GET', $route);
+            static::assertTrue($this->client->getResponse()->isSuccessful(), "Not found: $route");
+        }
+    }
+
+    /**
      * Workflow, including creating, updating and deleting events.
      */
     public function testWorkflow(): void
@@ -48,6 +96,12 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         // Load basic fixtures.
         $this->addFixture(new LoadFixtures());
         $this->executeFixtures();
+
+        /** @var Program $program */
+        $program = $this->entityManager
+            ->getRepository('Model:Program')
+            ->findOneBy(['title' => 'My_fun_program']);
+        $this->programId = $program->getId();
 
         $this->loginUser();
 
@@ -70,7 +124,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     public function testLoggedOut(): void
     {
         // 'My_fun_program' was already created via fixtures.
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
+        $this->crawler = $this->client->request('GET', $this->getProgramUrl());
         $this->response = $this->client->getResponse();
         static::assertEquals(307, $this->response->getStatusCode());
     }
@@ -86,7 +140,14 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         $this->loginUser('Not an organizer');
 
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Oliver_and_Company');
+        /** @var Event $event */
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Oliver_and_Company']);
+        $eventId = $event->getId();
+        $programId = $event->getProgram()->getId();
+
+        $this->crawler = $this->client->request('GET', "/programs/$programId/events/$eventId");
         $this->response = $this->client->getResponse();
         static::assertEquals(403, $this->response->getStatusCode());
 
@@ -101,7 +162,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         // );
 
         // // Should not be able to edit an event.
-        // $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/Oliver_and_Company');
+        // $this->crawler = $this->client->request('GET', '/programs/'.$this->programId.'/'.$this->eventId.'/edit');
         // static::assertEquals(403, $this->client->getResponse()->getStatusCode());
     }
 
@@ -111,7 +172,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     private function indexSpec(): void
     {
         // 'My_fun_program' was already created via fixtures.
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
+        $this->crawler = $this->client->request('GET', $this->getProgramUrl());
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
     }
@@ -121,7 +182,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     private function newSpec(): void
     {
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/new');
+        $this->crawler = $this->client->request('GET', $this->getProgramUrl().'/events/new');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
         static::assertContains(
             'Create a new event',
@@ -149,6 +210,9 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'The_Lion_King']);
+
+        // Used throughout the rest of the specs.
+        $this->eventId = $event->getId();
 
         static::assertNotNull($event);
         static::assertEquals(
@@ -188,7 +252,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     private function updateSpec(): void
     {
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/The_Lion_King');
+        $this->crawler = $this->client->request('GET', $this->getEventUrl().'/edit');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $this->crawler->selectButton('Submit')->form();
@@ -244,7 +308,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             ->findOneBy(['domain' => 'fr.wikipedia']);
         static::assertNotNull($eventWiki);
 
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/Pinocchio');
+        $this->crawler = $this->client->request('GET', $this->getEventUrl().'/edit');
 
         // Make sure the three wikis are in the form.
         static::assertEquals('commons.wikimedia', $this->crawler->filter('#event_wikis_0')->attr('value'));
@@ -281,7 +345,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     private function validateSpec(): void
     {
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/The_Lion_King');
+        $this->crawler = $this->client->request('GET', $this->getEventUrl().'/edit');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $this->crawler->selectButton('Submit')->form();
@@ -296,12 +360,18 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
     /**
      * Show page, which lists participants and statistics.
+     * This also tests that you can use the ID or title for routing.
      */
     private function showSpec(): void
     {
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Pinocchio');
+        $this->crawler = $this->client->request('GET', $this->getEventUrl());
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
+
+        static::assertContains(
+            'Pinocchio',
+            $this->crawler->filter('.page-header')->text()
+        );
 
         // Should see the 'edit event', since we are logged in and are one of the organizers.
         static::assertContains(
@@ -360,7 +430,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     public function categoriesSpec(): void
     {
         // Browse to event page.
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Pinocchio');
+        $this->crawler = $this->client->request('GET', $this->getEventUrl());
         $this->response = $this->client->getResponse();
 
         $form = $this->crawler->selectButton('Save categories')->form();
@@ -413,7 +483,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     private function cloneSpec(): void
     {
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/copy/Pinocchio');
+        $this->crawler = $this->client->request('GET', $this->getEventUrl().'/copy');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $this->crawler->selectButton('Submit')->form();
@@ -460,7 +530,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             $this->entityManager->getRepository('Model:Event')->findAll()
         );
 
-        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/delete/Pinocchio');
+        $this->crawler = $this->client->request('GET', $this->getEventUrl().'/delete');
         $this->response = $this->client->getResponse();
         static::assertEquals(302, $this->response->getStatusCode());
 
@@ -468,5 +538,23 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             1,
             $this->entityManager->getRepository('Model:Event')->findAll()
         );
+    }
+
+    /**
+     * Generate a URL to the program, going by $this->programId.
+     * @return string
+     */
+    private function getProgramUrl(): string
+    {
+        return '/programs/'.$this->programId;
+    }
+
+    /**
+     * Generate a URL to the event, going by $this->programId and $this->eventId.
+     * @return string
+     */
+    private function getEventUrl(): string
+    {
+        return '/programs/'.$this->programId.'/events/'.$this->eventId;
     }
 }

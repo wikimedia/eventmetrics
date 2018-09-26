@@ -60,16 +60,14 @@ trait TitleUserTrait
     }
 
     /**
-     * Validates that the title is not a reserved string.
+     * Validates that the title is not just a number (as these would be assumed to be IDs).
      * @Assert\Callback
-     * @param ExecutionContext $context Supplied by Symfony.
+     * @param ExecutionContext $context
      */
-    public function validateUnreservedTitle(ExecutionContext $context): void
+    public function validateNonNumerical(ExecutionContext $context): void
     {
-        if (in_array($this->title, ['edit', 'new', 'delete', 'process', 'api', 'revisions'])) {
-            $context->buildViolation('error-title-reserved')
-                ->setParameter(0, '<code>edit</code>, <code>delete</code>, '.
-                    '<code>process</code>, <code>api</code>, <code>revisions</code>')
+        if (ctype_digit((string)$this->title)) {
+            $context->buildViolation('error-title-numeric')
                 ->atPath('title')
                 ->addViolation();
         }

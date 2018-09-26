@@ -16,7 +16,7 @@
     <div class="container">
         <div class="page-header">
             {% if isOrganizer %}
-                <a href="{{ path('NewEvent', {'programTitle': program.title}) }}" class="btn btn-default pull-right">
+                <a href="{{ path('NewEvent', {'programId': program.id}) }}" class="btn btn-default pull-right">
                     {{ msg('create-new-event') }}
                 </a>
             {% endif %}
@@ -24,7 +24,7 @@
                 {{ program.displayTitle }}
                 {% if isOrganizer %}
                     <small>
-                        (<a href="{{ path('EditProgram', {'programTitle': program.title}) }}">{{ msg('edit-program')|lower }}</a>)
+                        (<a href="{{ path('EditProgram', {'programId': program.id}) }}">{{ msg('edit-program')|lower }}</a>)
                     </small>
                 {% endif %}
             </h1>
@@ -68,12 +68,12 @@
                     {% for event in program.events %}
                         <tr class="event-entry">
                             <td class="sort-entry--event" data-value="{{ event.title }}">
-                                <a href="{{ path('Event', {'programTitle': program.title, 'eventTitle': event.title}) }}">{{ event.displayTitle }}</a>
+                                <a href="{{ path('Event', {'programId': program.id, 'eventId': event.id}) }}">{{ event.displayTitle }}</a>
                             </td>
                             {% set numParticipants = event.numParticipants %}
                             {% if isOrganizer %}
                                 <td class="text-nowrap">
-                                    {{ layout.actionButtons('Event', event, {'programTitle': program.title, 'eventTitle': event.title}, numParticipants == 0) }}
+                                    {{ layout.actionButtons('Event', event, {'programId': program.id, 'eventId': event.id}, numParticipants == 0) }}
                                 </td>
                             {% endif %}
                             <td class="text-nowrap sort-entry--participants" data-value="{{ numParticipants }}">
