@@ -3,16 +3,17 @@
  * This file contains only the SpawnJobsCommand class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Command;
 
+use AppBundle\Model\Job;
+use AppBundle\Service\JobHandler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Psr\Container\ContainerInterface;
-use AppBundle\Model\Job;
-use AppBundle\Service\JobHandler;
-use DateTime;
 
 /**
  * The SpawnJobsCommand will query the jobs table and run the JobHandler
@@ -42,7 +43,7 @@ class SpawnJobsCommand extends Command
     /**
      * Configuration for the Symfony console command.
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('app:spawn-jobs')
             ->setDescription(
@@ -60,9 +61,9 @@ class SpawnJobsCommand extends Command
      * Called when the command is executed.
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @return null
+     * @return int Exit code.
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln([
             "\nJob queue processor",
@@ -74,18 +75,20 @@ class SpawnJobsCommand extends Command
 
         if (!$jobId) {
             $this->jobHandler->spawnAll($output);
-            return null;
+            return 0;
         }
 
+        /** @var Job|null $job */
         $job = $this->entityManager
             ->getRepository('Model:Job')
             ->findOneBy(['id' => (int)$jobId]);
 
-        if ($job === null) {
+        if (null === $job) {
             $output->writeln("<error>No job found with ID $jobId</error>");
             return 1;
-        } else {
-            $this->jobHandler->spawn($job, $output);
         }
+
+        $this->jobHandler->spawn($job, $output);
+        return 0;
     }
 }

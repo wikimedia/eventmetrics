@@ -3,16 +3,18 @@
  * This file contains only the ProcessEventCommand class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Command;
 
 use AppBundle\Model\Event;
 use AppBundle\Repository\EventRepository;
+use AppBundle\Service\EventProcessor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use AppBundle\Service\EventProcessor;
 
 /**
  * The ProcessEventCommand handles the core logic of calculating statistics for an event.
@@ -47,7 +49,7 @@ class ProcessEventCommand extends Command
     /**
      * Configuration for the Symfony console command.
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('app:process-event')
             ->setDescription('Generates statistics for the given event.')
@@ -58,9 +60,9 @@ class ProcessEventCommand extends Command
      * Called when the command is executed.
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @return integer
+     * @return int Exit code.
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $eventId = $input->getArgument('eventId');
 
@@ -70,7 +72,7 @@ class ProcessEventCommand extends Command
         /** @var Event $event */
         $event = $eventRepo->findOneBy(['id' => $eventId]);
 
-        if ($event === null) {
+        if (null === $event) {
             $output->writeln("<error>Event with ID $eventId not found.</error>");
             return 1;
         }
@@ -82,5 +84,6 @@ class ProcessEventCommand extends Command
         ]);
 
         $this->eventProcessor->process($event, $output);
+        return 0;
     }
 }
