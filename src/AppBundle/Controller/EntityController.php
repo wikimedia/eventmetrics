@@ -14,8 +14,8 @@ use AppBundle\Repository\OrganizerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Krinkle\Intuition\Intuition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -65,7 +65,7 @@ abstract class EntityController extends Controller
      * Service injection point, configured in services.yml
      * @param ValidatorInterface $validator
      */
-    public function setValidator(ValidatorInterface $validator)
+    public function setValidator(ValidatorInterface $validator): void
     {
         $this->validator = $validator;
     }
@@ -176,7 +176,7 @@ abstract class EntityController extends Controller
      */
     private function validateUser(): void
     {
-        if ($this->session->get('logged_in_user') != '') {
+        if ('' != $this->session->get('logged_in_user')) {
             return;
         }
         $this->addFlashMessage('danger', 'please-login');

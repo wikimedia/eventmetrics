@@ -37,7 +37,7 @@ class FormatExtension extends Extension
 
     /**
      * Get all functions that this class provides.
-     * @return array
+     * @return \Twig_SimpleFunction[]
      */
     public function getFunctions(): array
     {
@@ -51,7 +51,7 @@ class FormatExtension extends Extension
 
     /**
      * Get all filters for this extension.
-     * @return array
+     * @return \Twig_SimpleFilter[]
      */
     public function getFilters(): array
     {
@@ -98,7 +98,7 @@ class FormatExtension extends Extension
     {
         // If the language is 'en' with no country code,
         // override the US English format that's provided by ICU.
-        if ($this->intuition->getLang() === 'en') {
+        if ('en' === $this->intuition->getLang()) {
             return $this->dateFormatStd($datetime);
         }
 
@@ -138,7 +138,7 @@ class FormatExtension extends Extension
      * @param string $str The string
      * @return string The string, capitalized
      */
-    public function ucfirst($str): string
+    public function ucfirst(string $str): string
     {
         return ucfirst($str);
     }
@@ -150,7 +150,7 @@ class FormatExtension extends Extension
      * @param int $precision Number of decimal places to show.
      * @return string Formatted percentage.
      */
-    public function percentFormat($numerator, $denominator = null, int $precision = 1)
+    public function percentFormat($numerator, $denominator = null, int $precision = 1): string
     {
         if (!$denominator) {
             $quotient = $numerator;
@@ -186,12 +186,12 @@ class FormatExtension extends Extension
      * @param int $seconds Number of seconds.
      * @param bool $translate Used for unit testing. Set to false to return
      *   the value and i18n key, instead of the actual translation.
-     * @return string|array Examples: '30 seconds', '2 minutes', '15 hours', '500 days',
+     * @return string|mixed[] Examples: '30 seconds', '2 minutes', '15 hours', '500 days',
      *   or [30, 'num-seconds'] (etc.) if $translate is false.
      */
     public function formatDuration(int $seconds, bool $translate = true)
     {
-        list($val, $key) = $this->getDurationMessageKey($seconds);
+        [$val, $key] = $this->getDurationMessageKey($seconds);
 
         if ($translate) {
             return $this->numberFormat($val).' '.$this->intuition->msg("num-$key", [$val]);
@@ -203,14 +203,14 @@ class FormatExtension extends Extension
     /**
      * Given a time duration in seconds, generate a i18n message key and value.
      * @param int $seconds Number of seconds.
-     * @return array [int - message value, string - message key]
+     * @return mixed[] [int - message value, string - message key]
      */
     private function getDurationMessageKey(int $seconds): array
     {
-        /** @var int Value to show in message */
+        /** @var int $val Value to show in message */
         $val = $seconds;
 
-        /** @var string Unit of time, used in the key for the i18n message */
+        /** @var string $key Unit of time, used in the key for the i18n message */
         $key = 'seconds';
 
         if ($seconds >= 86400) {

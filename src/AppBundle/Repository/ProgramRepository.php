@@ -71,7 +71,7 @@ class ProgramRepository extends Repository
      * Get the names and offsets of all unique EventWikiMetrics belonging to the Events with the given event IDs.
      * @param QueryBuilder $rqb
      * @param int[] $eventIds
-     * @return array With metric names as the keys.
+     * @return mixed[] With metric names as the keys.
      */
     private function getEventWikiMetrics(QueryBuilder $rqb, array $eventIds): array
     {
@@ -103,7 +103,7 @@ class ProgramRepository extends Repository
         $eventIds = $program->getEventIds();
 
         // Don't run a query unless you need to.
-        if (count($eventIds) === 0) {
+        if (0 === count($eventIds)) {
             return 0;
         }
 

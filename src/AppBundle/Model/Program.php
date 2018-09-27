@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace AppBundle\Model;
 
 use AppBundle\Model\Traits\TitleUserTrait;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -77,7 +77,7 @@ class Program
 
     /**
      * Hash of combined statistics across all Events in this Program.
-     * @var array Keyed by metric.
+     * @var mixed[] Keyed by metric.
      */
     private $statistics;
 
@@ -159,7 +159,7 @@ class Program
 
     /**
      * Set the Organizers of this Program with the given usernames.
-     * @param array $usernames Usernames of the organizers.
+     * @param string[] $usernames Usernames of the organizers.
      */
     public function setOrganizerNames(array $usernames): void
     {
@@ -291,7 +291,7 @@ class Program
 
     /**
      * Get combined statistics about all Events that make up this Program.
-     * @return array Keyed by metric.
+     * @return mixed[] Keyed by metric.
      */
     public function getStatistics(): array
     {
@@ -323,9 +323,9 @@ class Program
      * @param string $metric Name of metric, one of EventStat::METRIC_TYPES.
      * @return mixed|null Will be null if metric was not found.
      */
-    public function getStatistic($metric)
+    public function getStatistic(string $metric)
     {
         $stats = $this->getStatistics();
-        return isset($stats[$metric]) ? $stats[$metric] : null;
+        return $stats[$metric] ?? null;
     }
 }

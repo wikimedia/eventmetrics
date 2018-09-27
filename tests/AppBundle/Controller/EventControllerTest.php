@@ -3,6 +3,8 @@
  * This file contains only the EventControllerTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Controller;
 
 use AppBundle\DataFixtures\ORM\LoadFixtures;
@@ -18,7 +20,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Called before each test.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -30,7 +32,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * No index of events without program in URL, just redirects to programs page.
      */
-    public function testIndex()
+    public function testIndex(): void
     {
         $this->loginUser('Test user');
         $this->crawler = $this->client->request('GET', '/events');
@@ -41,7 +43,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Workflow, including creating, updating and deleting events.
      */
-    public function testWorkflow()
+    public function testWorkflow(): void
     {
         // Load basic fixtures.
         $this->addFixture(new LoadFixtures());
@@ -64,7 +66,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Attempting to browse to /programs when not logged in at all.
      */
-    public function testLoggedOut()
+    public function testLoggedOut(): void
     {
         // 'My_fun_program' was already created via fixtures.
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
@@ -75,7 +77,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Test while logged in as a non-organizer, ensuring edit options aren't available.
      */
-    public function testNonOrganizer()
+    public function testNonOrganizer(): void
     {
         // Load more test events.
         $this->addFixture(new LoadFixtures('extended'));
@@ -105,7 +107,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Index of events for the program.
      */
-    private function indexSpec()
+    private function indexSpec(): void
     {
         // 'My_fun_program' was already created via fixtures.
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program');
@@ -116,7 +118,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Form to create a new event.
      */
-    private function newSpec()
+    private function newSpec(): void
     {
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/new');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -129,7 +131,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Creating a new event.
      */
-    private function createSpec()
+    private function createSpec(): void
     {
         $form = $this->crawler->selectButton('Submit')->form();
         $form['event[title]'] = ' The Lion King ';
@@ -183,7 +185,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Updating an event.
      */
-    private function updateSpec()
+    private function updateSpec(): void
     {
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/The_Lion_King');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -223,9 +225,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
     /**
      * Test how child wikis are handled when a family wiki is added, and when stats are generated.
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function familyWikiSpec()
+    public function familyWikiSpec(): void
     {
         // First create multiple 'orphan' wikis (that don't have an associated family wiki yet).
         /** @var Event $event */
@@ -277,7 +278,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Test relevant errors are shown when updating an event.
      */
-    private function validateSpec()
+    private function validateSpec(): void
     {
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/edit/The_Lion_King');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -295,7 +296,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Show page, which lists participants and statistics.
      */
-    private function showSpec()
+    private function showSpec(): void
     {
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Pinocchio');
         $this->response = $this->client->getResponse();
@@ -311,7 +312,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Adding/remove participants to the event.
      */
-    private function participantsSpec()
+    private function participantsSpec(): void
     {
         $form = $this->crawler->selectButton('Save participants')->form();
 
@@ -355,7 +356,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Cloning an Event.
      */
-    private function cloneSpec()
+    private function cloneSpec(): void
     {
         $this->crawler = $this->client->request('GET', '/programs/My_fun_program/copy/Pinocchio');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -395,7 +396,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     /**
      * Test event deletion.
      */
-    private function deleteSpec()
+    private function deleteSpec(): void
     {
         static::assertCount(
             2, // There was a cloned event, see self::cloneSpec()

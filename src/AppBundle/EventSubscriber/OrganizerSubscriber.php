@@ -9,7 +9,6 @@ namespace AppBundle\EventSubscriber;
 
 use AppBundle\Model\Organizer;
 use AppBundle\Repository\OrganizerRepository;
-use AppBundle\Repository\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Psr\Container\ContainerInterface;
@@ -51,7 +50,9 @@ class OrganizerSubscriber
     {
         // Fetch and set the username on the entity.
         if (null === $organizer->getUsername()) {
-            $this->setUsername($organizer, $this->repo);
+            $userId = $organizer->getUserId();
+            $username = $this->repo->getUsernameFromId($userId);
+            $organizer->setUsername($username);
         }
     }
 
@@ -69,21 +70,9 @@ class OrganizerSubscriber
         );
 
         // Fetch and set the user ID on the entity.
-        if ($organizer->getUserId() === null) {
+        if (null === $organizer->getUserId()) {
             $userId = $this->repo->getUserIdFromName($organizer->getUsername());
             $organizer->setUserId($userId);
         }
-    }
-
-    /**
-     * Set the username on the Organizer for display purposes.
-     * @param Organizer $entity
-     * @param Repository $repo
-     */
-    private function setUsername($entity, $repo): void
-    {
-        $userId = $entity->getUserId();
-        $username = $repo->getUsernameFromId($userId);
-        $entity->setUsername($username);
     }
 }

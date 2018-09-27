@@ -3,12 +3,14 @@
  * This file contains only the ProgramTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Model;
 
-use AppBundle\Model\Program;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\Organizer;
+use AppBundle\Model\Program;
 use Doctrine\ORM\EntityManagerInterface;
 use Tests\AppBundle\GrantMetricsTestCase;
 
@@ -26,7 +28,7 @@ class ProgramTest extends GrantMetricsTestCase
     /**
      * Create test Organizer and Program.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -37,7 +39,7 @@ class ProgramTest extends GrantMetricsTestCase
     /**
      * Tests constructor and basic getters.
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         static::assertEquals(1, count($this->program->getOrganizers()));
         static::assertEquals($this->organizer, $this->program->getOrganizers()[0]);
@@ -55,7 +57,7 @@ class ProgramTest extends GrantMetricsTestCase
     /**
      * Test adding and removing organizers.
      */
-    public function testAddRemoveOrganizer()
+    public function testAddRemoveOrganizer(): void
     {
         // Add another organizer by user ID.
         $organizer2 = new Organizer(100);
@@ -95,7 +97,7 @@ class ProgramTest extends GrantMetricsTestCase
     /**
      * Test setting organizers by username.
      */
-    public function testSetOrganizerNames()
+    public function testSetOrganizerNames(): void
     {
         $organizer = new Organizer('Foo');
         $program = new Program($organizer);
@@ -109,7 +111,7 @@ class ProgramTest extends GrantMetricsTestCase
     /**
      * Test adding and removing events.
      */
-    public function testAddRemoveEvent()
+    public function testAddRemoveEvent(): void
     {
         static::assertEquals(0, count($this->program->getEvents()));
 
@@ -138,7 +140,7 @@ class ProgramTest extends GrantMetricsTestCase
     /**
      * Normalized slug of the program.
      */
-    public function testSanitizeTitle()
+    public function testSanitizeTitle(): void
     {
         $this->program->setTitle(" My fun program 5 ");
         static::assertEquals('My_fun_program_5', $this->program->getTitle());
@@ -148,7 +150,7 @@ class ProgramTest extends GrantMetricsTestCase
     /**
      * Tests the validators on the model.
      */
-    public function testValidations()
+    public function testValidations(): void
     {
         $organizer = new Organizer('');
         $program = new Program($organizer);
@@ -173,7 +175,7 @@ class ProgramTest extends GrantMetricsTestCase
     /**
      * Test fetching statistics.
      */
-    public function testStatistics()
+    public function testStatistics(): void
     {
         // Create some events with event stats.
         $event1 = new Event($this->program, 'The Lion King');
@@ -201,7 +203,7 @@ class ProgramTest extends GrantMetricsTestCase
      * which only permits 3-byte characters and issues a warning and truncates at the first longer character.
      * @link https://phabricator.wikimedia.org/T201388
      */
-    public function testTitleWithExtendedCharacters()
+    public function testTitleWithExtendedCharacters(): void
     {
         $this->bootKernel();
         /** @var EntityManagerInterface $entityManager */

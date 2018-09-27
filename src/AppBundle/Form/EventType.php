@@ -50,7 +50,7 @@ class EventType extends AbstractType
         $builder->add('title', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
             ->add('wikis', CollectionType::class, [
                 'entry_type' => TextType::class,
@@ -117,7 +117,7 @@ class EventType extends AbstractType
             $region = str_replace('_', ' ', explode('/', $timezone)[0]);
             $displayTimezone = str_replace('_', ' ', $timezone);
 
-            if ($region === 'UTC') {
+            if ('UTC' === $region) {
                 continue;
             }
 
@@ -189,7 +189,7 @@ class EventType extends AbstractType
                 'domain' => $domain,
             ]);
 
-            if ($eventWiki === null) {
+            if (null === $eventWiki) {
                 $eventWiki = new EventWiki($event, $domain);
             }
 

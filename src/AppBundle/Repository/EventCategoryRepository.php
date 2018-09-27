@@ -30,12 +30,12 @@ class EventCategoryRepository extends Repository
     /**
      * Get the IDs of pages in the given categories.
      * @param string $dbName Database name such as 'enwiki_p'.
-     * @param array $titles Titles of categories to fetch from.
+     * @param string[] $titles Titles of categories to fetch from.
      * @param bool $queryBuilder Whether to return just the Doctrine query builder object.
      * @param int|null $limit Max number of pages. null for no limit, but only do this if used in a subquery.
-     * @return array|QueryBuilder Page IDs or the QueryBuilder object.
+     * @return string[]|QueryBuilder Page IDs or the QueryBuilder object.
      */
-    public function getPagesInCategories($dbName, array $titles, bool $queryBuilder = false, ?int $limit = 20000)
+    public function getPagesInCategories(string $dbName, array $titles, bool $queryBuilder = false, ?int $limit = 20000)
     {
         $rqb = $this->getReplicaConnection()->createQueryBuilder();
         $rqb->select(['DISTINCT(cl_from)'])

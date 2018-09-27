@@ -12,8 +12,8 @@ use AppBundle\Model\Program;
 use AppBundle\Repository\OrganizerRepository;
 use AppBundle\Repository\ProgramRepository;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**

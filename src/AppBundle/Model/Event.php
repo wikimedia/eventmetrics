@@ -14,8 +14,8 @@ use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * An Event belongs to one program, and has many participants.
@@ -48,7 +48,7 @@ class Event
      * @see EventProcessor
      * @see EventStat
      */
-    const AVAILABLE_METRICS = [
+    public const AVAILABLE_METRICS = [
         'new-editors' => 15,
         'retention' => 7,
         'pages-created' => null,
@@ -63,7 +63,7 @@ class Event
      * This defines what metrics are available to what wiki families.
      * '*' means all wikis are applicable.
      */
-    const WIKI_FAMILY_METRIC_MAP = [
+    public const WIKI_FAMILY_METRIC_MAP = [
         '*' => ['new-editors', 'retention'],
         'wikipedia' => ['pages-created', 'pages-improved'],
         'commons' => ['files-uploaded', 'file-usage'],
@@ -182,8 +182,13 @@ class Event
      * @param DateTime|string $end End date of the event.
      * @param string $timezone Official timezone code within the tz database.
      */
-    public function __construct(Program $program, $title = null, $start = null, $end = null, $timezone = 'UTC')
-    {
+    public function __construct(
+        Program $program,
+        ?string $title = null,
+        $start = null,
+        $end = null,
+        string $timezone = 'UTC'
+    ) {
         $this->program = $program;
         $this->setTitle($title);
         $this->setTimezone($timezone);
@@ -234,8 +239,8 @@ class Event
     public function isValid(): bool
     {
         return $this->wikis->count() > 0 &&
-            $this->start !== null &&
-            $this->end !== null &&
+            null !== $this->start &&
+            null !== $this->end &&
             $this->getStartWithTimezone() < new DateTime() &&
             $this->participants->count() > 0;
     }
@@ -387,7 +392,7 @@ class Event
      * @param bool $saved Whether to only count saved categories (have an ID).
      * @return int
      */
-    public function getNumCategories($saved = false): int
+    public function getNumCategories(bool $saved = false): int
     {
         if (false === $saved) {
             return $this->categories->count();
@@ -591,7 +596,7 @@ class Event
     public function getFamilyWikis(): Collection
     {
         return $this->wikis->filter(function (EventWiki $wiki) {
-            return substr((string)$wiki->getDomain(), 0, 2) === '*.';
+            return '*.' === substr((string)$wiki->getDomain(), 0, 2);
         });
     }
 
@@ -601,7 +606,7 @@ class Event
      * representing a family (e.g. *.wikipedia). For instance, if there are EventWikis for en.wikipedia, fr.wikipedia,
      * and commons.wikipedia, the two Wikipedias are grouped together. If there's also a *.wikipedia,
      * it is not included in the 'wikipedia' group.
-     * @return array
+     * @return EventWiki[]
      */
     public function getWikisByFamily(): array
     {

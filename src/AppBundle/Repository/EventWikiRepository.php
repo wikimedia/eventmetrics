@@ -32,9 +32,9 @@ class EventWikiRepository extends Repository
      */
     public function getDomainFromEventWikiInput(string $value): ?string
     {
-        if (substr($value, 0, 2) === '*.') {
+        if ('*.' === substr($value, 0, 2)) {
             $ret = $this->getWikiFamilyName(substr($value, 2));
-            return $ret !== null ? '*.'.$ret : null;
+            return null !== $ret ? '*.'.$ret : null;
         }
 
         $conn = $this->getMetaConnection();
@@ -111,7 +111,7 @@ class EventWikiRepository extends Repository
      * @return string
      * @static
      */
-    public static function wikifyString(string $wikitext, string $domain, $pageTitle = null): string
+    public static function wikifyString(string $wikitext, string $domain, ?string $pageTitle = null): string
     {
         $wikitext = htmlspecialchars(html_entity_decode($wikitext), ENT_NOQUOTES);
         $sectionMatch = null;
@@ -149,7 +149,7 @@ class EventWikiRepository extends Repository
             $wikiLinkParts = explode('|', $linkMatch[1][0]);
             $wikiLinkPath = htmlspecialchars($wikiLinkParts[0]);
             $wikiLinkText = htmlspecialchars(
-                isset($wikiLinkParts[1]) ? $wikiLinkParts[1] : $wikiLinkPath
+                $wikiLinkParts[1] ?? $wikiLinkPath
             );
 
             // Use normalized page title (underscored, capitalized).
@@ -163,7 +163,7 @@ class EventWikiRepository extends Repository
 
     /**
      * Get all available wikis on the replicas, as defined by EventWiki::VALID_WIKI_PATTERN.
-     * @return array With domain as the keys, database name as the values.
+     * @return string[] With domain as the keys, database name as the values.
      */
     public function getAvailableWikis(): array
     {

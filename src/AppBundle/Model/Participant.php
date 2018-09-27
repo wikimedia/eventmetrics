@@ -68,7 +68,7 @@ class Participant
      * @param Event $event Event the Participant is participating in.
      * @param int $userId ID of the user, corresponds with `centralauth`.`globaluser`.
      */
-    public function __construct(Event $event, int $userId = null)
+    public function __construct(Event $event, ?int $userId = null)
     {
         $this->event = $event;
         $this->event->addParticipant($this);

@@ -45,7 +45,7 @@ class ProgramType extends AbstractType
         $builder->add('title', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
             ->add('organizers', CollectionType::class, [
                 'entry_type' => TextType::class,

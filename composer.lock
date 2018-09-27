@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c23122e8346c901058e48dd3a5705ebc",
+    "content-hash": "b76bc6f73e3acea5fc8cf153c03f72e4",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1847,16 +1847,16 @@
         },
         {
             "name": "ocramius/proxy-manager",
-            "version": "2.2.1",
+            "version": "2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/ProxyManager.git",
-                "reference": "306da837ddf12aa5a85a8ca343587ec822802ac3"
+                "reference": "14b137b06b0f911944132df9d51e445a35920ab1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/306da837ddf12aa5a85a8ca343587ec822802ac3",
-                "reference": "306da837ddf12aa5a85a8ca343587ec822802ac3",
+                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/14b137b06b0f911944132df9d51e445a35920ab1",
+                "reference": "14b137b06b0f911944132df9d51e445a35920ab1",
                 "shasum": ""
             },
             "require": {
@@ -1913,7 +1913,7 @@
                 "proxy pattern",
                 "service proxies"
             ],
-            "time": "2018-08-26T15:07:25+00:00"
+            "time": "2018-09-27T13:45:01+00:00"
         },
         {
             "name": "psr/cache",
@@ -3420,16 +3420,16 @@
         },
         {
             "name": "nelmio/alice",
-            "version": "v3.5.0",
+            "version": "v3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/alice.git",
-                "reference": "ffa4ce81a3be6c7c8fb12a7f192eeed4686e8e2f"
+                "reference": "9c730ed3db86483d9b2c2b804e65bfee245a1f2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/alice/zipball/ffa4ce81a3be6c7c8fb12a7f192eeed4686e8e2f",
-                "reference": "ffa4ce81a3be6c7c8fb12a7f192eeed4686e8e2f",
+                "url": "https://api.github.com/repos/nelmio/alice/zipball/9c730ed3db86483d9b2c2b804e65bfee245a1f2d",
+                "reference": "9c730ed3db86483d9b2c2b804e65bfee245a1f2d",
                 "shasum": ""
             },
             "require": {
@@ -3496,7 +3496,7 @@
                 "faker",
                 "test"
             ],
-            "time": "2018-09-01T16:37:42+00:00"
+            "time": "2018-09-27T21:40:21+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -4766,6 +4766,45 @@
             "time": "2016-10-03T07:35:21+00:00"
         },
         {
+            "name": "slevomat/coding-standard",
+            "version": "4.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/slevomat/coding-standard.git",
+                "reference": "32e1ca205fc34920f323582ed29c0602e3897ae3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/32e1ca205fc34920f323582ed29c0602e3897ae3",
+                "reference": "32e1ca205fc34920f323582ed29c0602e3897ae3",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1",
+                "squizlabs/php_codesniffer": "^3.3.0"
+            },
+            "require-dev": {
+                "jakub-onderka/php-parallel-lint": "1.0.0",
+                "phing/phing": "2.16.1",
+                "phpstan/phpstan": "0.9.2",
+                "phpstan/phpstan-phpunit": "0.9.4",
+                "phpstan/phpstan-strict-rules": "0.9",
+                "phpunit/phpunit": "7.3.5"
+            },
+            "type": "phpcodesniffer-standard",
+            "autoload": {
+                "psr-4": {
+                    "SlevomatCodingStandard\\": "SlevomatCodingStandard"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
+            "time": "2018-09-25T21:21:11+00:00"
+        },
+        {
             "name": "squizlabs/php_codesniffer",
             "version": "3.3.2",
             "source": {
@@ -5045,10 +5084,10 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "ext-json": "*",
+        "php": "^7.2",
         "ext-pdo": "*",
-        "ext-redis": "*",
-        "php": "^7.2"
+        "ext-json": "*",
+        "ext-redis": "*"
     },
     "platform-dev": [],
     "platform-overrides": {

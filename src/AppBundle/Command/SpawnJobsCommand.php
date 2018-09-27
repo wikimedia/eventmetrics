@@ -9,11 +9,11 @@ namespace AppBundle\Command;
 
 use AppBundle\Model\Job;
 use AppBundle\Service\JobHandler;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Psr\Container\ContainerInterface;
 
 /**
  * The SpawnJobsCommand will query the jobs table and run the JobHandler

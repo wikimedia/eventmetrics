@@ -62,7 +62,7 @@ abstract class Controller extends SymfonyController
      * Add a flash message.
      * @param string $type
      * @param string $messageName
-     * @param array $vars
+     * @param mixed[] $vars
      */
     public function addFlashMessage(string $type, string $messageName, array $vars = []): void
     {

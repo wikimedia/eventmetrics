@@ -9,8 +9,8 @@ namespace AppBundle\Twig;
 
 use Krinkle\Intuition\Intuition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig_Extension;
 
