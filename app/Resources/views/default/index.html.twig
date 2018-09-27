@@ -9,7 +9,7 @@
                 {{ app.session.flashBag.get('danger')[0] }}
             </h4>
         {% endif %}
-        <a class="btn btn-default splash-dialog__login" href="{{ path('login') }}">
+        <a class="btn btn-default splash-dialog__login" href="{{ path('toolforge_login') }}">
             {{ msg('login-with-oauth') }}
         </a>
     </div>

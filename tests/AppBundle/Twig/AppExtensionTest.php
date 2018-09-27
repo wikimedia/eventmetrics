@@ -36,29 +36,6 @@ class AppExtensionTest extends GrantMetricsTestCase
     }
 
     /**
-     * Intution methods.
-     */
-    public function testIntution()
-    {
-        static::assertEquals('en', $this->appExtension->getLang());
-        static::assertEquals('English', $this->appExtension->getLangName());
-
-        $allLangs = $this->appExtension->getAllLangs();
-
-        // There should be a bunch.
-        static::assertGreaterThan(20, count($allLangs));
-
-        // Keys should be the language codes, with name as the values.
-        static::assertArraySubset(['en' => 'English'], $allLangs);
-        static::assertArraySubset(['de' => 'Deutsch'], $allLangs);
-        static::assertArraySubset(['es' => 'Español'], $allLangs);
-
-        // Testing if the language is RTL.
-        static::assertFalse($this->appExtension->isRTLLang('en'));
-        static::assertTrue($this->appExtension->isRTLLang('ar'));
-    }
-
-    /**
      * Methods that fetch data about the git repository.
      */
     public function testGitMethods()

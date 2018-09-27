@@ -14,7 +14,7 @@
     {% else %}
         {% set message = 'unknown' %}
     {% endif %}
-    {% set knownError = msgExists(message) %}
+    {% set knownError = msg_exists(message) %}
 
     <div class="container">
         <div class="page-header">
@@ -27,7 +27,7 @@
                 {{ msg(message) }}
             {% else %}
                 <p>
-                    {{ msg('error-server-message', ['<code>' ~ msgIfExists(message) ~ '</code>']) }}
+                    {{ msg('error-server-message', ['<code>' ~ msg_if_exists(message) ~ '</code>']) }}
                 </p>
             {% endif %}
         </p>

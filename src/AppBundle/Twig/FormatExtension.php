@@ -75,7 +75,7 @@ class FormatExtension extends Extension
     public function numberFormat($number, int $decimals = 0): string
     {
         if (!isset($this->numFormatter)) {
-            $lang = $this->getIntuition()->getLang();
+            $lang = $this->intuition->getLang();
             $this->numFormatter = new NumberFormatter($lang, NumberFormatter::DECIMAL);
         }
 
@@ -98,14 +98,14 @@ class FormatExtension extends Extension
     {
         // If the language is 'en' with no country code,
         // override the US English format that's provided by ICU.
-        if ($this->getIntuition()->getLang() === 'en') {
+        if ($this->intuition->getLang() === 'en') {
             return $this->dateFormatStd($datetime);
         }
 
         // Otherwise, format it according to the current locale.
         if (!isset($this->dateFormatter)) {
             $this->dateFormatter = new IntlDateFormatter(
-                $this->getIntuition()->getLang(),
+                $this->intuition->getLang(),
                 IntlDateFormatter::SHORT,
                 IntlDateFormatter::SHORT
             );
@@ -194,7 +194,7 @@ class FormatExtension extends Extension
         list($val, $key) = $this->getDurationMessageKey($seconds);
 
         if ($translate) {
-            return $this->numberFormat($val).' '.$this->msg("num-$key", [$val]);
+            return $this->numberFormat($val).' '.$this->intuition->msg("num-$key", [$val]);
         } else {
             return [$this->numberFormat($val), "num-$key"];
         }

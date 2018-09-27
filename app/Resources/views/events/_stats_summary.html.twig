@@ -7,9 +7,9 @@
         {% set stat = event.getStatistic(metric) %}
         {% if stat is not empty %}
             <div class="text-center event-stats--tile">
-                <h4{% if msgExists(stat.metric ~ '-desc', [stat.offset]) %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}" class="event-metric-desc"{% endif %}>
+                <h4{% if msg_exists(stat.metric ~ '-desc', [stat.offset]) %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}" class="event-metric-desc"{% endif %}>
                     {{ msg(stat.metric, [stat.offset]) }}
-                    {% if msgExists(stat.metric ~ '-desc', [stat.offset]) %}
+                    {% if msg_exists(stat.metric ~ '-desc', [stat.offset]) %}
                         <span class="glyphicon glyphicon-info-sign"></span>
                     {% endif %}
                 </h4>

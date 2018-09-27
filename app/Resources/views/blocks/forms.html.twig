@@ -21,10 +21,10 @@
                          # Here the 0 index of the messageParameters should be the
                          # i18n message used in the <label> for the field label.
                          #}
-                        <strong>{{ msgIfExists(errorParams[0]) }}</strong>:
-                        {{ msgIfExists(error.messageTemplate) }}
+                        <strong>{{ msg_if_exists(errorParams[0]) }}</strong>:
+                        {{ msg_if_exists(error.messageTemplate) }}
                     {% else %}
-                        {{ msgIfExists(error.messageTemplate, errorParams) }}
+                        {{ msg_if_exists(error.messageTemplate, errorParams) }}
                     {% endif %}
                 </ul>
             </div>

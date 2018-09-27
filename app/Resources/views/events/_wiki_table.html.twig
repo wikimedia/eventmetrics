@@ -10,7 +10,7 @@
                     {% set columnCount = columnCount + 1 %}
                     {% set stat = event.statistic(metric) %}
                     {% set metricOrder = metricOrder|merge([stat.metric]) %}
-                    {% set hasDesc = msgExists(stat.metric ~ '-desc', [stat.offset]) %}
+                    {% set hasDesc = msg_exists(stat.metric ~ '-desc', [stat.offset]) %}
                     <th class="col-lg-3">
                         <div class="{% if stat.metric in sortableMetrics %} sort-link sort-link--{{ stat.metric }}{% endif %}{% if hasDesc %} event-metric-desc{% endif %}" {% if hasDesc %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"{% endif %} data-column="{{ stat.metric }}">
                             {{ msg(stat.metric, [stat.offset]) }}

@@ -136,3 +136,11 @@ eight_points_guzzle:
 sensio_framework_extra:
     router:
         annotations: false
+
+toolforge:
+    oauth:
+        consumer_key: '%oauth.key%'
+        consumer_secret: '%oauth.secret%'
+        logged_in_user: '%app.logged_in_user%'
+    intuition:
+        domain: 'grantmetrics'

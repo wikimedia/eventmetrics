@@ -61,11 +61,3 @@ services:
 
     AppBundle\Service\JobHandler:
         public: true
-
-    # Intuition i18n library.
-    # The service class is a subclass of Intuition.
-    # Also define an alias, for use above injecting into Controllers.
-    Krinkle\Intuition\Intuition:
-        factory: ['AppBundle\Service\Intuition', serviceFactory]
-        arguments: ["@request_stack", "@session", "%kernel.root_dir%"]
-    intuition: '@Krinkle\Intuition\Intuition'

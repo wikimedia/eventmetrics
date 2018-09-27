@@ -22,7 +22,7 @@
 <fieldset class="program__organizers">
     {# The organizer currently viewing the program cannot remove or rename themself. #}
     {% for organizer in form.organizers %}
-        {% set isViewingOrganizer = organizer.vars.value == loggedInUser().username %}
+        {% set isViewingOrganizer = organizer.vars.value == logged_in_user().username %}
 
         <div class="form-group organizer-row">
             {% if loop.index == 1 %}
