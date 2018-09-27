@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace AppBundle\Model;
 
-use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * A Job is a processing event that has been submitted to the job queue.

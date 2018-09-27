@@ -3,6 +3,8 @@
  * This file contains only the ProgramControllerTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Controller;
 
 use AppBundle\DataFixtures\ORM\LoadFixtures;
@@ -12,7 +14,7 @@ use AppBundle\DataFixtures\ORM\LoadFixtures;
  */
 class ProgramControllerTest extends DatabaseAwareWebTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -24,7 +26,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     /**
      * Workflow, including creating, updating and deleting programs.
      */
-    public function testWorkflow()
+    public function testWorkflow(): void
     {
         $this->executeFixtures();
 
@@ -49,7 +51,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     /**
      * Test while logged in as a non-organizer, ensuring edit options aren't available.
      */
-    public function testNonOrganizer()
+    public function testNonOrganizer(): void
     {
         // Load basic fixtures, including a test program.
         $this->addFixture(new LoadFixtures());
@@ -75,7 +77,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     /**
      * Index page, listing all the viewing organizer's programs.
      */
-    private function indexSpec()
+    private function indexSpec(): void
     {
         $this->crawler = $this->client->request('GET', '/programs');
         $this->response = $this->client->getResponse();
@@ -85,7 +87,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     /**
      * Form to create a new program.
      */
-    private function newSpec()
+    private function newSpec(): void
     {
         $this->crawler = $this->client->request('GET', '/programs/new');
 
@@ -103,7 +105,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     /**
      * Creating a new program.
      */
-    private function createSpec()
+    private function createSpec(): void
     {
         $form = $this->crawler->selectButton('Submit')->form();
         $form['program[title]'] = ' My test program ';
@@ -122,7 +124,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     /**
      * Updating a program.
      */
-    private function updateSpec()
+    private function updateSpec(): void
     {
         $this->crawler = $this->client->request('GET', '/programs/edit/My_test_program');
         $form = $this->crawler->selectButton('Submit')->form();
@@ -138,7 +140,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     /**
      * Showing a program.
      */
-    private function showSpec()
+    private function showSpec(): void
     {
         $this->crawler = $this->client->request('GET', '/programs/The_Lion_King');
         $this->response = $this->client->getResponse();
@@ -162,7 +164,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     /**
      * Test program deletion.
      */
-    private function deleteSpec()
+    private function deleteSpec(): void
     {
         static::assertCount(
             1,

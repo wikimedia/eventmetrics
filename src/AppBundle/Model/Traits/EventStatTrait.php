@@ -39,7 +39,7 @@ trait EventStatTrait
      * @param string $metric Name of metric, one of EventStat::METRIC_TYPES.
      * @return EventStat|null Null if no EventStat with given metric was found.
      */
-    public function getStatistic($metric): ?EventStat
+    public function getStatistic(string $metric): ?EventStat
     {
         /** @var ArrayCollection $ewStats of EventStats. */
         $ewStats = $this->stats->filter(function (EventStat $stat) use ($metric) {
@@ -88,9 +88,9 @@ trait EventStatTrait
     /**
      * Get the metric types available to this event, based on associated wikis, and their default offset values.
      * @param string|null $family Only return metrics available to given wiki family.
-     * @return array
+     * @return mixed[]
      */
-    public function getAvailableMetrics($family = null): array
+    public function getAvailableMetrics(?string $family = null): array
     {
         $metricMap = self::WIKI_FAMILY_METRIC_MAP;
 
@@ -98,7 +98,7 @@ trait EventStatTrait
         $metricKeys = $metricMap['*'];
 
         foreach ($this->wikis as $wiki) {
-            $isFamily = $family === null ? true : $wiki->getFamilyName() === $family;
+            $isFamily = null === $family ? true : $wiki->getFamilyName() === $family;
 
             if ($isFamily && isset($metricMap[$wiki->getFamilyName()])) {
                 $metricKeys = array_merge(

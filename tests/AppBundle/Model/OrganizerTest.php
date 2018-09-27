@@ -3,6 +3,8 @@
  * This file contains only the OrganizerTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Model;
 
 use AppBundle\Model\Organizer;
@@ -17,7 +19,7 @@ class OrganizerTest extends GrantMetricsTestCase
     /**
      * Tests constructor and basic getters.
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $organizer = new Organizer(50);
         static::assertNull($organizer->getId());
@@ -27,7 +29,7 @@ class OrganizerTest extends GrantMetricsTestCase
     /**
      * Test adding and removing programs.
      */
-    public function testAddRemoveProgram()
+    public function testAddRemoveProgram(): void
     {
         $organizer = new Organizer(50);
 
@@ -56,7 +58,7 @@ class OrganizerTest extends GrantMetricsTestCase
     /**
      * Basic setters.
      */
-    public function testSetters()
+    public function testSetters(): void
     {
         $organizer = new Organizer(50);
 

@@ -3,14 +3,16 @@
  * This file contains only the EventWikiTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Model\EventWiki;
-use AppBundle\Model\Program;
 use AppBundle\Model\Event;
+use AppBundle\Model\EventWiki;
 use AppBundle\Model\EventWikiStat;
 use AppBundle\Model\Organizer;
+use AppBundle\Model\Program;
+use Doctrine\Common\Collections\ArrayCollection;
 use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
@@ -21,7 +23,7 @@ class EventWikiTest extends GrantMetricsTestCase
     /** @var Event The Event that the EventWiki is part of. */
     protected $event;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -39,7 +41,7 @@ class EventWikiTest extends GrantMetricsTestCase
     /**
      * Tests constructor and basic getters.
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $wiki = new EventWiki($this->event, 'test.wikipedia');
 
@@ -59,7 +61,7 @@ class EventWikiTest extends GrantMetricsTestCase
     /**
      * Test adding and removing statistics.
      */
-    public function testAddRemoveStatistics()
+    public function testAddRemoveStatistics(): void
     {
         $wiki = new EventWiki($this->event, 'test.wikipedia');
 
@@ -93,7 +95,7 @@ class EventWikiTest extends GrantMetricsTestCase
     /**
      * Test methods involving wiki families.
      */
-    public function testWikiFamilies()
+    public function testWikiFamilies(): void
     {
         // Not a wiki family.
         $wiki = new EventWiki($this->event, 'test.wikipedia');

@@ -37,7 +37,7 @@ class OrganizerRepository extends Repository
 
         // Username is invalid, so just return a new Organizer
         // without a user ID so that the Form can produce errors.
-        if ($userId === null) {
+        if (null === $userId) {
             return new Organizer($username);
         }
 
@@ -46,7 +46,7 @@ class OrganizerRepository extends Repository
         $organizer = $em->getRepository(Organizer::class)
             ->findOneBy(['userId' => $userId]);
 
-        if ($organizer === null) {
+        if (null === $organizer) {
             $organizer = new Organizer((int)$userId);
         }
 

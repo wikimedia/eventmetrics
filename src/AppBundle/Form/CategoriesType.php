@@ -18,7 +18,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
 
 /**
@@ -52,7 +51,7 @@ class CategoriesType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                'delete_empty' => function (EventCategory $category = null) {
+                'delete_empty' => function (?EventCategory $category = null) {
                     return null === $category || (empty($category->getTitle()) && empty($category->getDomain()));
                 },
                 'constraints' => [new Valid()],
@@ -105,7 +104,7 @@ class CategoriesType extends AbstractType
             // We have to underscore the title here (in addition to EventCategory::setTitle()) because we are
             // checking for duplicates, working with the raw form input and not EventCategory objects.
             $category['title'] = str_replace(' ', '_', trim($category['title']));
-            if (!in_array($category, $categories) && $category['title'].$category['domain'] !== '') {
+            if (!in_array($category, $categories) && '' !== $category['title'].$category['domain']) {
                 // We must use the original index to reference the right entity on form submission.
                 $categories[$index] = $category;
             }

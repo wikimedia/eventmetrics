@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace AppBundle\Service;
 
 use AppBundle\Model\Job;
+use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,7 +22,7 @@ class JobHandler
     // Max number of open connections allowed. We intentionally
     // set this lower to allow for wiggle room for queries in the main
     // application, unrelated to processing jobs.
-    const DATABASE_QUOTA = 5;
+    private const DATABASE_QUOTA = 5;
 
     /** @var ContainerInterface The application's container interface. */
     private $container;
@@ -61,7 +62,7 @@ class JobHandler
      *   If this is null, a local LoggerInterface is used instead.
      * @return int The number of jobs processed.
      */
-    public function spawnAll(OutputInterface &$output = null): int
+    public function spawnAll(?OutputInterface &$output = null): int
     {
         $this->output = $output;
 
@@ -70,7 +71,7 @@ class JobHandler
          * stubbing all database interaction with a Repository.
          * @codeCoverageIgnoreStart
          */
-        if ($this->getQuota() === 0) {
+        if (0 === $this->getQuota()) {
             $this->log(
                 "<error>Not enough database quota to run any jobs. Please try again later.</error>"
             );
@@ -80,7 +81,7 @@ class JobHandler
         $jobs = $this->getQueuedJobs();
         $numJobs = count($jobs);
 
-        if ($numJobs === 0) {
+        if (0 === $numJobs) {
             $this->log("<comment>No jobs found in the queue.</comment>\n");
             return 0;
         }
@@ -102,9 +103,9 @@ class JobHandler
      * @param OutputInterface &$output Used by Commands so that the output
      *   can be controlled by the parent process. If this is null,
      *   a local LoggerInterface is used instead.
-     * @return array|false The generated stats, or false if there's no quota.
+     * @return mixed[]|false The generated stats, or false if there's no quota.
      */
-    public function spawn(Job $job, OutputInterface &$output = null)
+    public function spawn(Job $job, ?OutputInterface &$output = null)
     {
         $this->output = $output;
 
@@ -113,7 +114,7 @@ class JobHandler
          * stubbing all database interaction with a Repository.
          * @codeCoverageIgnoreStart
          */
-        if ($this->getQuota() === 0) {
+        if (0 === $this->getQuota()) {
             return false;
         }
         // @codeCoverageIgnoreEnd
@@ -124,7 +125,7 @@ class JobHandler
     /**
      * Start a process for a single job.
      * @param Job $job
-     * @return array|null Generated stats, or null if queued or failed.
+     * @return mixed[]|null Generated stats, or null if queued or failed.
      * @codeCoverageIgnore
      */
     private function processJob(Job $job): ?array
@@ -147,7 +148,7 @@ class JobHandler
      */
     private function getQueuedJobs(): array
     {
-        /** @var int Number of jobs to fire. This shouldn't be a negative number :) */
+        /** @var int $limit Number of jobs to fire. This shouldn't be a negative number :) */
         $limit = $this->getQuota();
 
         return $this->entityManager
@@ -170,6 +171,7 @@ class JobHandler
      */
     private function getNumOpenConnections(): int
     {
+        /** @var Connection $conn */
         $conn = $this->container
             ->get('doctrine')
             ->getManager('replicas')
@@ -189,9 +191,9 @@ class JobHandler
      * be tested, but the output via $this->output does have test coverage.
      * @codeCoverageIgnore
      */
-    private function log($message): void
+    private function log(string $message): void
     {
-        if ($this->output === null) {
+        if (null === $this->output) {
             $this->logger->info($message);
         } else {
             $this->output->writeln($message);

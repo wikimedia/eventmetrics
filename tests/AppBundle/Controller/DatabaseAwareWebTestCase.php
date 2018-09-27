@@ -3,15 +3,16 @@
  * This file contains the DatabaseAwareWebTestCase class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Controller;
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
@@ -59,7 +60,7 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
     /**
      * Runs before each test.
      */
-    public function setUp()
+    public function setUp(): void
     {
         self::bootKernel();
 
@@ -67,7 +68,7 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
         $this->session = static::$container->get('session');
     }
 
-    public function suppressErrors()
+    public function suppressErrors(): void
     {
         $this->suppressErrors = true;
     }
@@ -77,7 +78,7 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
      * who is an organizer of programs created via the fixtures.
      * @param string $username
      */
-    public function loginUser($username = 'MusikAnimal')
+    public function loginUser(string $username = 'MusikAnimal'): void
     {
         // Create identity mock of user and put it in the session.
         $identityMock = (object)['username' => $username];
@@ -87,7 +88,7 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
     /**
      * Invalidate the session, logging out the user.
      */
-    public function logoutUser()
+    public function logoutUser(): void
     {
         $this->session->invalidate();
     }
@@ -98,11 +99,11 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
      * If not, we print the stacktrace produced in the browser, since this
      * would otherwise just return a unhelpful plain 500 error.
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
-        if (isset($this->response) && !$this->response->isSuccessful() && $this->suppressErrors === false) {
+        if (isset($this->response) && !$this->response->isSuccessful() && false === $this->suppressErrors) {
             $stacktrace = $this->crawler->filter('.stacktrace');
             if ($stacktrace->count()) {
                 echo "\n\n".$stacktrace->text();
@@ -115,7 +116,7 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
      *
      * @param FixtureInterface $fixture
      */
-    protected function addFixture(FixtureInterface $fixture)
+    protected function addFixture(FixtureInterface $fixture): void
     {
         $this->getFixtureLoader()->addFixture($fixture);
     }
@@ -123,7 +124,7 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
     /**
      * Executes all the fixtures that have been loaded so far.
      */
-    protected function executeFixtures()
+    protected function executeFixtures(): void
     {
         $this->getFixtureExecutor()->execute($this->getFixtureLoader()->getFixtures());
     }
@@ -131,7 +132,7 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
     /**
      * @return ORMExecutor
      */
-    private function getFixtureExecutor()
+    private function getFixtureExecutor(): ORMExecutor
     {
         if (!$this->fixtureExecutor) {
             /** @var \Doctrine\ORM\EntityManager $entityManager */
@@ -147,7 +148,7 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
     /**
      * @return ContainerAwareLoader
      */
-    private function getFixtureLoader()
+    private function getFixtureLoader(): ContainerAwareLoader
     {
         if (!$this->fixtureLoader) {
             $this->fixtureLoader = new ContainerAwareLoader(self::$kernel->getContainer());

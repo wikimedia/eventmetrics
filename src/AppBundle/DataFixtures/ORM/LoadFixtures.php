@@ -3,6 +3,8 @@
  * This file contains only the LoadFixtures class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -19,10 +21,9 @@ class LoadFixtures implements FixtureInterface
 
     /**
      * Constructor for LoadFixtures.
-     * @param string $set Which fixture set to load based on
-     *   what tests we're running. Either 'basic' or 'extended'.
+     * @param string $set Which fixture set to load based on what tests we're running. Either 'basic' or 'extended'.
      */
-    public function __construct($set = 'basic')
+    public function __construct(string $set = 'basic')
     {
         $this->set = $set;
     }
@@ -31,7 +32,7 @@ class LoadFixtures implements FixtureInterface
      * Load the fixtures into the ObjectManager.
      * @param ObjectManager $manager
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $loader = new NativeLoader();
         $objectSet = $loader->loadFile(__DIR__.'/'.$this->set.'.yml');

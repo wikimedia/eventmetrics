@@ -11,10 +11,10 @@ use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -55,7 +55,7 @@ class EventDataController extends EntityController
 
         // If the format is not HTML, we show all revisions, and don't need an overall COUNT.
         $format = $this->request->query->get('format', 'html');
-        if ($format === 'html' || $format == '') {
+        if ('html' === $format || '' == $format) {
             // The get() default above doesn't work when the 'format' parameter is blank.
             $format = 'html';
 
@@ -83,7 +83,7 @@ class EventDataController extends EntityController
     /**
      * Get the rendered template for the requested format.
      * @param string $format One of 'html', 'csv' or 'wikitext'
-     * @param array $ret Data that should be passed to the view.
+     * @param mixed[] $ret Data that should be passed to the view.
      * @return Response
      */
     private function getFormattedRevisionsResponse(string $format, array $ret): Response
@@ -95,7 +95,7 @@ class EventDataController extends EntityController
 
         $response = $this->render("events/revisions.$format.twig", $ret);
 
-        $contentType = isset($formatMap[$format]) ? $formatMap[$format] : 'text/html';
+        $contentType = $formatMap[$format] ?? 'text/html';
         $response->headers->set('Content-Type', $contentType);
 
         return $response;
@@ -131,7 +131,7 @@ class EventDataController extends EntityController
         /** @var Event $event */
         $event = $eventRepo->findOneBy(['id' => $eventId]);
 
-        if ($event === null) {
+        if (null === $event) {
             throw new NotFoundHttpException();
         }
 

@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace AppBundle\Model\Traits;
 
-use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContext;
 
 /**
  * The TitleUserTrait refactors out common methods between Program and Event. These methods pertain to titles of the
@@ -21,7 +21,7 @@ trait TitleUserTrait
      * @abstract
      * @return string
      */
-    abstract public function getUserClassName();
+    abstract public function getUserClassName(): string;
 
     /*********
      * TITLE *
@@ -82,7 +82,7 @@ trait TitleUserTrait
      */
     public function validateCharacters(ExecutionContext $context): void
     {
-        if (preg_match('/[\/]/', $this->title) === 1) {
+        if (1 === preg_match('/[\/]/', $this->title)) {
             $context->buildViolation('error-title-invalid-chars')
                 ->setParameter(0, '<code>/</code>')
                 ->atPath('title')

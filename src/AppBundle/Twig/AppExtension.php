@@ -3,6 +3,8 @@
  * This file contains only the AppExtension class.
  */
 
+declare(strict_types=1);
+
 namespace AppBundle\Twig;
 
 use IntlDateFormatter;
@@ -27,7 +29,7 @@ class AppExtension extends Extension
      * Get the name of this extension.
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'app_extension';
     }
@@ -36,9 +38,9 @@ class AppExtension extends Extension
 
     /**
      * Get all functions that this class provides.
-     * @return array
+     * @return \Twig_SimpleFunction[]
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new \Twig_SimpleFunction('isAdmin', [$this, 'isAdmin']),
@@ -52,7 +54,7 @@ class AppExtension extends Extension
      * Get the currently logged in user's details.
      * @return string[]
      */
-    public function loggedInUser()
+    public function loggedInUser(): array
     {
         return $this->container->get('session')->get('logged_in_user');
     }
@@ -64,7 +66,7 @@ class AppExtension extends Extension
      * class, but for some reason the clover system doesn't detect that this bit of code was ran.
      * @codeCoverageIgnore
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return in_array(
             $this->container->get('session')->get('logged_in_user')->username,
@@ -76,7 +78,7 @@ class AppExtension extends Extension
      * Get the short hash of the currently checked-out Git commit.
      * @return string
      */
-    public function gitShortHash()
+    public function gitShortHash(): string
     {
         return exec('git rev-parse --short HEAD');
     }
@@ -85,7 +87,7 @@ class AppExtension extends Extension
      * Get the full hash of the currently checkout-out Git commit.
      * @return string
      */
-    public function gitHash()
+    public function gitHash(): string
     {
         return exec('git rev-parse HEAD');
     }

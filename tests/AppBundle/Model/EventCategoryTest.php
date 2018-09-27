@@ -3,6 +3,8 @@
  * This file contains only the EventCategory class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Model;
 
 use AppBundle\Model\Event;
@@ -13,14 +15,13 @@ use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
  * Class EventCategoryTest
- * @package Tests\AppBundle\Model
  */
 class EventCategoryTest extends GrantMetricsTestCase
 {
     /** @var Event The Event that the EventCategory belongs to. */
     protected $event;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -38,7 +39,7 @@ class EventCategoryTest extends GrantMetricsTestCase
     /**
      * Tests constructor and basic getters.
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $eventCategory = new EventCategory($this->event, ' Foo_bar ', 'test.wikipedia');
 
@@ -54,7 +55,7 @@ class EventCategoryTest extends GrantMetricsTestCase
     /**
      * Test adding and removing categories.
      */
-    public function testAddRemoveCategories()
+    public function testAddRemoveCategories(): void
     {
         static::assertEquals(0, count($this->event->getCategories()));
 

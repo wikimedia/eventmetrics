@@ -3,6 +3,8 @@
  * This file contains only the EventWikiStatTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Model;
 
 use AppBundle\Model\Event;
@@ -21,7 +23,7 @@ class EventWikiStatTest extends GrantMetricsTestCase
     /**
      * Tests constructor and basic getters.
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $organizer = new Organizer(50);
         $program = new Program($organizer);

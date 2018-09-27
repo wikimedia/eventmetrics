@@ -3,6 +3,8 @@
  * This file contains only the EventDataControllerTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Controller;
 
 use AppBundle\DataFixtures\ORM\LoadFixtures;
@@ -15,7 +17,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
     /**
      * Called before each test.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -30,7 +32,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
     /**
      * Revisions page.
      */
-    public function testRevisions()
+    public function testRevisions(): void
     {
         $event = $this->entityManager
             ->getRepository('Model:Event')
@@ -92,7 +94,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
     /**
      * Generating statistics.
      */
-    public function testStats()
+    public function testStats(): void
     {
         $event = $this->entityManager
             ->getRepository('Model:Event')
@@ -131,7 +133,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         static::assertEquals(
             [
                 'new-editors', 'wikis', 'files-uploaded', 'file-usage', 'items-created', 'items-improved',
-                'pages-created', 'pages-improved', 'retention'
+                'pages-created', 'pages-improved', 'retention',
             ],
             array_keys($ret['data'])
         );

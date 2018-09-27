@@ -3,11 +3,13 @@
  * This file contains only the ParticipantTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Model;
 
-use AppBundle\Model\Participant;
 use AppBundle\Model\Event;
 use AppBundle\Model\Organizer;
+use AppBundle\Model\Participant;
 use AppBundle\Model\Program;
 use Tests\AppBundle\GrantMetricsTestCase;
 
@@ -19,9 +21,9 @@ class ParticipantTest extends GrantMetricsTestCase
     /**
      * Tests constructor and basic getters.
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
-        list($event, $participant) = $this->createEventAndParticipant();
+        [$event, $participant] = $this->createEventAndParticipant();
 
         // Basic getters.
         static::assertEquals(50, $participant->getUserId());
@@ -34,9 +36,9 @@ class ParticipantTest extends GrantMetricsTestCase
     /**
      * Basic setters.
      */
-    public function testSetters()
+    public function testSetters(): void
     {
-        list(, $participant) = $this->createEventAndParticipant();
+        [, $participant] = $this->createEventAndParticipant();
 
         $participant->setUsername('MusikAnimal');
         $participant->setUserId(123);
@@ -49,7 +51,7 @@ class ParticipantTest extends GrantMetricsTestCase
      * Create a sample Event and Participant.
      * @return mixed[]
      */
-    public function createEventAndParticipant()
+    public function createEventAndParticipant(): array
     {
         $organizer = new Organizer(50);
         $program = new Program($organizer);

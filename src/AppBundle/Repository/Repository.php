@@ -129,14 +129,14 @@ abstract class Repository extends EntityRepository
      *   $this->getCacheKey(func_get_args(), 'unique key for function');
      * Arugments that are a model should implement their own getCacheKey() that returns
      * a unique identifier for an instance of that model. See User::getCacheKey() for example.
-     * @param array|mixed $args Array of arguments or a single argument.
+     * @param mixed[]|mixed $args Array of arguments or a single argument.
      * @param string $key Unique key for this function. If omitted the function name itself
      *   is used, which is determined using `debug_backtrace`.
      * @return string
      */
-    public function getCacheKey($args, $key = null): string
+    public function getCacheKey($args, ?string $key = null): string
     {
-        if ($key === null) {
+        if (null === $key) {
             $key = debug_backtrace()[1]['function'];
         }
 
@@ -150,7 +150,7 @@ abstract class Repository extends EntityRepository
         // Loop through and determine what values to use based on type of object.
         foreach ($args as $arg) {
             // Zero is an acceptable value.
-            if ($arg === '' || $arg === null) {
+            if ('' === $arg || null === $arg) {
                 continue;
             }
 
@@ -271,7 +271,7 @@ abstract class Repository extends EntityRepository
 
         $dsn = $this->container->getParameter('cache.redis_dsn');
 
-        if (strlen((string)$dsn) === 0) {
+        if (0 === strlen((string)$dsn)) {
             return null;
         }
 
@@ -290,7 +290,7 @@ abstract class Repository extends EntityRepository
     /**
      * Get the global user IDs for multiple users, based on the central auth database.
      * @param string[] $usernames Usernames to query for.
-     * @return array with keys 'user_name' and 'user_id'.
+     * @return string[] with keys 'user_name' and 'user_id'.
      * FIXME: add caching.
      */
     public function getUserIdsFromNames(array $usernames): array
@@ -317,7 +317,7 @@ abstract class Repository extends EntityRepository
     /**
      * Get the usernames given multiple global user IDs, based on the central auth database.
      * @param int[] $userIds User IDs to query for.
-     * @return array with keys 'user_name' and 'user_id'.
+     * @return string[] with keys 'user_name' and 'user_id'.
      * FIXME: add caching.
      */
     public function getUsernamesFromIds(array $userIds): array
@@ -340,7 +340,7 @@ abstract class Repository extends EntityRepository
     public function getUsernameFromId(int $userId): ?string
     {
         $ret = $this->getUsernamesFromIds([$userId]);
-        return isset($ret[0]['user_name']) ? $ret[0]['user_name'] : null;
+        return $ret[0]['user_name'] ?? null;
     }
 
     /*****************
@@ -354,9 +354,9 @@ abstract class Repository extends EntityRepository
      * @param string $suffix Suffix to use instead of _userindex.
      * @return string
      */
-    protected function getTableName(string $name, $suffix = null): string
+    protected function getTableName(string $name, ?string $suffix = null): string
     {
-        if ($suffix !== null) {
+        if (null !== $suffix) {
             return $name.'_'.$suffix;
         }
 
@@ -364,7 +364,7 @@ abstract class Repository extends EntityRepository
         // use the indexed versions (that have some rows hidden, e.g. for revdeleted users).
         $isLoggingOrRevision = in_array($name, ['revision', 'logging', 'archive']);
         if ($isLoggingOrRevision) {
-            $name = $name.'_userindex';
+            $name .= '_userindex';
         }
 
         return $name;
@@ -373,7 +373,7 @@ abstract class Repository extends EntityRepository
     /**
      * Execute a query using the projects connection, handling certain Exceptions.
      * @param string $sql
-     * @param array $params Parameters to bound to the prepared query.
+     * @param mixed[] $params Parameters to bound to the prepared query.
      * @param int|null|false $timeout Maximum statement time in seconds. null will use the
      *   default specified by the app.query_timeout config parameter. false will set no timeout.
      * @return ResultStatement
@@ -420,13 +420,13 @@ abstract class Repository extends EntityRepository
     private function handleDriverError(DriverException $e, ?int $timeout): void
     {
         // If no value was passed for the $timeout, it must be the default.
-        if ($timeout === null) {
+        if (null === $timeout) {
             $timeout = $this->container->getParameter('app.query_timeout');
         }
 
-        if ($e->getErrorCode() === 1226) {
+        if (1226 === $e->getErrorCode()) {
             throw new ServiceUnavailableHttpException(30, 'error-service-overload', null, 503);
-        } elseif ($e->getErrorCode() === 1969) {
+        } elseif (1969 === $e->getErrorCode()) {
             throw new HttpException(504, 'error-query-timeout', null, [], $timeout);
         } else {
             throw $e;
@@ -445,7 +445,7 @@ abstract class Repository extends EntityRepository
             return '';
         }
 
-        if ($timeout === null) {
+        if (null === $timeout) {
             $timeout = $this->container->getParameter('app.query_timeout');
         }
 

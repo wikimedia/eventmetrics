@@ -106,7 +106,7 @@ class ParticipantsType extends AbstractType
          */
         $newParUsernames = explode("\n", $event['new_participants']);
 
-        $participants = isset($event['participants']) ? $event['participants'] : [];
+        $participants = $event['participants'] ?? [];
 
         // Combine usernames from inputs and textarea.
         $event['participants'] = array_merge($participants, $newParUsernames);
@@ -180,7 +180,7 @@ class ParticipantsType extends AbstractType
     /**
      * Given a row from ParticipantRepository::getRowsFromUsernames(), find or instantiate a new Participant.
      * @param Event $event
-     * @param array $row As fetched from ParticipantRepository::getRowsFromUsernames().
+     * @param string[] $row As fetched from ParticipantRepository::getRowsFromUsernames().
      * @return Participant
      */
     private function getParticipantFromRow(Event $event, array $row): Participant
