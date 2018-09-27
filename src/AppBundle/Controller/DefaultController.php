@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace AppBundle\Controller;
 
 use AppBundle\Repository\EventWikiRepository;
+use GuzzleHttp\Client as GuzzleClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use GuzzleHttp\Client as GuzzleClient;
 
 /**
  * The DefaultController handles the homepage, about pages, and user authentication.
@@ -27,7 +27,7 @@ class DefaultController extends Controller
      * @Route("/", name="home")
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(): Response
     {
         if ($this->container->get('session')->get('logged_in_user')) {
             return $this->redirectToRoute('Programs');
@@ -47,15 +47,15 @@ class DefaultController extends Controller
      * uploading images to test this just-for-fun method.
      * @codeCoverageIgnore
      */
-    public function backgroundImageAction($windowSize = null)
+    public function backgroundImageAction(?int $windowSize = null): JsonResponse
     {
-        /** @var string[] List of titles of files on Commons. */
+        /** @var string[] $files List of titles of files on Commons. */
         $files = $this->container->getParameter('picture_of_the_day');
 
-        /** @var string A random file */
+        /** @var string $file A random file */
         $file = $files[array_rand($files)];
 
-        /** @var string[] Parameters to be passed to the API. */
+        /** @var string[] $params Parameters to be passed to the API. */
         $params = [
             'action' => 'query',
             'prop' => 'imageinfo',

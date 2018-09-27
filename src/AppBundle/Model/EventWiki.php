@@ -33,12 +33,12 @@ class EventWiki
     /**
      * Regex pattern of the supported wikis.
      */
-    const VALID_WIKI_PATTERN = '/\w+\.wikipedia|commons\.wikimedia|www\.wikidata/';
+    public const VALID_WIKI_PATTERN = '/\w+\.wikipedia|commons\.wikimedia|www\.wikidata/';
 
     /**
      * Valid names of wiki families, or singular orphan wikis like commons.
      */
-    const FAMILY_NAMES = [
+    public const FAMILY_NAMES = [
         'wikipedia',
         'commons',
         'wikidata',
@@ -79,7 +79,7 @@ class EventWiki
      * @param Event $event Event that this EventWiki belongs to.
      * @param string $domain Domain name of the wiki, without the .org.
      */
-    public function __construct(Event $event, $domain = null)
+    public function __construct(Event $event, ?string $domain = null)
     {
         $this->event = $event;
         $this->event->addWiki($this);
@@ -128,7 +128,7 @@ class EventWiki
      */
     public function isFamilyWiki(): bool
     {
-        return substr($this->domain, 0, 2) === '*.';
+        return '*.' === substr($this->domain, 0, 2);
     }
 
     /**
@@ -138,7 +138,7 @@ class EventWiki
     public function getFamilyName(): ?string
     {
         foreach (self::FAMILY_NAMES as $family) {
-            if (strpos($this->domain, $family) !== false) {
+            if (false !== strpos($this->domain, $family)) {
                 return $family;
             }
         }

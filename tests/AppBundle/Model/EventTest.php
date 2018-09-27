@@ -3,6 +3,8 @@
  * This file contains only the EventTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Model;
 
 use AppBundle\Model\Event;
@@ -10,8 +12,8 @@ use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Job;
 use AppBundle\Model\Organizer;
-use AppBundle\Model\Program;
 use AppBundle\Model\Participant;
+use AppBundle\Model\Program;
 use DateTime;
 use Tests\AppBundle\GrantMetricsTestCase;
 
@@ -23,7 +25,7 @@ class EventTest extends GrantMetricsTestCase
     /** @var Program The Program that the Event is part of. */
     protected $program;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +36,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * Tests constructor and basic getters.
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $event = new Event(
             $this->program,
@@ -68,7 +70,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * Tests that dates in the constructor were stored properly in the class.
      */
-    public function testDates()
+    public function testDates(): void
     {
         $event = new Event(
             $this->program,
@@ -96,7 +98,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * Test adding and removing statistics.
      */
-    public function testAddRemoveStatistics()
+    public function testAddRemoveStatistics(): void
     {
         $event = new Event(
             $this->program,
@@ -140,7 +142,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * Test adding and removing participants.
      */
-    public function testAddRemoveParticipant()
+    public function testAddRemoveParticipant(): void
     {
         $event = new Event(
             $this->program,
@@ -175,7 +177,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * Test adding and removing wikis.
      */
-    public function testAddRemoveWiki()
+    public function testAddRemoveWiki(): void
     {
         $event = new Event(
             $this->program,
@@ -209,7 +211,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * Tests the validators on the model.
      */
-    public function testValidations()
+    public function testValidations(): void
     {
         $organizer = new Organizer('MusikAnimal');
         $organizer->setUserId(50);
@@ -238,7 +240,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * Validations of the Event itself.
      */
-    public function testIsValid()
+    public function testIsValid(): void
     {
         $event = new Event($this->program, 'Test event');
 
@@ -261,7 +263,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * Jobs associated with the Event.
      */
-    public function testJobs()
+    public function testJobs(): void
     {
         $event = new Event(
             $this->program,
@@ -283,7 +285,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * Changing the 'updated' attribute.
      */
-    public function testUpdatedAt()
+    public function testUpdatedAt(): void
     {
         $event = new Event(
             $this->program,
@@ -304,7 +306,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * Test methods involving EventWikis that represent a family.
      */
-    public function testWikiFamilies()
+    public function testWikiFamilies(): void
     {
         $event = new Event($this->program);
 
@@ -336,7 +338,7 @@ class EventTest extends GrantMetricsTestCase
                 'new-editors' => 15,
                 'retention' => 7,
                 'pages-created' => null,
-                'pages-improved' => null
+                'pages-improved' => null,
             ],
             $event->getAvailableMetrics()
         );
@@ -345,7 +347,7 @@ class EventTest extends GrantMetricsTestCase
     /**
      * @covers \AppBundle\Model\Event::getWikisByFamily()
      */
-    public function testWikisByFamily()
+    public function testWikisByFamily(): void
     {
         $event = new Event($this->program);
 

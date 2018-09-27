@@ -3,18 +3,20 @@
  * This file contains only the ProcessEventCommandTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Command;
 
+use AppBundle\Command\ProcessEventCommand;
+use AppBundle\DataFixtures\ORM\LoadFixtures;
+use AppBundle\Model\Event;
 use AppBundle\Model\EventCategory;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
+use AppBundle\Model\Job;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use AppBundle\DataFixtures\ORM\LoadFixtures;
-use AppBundle\Command\ProcessEventCommand;
-use AppBundle\Model\Job;
-use AppBundle\Model\Event;
+use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
@@ -48,7 +50,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
      */
     private $event;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -84,7 +86,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * @return ContainerAwareLoader
      */
-    private function getFixtureLoader()
+    private function getFixtureLoader(): ContainerAwareLoader
     {
         if (!$this->fixtureLoader) {
             $this->fixtureLoader = new ContainerAwareLoader(self::$kernel->getContainer());
@@ -95,7 +97,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * Start of test suite, run the command and make the assertions.
      */
-    public function testProcess()
+    public function testProcess(): void
     {
         $this->nonexistentSpec();
 
@@ -123,7 +125,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * Event that doesn't exist.
      */
-    private function nonexistentSpec()
+    private function nonexistentSpec(): void
     {
         $this->commandTester->execute(['eventId' => 12345]);
         static::assertEquals(1, $this->commandTester->getStatusCode());
@@ -132,7 +134,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * Number of EventStat's created.
      */
-    private function numEventStatsSpec()
+    private function numEventStatsSpec(): void
     {
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
@@ -143,13 +145,13 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * Number of new editors.
      */
-    private function newEditorsSpec()
+    private function newEditorsSpec(): void
     {
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findOneBy([
                 'event' => $this->event,
-                'metric' => 'new-editors'
+                'metric' => 'new-editors',
             ]);
         static::assertEquals(1, $eventStat->getValue());
     }
@@ -157,7 +159,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * Number of pages created.
      */
-    private function pagesCreatedSpec()
+    private function pagesCreatedSpec(): void
     {
         // As an EventStat...
         $eventStat = $this->entityManager
@@ -181,7 +183,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * Number of pages improved.
      */
-    private function pagesImprovedSpec()
+    private function pagesImprovedSpec(): void
     {
         // As an EventStat...
         $eventStat = $this->entityManager
@@ -204,7 +206,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * Files uploaded.
      */
-    private function filesUploadedSpec()
+    private function filesUploadedSpec(): void
     {
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
@@ -226,7 +228,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * File usage.
      */
-    private function fileUsageSpec()
+    private function fileUsageSpec(): void
     {
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
@@ -250,7 +252,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
      * Items created and improved (should be the same for event and event-wiki).
      * @covers \AppBundle\Service\EventProcessor::setItemsCreatedOrImprovedOnWikidata()
      */
-    protected function itemsCreatedAndImprovedSpec()
+    protected function itemsCreatedAndImprovedSpec(): void
     {
         $eventStat = $this->entityManager->getRepository('Model:EventStat');
         $eventWikiStat = $this->entityManager->getRepository('Model:EventWikiStat');
@@ -272,13 +274,13 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * Retention.
      */
-    private function retentionSpec()
+    private function retentionSpec(): void
     {
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findOneBy([
                 'event' => $this->event,
-                'metric' => 'retention'
+                'metric' => 'retention',
             ]);
         static::assertEquals(1, $eventStat->getValue());
     }
@@ -286,7 +288,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * There should be no pending jobs.
      */
-    private function jobFinishedSpec()
+    private function jobFinishedSpec(): void
     {
         $jobs = $this->entityManager
             ->getRepository('Model:Job')
@@ -299,7 +301,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
     /**
      * Creates a new job, this time with EventCategorys on the Event.
      */
-    public function testCategories()
+    public function testCategories(): void
     {
         // Add https://en.wikipedia.org/wiki/Category:Parks_in_Brooklyn.
         // This will include [[Domino Park]] created and edited by MusikAnimal.

@@ -3,13 +3,15 @@
  * This file contains only the FormatExtensionTest class.
  */
 
-namespace AppBundle\Twig;
+declare(strict_types=1);
 
+namespace Tests\AppBundle\Twig;
+
+use AppBundle\Twig\FormatExtension;
+use DateTime;
 use Krinkle\Intuition\Intuition;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
-use DateTime;
 use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
@@ -28,7 +30,7 @@ class FormatExtensionTest extends GrantMetricsTestCase
     /**
      * Set class instance.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         static::bootKernel();
@@ -41,7 +43,7 @@ class FormatExtensionTest extends GrantMetricsTestCase
     /**
      * Format number as a diff size.
      */
-    public function testDiffFormat()
+    public function testDiffFormat(): void
     {
         static::assertEquals(
             "<span class='diff-pos'>3,000</span>",
@@ -60,7 +62,7 @@ class FormatExtensionTest extends GrantMetricsTestCase
     /**
      * Format number as a percentage.
      */
-    public function testPercentFormat()
+    public function testPercentFormat(): void
     {
         static::assertEquals('45%', $this->formatExtension->percentFormat(45));
         static::assertEquals('30%', $this->formatExtension->percentFormat(30, null, 3));
@@ -71,7 +73,7 @@ class FormatExtensionTest extends GrantMetricsTestCase
     /**
      * Format a time duration as humanized string.
      */
-    public function testFormatDuration()
+    public function testFormatDuration(): void
     {
         static::assertEquals(
             [30, 'num-seconds'],
@@ -98,7 +100,7 @@ class FormatExtensionTest extends GrantMetricsTestCase
     /**
      * Format a number.
      */
-    public function testNumberFormat()
+    public function testNumberFormat(): void
     {
         static::assertEquals('1,234', $this->formatExtension->numberFormat(1234));
         static::assertEquals('1,234.32', $this->formatExtension->numberFormat(1234.316, 2));
@@ -108,7 +110,7 @@ class FormatExtensionTest extends GrantMetricsTestCase
     /**
      * Format a date.
      */
-    public function testDateFormat()
+    public function testDateFormat(): void
     {
         // Default of English uses ISO8601 format.
         $this->assertEquals('en', $this->intuition->getLang());
@@ -133,7 +135,7 @@ class FormatExtensionTest extends GrantMetricsTestCase
     /**
      * Format a date according to ISO8601.
      */
-    public function testDateFormatStd()
+    public function testDateFormatStd(): void
     {
         static::assertEquals(
             '2017-02-01 23:45',
@@ -148,7 +150,7 @@ class FormatExtensionTest extends GrantMetricsTestCase
     /**
      * Capitalizing first letter.
      */
-    public function testCapitalizeFirst()
+    public function testCapitalizeFirst(): void
     {
         static::assertEquals('Foo', $this->formatExtension->ucfirst('foo'));
         static::assertEquals('Bar', $this->formatExtension->ucfirst('Bar'));
@@ -157,7 +159,7 @@ class FormatExtensionTest extends GrantMetricsTestCase
     /**
      * Wikifying a string.
      */
-    public function testWikify()
+    public function testWikify(): void
     {
         $wikitext = '<script>alert("XSS baby")</script> [[test page]]';
         static::assertEquals(

@@ -3,6 +3,8 @@
  * This file contains only the DefaultControllerTest class.
  */
 
+declare(strict_types=1);
+
 namespace Tests\AppBundle\Controller;
 
 /**
@@ -13,7 +15,7 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
     /**
      * The home page.
      */
-    public function testIndex()
+    public function testIndex(): void
     {
         $this->crawler = $this->client->request('GET', '/');
         $this->response = $this->client->getResponse();
@@ -24,7 +26,7 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
     /**
      * Test browsing to index when logged on.
      */
-    public function testLoggedIn()
+    public function testLoggedIn(): void
     {
         $this->loginUser();
 
@@ -36,7 +38,7 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
     /**
      * Logging out.
      */
-    public function testLogout()
+    public function testLogout(): void
     {
         $this->loginUser();
 
@@ -51,7 +53,7 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
     /**
      * OAuth callback action.
      */
-    public function testOAuthCallback()
+    public function testOAuthCallback(): void
     {
         $this->client->request('GET', '/oauth_callback');
 
@@ -62,7 +64,7 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
     /**
      * The wikis API.
      */
-    public function testWikisApi()
+    public function testWikisApi(): void
     {
         $this->client->request('GET', '/api/wikis');
         $this->response = $this->client->getResponse();

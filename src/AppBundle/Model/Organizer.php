@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace AppBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -59,7 +59,7 @@ class Organizer
 
     /**
      * Organizer constructor.
-     * @param string $usernameOrId User's global user ID or username.
+     * @param string|int $usernameOrId User's global user ID or username.
      */
     public function __construct($usernameOrId)
     {
@@ -123,7 +123,7 @@ class Organizer
      * Set the username.
      * @param string $username
      */
-    public function setUsername(string $username)
+    public function setUsername(string $username): void
     {
         $this->username = $username;
     }

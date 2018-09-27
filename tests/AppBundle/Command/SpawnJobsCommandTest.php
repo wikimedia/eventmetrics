@@ -1,17 +1,22 @@
 <?php
+/**
+ * This file contains only the SpawnJobsCommandTest class.
+ */
+
+declare(strict_types=1);
 
 namespace Tests\AppBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Command\SpawnJobsCommand;
+use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use DateTime;
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 use Tests\AppBundle\GrantMetricsTestCase;
 
 /**
@@ -45,7 +50,7 @@ class SpawnJobsCommandTest extends GrantMetricsTestCase
      */
     private $event;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -79,7 +84,7 @@ class SpawnJobsCommandTest extends GrantMetricsTestCase
     /**
      * @return ContainerAwareLoader
      */
-    private function getFixtureLoader()
+    private function getFixtureLoader(): ContainerAwareLoader
     {
         if (!$this->fixtureLoader) {
             $this->fixtureLoader = new ContainerAwareLoader(self::$kernel->getContainer());
@@ -90,7 +95,7 @@ class SpawnJobsCommandTest extends GrantMetricsTestCase
     /**
      * Start of test suite, run the command and make the assertions.
      */
-    public function testProcess()
+    public function testProcess(): void
     {
         $this->nonexistentSpec();
 
@@ -115,7 +120,7 @@ class SpawnJobsCommandTest extends GrantMetricsTestCase
     /**
      * When there are no queued jobs.
      */
-    private function nonexistentSpec()
+    private function nonexistentSpec(): void
     {
         $this->commandTester->execute([]);
         static::assertEquals(0, $this->commandTester->getStatusCode());
@@ -129,7 +134,7 @@ class SpawnJobsCommandTest extends GrantMetricsTestCase
      * the dedicated JobTest class does not persist to the database.
      * @param Job $job
      */
-    private function jobSpec(Job $job)
+    private function jobSpec(Job $job): void
     {
         static::assertTrue($job->getId() > 0);
         static::assertEquals(
@@ -143,7 +148,7 @@ class SpawnJobsCommandTest extends GrantMetricsTestCase
      * Spawning all jobs.
      * @param Job $job
      */
-    private function spawnSpec(Job $job)
+    private function spawnSpec(Job $job): void
     {
         $this->commandTester->execute([]);
         static::assertTrue($job->getStarted());
@@ -156,7 +161,7 @@ class SpawnJobsCommandTest extends GrantMetricsTestCase
      * Spawning a single job.
      * @param Job $job
      */
-    private function spawnOneSpec(Job $job)
+    private function spawnOneSpec(Job $job): void
     {
         // First try bogus job ID.
         $this->commandTester->execute(['--id' => 12345]);

@@ -34,7 +34,7 @@ class ExceptionSubscriber
      * @param LoggerInterface $logger
      * @param string $environment
      */
-    public function __construct(EngineInterface $templateEngine, LoggerInterface $logger, $environment = 'prod')
+    public function __construct(EngineInterface $templateEngine, LoggerInterface $logger, string $environment = 'prod')
     {
         $this->templateEngine = $templateEngine;
         $this->logger = $logger;
@@ -55,11 +55,11 @@ class ExceptionSubscriber
         // not the one Twig put on top of it.
         $prevException = $exception->getPrevious();
 
-        if (!($exception instanceof Twig_Error_Runtime && $prevException !== null)) {
+        if (!($exception instanceof Twig_Error_Runtime && null !== $prevException)) {
             return;
         }
 
-        if ($this->environment !== 'prod') {
+        if ('prod' !== $this->environment) {
             throw $prevException;
         }
 

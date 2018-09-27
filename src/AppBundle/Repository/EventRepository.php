@@ -66,7 +66,7 @@ class EventRepository extends Repository
      * @param DateTime $end
      * @param string[] $usernames
      * @param string[] $categoryTitles Only search within given categories.
-     * @return array With keys 'edited' and 'created'.
+     * @return int[] With keys 'edited' and 'created'.
      */
     public function getNumPagesEdited(
         string $dbName,
@@ -159,7 +159,7 @@ class EventRepository extends Repository
      * @param string[] $usernames
      * @return int
      */
-    public function getFileUsage(DateTime $start, DateTime $end, array $usernames)
+    public function getFileUsage(DateTime $start, DateTime $end, array $usernames): int
     {
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
@@ -205,7 +205,7 @@ class EventRepository extends Repository
      * @param string $family
      * @return string[] Domain names in the format of lang.project, e.g. en.wiktionary
      */
-    public function getCommonLangWikiDomains(array $usernames, $family): array
+    public function getCommonLangWikiDomains(array $usernames, string $family): array
     {
         $conn = $this->getCentralAuthConnection();
         $rqb = $conn->createQueryBuilder();
@@ -260,14 +260,14 @@ class EventRepository extends Repository
      */
     public function getRevisions(Event $event, ?int $offset = 0, ?int $limit = 50, bool $count = false)
     {
-        /** @var int TTL of cache, in seconds. */
+        /** @var int $cacheDuration TTL of cache, in seconds. */
         $cacheDuration = 300;
 
         // Check cache and return if it exists, unless the Event was recently updated,
         // in which case we'll want to invalidate the cache.
-        $shouldUseCache = $event->getUpdated() !== null &&
+        $shouldUseCache = null !== $event->getUpdated() &&
             (int)$event->getUpdated()->format('U') < time() - $cacheDuration &&
-            $this->getRedisConnection() !== null;
+            null !== $this->getRedisConnection();
         $cacheKey = $this->getCacheKey(func_get_args(), 'revisions');
         if ($shouldUseCache && $this->getRedisConnection()->contains($cacheKey)) {
             return $this->getRedisConnection()->fetch($cacheKey);
@@ -300,10 +300,10 @@ class EventRepository extends Repository
                 $this->getRevisionsInnerSql($event)."
                 ) a";
 
-        if ($count === false) {
+        if (false === $count) {
             $sql .= "\nORDER BY timestamp ASC";
         }
-        if ($offset !== null) {
+        if (null !== $offset) {
             $sql .= "\nLIMIT $offset, $limit";
         }
 
@@ -315,7 +315,7 @@ class EventRepository extends Repository
             'endDate' => $end,
         ]);
 
-        if ($count === true) {
+        if (true === $count) {
             return (int)$stmt->fetchColumn();
         } else {
             return $stmt->fetchAll();
@@ -360,7 +360,7 @@ class EventRepository extends Repository
             $domain = $wiki->getDomain();
             $dbName = $eventWikiRepo->getDbNameFromDomain($domain);
 
-            $nsClause = $dbName === 'commonswiki_p'
+            $nsClause = 'commonswiki_p' === $dbName
                 ? '6 AND rev_parent_id = 0' // Only creations of File pages.
                 : '0';
 

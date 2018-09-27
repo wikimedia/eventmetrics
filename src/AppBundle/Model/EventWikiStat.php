@@ -40,7 +40,7 @@ class EventWikiStat
      * of metric, with null meaning all wikis.
      * @see StatTrait Shared methods that use this constant.
      */
-    const METRIC_TYPES = [
+    public const METRIC_TYPES = [
         'pages-created',
         'pages-improved',
 
@@ -96,7 +96,7 @@ class EventWikiStat
      * @param mixed $value Value of the associated metric.
      * @param int $offset Offset value associated with the metric, such as number of days retention.
      */
-    public function __construct(EventWiki $wiki, $metric, $value, $offset = null)
+    public function __construct(EventWiki $wiki, string $metric, $value, ?int $offset = null)
     {
         $this->wiki = $wiki;
         $this->wiki->addStatistic($this);

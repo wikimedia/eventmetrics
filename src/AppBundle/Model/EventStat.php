@@ -37,7 +37,7 @@ class EventStat
      * defaults when no EventStats are associated with an Event, based on the configured wiki(s).
      * @see StatTrait Shared methods that use this constant.
      */
-    const METRIC_TYPES = [
+    public const METRIC_TYPES = [
         'new-editors',
         'retention',
 

@@ -44,10 +44,10 @@ class EventController extends EntityController
      * @param Event $event Event to copy.
      * @return Response|RedirectResponse
      */
-    public function newAction($event = null): Response
+    public function newAction(?Event $event = null): Response
     {
         // $event is not null when copying an Event.
-        if ($event === null) {
+        if (null === $event) {
             $event = new Event($this->program);
             $eventWiki = new EventWiki($event);
             $event->addWiki($eventWiki);
@@ -258,7 +258,7 @@ class EventController extends EntityController
 
             // Only put 'eventTitle' if redirecting to event page (otherwise '?eventTitle=Foo' would be in the URL).
             $urlParams = ['programTitle' => $event->getProgram()->getTitle()];
-            if ($redirect === 'Event') {
+            if ('Event' === $redirect) {
                 $urlParams['eventTitle'] = $event->getTitle();
             }
 

@@ -10,14 +10,14 @@ namespace AppBundle\Service;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
-use AppBundle\Repository\EventWikiRepository;
 use AppBundle\Model\EventWikiStat;
 use AppBundle\Repository\EventRepository;
+use AppBundle\Repository\EventWikiRepository;
 use DateTime;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * An EventProcessor handles generating statistics for an Event.
@@ -45,7 +45,7 @@ class EventProcessor
     /** @var string[]|null Usernames of the new editors. */
     private $newEditors;
 
-    /** @var array The generated stats, keyed by metric. */
+    /** @var mixed[] The generated stats, keyed by metric. */
     protected $stats;
 
     /** @var string[] Unique wikis where participants have made edits. */
@@ -68,10 +68,10 @@ class EventProcessor
      * @param Event $event
      * @param OutputInterface|null &$output Used by Commands so that the output can be controlled by the parent process.
      *   If this is null, a local LoggerInterface is used instead.
-     * @return array Statistics, keyed by metric, along with 'wikis' which
+     * @return mixed[] Statistics, keyed by metric, along with 'wikis' which
      *   is a similar array of statistics, but keyed by the wiki's domain.
      */
-    public function process(Event $event, OutputInterface &$output = null): array
+    public function process(Event $event, ?OutputInterface &$output = null): array
     {
         $this->loadEvent($event);
 
@@ -217,7 +217,7 @@ class EventProcessor
         $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
 
-        /** @var bool Whether or not EventWikiStats for pages-created or pages-improved are being saved. */
+        /** @var bool $pageStats Whether or not EventWikiStats for pages-created or pages-improved are being saved. */
         $pageStats = false;
 
         foreach ($this->event->getWikis() as $wiki) {
@@ -262,8 +262,8 @@ class EventProcessor
     private function setPagesEditedWikipedias(
         EventWiki $wiki,
         EventWikiRepository $ewRepo,
-        &$pagesCreated,
-        &$pagesImproved
+        int &$pagesCreated,
+        int &$pagesImproved
     ): void {
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
@@ -339,7 +339,7 @@ class EventProcessor
     {
         // Quick cache.
         static $parUsernames = null;
-        if ($parUsernames !== null) {
+        if (null !== $parUsernames) {
             return $parUsernames;
         }
 
@@ -461,7 +461,7 @@ class EventProcessor
         // Update class property.
         $this->stats[$metric] = [
             'value' => $value,
-            'offset' => $offset
+            'offset' => $offset,
         ];
 
         // Create or update an EventStat.
@@ -472,7 +472,7 @@ class EventProcessor
                 'metric' => $metric,
             ]);
 
-        if ($eventStat === null) {
+        if (null === $eventStat) {
             $eventStat = new EventStat($this->event, $metric, $value, $offset);
         } else {
             $eventStat->setValue($value);
@@ -506,7 +506,7 @@ class EventProcessor
         }
         $this->stats['wikis'][$domain][$metric] = [
             'value' => $value,
-            'offset' => $offset
+            'offset' => $offset,
         ];
 
         // Create or update an EventStat.
@@ -517,7 +517,7 @@ class EventProcessor
                 'metric' => $metric,
             ]);
 
-        if ($eventWikiStat === null) {
+        if (null === $eventWikiStat) {
             $eventWikiStat = new EventWikiStat($wiki, $metric, $value, $offset);
         } else {
             $eventWikiStat->setValue($value);
@@ -557,7 +557,7 @@ class EventProcessor
      */
     private function log(string $message): void
     {
-        if ($this->output === null) {
+        if (null === $this->output) {
             $this->logger->info($message);
         } else {
             $this->output->writeln($message);

@@ -27,11 +27,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class EventCategory
 {
     /**
-     * The Category namespace ID.
-     */
-    const CATEGORY_NAMESPACE = 14;
-
-    /**
      * @ORM\Id
      * @ORM\Column(name="ec_id", type="integer")
      * @ORM\GeneratedValue
@@ -69,7 +64,7 @@ class EventCategory
      * @param string $title
      * @param string $domain Without .org, such as en.wikipedia
      */
-    public function __construct(Event $event, $title, $domain)
+    public function __construct(Event $event, string $title, string $domain)
     {
         $this->event = $event;
         $this->event->addCategory($this);

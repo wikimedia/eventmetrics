@@ -3,10 +3,12 @@
  * This file contains only the AppExtensionTest class.
  */
 
-namespace AppBundle\Twig;
+declare(strict_types=1);
 
+namespace Tests\AppBundle\Twig;
+
+use AppBundle\Twig\AppExtension;
 use Krinkle\Intuition\Intuition;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Tests\AppBundle\GrantMetricsTestCase;
@@ -24,7 +26,7 @@ class AppExtensionTest extends GrantMetricsTestCase
     /**
      * Set class instance.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -38,7 +40,7 @@ class AppExtensionTest extends GrantMetricsTestCase
     /**
      * Methods that fetch data about the git repository.
      */
-    public function testGitMethods()
+    public function testGitMethods(): void
     {
         static::assertEquals(7, strlen($this->appExtension->gitShortHash()));
         static::assertEquals(40, strlen($this->appExtension->gitHash()));
