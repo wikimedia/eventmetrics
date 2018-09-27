@@ -75,7 +75,7 @@
             "bin/phpdoc run --title='GrantMetrics Documentation'"
         ],
         "unit": [
-            "./vendor/bin/phpunit --coverage-clover ./clover.xml tests"
+            "./vendor/bin/phpunit tests"
         ],
         "test": [
             "@migrate-test",

@@ -43,7 +43,7 @@ script:
   - git status | grep "nothing to commit, working tree clean"
   - composer lint
   #- composer docs # Disabled for now, until PhpDocumentor 3 supports checkstyle again.
-  - composer unit
+  - ./vendor/bin/phpunit --coverage-clover ./clover.xml tests
 
 after_script:
   - ps -ef | grep communitytech@tools-dev.wmflabs.org | awk 'NR==1{print $3}' | xargs kill -9
