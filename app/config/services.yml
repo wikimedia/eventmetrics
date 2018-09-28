@@ -39,6 +39,10 @@ services:
         tags:
             - { name: doctrine.orm.entity_listener }
 
+    AppBundle\EventSubscriber\CategorySubscriber:
+        tags:
+            - { name: doctrine.orm.entity_listener }
+
     AppBundle\EventSubscriber\ProgramSubscriber:
         tags:
             - { name: doctrine.orm.entity_listener }

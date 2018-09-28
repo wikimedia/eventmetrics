@@ -48,8 +48,7 @@ class EventCategoryTest extends GrantMetricsTestCase
 
         // Getters.
         static::assertEquals($this->event, $eventCategory->getEvent());
-        static::assertEquals('Foo_bar', $eventCategory->getTitle());
-        static::assertEquals('Foo bar', $eventCategory->getDisplayTitle());
+        static::assertEquals('Foo bar', $eventCategory->getTitle());
     }
 
     /**

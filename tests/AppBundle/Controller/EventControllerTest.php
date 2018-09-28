@@ -59,6 +59,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->familyWikiSpec();
         $this->showSpec();
         $this->participantsSpec();
+        $this->categoriesSpec();
         $this->cloneSpec();
         $this->deleteSpec();
     }
@@ -354,6 +355,63 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     }
 
     /**
+     * Add/remove categories to the Event.
+     */
+    public function categoriesSpec(): void
+    {
+        $this->markTestSkipped(
+            'Until the categories frontend is enabled.'
+        );
+//        // Browse to event page.
+//        $this->crawler = $this->client->request('GET', '/programs/My_fun_program/Pinocchio');
+//        $this->response = $this->client->getResponse();
+//
+//        $form = $this->crawler->selectButton('Save categories')->form();
+//
+//        // Should have an empty row.
+//        static::assertEquals('', $form['categoryForm[categories][0][title]']->getValue());
+//
+//        // Start with an invalid category title.
+//        $form['categoryForm[categories][0][title]'] = 'Invalid category 12345';
+//        $this->crawler = $this->client->submit($form);
+//        static::assertContains(
+//            '1 category is invalid',
+//            $this->crawler->filter('.alert-danger')->text()
+//        );
+//        static::assertContains(
+//            'has-error',
+//            $this->crawler->filter('#categoryForm_categories_0_title')->parents()->attr('class')
+//        );
+//
+//        // Invalid wiki.
+//        $form['categoryForm[categories][0][title]'] = 'Parks in Brooklyn';
+//        $form['categoryForm[categories][0][domain]'] = 'invalid.wikipedia.org';
+//        $this->crawler = $this->client->submit($form);
+//        static::assertContains(
+//            '1 category is invalid',
+//            $this->crawler->filter('.alert-danger')->text()
+//        );
+//
+//        // Add a valid category and wiki (category is already set from above).
+//        $form['categoryForm[categories][0][domain]'] = 'en.wikipedia.org';
+//        $this->crawler = $this->client->submit($form);
+//        $this->response = $this->client->getResponse();
+//        static::assertEquals(302, $this->response->getStatusCode());
+//
+//        // Make sure it was saved to the database.
+//        $eventRepo = $this->entityManager->getRepository('Model:Event');
+//        $event = $eventRepo->findOneBy(['title' => 'Pinocchio']);
+//        $this->entityManager->refresh($event); // Clear cache, unclear why this is needed.
+//        static::assertEquals('Parks in Brooklyn', $event->getCategories()->first()->getTitle());
+//
+//        // One last pass to make sure the category is listed.
+//        static::assertEquals(
+//            'Parks in Brooklyn',
+//            $form->get('categoryForm[categories][0][title]')->getValue()
+//        );
+    }
+
+    /**
      * Cloning an Event.
      */
     private function cloneSpec(): void
@@ -391,6 +449,8 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             [10584730],
             $event->getParticipantIds()
         );
+
+        static::assertEquals('Parks in Brooklyn', $event->getCategories()->first()->getTitle());
     }
 
     /**

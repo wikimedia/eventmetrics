@@ -65,7 +65,7 @@ class EventRepository extends Repository
      * @param DateTime $start
      * @param DateTime $end
      * @param string[] $usernames
-     * @param string[] $categoryTitles Only search within given categories.
+     * @param int[] $categoryIds Only search within categories with given IDs.
      * @return int[] With keys 'edited' and 'created'.
      */
     public function getNumPagesEdited(
@@ -73,9 +73,9 @@ class EventRepository extends Repository
         DateTime $start,
         DateTime $end,
         array $usernames = [],
-        array $categoryTitles = []
+        array $categoryIds = []
     ): array {
-        if (empty($usernames) && empty($categoryTitles)) {
+        if (empty($usernames) && empty($categoryIds)) {
             // FIXME: This should throw an Exception or something so we can print an error message.
             return [
                 'edited' => 0,
@@ -104,7 +104,7 @@ class EventRepository extends Repository
             $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
                 ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
         }
-        if (count($categoryTitles) > 0) {
+        if (count($categoryIds) > 0) {
             $catRepo = $this->em->getRepository('Model:EventCategory');
             $catRepo->setContainer($this->container);
             $rqb->andWhere(
@@ -113,10 +113,9 @@ class EventRepository extends Repository
                     // null is used to remove the LIMIT, since our version of MariaDB doesn't support LIMIT
                     // within a subquery. This should (maybe?) still be performant, since we're not putting all the
                     // categories in local memory.
-                    $catRepo->getPagesInCategories($dbName, $categoryTitles, true, null)->getSQL()
+                    $catRepo->getPagesInCategories($dbName, $categoryIds, true, null)->getSQL()
                 )
             );
-            $rqb->setParameter('categoryTitles', $categoryTitles, Connection::PARAM_STR_ARRAY);
         }
 
         $rqb->setParameter('start', $start)
@@ -346,6 +345,11 @@ class EventRepository extends Repository
         /** @var EventWikiRepository $eventWikiRepo */
         $eventWikiRepo = $this->em->getRepository('Model:EventWiki');
         $eventWikiRepo->setContainer($this->container);
+
+        /** @var EventCategoryRepository $catRepo */
+        $catRepo = $this->em->getRepository('Model:EventCategory');
+        $catRepo->setContainer($this->container);
+
         $sqlClauses = [];
 
         $revisionTable = $this->getTableName('revision');
@@ -359,6 +363,19 @@ class EventRepository extends Repository
 
             $domain = $wiki->getDomain();
             $dbName = $eventWikiRepo->getDbNameFromDomain($domain);
+
+            $catSql = '';
+            $catIds = $event->getCategoryIdsForWiki($wiki);
+            if (count($catIds) > 0) {
+                $catSql = 'AND page_id IN ('.
+                    $catRepo->getPagesInCategories(
+                        $dbName,
+                        $catIds,
+                        true,
+                        // No limits in subqueries.
+                        null
+                    )->getSQL().')';
+            }
 
             $nsClause = 'commonswiki_p' === $dbName
                 ? '6 AND rev_parent_id = 0' // Only creations of File pages.
@@ -375,7 +392,8 @@ class EventRepository extends Repository
                 JOIN $dbName.$pageTable ON page_id = rev_page
                 WHERE rev_user_text IN ($usernames)
                 AND page_namespace = $nsClause
-                AND rev_timestamp BETWEEN :startDate AND :endDate";
+                AND rev_timestamp BETWEEN :startDate AND :endDate
+                $catSql";
         }
 
         $this->revisionsInnerSql = implode(' UNION ', $sqlClauses);

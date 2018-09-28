@@ -34,6 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     options={"engine":"InnoDB"}
  * )
  * @UniqueEntity("title", message="error-event-title-dup")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Event
 {
@@ -242,7 +243,10 @@ class Event
             null !== $this->start &&
             null !== $this->end &&
             $this->getStartWithTimezone() < new DateTime() &&
-            $this->participants->count() > 0;
+            (
+                $this->participants->count() > 0 ||
+                $this->categories->count() > 0
+            );
     }
 
     /***********
@@ -411,7 +415,19 @@ class Event
     public function getCategoryTitlesForWiki(EventWiki $wiki): array
     {
         return $this->getCategoriesForWiki($wiki)->map(function (EventCategory $category) {
-            return $category->getTitle();
+            return $category->getTitle(true);
+        })->toArray();
+    }
+
+    /**
+     * Get the IDs (in replica database) of categories belonging to this Event that are the specified wiki.
+     * @param EventWiki $wiki
+     * @return int[]
+     */
+    public function getCategoryIdsForWiki(EventWiki $wiki): array
+    {
+        return $this->getCategoriesForWiki($wiki)->map(function (EventCategory $category) {
+            return $category->getCategoryId();
         })->toArray();
     }
 
@@ -457,6 +473,20 @@ class Event
     public function clearCategories(): void
     {
         $this->categories->clear();
+    }
+
+    /**
+     * Before flushing to the database, remove categories for which no relevant EventWiki exists.
+     * This can happen when removing a wiki from an Event after you had an EventCategory created for the same wiki.
+     * @ORM\PreFlush()
+     */
+    public function removeInvalidCategories(): void
+    {
+        foreach ($this->categories->getIterator() as $category) {
+            if (1 !== preg_match($this->getAvailableWikiPattern(), $category->getDomain())) {
+                $this->removeCategory($category);
+            }
+        }
     }
 
     /****************
@@ -582,6 +612,20 @@ class Event
             return;
         }
         $this->wikis->removeElement($wiki);
+    }
+
+    /**
+     * Get the regex pattern for wikis defined on the Event.
+     * @return string
+     */
+    public function getAvailableWikiPattern(): string
+    {
+        $regex = implode('|', $this->getOrphanWikisAndFamilies()->map(function (EventWiki $wiki) {
+            // Regex-ify the domain name.
+            return str_replace('\*', '\w+', preg_quote($wiki->getDomain()));
+        })->toArray());
+
+        return "/$regex/";
     }
 
     /***************

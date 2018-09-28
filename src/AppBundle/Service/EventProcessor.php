@@ -273,7 +273,7 @@ class EventProcessor
             $this->event->getStartWithTimezone(),
             $this->event->getEndWithTimezone(),
             $this->getParticipantNames(),
-            $this->event->getCategoryTitlesForWiki($wiki)
+            $this->event->getCategoryIdsForWiki($wiki)
         );
         $pagesCreated += $ret['created'];
         $pagesImproved += $ret['edited'];
@@ -320,7 +320,7 @@ class EventProcessor
             $this->event->getStartWithTimezone(),
             $this->event->getEndWithTimezone(),
             $this->getParticipantNames(),
-            $this->event->getCategoryTitlesForWiki($wiki)
+            $this->event->getCategoryIdsForWiki($wiki)
         );
         // Report the counts, and record them both for this wiki and the event (there's only ever one Wikidata wiki).
         $this->log(">> <info>Items created: {$ret['created']}</info>");

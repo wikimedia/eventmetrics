@@ -9,6 +9,7 @@ namespace AppBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContext;
 
 /**
  * An EventCategory is a wiki category tied to an Event.
@@ -19,10 +20,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="ec_event", columns={"ec_event_id"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="ec_event_domains", columns={"ec_event_id", "ec_title", "ec_domain"})
+ *         @ORM\UniqueConstraint(name="ec_event_domains", columns={"ec_event_id", "ec_category_id", "ec_domain"})
  *     },
  *     options={"engine":"InnoDB"}
  * )
+ * @ORM\EntityListeners({"AppBundle\EventSubscriber\CategorySubscriber"})
  */
 class EventCategory
 {
@@ -44,11 +46,19 @@ class EventCategory
 
     /**
      * @ORM\Column(name="ec_title", type="string", length=255)
+     * @Assert\NotBlank(message="")
      * @Assert\Type("string")
      * @Assert\Length(max=255)
      * @var string Category title.
      */
     protected $title;
+
+    /**
+     * @ORM\Column(name="ec_category_id", type="integer")
+     * @Assert\NotBlank(message="")
+     * @var int Category ID. Correlates to cat_id in the 'category' table on the replicas.
+     */
+    protected $categoryId;
 
     /**
      * @ORM\Column(name="ec_domain", type="string", length=255, nullable=false)
@@ -129,19 +139,56 @@ class EventCategory
 
     /**
      * Get the title of the category.
+     * @param bool $underscored Set to true when fetching titles for use in database queries.
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle(bool $underscored = false): string
     {
-        return $this->title;
+        if ($underscored) {
+            return $this->title;
+        }
+        return str_replace('_', ' ', $this->title);
     }
 
     /**
-     * Get the display variant of the program title.
-     * @return string
+     * Get the ID of the category. Correlates to cat_id in the 'category' table on the replicas.
+     * @return int|null
      */
-    public function getDisplayTitle(): string
+    public function getCategoryId(): ?int
     {
-        return str_replace('_', ' ', $this->title);
+        return $this->categoryId;
+    }
+
+    /**
+     * Set the category ID.
+     * @param int|null $categoryId Null to invalidate the entity (as $categoryId cannot be null).
+     */
+    public function setCategoryId(?int $categoryId): void
+    {
+        $this->categoryId = $categoryId;
+    }
+
+    /***************
+     * VALIDATIONS *
+     ***************/
+
+    /**
+     * Validate the wiki is applicable to the event based on the associated EventWikis.
+     * @Assert\Callback
+     * @param ExecutionContext $context Supplied by Symfony.
+     */
+    public function validateWiki(ExecutionContext $context): void
+    {
+        $regex = $this->event->getAvailableWikiPattern();
+
+        // If it is an invalid WMF wiki (unrelated to the Event), the domain will be blanked and hence
+        // a validation will be added from the @Assert\NotBlank on self::domain. Here we only check if it's a valid
+        // wiki for the Event, so that we don't include redundant error messages.
+        if (1 === preg_match(EventWiki::getValidPattern(), $this->domain) && 1 !== preg_match($regex, $this->domain)) {
+            $context->buildViolation('error-unconfigured-wiki')
+                ->setParameter(0, $this->domain)
+                ->atPath('domain')
+                ->addViolation();
+        }
     }
 }

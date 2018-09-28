@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace AppBundle\Repository;
 
 use AppBundle\Model\EventCategory;
-use Doctrine\DBAL\Connection;
+use AppBundle\Model\EventWiki;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
@@ -30,12 +30,12 @@ class EventCategoryRepository extends Repository
     /**
      * Get the IDs of pages in the given categories.
      * @param string $dbName Database name such as 'enwiki_p'.
-     * @param string[] $titles Titles of categories to fetch from.
+     * @param int[] $ids IDs of categories to fetch from.
      * @param bool $queryBuilder Whether to return just the Doctrine query builder object.
      * @param int|null $limit Max number of pages. null for no limit, but only do this if used in a subquery.
      * @return string[]|QueryBuilder Page IDs or the QueryBuilder object.
      */
-    public function getPagesInCategories(string $dbName, array $titles, bool $queryBuilder = false, ?int $limit = 20000)
+    public function getPagesInCategories(string $dbName, array $ids, bool $queryBuilder = false, ?int $limit = 20000)
     {
         $rqb = $this->getReplicaConnection()->createQueryBuilder();
         $rqb->select(['DISTINCT(cl_from)'])
@@ -43,8 +43,8 @@ class EventCategoryRepository extends Repository
             ->join("$dbName.categorylinks", "$dbName.category", 'cl', 'cl_to = cat_title')
             ->join("$dbName.categorylinks", "$dbName.page", 'p', 'cl_from = page_id')
             ->where('page_namespace = 0')
-            ->andWhere('cat_title IN (:categoryTitles)')
-            ->setParameter('categoryTitles', $titles, Connection::PARAM_STR_ARRAY);
+            // IDs are validated as integers in the model, and hence safe to put directly in the SQL.
+            ->andWhere('cat_id IN ('.implode(',', $ids).')');
 
         if (is_int($limit)) {
             $rqb->setMaxResults($limit);
@@ -55,5 +55,28 @@ class EventCategoryRepository extends Repository
         }
 
         return $this->executeQueryBuilder($rqb)->fetchAll();
+    }
+
+    /**
+     * Fetch the ID of the given category from the replicas.
+     * @param string $domain
+     * @param string $title
+     * @return int|null Null if nonexistent.
+     */
+    public function getCategoryId(string $domain, string $title): ?int
+    {
+        // First get the database name.
+        $ewRepo = $this->em->getRepository(EventWiki::class);
+        $ewRepo->setContainer($this->container);
+        $dbName = $ewRepo->getDbNameFromDomain($domain);
+
+        $rqb = $this->getReplicaConnection()->createQueryBuilder();
+        $rqb->select('cat_id')
+            ->from("$dbName.category")
+            ->where('cat_title = :title')
+            ->setParameter('title', str_replace(' ', '_', ucfirst($title)));
+        $id = $this->executeQueryBuilder($rqb)->fetchColumn();
+
+        return $id ? (int)$id : null;
     }
 }
