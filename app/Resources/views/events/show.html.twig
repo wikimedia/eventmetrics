@@ -103,8 +103,10 @@
             {% endif %}
         {% else %}
             <div class="text-center event-wiki-stats--empty">
-                {# FIXME: check for event.numCategories == 0 and add msg('categories') once T194707#4620358 is resolved #}
-                {% if event.numParticipants == 0 %}
+                {% if jobStatus is not null %}
+                    &nbsp;
+                {% elseif event.numParticipants == 0 %}
+                    {# FIXME: ^ also check for event.numCategories == 0 and add msg('categories') once T194707#4620358 is resolved #}
                     {{ msg('event-misconfig', [msg('participants')]) }}
                 {% elseif event.startWithTimezone > date() %}
                     {{ msg('event-in-future') }}
