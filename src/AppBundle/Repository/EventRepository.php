@@ -295,9 +295,14 @@ class EventRepository extends Repository
      */
     private function getRevisionsData(Event $event, ?int $offset, ?int $limit, bool $count)
     {
-        $sql = 'SELECT '.($count ? 'COUNT(id)' : '*').' FROM ('.
-                $this->getRevisionsInnerSql($event)."
-                ) a";
+        $innerSql = $this->getRevisionsInnerSql($event);
+
+        if ('' === trim($innerSql)) {
+            // No wikis were queried.
+            return true === $count ? 0 : [];
+        }
+
+        $sql = 'SELECT '.($count ? 'COUNT(id)' : '*')." FROM ($innerSql) a";
 
         if (false === $count) {
             $sql .= "\nORDER BY timestamp ASC";
