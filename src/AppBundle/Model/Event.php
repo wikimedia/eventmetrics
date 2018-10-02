@@ -770,10 +770,31 @@ class Event
     }
 
     /**
+     * Remove a Job from the Event. This does NOT kill the job if it is currently running.
+     * @param Job $job
+     */
+    public function removeJob(Job $job): void
+    {
+        $this->jobs->remove($job);
+    }
+
+    /**
      * Remove all Jobs from this Event.
      */
-    public function removeJobs(): void
+    public function clearJobs(): void
     {
         $this->jobs->clear();
+    }
+
+    /**
+     * Get stale jobs that have been idling for a long time (specified by $offset).
+     * @param string $offset String accepted by DateTime constructor.
+     * @return Collection
+     */
+    public function getStaleJobs(string $offset = '-1 hour'): Collection
+    {
+        return $this->jobs->filter(function (Job $job) use ($offset) {
+            return $job->getSubmitted() <= new DateTime($offset);
+        });
     }
 }

@@ -277,7 +277,15 @@ class EventTest extends GrantMetricsTestCase
         static::assertTrue($event->hasJob());
         static::assertEquals(1, $event->getNumJobs());
         static::assertEquals($job, $event->getJobs()[0]);
-        $event->removeJobs();
+
+        // Set the submitted timestamp, normally called when persisting the Job.
+        $job->setSubmitted();
+        // The Job hence should not be 'stale' because we just created it.
+        static::assertNotContains($job, $event->getStaleJobs());
+        // The Job is stale if we use an offset of 0 seconds.
+        static::assertContains($job, $event->getStaleJobs('-0 seconds'));
+
+        $event->clearJobs();
         static::assertFalse($event->hasJob());
         static::assertEquals(0, $event->getNumJobs());
     }

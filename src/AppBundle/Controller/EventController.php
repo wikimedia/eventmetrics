@@ -13,6 +13,7 @@ use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Participant;
 use AppBundle\Repository\EventRepository;
+use AppBundle\Service\JobHandler;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\FormError;
@@ -171,10 +172,18 @@ class EventController extends EntityController
      *     "eventTitle" = "^(?!(new|edit|delete|revisions)$)[^\/]+"
      * })
      * @param EventRepository $eventRepo
+     * @param JobHandler $jobHandler
      * @return Response
      */
-    public function showAction(EventRepository $eventRepo): Response
+    public function showAction(EventRepository $eventRepo, JobHandler $jobHandler): Response
     {
+        /**
+         * Kill any old, stale jobs. This would normally be handled via cron but it is not trivial to add a cronjob
+         * within a Toolforge kubernetes container.
+         * @see https://phabricator.wikimedia.org/T192954
+         */
+        $jobHandler->handleStaleJobs($this->event);
+
         // Add blank EventCategory in the form if one doesn't already exist.
         // @fixme: There is probably a better place to do this than here.
         if ($this->event->getCategories()->isEmpty()) {

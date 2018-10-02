@@ -95,7 +95,7 @@ class EventProcessor
         $this->setRetention();
 
         // Clear out any existing job records from the queue.
-        $event->removeJobs();
+        $event->clearJobs();
 
         // Update the 'updated' attribute.
         $event->setUpdated(new DateTime());
