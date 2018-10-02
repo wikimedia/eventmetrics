@@ -1,0 +1,6 @@
+{
+    "ignoreDirectories": [
+        "./var",
+        "./node_modules"
+    ]
+}

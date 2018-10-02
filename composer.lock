@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b76bc6f73e3acea5fc8cf153c03f72e4",
+    "content-hash": "1ba143206d76234e4398db8cdbfa30b3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3369,6 +3369,52 @@
                 "slow"
             ],
             "time": "2018-02-24T18:55:28+00:00"
+        },
+        {
+            "name": "mediawiki/minus-x",
+            "version": "0.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wikimedia/mediawiki-tools-minus-x.git",
+                "reference": "5ef302a0e911959caf42b713e66b93a1b7c7ad76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wikimedia/mediawiki-tools-minus-x/zipball/5ef302a0e911959caf42b713e66b93a1b7c7ad76",
+                "reference": "5ef302a0e911959caf42b713e66b93a1b7c7ad76",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "symfony/console": "^3.3.5 || ^4"
+            },
+            "require-dev": {
+                "jakub-onderka/php-console-highlighter": "0.3.2",
+                "jakub-onderka/php-parallel-lint": "1.0.0",
+                "mediawiki/mediawiki-codesniffer": "22.0.0"
+            },
+            "bin": [
+                "bin/minus-x"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MediaWiki\\MinusX\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Kunal Mehta",
+                    "email": "legoktm@member.fsf.org"
+                }
+            ],
+            "description": "Removes executable bit from files that shouldn't be executable",
+            "homepage": "https://www.mediawiki.org/wiki/MinusX",
+            "time": "2018-10-02T05:14:16+00:00"
         },
         {
             "name": "myclabs/deep-copy",

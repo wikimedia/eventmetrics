@@ -42,10 +42,11 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "johnkary/phpunit-speedtrap": "^3.0",
+        "mediawiki/minus-x": "^0.3.2",
         "nelmio/alice": "^3.5",
         "slevomat/coding-standard": "^4.8",
-        "symfony/maker-bundle": "^1.6",
         "squizlabs/php_codesniffer": "^3.3",
+        "symfony/maker-bundle": "^1.6",
         "symfony/phpunit-bridge": "^4.1"
     },
     "scripts": {
@@ -69,7 +70,8 @@
             "./bin/console lint:twig ./app/Resources/views",
             "./bin/console lint:yaml ./app/config",
             "./bin/console lint:yaml .travis.yml",
-            "./vendor/bin/phpcs -s ."
+            "./vendor/bin/phpcs -s .",
+            "./vendor/bin/minus-x check ."
         ],
         "docs": [
             "build/phpdoc-install.php",
@@ -83,6 +85,10 @@
             "@lint",
             "@docs",
             "@unit"
+        ],
+        "fix": [
+            "./vendor/bin/phpcbf .",
+            "./vendor/bin/minus-x fix ."
         ]
     },
     "config": {
