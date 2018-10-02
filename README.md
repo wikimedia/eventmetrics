@@ -11,7 +11,7 @@ A Wikimedia Foundation tool that provides grantees a simple, easy to use interfa
 
 ## Installation for development
 
-Prerequesites:
+Prerequisites:
 
 * PHP 7.2 and MySQL.
 * A [Wikimedia developer account](https://wikitech.wikimedia.org/wiki/Help:Create_a_Wikimedia_developer_account) with which to access the Wikimedia database replicas.
@@ -40,7 +40,7 @@ The web interface is hopefully straightforward to use. However developers can al
 
 ## PHP and framework
 
-There is one internal [Symfony bundle](https://symfony.com/doc/current/bundles.html), called `AppBundle`. It contains a separate directory for the controllers, models, respositories, Twig helpers, and fixtures.
+There is one internal [Symfony bundle](https://symfony.com/doc/current/bundles.html), called `AppBundle`. It contains a separate directory for the controllers, models, repositories, Twig helpers, and fixtures.
 
 Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the `grantmetrics` database. Database interaction should generally be done with Doctrine's `EntityManager`.
 
@@ -85,9 +85,11 @@ In JavaScript, we use [jquery.i18n](https://github.com/wikimedia/jquery.i18n). T
 Use `composer test` to run the full test suite. The individual commands that it runs are as follows:
 
 * `composer migrate-test` – Creates and migrates the test database.
-* `composer lint` – Runs CodeSniffer that will test the PHP for linting errors.
-* `composer docs` – Validates PHP block-level documentation. If [phpDocumentor](https://www.phpdoc.org/) is not already installed, it will automatically be downloaded into the root of the repo, and will be ingored via .gitignore.
+* `composer lint` – tests for linting errors in PHP, Twig and YAML files, and uses [MinusX](https://www.mediawiki.org/wiki/MinusX) to ensure files have the correct permissions.
+* `composer docs` – Validates PHP block-level documentation. If [phpDocumentor](https://www.phpdoc.org/) is not already installed, it will automatically be downloaded into the root of the repo, and will be ignored via .gitignore.
 * `composer unit` – Runs unit and integration tests with [PHPUnit](https://phpunit.de/).
+
+Most CodeSniffer and MinusX errors can be fixed automatically using `composer test`.
 
 The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM`. This data, along with what is populated in [install-mediawiki.sh](https://github.com/wikimedia/grantmetrics/blob/master/build/ci/install-mediawiki.sh), are intended to mimic production data so that you can run the tests locally against the replicas and get the same results as the test MediaWiki installation that is used for the CI build. The [basic fixture set](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/DataFixtures/ORM/basic.yml) is loaded by default. The [extended set](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/DataFixtures/ORM/extended.yml) supplies a lot more test data, and is meant for testing beyond the workflow of creating events, etc., such as statistics generation.
 
@@ -110,7 +112,7 @@ For maintainer documentation, see https://wikitech.wikimedia.org/wiki/Tool:Grant
 
 The application currently is running on WMF's Toolforge environment at https://tools.wmflabs.org/grantmetrics
 
-You'll need to run deploy cammands in the bash shell for the Kubernetes container:
+You'll need to run deploy commands in the bash shell for the Kubernetes container:
 
 * `webservice --backend=kubernetes php7.2 shell`
 * `sh deploy.sh`
