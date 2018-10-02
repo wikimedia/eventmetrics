@@ -32,10 +32,18 @@ class EventDataController extends EntityController
      * @Route("/programs/{programTitle}/{eventTitle}/revisions", name="Revisions")
      * @Route("/programs/{programTitle}/{eventTitle}/revisions/", name="RevisionsSlash")
      * @param EventRepository $eventRepo
+     * @param JobHandler $jobHandler
      * @return Response
      */
-    public function revisionsAction(EventRepository $eventRepo): Response
+    public function revisionsAction(EventRepository $eventRepo, JobHandler $jobHandler): Response
     {
+        /**
+         * Kill any old, stale jobs. This would normally be handled via cron but it is not trivial to add a cronjob
+         * within a Toolforge kubernetes container.
+         * @see https://phabricator.wikimedia.org/T192954
+         */
+        $jobHandler->handleStaleJobs($this->event);
+
         // Redirect to event page if statistics have not yet been generated.
         if (null === $this->event->getUpdated()) {
             return $this->redirectToRoute('Event', [

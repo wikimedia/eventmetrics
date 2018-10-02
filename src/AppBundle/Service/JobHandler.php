@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Service;
 
+use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
@@ -120,6 +121,34 @@ class JobHandler
         // @codeCoverageIgnoreEnd
 
         return $this->processJob($job);
+    }
+
+    /**
+     * Check for old jobs that never started or are mysteriously running for a very long time, and lay them to rest.
+     * This does NOT kill the process associated with the job, if there is one.
+     * This is called in EventController::showAction, as a bit of a hack to get around the lack of support for a
+     * cronjob to do the same thing. We actually would prefer to *start* old jobs that were never started, but we'd
+     * need to do this with a new process, otherwise it will hold up loading of the event page itself.
+     * @see https://phabricator.wikimedia.org/T192954
+     * @param Event $event
+     */
+    public function handleStaleJobs(Event $event): void
+    {
+        $staleJobs = $event->getStaleJobs();
+
+        if ($staleJobs->isEmpty()) {
+            return;
+        }
+
+        /** @var Job $job */
+        foreach ($staleJobs->getIterator() as $job) {
+            $event->removeJob($job);
+        }
+
+        // This needs to be flushed immediately because this method is called in EventController::showAction,
+        // and the event page itself indicates whether there are pending/currently running jobs.
+        $this->entityManager->persist($event);
+        $this->entityManager->flush();
     }
 
     /**
