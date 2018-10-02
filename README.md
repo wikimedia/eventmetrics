@@ -89,7 +89,7 @@ Use `composer test` to run the full test suite. The individual commands that it 
 * `composer docs` – Validates PHP block-level documentation. If [phpDocumentor](https://www.phpdoc.org/) is not already installed, it will automatically be downloaded into the root of the repo, and will be ignored via .gitignore.
 * `composer unit` – Runs unit and integration tests with [PHPUnit](https://phpunit.de/).
 
-Most CodeSniffer and MinusX errors can be fixed automatically using `composer test`.
+Most CodeSniffer and MinusX errors can be fixed automatically using `composer fix`.
 
 The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM`. This data, along with what is populated in [install-mediawiki.sh](https://github.com/wikimedia/grantmetrics/blob/master/build/ci/install-mediawiki.sh), are intended to mimic production data so that you can run the tests locally against the replicas and get the same results as the test MediaWiki installation that is used for the CI build. The [basic fixture set](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/DataFixtures/ORM/basic.yml) is loaded by default. The [extended set](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/DataFixtures/ORM/extended.yml) supplies a lot more test data, and is meant for testing beyond the workflow of creating events, etc., such as statistics generation.
 
