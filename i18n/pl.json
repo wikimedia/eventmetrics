@@ -4,6 +4,7 @@
 			"Chrumps"
 		]
 	},
+	"add-category": "Dodaj kategorię",
 	"add-more-participants": "Dodaj więcej uczestników, po jednym na linię",
 	"add-organizer": "Dodaj organizatora",
 	"add-wiki": "Dodaj wiki",
@@ -11,6 +12,8 @@
 	"all-wikipedias": "Wszystkie Wikipedie",
 	"apply": "Zatwierdź",
 	"cancel": "Anuluj",
+	"categories": "Kategorie",
+	"category-name": "Nazwa kategorii",
 	"close": "Zamknij",
 	"confirm-deletion": "Czy na pewno chcesz usunąć '$1'?",
 	"copy": "Kopiuj",
@@ -64,6 +67,7 @@
 	"no-events": "Brak wydarzeń w tym programie!",
 	"no-programs": "Nie utworzyłeś żadnych programów.",
 	"no-results": "Brak wyników",
+	"num-categories": "{{PLURAL:$1|kategoria|kategorie}}",
 	"num-days": "{{PLURAL:$1|dzień|dni}}",
 	"num-hours": "{{PLURAL:$1|godzina|godzin}}",
 	"num-minutes": "{{PLURAL:$1|minuta|minuty|minut}}",

@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Mainframe98"
+			"Mainframe98",
+			"Optilete"
 		]
 	},
-	"add-more-participants": "Voeg meer deelnemers toe, één per regel",
+	"add-more-participants": "Voeg meer deelnemers toe, één per regel. Je kunt knippen/plakken van een on-wiki lijst.",
 	"add-organizer": "Organisator toevoegen",
 	"add-wiki": "Wiki toevoegen",
 	"all": "Alle",
