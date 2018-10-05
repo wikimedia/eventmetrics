@@ -10,10 +10,10 @@
             </li>
         {% endif %}
         <li>
-            <a href="{{ path('Program', {'programTitle': program.title}) }}">{{ program.displayTitle }}</a>
+            <a href="{{ path('Program', {'programTitle': program.title}) }}">{{ bdi(program.displayTitle) }}</a>
         </li>
         <li>
-            <a href="{{ path('Event', {'programTitle': program.title, 'eventTitle': event.title}) }}">{{ event.displayTitle }}</a>
+            <a href="{{ path('Event', {'programTitle': program.title, 'eventTitle': event.title}) }}">{{ bdi(event.displayTitle) }}</a>
         </li>
         <li class="active">{{ msg('event-data') }}</li>
     </ol>

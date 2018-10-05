@@ -61,4 +61,13 @@ abstract class Extension extends Twig_Extension
     {
         return $this->container->get('request_stack')->getCurrentRequest();
     }
+	/**
+	 * Wrap a text with <bdi> tags for BiDirectional isolation
+	 * @param string $text Given text
+	 * @return string The given text, wrapped with <bdi> tags
+	 */
+	public function bdi($text = '')
+	{
+		return '<bdi>'.$text.'</bdi>';
+	}
 }

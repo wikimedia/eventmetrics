@@ -47,6 +47,7 @@ class AppExtension extends Extension
             new \Twig_SimpleFunction('shortHash', [$this, 'gitShortHash']),
             new \Twig_SimpleFunction('hash', [$this, 'gitHash']),
             new \Twig_SimpleFunction('wikiPath', [$this, 'wikiPath']),
+            new \Twig_SimpleFunction('bdi', [$this, 'bdi'], $options),
         ];
     }
 
