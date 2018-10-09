@@ -67,7 +67,7 @@ class EventController extends EntityController
         return $this->render('events/new.html.twig', [
             'form' => $form->createView(),
             'event' => $event,
-            'gmTitle' => 'create-new-program',
+            'gmTitle' => 'create-new-event',
         ]);
     }
 
