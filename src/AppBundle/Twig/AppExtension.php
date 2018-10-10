@@ -28,6 +28,7 @@ class AppExtension extends Extension
     /**
      * Get the name of this extension.
      * @return string
+     * @codeCoverageIgnore
      */
     public function getName(): string
     {

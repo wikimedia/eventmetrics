@@ -64,6 +64,7 @@ abstract class EntityController extends Controller
     /**
      * Service injection point, configured in services.yml
      * @param ValidatorInterface $validator
+     * @codeCoverageIgnore
      */
     public function setValidator(ValidatorInterface $validator): void
     {

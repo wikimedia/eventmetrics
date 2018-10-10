@@ -299,6 +299,8 @@ class EventTest extends GrantMetricsTestCase
         $event->addJob($job);
         static::assertEquals(1, $event->getNumJobs());
         $event->removeJob($job);
+        // Removing twice should not error out.
+        $event->removeJob($job);
         static::assertEquals(0, $event->getNumJobs());
     }
 

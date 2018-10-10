@@ -35,3 +35,4 @@ exclude_patterns:
     - "app/DoctrineMigrations/"
     - "tests/"
     - "app/Resources/assets/vendor/"
+    - "src/AppBundle/AppBundle.php"

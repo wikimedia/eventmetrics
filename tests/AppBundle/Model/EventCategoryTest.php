@@ -64,6 +64,10 @@ class EventCategoryTest extends GrantMetricsTestCase
 
         static::assertEquals($cat, $this->event->getCategories()[0]);
 
+        // Manually set the Event, which should make no difference.
+        $cat->setEvent($this->event);
+        static::assertEquals($cat, $this->event->getCategories()[0]);
+
         // Try adding the same one, which shouldn't duplicate.
         $this->event->addCategory($cat);
         static::assertEquals(1, count($this->event->getCategories()));
