@@ -65,7 +65,7 @@ class EventRepository extends Repository
      * @param DateTime $start
      * @param DateTime $end
      * @param string[] $usernames
-     * @param int[] $categoryIds Only search within categories with given IDs.
+     * @param string[] $categoryTitles Only search within given categories.
      * @return int[] With keys 'edited' and 'created'.
      */
     public function getNumPagesEdited(
@@ -73,9 +73,9 @@ class EventRepository extends Repository
         DateTime $start,
         DateTime $end,
         array $usernames = [],
-        array $categoryIds = []
+        array $categoryTitles = []
     ): array {
-        if (empty($usernames) && empty($categoryIds)) {
+        if (empty($usernames) && empty($categoryTitles)) {
             // FIXME: This should throw an Exception or something so we can print an error message.
             return [
                 'edited' => 0,
@@ -92,34 +92,31 @@ class EventRepository extends Repository
         $revisionTable = $this->getTableName('revision');
 
         $rqb->select([
-                'COUNT(DISTINCT(page_title)) AS edited',
+                'COUNT(DISTINCT(rev_page)) AS edited',
                 'IFNULL(SUM(CASE WHEN rev_parent_id = 0 THEN 1 ELSE 0 END), 0) AS created',
             ])
-            ->from("$dbName.page")
-            ->join("$dbName.page", "$dbName.$revisionTable", null, 'rev_page = page_id')
-            ->where('page_namespace = 0')
+            ->from("$dbName.$revisionTable")
+            ->join("$dbName.$revisionTable", "$dbName.page", 'page_rev', 'page_id = rev_page');
+
+        if (count($categoryTitles) > 0) {
+            $rqb->join("$dbName.$revisionTable", "$dbName.categorylinks", 'category_rev', 'cl_from = rev_page')
+                ->where('cl_to IN (:categoryTitles)');
+        }
+
+        $rqb->andWhere('page_namespace = 0')
             ->andWhere('rev_timestamp BETWEEN :start AND :end');
 
         if (count($usernames) > 0) {
             $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
                 ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
         }
-        if (count($categoryIds) > 0) {
-            $catRepo = $this->em->getRepository('Model:EventCategory');
-            $catRepo->setContainer($this->container);
-            $rqb->andWhere(
-                $rqb->expr()->in(
-                    'page_id',
-                    // null is used to remove the LIMIT, since our version of MariaDB doesn't support LIMIT
-                    // within a subquery. This should (maybe?) still be performant, since we're not putting all the
-                    // categories in local memory.
-                    $catRepo->getPagesInCategories($dbName, $categoryIds, true, null)->getSQL()
-                )
-            );
-        }
 
         $rqb->setParameter('start', $start)
             ->setParameter('end', $end);
+
+        if (count($categoryTitles) > 0) {
+            $rqb->setParameter('categoryTitles', $categoryTitles, Connection::PARAM_STR_ARRAY);
+        }
 
         return $this->executeQueryBuilder($rqb)->fetch();
     }
@@ -369,17 +366,15 @@ class EventRepository extends Repository
             $domain = $wiki->getDomain();
             $dbName = $eventWikiRepo->getDbNameFromDomain($domain);
 
-            $catSql = '';
+            $catJoin = '';
+            $catWhere = '';
             $catIds = $event->getCategoryIdsForWiki($wiki);
             if (count($catIds) > 0) {
-                $catSql = 'AND page_id IN ('.
-                    $catRepo->getPagesInCategories(
-                        $dbName,
-                        $catIds,
-                        true,
-                        // No limits in subqueries.
-                        null
-                    )->getSQL().')';
+                $catJoin = "INNER JOIN $dbName.categorylinks ON cl_from = rev_page";
+                $categoryTitles = implode(',', array_map(function ($title) {
+                    return $this->getReplicaConnection()->quote($title, \PDO::PARAM_STR);
+                }, $event->getCategoryTitlesForWiki($wiki)));
+                $catWhere = "AND cl_to IN ($categoryTitles)";
             }
 
             $nsClause = 'commonswiki_p' === $dbName
@@ -394,11 +389,12 @@ class EventRepository extends Repository
                     rev_comment AS 'summary',
                     '$domain' AS 'wiki'
                 FROM $dbName.$revisionTable
-                JOIN $dbName.$pageTable ON page_id = rev_page
+                INNER JOIN $dbName.$pageTable ON page_id = rev_page
+                $catJoin
                 WHERE rev_user_text IN ($usernames)
                 AND page_namespace = $nsClause
                 AND rev_timestamp BETWEEN :startDate AND :endDate
-                $catSql";
+                $catWhere";
         }
 
         $this->revisionsInnerSql = implode(' UNION ', $sqlClauses);
