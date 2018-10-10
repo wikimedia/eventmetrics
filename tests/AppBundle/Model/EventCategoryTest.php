@@ -9,6 +9,7 @@ namespace Tests\AppBundle\Model;
 
 use AppBundle\Model\Event;
 use AppBundle\Model\EventCategory;
+use AppBundle\Model\EventWiki;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use Tests\AppBundle\GrantMetricsTestCase;
@@ -67,14 +68,18 @@ class EventCategoryTest extends GrantMetricsTestCase
         $this->event->addCategory($cat);
         static::assertEquals(1, count($this->event->getCategories()));
 
-        // Removing the statistic.
+        // Getting titles, going by associated wiki.
+        $wiki = new EventWiki($this->event, 'test.wikipedia');
+        static::assertEquals(['Foo_bar'], $this->event->getCategoryTitlesForWiki($wiki));
+
+        // Removing the category.
         $this->event->removeCategory($cat);
         static::assertEquals(0, count($this->event->getCategories()));
 
         // Double-remove shouldn't error out.
         $this->event->removeCategory($cat);
 
-        // Clearing statistics.
+        // Clearing categories.
         $this->event->addCategory($cat);
         static::assertEquals(1, $this->event->getCategories()->count());
         $this->event->clearCategories();

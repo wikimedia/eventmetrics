@@ -775,7 +775,10 @@ class Event
      */
     public function removeJob(Job $job): void
     {
-        $this->jobs->remove($job);
+        if (!$this->jobs->contains($job)) {
+            return;
+        }
+        $this->jobs->removeElement($job);
     }
 
     /**

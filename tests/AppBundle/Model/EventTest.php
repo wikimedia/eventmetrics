@@ -166,12 +166,18 @@ class EventTest extends GrantMetricsTestCase
         $event->addParticipant($participant);
         static::assertEquals(1, $event->getNumParticipants());
 
-        // Removing the event.
+        // Removing the participant.
         $event->removeParticipant($participant);
         static::assertEquals(0, $event->getNumParticipants());
 
         // Double-remove shouldn't error out.
         $event->removeParticipant($participant);
+
+        // One more time to test clearParticipants method.
+        $event->addParticipant($participant);
+        static::assertEquals(1, $event->getNumParticipants());
+        $event->clearParticipants();
+        static::assertEquals(0, $event->getNumParticipants());
     }
 
     /**
@@ -287,6 +293,12 @@ class EventTest extends GrantMetricsTestCase
 
         $event->clearJobs();
         static::assertFalse($event->hasJob());
+        static::assertEquals(0, $event->getNumJobs());
+
+        // Add again and remove via object.
+        $event->addJob($job);
+        static::assertEquals(1, $event->getNumJobs());
+        $event->removeJob($job);
         static::assertEquals(0, $event->getNumJobs());
     }
 
