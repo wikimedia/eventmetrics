@@ -39,7 +39,6 @@
 	"error-program-title-dup": "Er bestaat al een programma met de titel $1.",
 	"error-program-undeletable": "Dit programma kan niet worden verwijderd omdat het meer dan een evenement bevat.",
 	"error-title-invalid-chars": "De titel mag geen van de volgende tekens bevatten: $1.",
-	"error-title-reserved": "De titel kan niet een van de volgende zijn: $1.",
 	"error-usernames": "$1 {{PLURAL:$1|gebruikersnaam|gebruikersnamen}} {{PLURAL:$1|is|zijn}} onjuist. Wijzig of verwijder deze en verstuur opnieuw om de gebruikersnamen op te slaan. Controleer op onjuiste spelling, hoofdlettergebruik en andere formattering.",
 	"error-wikis": "$1 {{PLURAL:$1|wiki|wiki's}} {{PLURAL:$1|is|zijn}} onjuist. Controleer de spelling.",
 	"event": "Evenement",

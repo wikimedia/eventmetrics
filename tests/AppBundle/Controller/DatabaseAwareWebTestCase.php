@@ -62,6 +62,7 @@ abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
         self::bootKernel();
 
         $this->client = static::createClient();

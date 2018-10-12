@@ -41,8 +41,8 @@ class EventController extends EntityController
 
     /**
      * Show a form to create a new event.
-     * @Route("/programs/{programTitle}/new", name="NewEvent")
-     * @Route("/programs/{programTitle}/new/", name="NewEventSlash")
+     * @Route("/programs/{programId}/events/new", name="NewEvent")
+     * @Route("/programs/{programId}/events/new/", name="NewEventSlash")
      * @param Event $event Event to copy.
      * @return Response|RedirectResponse
      */
@@ -73,8 +73,8 @@ class EventController extends EntityController
 
     /**
      * Show a form to edit the given event.
-     * @Route("/programs/{programTitle}/edit/{eventTitle}", name="EditEvent")
-     * @Route("/programs/{programTitle}/edit/{eventTitle}/", name="EditEventSlash")
+     * @Route("/programs/{programId}/events/{eventId}/edit", name="EditEvent")
+     * @Route("/programs/{programId}/events/{eventId}/edit/", name="EditEventSlash")
      * @return Response|RedirectResponse
      */
     public function editAction(): Response
@@ -103,8 +103,8 @@ class EventController extends EntityController
     /**
      * Copy the given Event and redirect to the NewEvent action, clearing out the title,
      * and getting new instances of associated entities.
-     * @Route("/programs/{programTitle}/copy/{eventTitle}", name="CopyEvent")
-     * @Route("/programs/{programTitle}/copy/{eventTitle}/", name="CopyEventSlash")
+     * @Route("/programs/{programId}/events/{eventId}/copy", name="CopyEvent")
+     * @Route("/programs/{programId}/events/{eventId}/copy/", name="CopyEventSlash")
      * @return Response|RedirectResponse
      */
     public function copyAction(): Response
@@ -140,8 +140,8 @@ class EventController extends EntityController
 
     /**
      * Delete an event.
-     * @Route("/programs/{programTitle}/delete/{eventTitle}", name="DeleteEvent")
-     * @Route("/programs/{programTitle}/delete/{eventTitle}/", name="DeleteEventSlash")
+     * @Route("/programs/{programId}/events/{eventId}/delete", name="DeleteEvent")
+     * @Route("/programs/{programId}/events/{eventId}/delete/", name="DeleteEventSlash")
      * @return RedirectResponse
      */
     public function deleteAction(): RedirectResponse
@@ -153,7 +153,7 @@ class EventController extends EntityController
         $this->em->flush();
 
         return $this->redirectToRoute('Program', [
-            'programTitle' => $this->program->getTitle(),
+            'programId' => $this->program->getId(),
         ]);
     }
 
@@ -163,13 +163,13 @@ class EventController extends EntityController
 
     /**
      * Show a specific event.
-     * @Route("/programs/{programTitle}/{eventTitle}", name="Event", requirements={
-     *     "programTitle" = "^(?!new|edit|delete).*$",
-     *     "eventTitle" = "^(?!(new|edit|delete|revisions)$)[^\/]+"
+     * @Route("/programs/{programId}/events/{eventId}", name="Event")
+     * @Route("/programs/{programId}/{eventId}", name="EventLegacy", requirements={
+     *     "eventId" = "^(?!(new|edit|delete|revisions)$)[^\/]+"
      * })
-     * @Route("/programs/{programTitle}/{eventTitle}/", name="EventSlash", requirements={
-     *     "programTitle" = "^(?!new|edit|delete).*$",
-     *     "eventTitle" = "^(?!(new|edit|delete|revisions)$)[^\/]+"
+     * @Route("/programs/{programId}/events/{eventId}/", name="EventSlash")
+     * @Route("/programs/{programId}/{eventId}/", name="EventLegacySlash", requirements={
+     *     "eventId" = "^(?!(new|edit|delete|revisions)$)[^\/]+"
      * })
      * @param EventRepository $eventRepo
      * @param JobHandler $jobHandler
@@ -282,10 +282,10 @@ class EventController extends EntityController
             $this->em->persist($event);
             $this->em->flush();
 
-            // Only put 'eventTitle' if redirecting to event page (otherwise '?eventTitle=Foo' would be in the URL).
-            $urlParams = ['programTitle' => $event->getProgram()->getTitle()];
+            // Only put 'eventId' if redirecting to event page (otherwise '?eventId=Foo' would be in the URL).
+            $urlParams = ['programId' => $event->getProgram()->getId()];
             if ('Event' === $redirect) {
-                $urlParams['eventTitle'] = $event->getTitle();
+                $urlParams['eventId'] = $event->getId();
             }
 
             return $this->redirectToRoute($redirect, $urlParams);

@@ -72,7 +72,7 @@ abstract class EntityController extends Controller
     }
 
     /**
-     * Check the request and if there are parameters for eventTitle or programTitle,
+     * Check the request and if there are parameters for eventId or programId,
      * find and set class properties for the corresponding entity.
      */
     private function setProgramAndEvent(): void
@@ -82,41 +82,59 @@ abstract class EntityController extends Controller
     }
 
     /**
-     * Check the request and if the programTitle is set, find and set
-     * $this->program with the corresponding entity.
+     * Check the request and if the programId is set, find and set $this->program with the corresponding entity.
      * @throws NotFoundHttpException
      */
     private function setProgram(): void
     {
-        $programTitle = $this->request->get('programTitle');
-        if ($programTitle) {
-            $this->program = $this->em->getRepository(Program::class)
-                ->findOneBy(['title' => $programTitle]);
+        $programId = $this->request->get('programId');
 
-            if (!is_a($this->program, Program::class)) {
-                throw new NotFoundHttpException('error-not-found');
-            }
+        if (!$programId) {
+            return;
+        }
+
+        $repo = $this->em->getRepository(Program::class);
+
+        // Check if the programId parameter is an integer, which we will assume to be the ID and not title.
+        if (ctype_digit((string)$programId)) {
+            $this->program = $repo->findOneBy(['id' => $programId]);
+        } else {
+            // Accept program title for backwards-compatibility.
+            $this->program = $repo->findOneBy(['title' => $programId]);
+        }
+
+        if (!is_a($this->program, Program::class)) {
+            throw new NotFoundHttpException('error-not-found');
         }
     }
 
     /**
-     * Check the request and if the eventTitle is set, find and set
-     * $this->event with the corresponding entity.
+     * Check the request and if the eventId is set, find and set $this->event with the corresponding entity.
      * @throws NotFoundHttpException
      */
     private function setEvent(): void
     {
-        $eventTitle = $this->request->get('eventTitle');
-        if ($eventTitle) {
-            $this->event = $this->em->getRepository(Event::class)
-                ->findOneBy([
-                    'program' => $this->program,
-                    'title' => $eventTitle,
-                ]);
+        $eventId = $this->request->get('eventId');
 
-            if (!is_a($this->event, Event::class)) {
-                throw new NotFoundHttpException('error-not-found');
-            }
+        if (!$eventId) {
+            return;
+        }
+
+        $repo = $this->em->getRepository(Event::class);
+
+        // Check if the eventId parameter is an integer, which we will assume to be the ID and not title.
+        if (ctype_digit((string)$eventId)) {
+            $this->event = $repo->findOneBy(['id' => $eventId]);
+        } else {
+            // Accept event title for backwards-compatibility.
+            $this->event = $repo->findOneBy([
+                'program' => $this->program,
+                'title' => $eventId,
+            ]);
+        }
+
+        if (!is_a($this->event, Event::class)) {
+            throw new NotFoundHttpException('error-not-found');
         }
     }
 
