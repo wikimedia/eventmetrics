@@ -53,6 +53,7 @@
 	"error-server-message": "Der Server sagte: $1",
 	"error-service-overload": "Grant Metrics ist derzeit mit der Bedienung anderer Anfragen überladen. Bitte in einigen Minuten erneut versuchen.",
 	"error-title-invalid-chars": "Der Titel kann nicht folgende Zeichen enthalten: $1.",
+	"error-title-numeric": "Der Titel kann keine Zahl sein.",
 	"error-unconfigured-wiki": "$1 ist nicht für dieses Ereignis konfiguriert. Bitte füge zuerst das Wiki dem Ereignis hinzu.",
 	"error-usernames": "{{PLURAL:$1|Ein Benutzername ist|$1 Benutzernamen sind}} ungültig. Bitte bearbeiten oder entfernen und anschließend zur Speicherung erneut absenden. Falsche Rechtschreibung, Großschreibungen und zusätzliche Formatierungen überprüfen.",
 	"error-wikis": "{{PLURAL:$1|Ein Wiki ist|$1 Wikis sind}} ungültig. Bitte Rechtschreibung überprüfen.",

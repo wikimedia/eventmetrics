@@ -53,6 +53,7 @@
 	"error-server-message": "O servidor respondeu: $1",
 	"error-service-overload": "O Grant Metrics encontra-se atualmente sobrecarregado, respondendo os outros pedidos. Por favor, tente de novo dentro de alguns minutos.",
 	"error-title-invalid-chars": "O título não pode incluir os seguintes caracteres: $1.",
+	"error-title-numeric": "O título não pode ser um número.",
 	"error-unconfigured-wiki": "$1 não está configurado para este evento. Por favor, adicione o wiki ao evento primeiro.",
 	"error-usernames": "$1 {{PLURAL:$1|nome de usuário é inválido. Edite ou remova-o|nomes de usuário são inválidos. Edite ou remova-os}} e volte a enviar para gravar. Verifique se existem erros ortográficos, uso incorreto de maiúsculas e formatação extra.",
 	"error-wikis": "$1 {{PLURAL:$1|wiki é inválida|wikis são inválidas}}. Verifique a existência de erros ortográficos.",

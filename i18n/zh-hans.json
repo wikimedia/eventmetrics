@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Liuxinyu970226",
-			"Deathkon"
+			"Deathkon",
+			"A Chinese Wikipedian"
 		]
 	},
 	"add-category": "添加分类",
@@ -53,6 +54,7 @@
 	"error-server-message": "服务器报告：$1",
 	"error-service-overload": "Grant Metrics目前正在超负荷服务其他请求。请等待几分钟后重试。",
 	"error-title-invalid-chars": "标题不能包含下列字符：$1。",
+	"error-title-numeric": "标题不准是数字。",
 	"error-unconfigured-wiki": "$1还没有为此活动配置。请首先添加wiki至活动。",
 	"error-usernames": "$1个{{PLURAL:$1|用户名|用户名}}{{PLURAL:$1|是|是}}不合理的。请编辑或删除后重新提交以进行保存。检查拼写错误，大小写和其他格式规范。",
 	"error-wikis": "$1个{{PLURAL:$1|wiki|wiki}}{{PLURAL:$1|是|是}}不合理的。请检查拼写。",

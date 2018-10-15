@@ -53,6 +53,7 @@
 	"error-server-message": "伺服器報告：$1",
 	"error-service-overload": "Grant Metrics 目前被多個請求給導致負荷過量。請等幾分鐘後再重試。",
 	"error-title-invalid-chars": "標題不可包含以下任何字元：$1。",
+	"error-title-numeric": "標題不能是數字。",
 	"error-unconfigured-wiki": "$1 尚未為此事項設置。請先添加 wiki 至事項。",
 	"error-usernames": "$1 個{{PLURAL:$1|使用者名稱|使用者名稱}}{{PLURAL:$1|為|為}}無效。請先編輯或移除，然後重新提交來保存。請檢查是否有不正確的拼寫、大小寫、和額外格式。",
 	"error-wikis": "$1 個 {{PLURAL:$1|wiki|wiki}} {{PLURAL:$1|為|為}}無效。請檢查拼寫內容。",

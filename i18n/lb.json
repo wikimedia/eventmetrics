@@ -24,6 +24,7 @@
 	"error-invalid": "Dëse Wäert ass net valabel.",
 	"error-program-title-dup": "Et gëtt schonn e Programm mam Titel $1.",
 	"error-server-message": "Äntwert vum Server: $1",
+	"error-title-numeric": "Titel ka keng Zuel sinn.",
 	"fatal-error": "Fatale Feeler",
 	"feedback": "Feedback",
 	"files-uploaded": "Eropgeluede Fichieren",

@@ -1,16 +1,21 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ykhwong"
+			"Ykhwong",
+			"Revi"
 		]
 	},
 	"add-category": "분류 추가",
-	"add-more-participants": "줄마다 더 많은 참가자 추가",
+	"add-more-participants": "줄마다 더 많은 참가자 추가. 위키에 있는 목록을 그대로 붙여넣기 해도 됩니다.",
 	"add-more-participants-tooltip": "참여자의 사용자 이름을 입력하는 방법에 관해 더 읽어보기",
+	"add-organizer": "주최자 추가",
 	"add-wiki": "위키 추가",
 	"all": "모두",
 	"all-wikipedias": "모든 위키백과인",
 	"apply": "적용",
+	"attribution": "저작자표시",
+	"attribution-background": "배경 사진은 공용에서 찾을 수 있음 $1",
+	"attribution-font": "$1 폰트는 $3 제공으로 $2 라이선스로 사용 가능함",
 	"cancel": "취소",
 	"categories": "분류",
 	"category-name": "분류 이름",
@@ -42,6 +47,7 @@
 	"error-server-message": "서버 응답: $1",
 	"error-service-overload": "Grant Metrics가 현재 다른 요청에 대한 서비스 제공에 과부하가 걸려있습니다. 몇 분 뒤에 다시 시도해 주십시오.",
 	"error-title-invalid-chars": "제목은 다음의 문자 중 어느 것도 포함할 수 없습니다: $1.",
+	"error-title-numeric": "제목은 숫자일 수 없습니다.",
 	"error-unconfigured-wiki": "$1은(는) 이 이벤트를 위해 구성되어 있지 않습니다. 먼저 해당 이벤트에 위키를 추가해 주십시오.",
 	"error-wikis": "{{PLURAL:$1|위키}} $1개가 유효하지 {{PLURAL:$1|않습니다}}. 철자를 확인하십시오.",
 	"event": "이벤트",
