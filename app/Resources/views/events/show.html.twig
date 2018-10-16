@@ -9,10 +9,10 @@
             </li>
         {% endif %}
         <li>
-            <a href="{{ path('Program', {'programId': program.id}) }}">{{ program.displayTitle }}</a>
+            <a href="{{ path('Program', {'programId': program.id}) }}">{{ bdi(program.displayTitle) }}</a>
         </li>
         <li class="active">
-            {{ event.displayTitle }}
+            {{ bdi(event.displayTitle) }}
         </li>
     </ol>
 {% endblock %}
@@ -21,7 +21,7 @@
     <div class="container">
         <div class="page-header">
             <h1>
-                {{ event.displayTitle }}
+                {{ bdi(event.displayTitle) }}
                 {% if isOrganizer %}
                     <small>
                         (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('edit-event')|lower }}</a>)
