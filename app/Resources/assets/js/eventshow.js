@@ -9,7 +9,7 @@ $(function () {
     grantmetrics.application.setupAddRemove('event', 'participant');
     grantmetrics.application.setupAddRemove('event', 'category', function ($newRow) {
         // Fill in the wiki with the last valid one.
-        var lastWiki = $(".event__categories .wiki-input[value!='']").val();
+        var lastWiki = $('.event__categories .wiki-input').eq(-2).val();
 
         if (lastWiki) {
             $newRow.find('.wiki-input').val(lastWiki);
