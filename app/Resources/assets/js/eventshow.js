@@ -57,7 +57,7 @@ grantmetrics.eventshow.setupCalculateStats = function () {
         }.bind(this)).fail(function (data) {
             $('.event-process-btn').text($.i18n('error-failed'))
                 .addClass('btn-danger');
-            var feedbackLink = "<a target='_blank' href='https://meta.wikimedia.org/wiki/Talk:Grant_Metrics'>" +
+            var feedbackLink = "<a target='_blank' href='https://meta.wikimedia.org/wiki/Talk:Grant_Metrics_tool'>" +
                 'meta:Talk:Grant Metrics</a>';
             $('.event-stats-status').html(
                 "<strong class='text-danger'>" +
