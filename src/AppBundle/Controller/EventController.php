@@ -184,22 +184,24 @@ class EventController extends EntityController
          */
         $jobHandler->handleStaleJobs($this->event);
 
-        // Add blank EventCategory in the form if one doesn't already exist.
-        // @fixme: There is probably a better place to do this than here.
-        if ($this->event->getCategories()->isEmpty()) {
-            $firstWiki = $this->event->getWikis()->first();
-            $defaultDomain = 1 === $this->event->getWikis()->count() &&  !$firstWiki->isFamilyWiki()
-                ? $firstWiki->getDomain()
-                : '';
-            $category = new EventCategory($this->event, '', $defaultDomain);
-            $this->event->addCategory($category);
-        }
-
         /** @var FormView[] $forms */
         $forms = [];
 
         // Handle each form type (participants, categories, etc.).
         foreach (['Participants', 'Categories'] as $formType) {
+            if ('Categories' === $formType) {
+                // Add blank EventCategory in the form if one doesn't already exist.
+                // @fixme: There is probably a better place to do this than here.
+                if ($this->event->getCategories()->isEmpty()) {
+                    $firstWiki = $this->event->getWikis()->first();
+                    $defaultDomain = 1 === $this->event->getWikis()->count() &&  !$firstWiki->isFamilyWiki()
+                        ? $firstWiki->getDomain()
+                        : '';
+                    $category = new EventCategory($this->event, '', $defaultDomain);
+                    $this->event->addCategory($category);
+                }
+            }
+
             $form = $this->handleFormSubmission($this->event, $formType);
 
             if ($form instanceof RedirectResponse) {
