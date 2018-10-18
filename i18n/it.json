@@ -21,6 +21,7 @@
 	"edit-program": "Modifica programma",
 	"edit-summary": "Commento",
 	"error-program-undeletable": "Questo programma non può essere cancellato perché contiene uno o più eventi.",
+	"error-title-numeric": "Il titolo non può contenere soltanto caratteri numerici.",
 	"event": "Evento",
 	"event-deleted": "L'evento '$1' è stato cancellato.",
 	"event-no-data": "Le statistiche non sono ancora state generate per questo evento.",
