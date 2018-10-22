@@ -53,6 +53,7 @@
 	"error-server-message": "Server sade: $1",
 	"error-service-overload": "Grant Metrics är för närvarande upptagen av andra begäran. Försök igen om några minuter.",
 	"error-title-invalid-chars": "Titeln kan inte innehålla någon av följande tecken: $1",
+	"error-title-numeric": "Titeln kan inte vara en siffra.",
 	"error-unconfigured-wiki": "$1 är inte konfigurerad för denna händelse. Lägg till wikin i händelsen först.",
 	"error-usernames": "$1 {{PLURAL:$1|användarnamn}} är {{PLURAL:$1|ogiltig|ogiltiga}}. Redigera eller ta bort och sedan skicka igen för att spara. Leta efter stavfel, ogiltig versalisering och extra formatering.",
 	"error-wikis": "$1 {{PLURAL:$1|wiki|wikis}} är {{PLURAL:$1|ogiltig|ogiltiga}}. Kontrollera stavningen.",

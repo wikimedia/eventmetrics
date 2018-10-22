@@ -23,6 +23,7 @@
 	"error-query-timeout": "Beklager, informationen tog for lang tid at behandle (tidsudløb $1 {{PLURAL:$1|sekund|sekunder}}). For at kunne spare på ressourcerne blev forespørgslen automatisk stoppet.",
 	"error-server-message": "Serveren sagde: $1",
 	"error-service-overload": "Grant Metrics er i øjeblikket overbelastet af andre forespørgsler. Prøv igen om nogle minutter.",
+	"error-title-numeric": "Titlen kan ikke være et tal.",
 	"fatal-error": "Fatal fejl",
 	"feedback": "Tilbagemelding",
 	"help": "Hjælp",

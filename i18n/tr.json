@@ -1,11 +1,27 @@
 {
+	"@metadata": {
+		"authors": [
+			"Hedda",
+			"Rapsar",
+			"Sayginer"
+		]
+	},
+	"add-category": "Kategori ekle",
+	"add-more-participants": "Her satıra daha fazla katılımcı ekleyin. Doğrudan bir viki listesinden kopyalayıp yapıştırabilirsiniz.",
+	"add-more-participants-tooltip": "Katılımcıların kullanıcı adlarının nasıl girileceği hakkında daha fazla bilgi edinin",
+	"add-organizer": "Organizatör ekle",
+	"add-wiki": "Viki ekle",
 	"all": "Tümü",
+	"all-wikipedias": "Tüm Vikipediler",
 	"apply": "Uygula",
+	"attribution": "Atıf",
+	"attribution-background": "Commons'ta $1 sayfasında arkaplan resmi mevcut",
 	"cancel": "Vazgeç",
 	"date": "Tarih",
 	"diff": "Fark",
 	"documentation": "Belgelendirme",
 	"edit-summary": "Yorum",
+	"error-title-numeric": "Başlık bir sayı olamaz.",
 	"fatal-error": "Önemli hata",
 	"help": "Yardım",
 	"help-translate": "Çeviriye yardım edin",
@@ -21,6 +37,7 @@
 	"pager-older-n": "$1 daha eski",
 	"report-issue": "Sorun bildirin",
 	"submit": "Gönder",
+	"title": "Başlık",
 	"totals": "Toplam",
 	"unknown": "Bilinmeyen",
 	"username": "Kullanıcı adı",
