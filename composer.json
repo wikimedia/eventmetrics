@@ -29,6 +29,7 @@
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.5",
         "eightpoints/guzzle-bundle": "^7.0",
+        "incenteev/composer-parameter-handler": "^2.1",
         "leafo/scssphp": "^0.7.1",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/monolog-bundle": "^3.3",
@@ -51,6 +52,7 @@
     },
     "scripts": {
         "symfony-scripts": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "php bin/console cache:clear",
             "php bin/console doctrine:database:create --if-not-exists",
             "php bin/console doctrine:migration:migrate"
