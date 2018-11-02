@@ -237,7 +237,7 @@ class EventProcessor
                     $this->setFilesUploadedCommons($wiki);
                     break;
                 case 'wikidata':
-                    $this->setItemsCreatedOrImprovedOnWikidata($wiki);
+                    $this->setItemsCreatedOrImprovedOnWikidata($wiki, $ewRepo);
                     break;
             }
         }
@@ -269,16 +269,20 @@ class EventProcessor
         int &$pagesImproved,
         int &$edits
     ): void {
-        $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
 
-        $ret = $this->eventRepo->getEditStats(
-            $dbName,
-            $this->event->getStartWithTimezone(),
-            $this->event->getEndWithTimezone(),
-            $this->getParticipantNames(),
-            $this->event->getCategoryTitlesForWiki($wiki)
-        );
+        $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
+        $start = $this->event->getStartWithTimezone();
+        $end = $this->event->getEndWithTimezone();
+        $usernames = $this->getParticipantNames();
+        $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
+        $pageIds = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles);
+
+        // Set on the EventWiki, so this will get persisted to the database.
+        $wiki->setPages($pageIds);
+
+        $ret = $this->eventRepo->getEditStats($dbName, $pageIds, $start, $end, $usernames);
+
         $pagesCreated += $ret['created'];
         $pagesImproved += $ret['edited'];
         $edits += $ret['edits'];
@@ -315,19 +319,26 @@ class EventProcessor
     /**
      * Retrieve counts of Wikidata Items created or improved and save them as both event and event-wiki stats.
      * @param EventWiki $wiki The wiki (must always be Wikidata).
+     * @param EventWikiRepository $ewRepo
      */
-    private function setItemsCreatedOrImprovedOnWikidata(EventWiki $wiki): void
+    private function setItemsCreatedOrImprovedOnWikidata(EventWiki $wiki, EventWikiRepository $ewRepo): void
     {
         $this->log("> Fetching items created or improved on Wikidata...");
+
+        $dbName = 'wikidatawiki_p';
+        $start = $this->event->getStartWithTimezone();
+        $end = $this->event->getEndWithTimezone();
+        $usernames = $this->getParticipantNames();
+        $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
+        $pageIds = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles);
+
+        // Set on the EventWiki, so this will get persisted to the database.
+        $wiki->setPages($pageIds);
+
         // Re-use the same metric calculator as is used for Wikipedia pages above,
         // but store the values under a different name.
-        $ret = $this->eventRepo->getEditStats(
-            'wikidatawiki_p',
-            $this->event->getStartWithTimezone(),
-            $this->event->getEndWithTimezone(),
-            $this->getParticipantNames(),
-            $this->event->getCategoryTitlesForWiki($wiki)
-        );
+        $ret = $this->eventRepo->getEditStats('wikidatawiki_p', $pageIds, $start, $end, $usernames);
+
         // Report the counts, and record them both for this wiki and the event (there's only ever one Wikidata wiki).
         $this->log(">> <info>Items created: {$ret['created']}</info>");
         $this->log(">> <info>Items improved: {$ret['edited']}</info>");

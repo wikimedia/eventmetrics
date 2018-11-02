@@ -84,7 +84,7 @@ class FormatExtension extends Extension
         $decimal = $this->numFormatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
         $thousands = $this->numFormatter->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
 
-        $formatted = number_format($number, $decimals, $decimal, $thousands);
+        $formatted = number_format((float)$number, $decimals, $decimal, $thousands);
 
         // Remove trailing .0's (e.g. 40.00 -> 40).
         return preg_replace("/\\".$decimal."0+$/", '', $formatted);

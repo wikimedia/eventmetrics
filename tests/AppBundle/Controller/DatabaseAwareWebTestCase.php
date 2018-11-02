@@ -110,6 +110,23 @@ abstract class DatabaseAwareWebTestCase extends EventMetricsTestCase
                 echo "\n\n".$stacktrace->text();
             }
         }
+
+        // Avoid memory leaks.
+
+        if (isset($this->entityManager)) {
+            $this->entityManager->close();
+            $this->entityManager = null;
+        }
+        gc_collect_cycles();
+
+        // Remove properties defined during the test.
+        $refl = new \ReflectionObject($this);
+        foreach ($refl->getProperties() as $prop) {
+            if (!$prop->isStatic() && 0 !== strpos($prop->getDeclaringClass()->getName(), 'PHPUnit_')) {
+                $prop->setAccessible(true);
+                $prop->setValue($this, null);
+            }
+        }
     }
 
     /**
