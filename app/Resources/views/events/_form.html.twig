@@ -15,7 +15,7 @@
                 }}
             </div>
             <div class="col-sm-8{{ form_errors(wiki) ? ' has-error' }}">
-                {{ form_widget(wiki, {'attr': {'class': 'event-wiki-input'}}) }}
+                {{ form_widget(wiki, {'attr': {'class': 'event-wiki-input', 'autocomplete': 'off'}}) }}
             </div>
             <div class="col-sm-2">
                 <button type="button" class="btn btn-default remove-wiki">

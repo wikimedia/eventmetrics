@@ -36,7 +36,7 @@
             {% set categoryRow %}
                 <div class="row category-row form-group">
                     <div class="col-sm-2{{ form_errors(category.domain) ? ' has-error' }}">
-                        {% set attrs = {'class': 'wiki-input', 'placeholder': 'en.wikipedia'} %}
+                        {% set attrs = {'class': 'wiki-input', 'placeholder': 'en.wikipedia', 'autocomplete': 'off'} %}
                         {% if defaultWiki is not empty %}
                             {% set attrs = attrs|merge({'readonly': 'readonly'}) %}
                         {% endif %}
