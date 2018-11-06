@@ -28,12 +28,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="event_program", columns={"event_program_id"}),
  *         @ORM\Index(name="event_program_title", columns={"event_program_id", "event_title"}),
  *     },
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="event_title_program_uniq", columns={"event_program_id", "event_title"})
- *     },
  *     options={"engine":"InnoDB"}
  * )
- * @UniqueEntity("title", message="error-event-title-dup")
  * @ORM\HasLifecycleCallbacks()
  */
 class Event
@@ -128,7 +124,7 @@ class Event
     protected $categories;
 
     /**
-     * @ORM\Column(name="event_title", type="string", length=255, unique=true)
+     * @ORM\Column(name="event_title", type="string", length=255)
      * @Assert\Type("string")
      * @Assert\Length(max=255)
      * @var string The title of the event.

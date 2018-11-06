@@ -20,10 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="program",
  *     indexes={@ORM\Index(name="program_title", columns={"program_title"})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="program_title_uniq", columns={"program_title"})},
  *     options={"engine":"InnoDB"}
  * )
- * @UniqueEntity("title", message="error-program-title-dup")
  * @ORM\EntityListeners({"AppBundle\EventSubscriber\ProgramSubscriber"})
  */
 class Program
@@ -43,7 +41,7 @@ class Program
     protected $id;
 
     /**
-     * @ORM\Column(name="program_title", type="string", length=255, unique=true)
+     * @ORM\Column(name="program_title", type="string", length=255)
      * @Assert\Type("string")
      * @Assert\Length(max=255)
      * @var string The title of the program.
