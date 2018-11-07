@@ -329,7 +329,7 @@ abstract class Repository extends EntityRepository
             ->setParameter('userIds', $userIds, Connection::PARAM_INT_ARRAY);
         // false means do not set a max query time. Here it's really fast,
         // and setting the query timeout actually slows it down.
-        return $this->executeQueryBuilder($rqb, false)->fetchAll();
+        return $this->executeQueryBuilder($rqb, -1)->fetchAll();
     }
 
     /**
@@ -374,13 +374,13 @@ abstract class Repository extends EntityRepository
      * Execute a query using the projects connection, handling certain Exceptions.
      * @param string $sql
      * @param mixed[] $params Parameters to bound to the prepared query.
-     * @param int|null|false $timeout Maximum statement time in seconds. null will use the
-     *   default specified by the app.query_timeout config parameter. false will set no timeout.
+     * @param int|null $timeout Maximum statement time in seconds. null will use the
+     *   default specified by the app.query_timeout config parameter. -1 will set no timeout.
      * @return ResultStatement
      * @throws DriverException
      * @throws DBALException
      */
-    public function executeReplicaQuery(string $sql, array $params = [], $timeout = null): ResultStatement
+    public function executeReplicaQuery(string $sql, array $params = [], ?int $timeout = null): ResultStatement
     {
         try {
             $sql = $this->getQueryTimeoutClause($timeout).$sql;
@@ -393,13 +393,13 @@ abstract class Repository extends EntityRepository
     /**
      * Execute a query using the projects connection, handling certain Exceptions.
      * @param QueryBuilder $qb
-     * @param int|null|false $timeout Maximum statement time in seconds. null will use the
-     *   default specified by the app.query_timeout config parameter. false will set no timeout.
+     * @param int|null $timeout Maximum statement time in seconds. null will use the
+     *   default specified by the app.query_timeout config parameter. -1 will set no timeout.
      * @return ResultStatement
      * @throws DriverException
      * @throws DBALException
      */
-    public function executeQueryBuilder(QueryBuilder $qb, $timeout = null): ResultStatement
+    public function executeQueryBuilder(QueryBuilder $qb, ?int $timeout = null): ResultStatement
     {
         try {
             $sql = $this->getQueryTimeoutClause($timeout).$qb->getSQL();
@@ -435,13 +435,13 @@ abstract class Repository extends EntityRepository
 
     /**
      * Set the maximum statement time on the MySQL engine.
-     * @param int|null|false $timeout In seconds. null will use the default specified by
-     *     the app.query_timeout config parameter. false will not set a timeout.
+     * @param int|null $timeout In seconds. null will use the default specified by
+     *     the app.query_timeout config parameter. -1 will not set a timeout.
      * @return string The SQL fragment to prepended to the query.
      */
-    public function getQueryTimeoutClause($timeout = null): string
+    public function getQueryTimeoutClause(?int $timeout = null): string
     {
-        if (false === $timeout) {
+        if (-1 === $timeout) {
             return '';
         }
 
