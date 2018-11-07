@@ -358,6 +358,7 @@ class EventTest extends GrantMetricsTestCase
             [
                 'new-editors' => 15,
                 'retention' => 7,
+                'edits' => null,
                 'pages-created' => null,
                 'pages-improved' => null,
             ],

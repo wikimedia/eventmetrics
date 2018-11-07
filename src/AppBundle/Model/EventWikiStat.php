@@ -41,6 +41,7 @@ class EventWikiStat
      * @see StatTrait Shared methods that use this constant.
      */
     public const METRIC_TYPES = [
+        'edits',
         'pages-created',
         'pages-improved',
 

@@ -14,7 +14,6 @@ use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -48,6 +47,7 @@ class Event
     public const AVAILABLE_METRICS = [
         'new-editors' => 15,
         'retention' => 7,
+        'edits' => null,
         'pages-created' => null,
         'pages-improved' => null,
         'files-uploaded' => null,
@@ -61,7 +61,7 @@ class Event
      * '*' means all wikis are applicable.
      */
     public const WIKI_FAMILY_METRIC_MAP = [
-        '*' => ['new-editors', 'retention'],
+        '*' => ['edits', 'new-editors', 'retention'],
         'wikipedia' => ['pages-created', 'pages-improved'],
         'commons' => ['files-uploaded', 'file-usage'],
         'wikidata' => ['items-created', 'items-improved'],
