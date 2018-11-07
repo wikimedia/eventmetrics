@@ -436,7 +436,7 @@ class EventRepository extends Repository
             ->from('job')
             ->where("job_event_id = $eventId");
 
-        $ret = $this->executeQueryBuilder($rqb, false)->fetch();
+        $ret = $this->executeQueryBuilder($rqb, -1)->fetch();
         return isset($ret['job_started']) ? (bool)$ret['job_started'] : null;
     }
 }
