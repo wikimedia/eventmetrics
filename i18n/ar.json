@@ -99,6 +99,7 @@
 	"page": "صفحة",
 	"pager-newer-n": "{{PLURAL:$1|أجدد 1|أجدد $1}}",
 	"pager-older-n": "{{PLURAL:$1|أقدم 1|أقدم $1}}",
+	"edits": "التعديلات",
 	"pages-created": "الصفحات المنشأة",
 	"pages-created-desc": "صفحة المحتوى هي صفحة إما في النطاق الرئيسي أو نطاق الملف.",
 	"pages-improved": "الصفحات المحسنة",
