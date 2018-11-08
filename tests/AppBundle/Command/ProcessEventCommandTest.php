@@ -113,6 +113,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
 
         // Test each individual EventStat.
         $this->newEditorsSpec();
+        $this->editCountSpec();
         $this->pagesCreatedSpec();
         $this->pagesImprovedSpec();
         $this->filesUploadedSpec();
@@ -139,7 +140,7 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findAll(['event' => $this->event]);
-        static::assertEquals(8, count($eventStats));
+        static::assertEquals(9, count($eventStats));
     }
 
     /**
@@ -154,6 +155,20 @@ class ProcessEventCommandTest extends GrantMetricsTestCase
                 'metric' => 'new-editors',
             ]);
         static::assertEquals(1, $eventStat->getValue());
+    }
+
+    /**
+     * Number of edits
+     */
+    private function editCountSpec(): void
+    {
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'edits',
+            ]);
+        static::assertEquals(18, $eventStat->getValue());
     }
 
     /**

@@ -87,7 +87,7 @@ class EventProcessor
         // if needed, and later remove those that have no statistics so that the UI is clean.
         $this->createEventWikisFromLang();
 
-        $this->setPagesEdited();
+        $this->setContributionStats();
 
         // Remove EventWikis that are part of a family where there are no statistics.
         $this->removeEventWikisWithNoStats();
@@ -206,10 +206,11 @@ class EventProcessor
      * Compute and persist a new EventStat and EventWikiStats
      * for the number of pages created/improved.
      */
-    private function setPagesEdited(): void
+    private function setContributionStats(): void
     {
         $this->log("\nFetching number of pages created or improved...");
 
+        $edits = 0;
         $pagesImproved = 0;
         $pagesCreated = 0;
 
@@ -229,7 +230,7 @@ class EventProcessor
             // Different stats based on wiki family.
             switch ($wiki->getFamilyName()) {
                 case 'wikipedia':
-                    $this->setPagesEditedWikipedias($wiki, $ewRepo, $pagesCreated, $pagesImproved);
+                    $this->setContributionsWikipedias($wiki, $ewRepo, $pagesCreated, $pagesImproved, $edits);
                     $pageStats = true;
                     break;
                 case 'commons':
@@ -244,10 +245,12 @@ class EventProcessor
         // Only save pages-created and pages-improved as EventStats
         // if they were also saved as EventWikiStats.
         if ($pageStats) {
+            $this->createOrUpdateEventStat('edits', $edits);
             $this->createOrUpdateEventStat('pages-created', $pagesCreated);
             $this->createOrUpdateEventStat('pages-improved', $pagesImproved);
         }
 
+        $this->log(">> <info>Edits: $edits</info>");
         $this->log(">> <info>Pages created: $pagesCreated</info>");
         $this->log(">> <info>Pages improved: $pagesImproved</info>");
     }
@@ -259,16 +262,17 @@ class EventProcessor
      * @param int &$pagesCreated
      * @param int &$pagesImproved
      */
-    private function setPagesEditedWikipedias(
+    private function setContributionsWikipedias(
         EventWiki $wiki,
         EventWikiRepository $ewRepo,
         int &$pagesCreated,
-        int &$pagesImproved
+        int &$pagesImproved,
+        int &$edits
     ): void {
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
 
-        $ret = $this->eventRepo->getNumPagesEdited(
+        $ret = $this->eventRepo->getEditStats(
             $dbName,
             $this->event->getStartWithTimezone(),
             $this->event->getEndWithTimezone(),
@@ -277,7 +281,9 @@ class EventProcessor
         );
         $pagesCreated += $ret['created'];
         $pagesImproved += $ret['edited'];
+        $edits += $ret['edits'];
 
+        $this->createOrUpdateEventWikiStat($wiki, 'edits', $ret['edits']);
         $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $ret['created']);
         $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $ret['edited']);
     }
@@ -315,7 +321,7 @@ class EventProcessor
         $this->log("> Fetching items created or improved on Wikidata...");
         // Re-use the same metric calculator as is used for Wikipedia pages above,
         // but store the values under a different name.
-        $ret = $this->eventRepo->getNumPagesEdited(
+        $ret = $this->eventRepo->getEditStats(
             'wikidatawiki_p',
             $this->event->getStartWithTimezone(),
             $this->event->getEndWithTimezone(),

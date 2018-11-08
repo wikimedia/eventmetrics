@@ -66,9 +66,9 @@ class EventRepository extends Repository
      * @param DateTime $end
      * @param string[] $usernames
      * @param string[] $categoryTitles Only search within given categories.
-     * @return int[] With keys 'edited' and 'created'.
+     * @return int[] With keys 'edits', 'edited' and 'created'.
      */
-    public function getNumPagesEdited(
+    public function getEditStats(
         string $dbName,
         DateTime $start,
         DateTime $end,
@@ -78,6 +78,7 @@ class EventRepository extends Repository
         if (empty($usernames) && empty($categoryTitles)) {
             // FIXME: This should throw an Exception or something so we can print an error message.
             return [
+                'edits' => 0,
                 'edited' => 0,
                 'created' => 0,
             ];
@@ -92,6 +93,7 @@ class EventRepository extends Repository
         $revisionTable = $this->getTableName('revision');
 
         $rqb->select([
+                'COUNT(*) AS edits',
                 'COUNT(DISTINCT(rev_page)) AS edited',
                 'IFNULL(SUM(CASE WHEN rev_parent_id = 0 THEN 1 ELSE 0 END), 0) AS created',
             ])

@@ -100,6 +100,7 @@
 	"page": "Page",
 	"pager-newer-n": "{{PLURAL:$1|Newer $1|Newer $1}}",
 	"pager-older-n": "{{PLURAL:$1|Older $1|Older $1}}",
+	"edits": "Edits",
 	"pages-created": "Pages created",
 	"pages-created-desc": "A content page is a page in either the main or file namespace.",
 	"pages-improved": "Pages improved",

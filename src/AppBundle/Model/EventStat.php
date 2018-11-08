@@ -42,6 +42,7 @@ class EventStat
         'retention',
 
         // These are also stored on a per-wiki basis as a EventWikiStat
+        'edits',
         'pages-created',
         'pages-improved',
 
