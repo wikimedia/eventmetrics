@@ -6,7 +6,7 @@
             {% set sortableMetrics = ['pages-created', 'pages-improved'] %}
             {% set columnCount = 1 %}
             {% for metric, offset in availableMetrics %}
-                {% if metric not in commonMetrics and event.statistic(metric) is defined %}
+                {% if metric not in commonMetrics and event.statistic(metric) is not empty %}
                     {% set columnCount = columnCount + 1 %}
                     {% set stat = event.statistic(metric) %}
                     {% set metricOrder = metricOrder|merge([stat.metric]) %}
