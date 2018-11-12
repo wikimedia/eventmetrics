@@ -100,6 +100,7 @@
 	"page": "Page",
 	"pager-newer-n": "{{PLURAL:$1|1 plus récente|$1 plus récentes}}",
 	"pager-older-n": "{{PLURAL:$1|1 plus ancienne|$1 plus anciennes}}",
+	"edits": "Modifications",
 	"pages-created": "Pages créées",
 	"pages-created-desc": "Une page de contenu est une page qui est soit dans l'espace de noms principal, soit dans celui des fichiers.",
 	"pages-improved": "Pages améliorées",

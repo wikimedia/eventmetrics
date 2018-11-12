@@ -27,6 +27,7 @@
 	"page": "Lapa",
 	"pager-newer-n": "{{PLURAL:$1|$1 jaunākas|$1 jaunāku|$1 jaunākas}}",
 	"pager-older-n": "{{PLURAL:$1|$1 vecākas|$1 vecāku|$1 vecākas}}",
+	"edits": "Labojumi",
 	"pages-improved": "Uzlabotās lapas",
 	"participants": "Dalībnieki",
 	"remove": "Noņemt",

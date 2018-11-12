@@ -99,6 +99,7 @@
 	"page": "Sida",
 	"pager-newer-n": "{{PLURAL:$1|1 nyare|$1 nyare}}",
 	"pager-older-n": "{{PLURAL:$1|1 äldre|$1 äldre}}",
+	"edits": "Redigeringar",
 	"pages-created": "Skapade sidor",
 	"pages-created-desc": "En innehållssida är en sida antingen i huvud- eller filnamnrymden.",
 	"pages-improved": "Förbättrade sidor",

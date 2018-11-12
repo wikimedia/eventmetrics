@@ -39,6 +39,7 @@
 	"page": "Side",
 	"pager-newer-n": "{{PLURAL:$1|1 nyere|$1 nyere}}",
 	"pager-older-n": "{{PLURAL:$1|1 ældre|$1 ældre}}",
+	"edits": "Redigeringer",
 	"pages-created": "Oprettede sider",
 	"participants": "Deltagere",
 	"program": "Program",

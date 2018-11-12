@@ -76,6 +76,7 @@
 	"page": "Strona",
 	"pager-newer-n": "{{PLURAL:$1|1 nowszy|$1 nowsze|$1 nowszych}}",
 	"pager-older-n": "{{PLURAL:$1|1 starszy|$1 starsze|$1 starszych}}",
+	"edits": "Edycje",
 	"pages-created": "Utworzone strony",
 	"pages-created-desc": "Strona treści jest stroną w przestrzeni głównej lub w przestrzeni plików.",
 	"pages-improved-desc": "Strona treści jest stroną w przestrzeni głównej lub w przestrzeni plików.",

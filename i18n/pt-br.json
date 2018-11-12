@@ -99,6 +99,7 @@
 	"page": "Página",
 	"pager-newer-n": "{{PLURAL:$1|posterior|$1 posteriores}}",
 	"pager-older-n": "{{PLURAL:$1|1 anterior|$1 anteriores}}",
+	"edits": "Edições",
 	"pages-created": "Páginas criadas",
 	"pages-created-desc": "Uma página de conteúdo é uma página no espaço de nomes principal ou de arquivo.",
 	"pages-improved": "Páginas melhoradas",

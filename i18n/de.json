@@ -99,6 +99,7 @@
 	"page": "Seite",
 	"pager-newer-n": "{{PLURAL:$1|nächster|nächste $1}}",
 	"pager-older-n": "{{PLURAL:$1|vorheriger|vorherige $1}}",
+	"edits": "Bearbeitungen",
 	"pages-created": "Erstellte Seiten",
 	"pages-created-desc": "Eine Inhaltsseite ist entweder eine Seite im Haupt- oder Dateinamensraum.",
 	"pages-improved": "Verbesserte Seiten",

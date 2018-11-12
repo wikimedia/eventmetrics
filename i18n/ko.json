@@ -86,6 +86,7 @@
 	"page": "페이지",
 	"pager-newer-n": "{{PLURAL:$1|다음 1개|다음 $1개}}",
 	"pager-older-n": "{{PLURAL:$1|이전 1개|이전 $1개}}",
+	"edits": "편집",
 	"pages-created": "만든 문서",
 	"pages-created-desc": "내용 문서는 일반 또는 파일 이름공간에 속한 문서입니다.",
 	"pages-improved": "개선된 문서",
