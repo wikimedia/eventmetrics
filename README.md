@@ -5,8 +5,8 @@ A Wikimedia Foundation tool that provides event organizers and grantees a simple
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://travis-ci.org/wikimedia/eventmetrics.svg?branch=master)](https://travis-ci.org/wikimedia/eventmetrics)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/53b3ddf0ce654055f8cd/test_coverage)](https://codeclimate.com/github/wikimedia/eventmetrics/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/53b3ddf0ce654055f8cd/maintainability)](https://codeclimate.com/github/wikimedia/eventmetrics/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/8e85e93cd9f6848bebfc/test_coverage)](https://codeclimate.com/github/wikimedia/eventmetrics/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/8e85e93cd9f6848bebfc/maintainability)](https://codeclimate.com/github/wikimedia/eventmetrics/maintainability)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wikimedia/eventmetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/eventmetrics/?branch=master)
 
 ## Installation for development
