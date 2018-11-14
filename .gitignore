@@ -27,6 +27,7 @@
 *.swp
 .DS_Store
 i18n_helper.js
+deploy.sh
 phpDocumentor.phar*
 /bin/phpdoc*
 
