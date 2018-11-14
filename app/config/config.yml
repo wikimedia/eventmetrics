@@ -48,7 +48,7 @@ twig:
 doctrine:
     dbal:
         connections:
-            grantmetrics:
+            eventmetrics:
                 driver:   pdo_mysql
                 host:     "%database.host%"
                 port:     "%database.port%"
@@ -83,10 +83,10 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
-        default_entity_manager: grantmetrics
+        default_entity_manager: eventmetrics
         entity_managers:
-            grantmetrics:
-                connection: grantmetrics
+            eventmetrics:
+                connection: eventmetrics
                 mappings:
                     model:
                         type: annotation
@@ -143,7 +143,7 @@ toolforge:
         consumer_secret: '%oauth.secret%'
         logged_in_user: '%app.logged_in_user%'
     intuition:
-        domain: 'grantmetrics'
+        domain: 'eventmetrics'
 
 monolog:
     handlers:
@@ -170,6 +170,6 @@ monolog:
             level: critical
             from_email: '%mailer.from_email%'
             to_email: '%mailer.to_email%'
-            subject: 'GrantMetrics error: %%message%%'
+            subject: 'EventMetrics error: %%message%%'
             formatter: monolog.formatter.html
             content_type: text/html

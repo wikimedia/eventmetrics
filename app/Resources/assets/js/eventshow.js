@@ -1,4 +1,4 @@
-grantmetrics.eventshow = {};
+eventmetrics.eventshow = {};
 
 $(function () {
     // Only run on event page.
@@ -6,8 +6,8 @@ $(function () {
         return;
     }
 
-    grantmetrics.application.setupAddRemove('event', 'participant');
-    grantmetrics.application.setupAddRemove('event', 'category', function ($newRow) {
+    eventmetrics.application.setupAddRemove('event', 'participant');
+    eventmetrics.application.setupAddRemove('event', 'category', function ($newRow) {
         // Fill in the wiki with the last valid one.
         var lastWiki = $('.event__categories .wiki-input').eq(-2).val();
 
@@ -18,7 +18,7 @@ $(function () {
             $newRow.find('.wiki-input').focus();
         }
     });
-    grantmetrics.application.setupAutocompletion();
+    eventmetrics.application.setupAutocompletion();
 
     // The event page contains multiple forms. Here we jump to the one with errors,
     // if any, since the user may otherwise not see it.
@@ -28,17 +28,17 @@ $(function () {
     }
 
     // Setup column sorting for stats.
-    grantmetrics.application.setupColumnSorting();
+    eventmetrics.application.setupColumnSorting();
 
-    grantmetrics.eventshow.setupWikiInputs();
-    grantmetrics.eventshow.setupCalculateStats();
+    eventmetrics.eventshow.setupWikiInputs();
+    eventmetrics.eventshow.setupCalculateStats();
 });
 
 /**
  * Listener for calculate statistics button, which hits the
  * process event endpoint, firing off a job.
  */
-grantmetrics.eventshow.setupCalculateStats = function () {
+eventmetrics.eventshow.setupCalculateStats = function () {
     $('.event-process-btn').on('click', function () {
         document.activeElement.blur();
 
@@ -57,8 +57,8 @@ grantmetrics.eventshow.setupCalculateStats = function () {
         }.bind(this)).fail(function (data) {
             $('.event-process-btn').text($.i18n('error-failed'))
                 .addClass('btn-danger');
-            var feedbackLink = "<a target='_blank' href='https://meta.wikimedia.org/wiki/Talk:Grant_Metrics'>" +
-                'meta:Talk:Grant Metrics</a>';
+            var feedbackLink = "<a target='_blank' href='https://meta.wikimedia.org/wiki/Talk:Event_Metrics'>" +
+                'meta:Talk:Event Metrics</a>';
             $('.event-stats-status').html(
                 "<strong class='text-danger'>" +
                 $.i18n('error-internal', feedbackLink) +
@@ -78,8 +78,8 @@ grantmetrics.eventshow.setupCalculateStats = function () {
 /**
  * Attach typeaheads to the wiki inputs. These will only autocomplete to wikis configured on the Event.
  */
-grantmetrics.eventshow.setupWikiInputs = function () {
-    grantmetrics.application.populateValidWikis().then(function (validWikis) {
+eventmetrics.eventshow.setupWikiInputs = function () {
+    eventmetrics.application.populateValidWikis().then(function (validWikis) {
         $('.event__categories').on('focus', '.wiki-input', function () {
             if ($(this).data().typeahead) {
                 return;
@@ -87,7 +87,7 @@ grantmetrics.eventshow.setupWikiInputs = function () {
 
             $(this).typeahead({
                 source: validWikis.filter(function (wiki) {
-                    return grantmetrics.eventshow.availableWikiPattern.test(wiki);
+                    return eventmetrics.eventshow.availableWikiPattern.test(wiki);
                 })
             });
         });

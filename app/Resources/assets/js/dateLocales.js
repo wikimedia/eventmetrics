@@ -1,14 +1,14 @@
 /**
  * This file contains helpers to get localization settings.
  */
-grantmetrics.dateLocales = {};
+eventmetrics.dateLocales = {};
 
 /**
  * Get the date pattern for the user's locale.
  * Defaults to ISO 8601 if window.navigator.language is undefined.
  * @return {string}
  */
-grantmetrics.dateLocales.getLocaleDatePattern = function () {
+eventmetrics.dateLocales.getLocaleDatePattern = function () {
     var defaultFormat = 'YYYY-MM-DD';
 
     if (!window.navigator.language) {
@@ -239,7 +239,7 @@ grantmetrics.dateLocales.getLocaleDatePattern = function () {
  * E.g. we can't just use Date.prototype.toLocaleTimeString().
  * @return {string}
  */
-grantmetrics.dateLocales.getLocaleTimePattern = function () {
+eventmetrics.dateLocales.getLocaleTimePattern = function () {
     return this.is24HourFormat() ? 'HH:mm' : 'h:mm A';
 };
 
@@ -248,7 +248,7 @@ grantmetrics.dateLocales.getLocaleTimePattern = function () {
  * This is hard-coded to return false for various English languages.
  * @return {boolean}
  */
-grantmetrics.dateLocales.is24HourFormat = function () {
+eventmetrics.dateLocales.is24HourFormat = function () {
     if (!window.navigator.language) {
         return true;
     }
@@ -264,7 +264,7 @@ grantmetrics.dateLocales.is24HourFormat = function () {
  * Uses Date.prototype.toLocaleString(), meaning no IE support.
  * @return {array}
  */
-grantmetrics.dateLocales.getWeekdayNames = function () {
+eventmetrics.dateLocales.getWeekdayNames = function () {
     var daysOfWeek = [];
     for (var i = 0; i < 7; i++) {
         daysOfWeek.push(
@@ -284,7 +284,7 @@ grantmetrics.dateLocales.getWeekdayNames = function () {
  * Uses Date.prototype.toLocaleString(), meaning no IE support.
  * @return {array}
  */
-grantmetrics.dateLocales.getMonthNames = function () {
+eventmetrics.dateLocales.getMonthNames = function () {
     var monthNames = [];
     for (var i = 0; i < 12; i++) {
         monthNames.push(

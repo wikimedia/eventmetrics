@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains only the GrantMetricsTestCase class.
+ * This file contains only the EventMetricsTestCase class.
  */
 
 declare(strict_types=1);
@@ -10,9 +10,9 @@ namespace Tests\AppBundle;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Class GrantMetricsTestCase
+ * Class EventMetricsTestCase
  */
-class GrantMetricsTestCase extends WebTestCase
+class EventMetricsTestCase extends WebTestCase
 {
     public function setUp(): void
     {

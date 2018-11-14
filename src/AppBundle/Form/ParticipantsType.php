@@ -190,14 +190,14 @@ class ParticipantsType extends AbstractType
             // without a user ID so that the form can produce errors.
             $participant = new Participant($event);
         } else {
-            // Otherwise we need find the one that exists in grantmetrics.
+            // Otherwise we need find the one that exists in eventmetrics.
             $participant = $this->participantRepo->findOneBy([
                 'userId' => $row['user_id'],
                 'event' => $event,
             ]);
 
             if (null === $participant) {
-                // Participant doesn't exist in grantmetrics yet,
+                // Participant doesn't exist in eventmetrics yet,
                 // so we'll create a new, blank Participant.
                 $participant = new Participant($event);
                 $participant->setUserId((int)$row['user_id']);

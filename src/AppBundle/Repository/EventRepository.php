@@ -430,7 +430,7 @@ class EventRepository extends Repository
      */
     public function getJobStatus(Event $event): ?bool
     {
-        $conn = $this->getGrantMetricsConnection();
+        $conn = $this->getEventMetricsConnection();
         $rqb = $conn->createQueryBuilder();
         $eventId = $event->getId();
 

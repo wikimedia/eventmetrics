@@ -17,12 +17,12 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the ProcessEventCommand.
  */
-class ProcessEventCommandTest extends GrantMetricsTestCase
+class ProcessEventCommandTest extends EventMetricsTestCase
 {
     /**
      * @var ORMExecutor

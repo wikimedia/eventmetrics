@@ -12,12 +12,12 @@ use AppBundle\Model\EventStat;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use Doctrine\ORM\EntityManagerInterface;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the Program class.
  */
-class ProgramTest extends GrantMetricsTestCase
+class ProgramTest extends EventMetricsTestCase
 {
     /** @var Organizer The Organizer of the Program. */
     protected $organizer;

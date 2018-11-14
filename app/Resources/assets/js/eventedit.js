@@ -1,4 +1,4 @@
-grantmetrics.eventedit = {};
+eventmetrics.eventedit = {};
 
 $(function () {
     // Only run on event-new, edit and copy pages (all event pages except -show).
@@ -18,18 +18,18 @@ $(function () {
         }
     }
 
-    grantmetrics.eventedit.setupWikiInputs();
-    grantmetrics.eventedit.setupDateRangePicker();
+    eventmetrics.eventedit.setupWikiInputs();
+    eventmetrics.eventedit.setupDateRangePicker();
 });
 
 /**
  * Set up wiki autocompletion and listeners for the special wiki links (e.g. "All Wikipedias").
  */
-grantmetrics.eventedit.setupWikiInputs = function () {
+eventmetrics.eventedit.setupWikiInputs = function () {
     // Setup the add/remove wiki fields.
-    grantmetrics.application.setupAddRemove('event', 'wiki');
+    eventmetrics.application.setupAddRemove('event', 'wiki');
 
-    grantmetrics.application.populateValidWikis().then(function (validWikis) {
+    eventmetrics.application.populateValidWikis().then(function (validWikis) {
         $('.event__wikis').on('focus', '.event-wiki-input', function () {
             if ($(this).data().typeahead) {
                 return;
@@ -62,7 +62,7 @@ grantmetrics.eventedit.setupWikiInputs = function () {
  * Setup the date range picker on the event new/edit page. The user sees a single input field containing the date range.
  * Hidden start/end date inputs are updated when the date range is changed, as this is how the server wants it.
  */
-grantmetrics.eventedit.setupDateRangePicker = function () {
+eventmetrics.eventedit.setupDateRangePicker = function () {
     var startDate = moment($('#event_start').val()).utc(),
         endDate = moment($('#event_end').val()).utc();
 
@@ -72,16 +72,16 @@ grantmetrics.eventedit.setupDateRangePicker = function () {
 
     $('#event_time').daterangepicker({
         timePicker: true,
-        timePicker24Hour: grantmetrics.dateLocales.is24HourFormat(),
+        timePicker24Hour: eventmetrics.dateLocales.is24HourFormat(),
         startDate: startDate,
         endDate: endDate,
         locale: {
-            format: grantmetrics.dateLocales.getLocaleDatePattern() + ' ' + grantmetrics.dateLocales.getLocaleTimePattern(),
+            format: eventmetrics.dateLocales.getLocaleDatePattern() + ' ' + eventmetrics.dateLocales.getLocaleTimePattern(),
             applyLabel: $.i18n('apply'),
             cancelLabel: $.i18n('cancel'),
             customRangeLabel: $.i18n('custom-range'),
-            daysOfWeek: grantmetrics.dateLocales.getWeekdayNames(),
-            monthNames: grantmetrics.dateLocales.getMonthNames()
+            daysOfWeek: eventmetrics.dateLocales.getWeekdayNames(),
+            monthNames: eventmetrics.dateLocales.getMonthNames()
         }
     });
 

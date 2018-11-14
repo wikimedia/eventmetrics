@@ -1,13 +1,13 @@
-Grant Metrics
+Event Metrics
 =============
 
-A Wikimedia Foundation tool that provides grantees a simple, easy to use interface for reporting their shared metrics, removing the need for any manual counting.
+A Wikimedia Foundation tool that provides event organizers and grantees a simple, easy to use interface for reporting their shared metrics, removing the need for any manual counting.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Build Status](https://travis-ci.org/wikimedia/grantmetrics.svg?branch=master)](https://travis-ci.org/wikimedia/grantmetrics)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/53b3ddf0ce654055f8cd/test_coverage)](https://codeclimate.com/github/wikimedia/grantmetrics/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/53b3ddf0ce654055f8cd/maintainability)](https://codeclimate.com/github/wikimedia/grantmetrics/maintainability)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/grantmetrics/?branch=master)
+[![Build Status](https://travis-ci.org/wikimedia/eventmetrics.svg?branch=master)](https://travis-ci.org/wikimedia/eventmetrics)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/53b3ddf0ce654055f8cd/test_coverage)](https://codeclimate.com/github/wikimedia/eventmetrics/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/53b3ddf0ce654055f8cd/maintainability)](https://codeclimate.com/github/wikimedia/eventmetrics/maintainability)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wikimedia/eventmetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/eventmetrics/?branch=master)
 
 ## Installation for development
 
@@ -18,7 +18,7 @@ Prerequisites:
 
 After cloning the repository:
 
-1. Create a local database called e.g. `grantmetrics`.
+1. Create a local database called e.g. `eventmetrics`.
 2. Run `composer install` (this will prompt for some configuration values):
    * Fill out your local database credentials according to your local configuration;
      those for `database.replica.user` and `database.replica.password` can be found in
@@ -35,14 +35,14 @@ To update: after pulling the latest code, run `composer install`.
 
 The web interface is hopefully straightforward to use. However developers can also do some functionality via the console. In the same directory as the application:
 
-* `php bin/console app:process-event <eventId>` - will generate [`EventStat`](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/Model/EventStat.php)s for the Event with the ID `<eventId>`.
-* `php bin/console app:spawn-jobs` - queries the [Job queue](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/Model/Job.php) and runs `app:process-event` for Events that are in the queue. There is a limit on the number of concurrent jobs to ensure the database quota on the replicas is not exceeded.
+* `php bin/console app:process-event <eventId>` - will generate [`EventStat`](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/Model/EventStat.php)s for the Event with the ID `<eventId>`.
+* `php bin/console app:spawn-jobs` - queries the [Job queue](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/Model/Job.php) and runs `app:process-event` for Events that are in the queue. There is a limit on the number of concurrent jobs to ensure the database quota on the replicas is not exceeded.
 
 ## PHP and framework
 
 There is one internal [Symfony bundle](https://symfony.com/doc/current/bundles.html), called `AppBundle`. It contains a separate directory for the controllers, models, repositories, Twig helpers, and fixtures.
 
-Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the `grantmetrics` database. Database interaction should generally be done with Doctrine's `EntityManager`.
+Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the `eventmetrics` database. Database interaction should generally be done with Doctrine's `EntityManager`.
 
 Repositories are responsible for querying the replicas, MediaWiki API, file system, etc., wherever external data lives.
 They do not do any post-processing.
@@ -51,9 +51,9 @@ Repositories should automatically be assigned to the models, and can be injected
 ## Assets
 
 Assets are managed with [Webpack Encore](https://github.com/symfony/webpack-encore).
-Local CSS and JavaScript live in [app/Resources/assets](https://github.com/wikimedia/grantmetrics/tree/master/app/Resources/assets).
-Fonts and vendor assets must be defined in [webpack.config.js](https://github.com/wikimedia/grantmetrics/blob/master/webpack.config.js),
-and if needed, sourced in the `<head>` of [base.html.twig](https://github.com/wikimedia/grantmetrics/blob/master/app/Resources/views/base.html.twig).
+Local CSS and JavaScript live in [app/Resources/assets](https://github.com/wikimedia/eventmetrics/tree/master/app/Resources/assets).
+Fonts and vendor assets must be defined in [webpack.config.js](https://github.com/wikimedia/eventmetrics/blob/master/webpack.config.js),
+and if needed, sourced in the `<head>` of [base.html.twig](https://github.com/wikimedia/eventmetrics/blob/master/app/Resources/views/base.html.twig).
 
 On compilation, all assets are copied to the `public/assets/` directory (publicly accessible).
 This happens by running `./node_modules/.bin/encore production` (or `dev` if you don't want the files to be minified and versioned).
@@ -91,28 +91,25 @@ Use `composer test` to run the full test suite. The individual commands that it 
 
 Most CodeSniffer and MinusX errors can be fixed automatically using `composer fix`.
 
-The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM`. This data, along with what is populated in [install-mediawiki.sh](https://github.com/wikimedia/grantmetrics/blob/master/build/ci/install-mediawiki.sh), are intended to mimic production data so that you can run the tests locally against the replicas and get the same results as the test MediaWiki installation that is used for the CI build. The [basic fixture set](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/DataFixtures/ORM/basic.yml) is loaded by default. The [extended set](https://github.com/wikimedia/grantmetrics/blob/master/src/AppBundle/DataFixtures/ORM/extended.yml) supplies a lot more test data, and is meant for testing beyond the workflow of creating events, etc., such as statistics generation.
+The test database is automatically populated with the fixtures, which live in `src/DataFixtures/ORM`. This data, along with what is populated in [install-mediawiki.sh](https://github.com/wikimedia/eventmetrics/blob/master/build/ci/install-mediawiki.sh), are intended to mimic production data so that you can run the tests locally against the replicas and get the same results as the test MediaWiki installation that is used for the CI build. The [basic fixture set](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/DataFixtures/ORM/basic.yml) is loaded by default. The [extended set](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/DataFixtures/ORM/extended.yml) supplies a lot more test data, and is meant for testing beyond the workflow of creating events, etc., such as statistics generation.
 
 Repository classes should not need tests. Add `@codeCoverageIgnore` to the bottom of the class summary so that coverage statistics are not affected.
 
 ### Functional/integration tests
 
-Controller tests extend [`DatabaseAwareWebTestCase`](https://github.com/wikimedia/grantmetrics/blob/master/tests/AppBundle/Controller/DatabaseAwareWebTestCase.php), which loads fixtures and ensures full stack traces are shown when there is an HTTP error. Some class properties must be set for this to work:
+Controller tests extend [`DatabaseAwareWebTestCase`](https://github.com/wikimedia/eventmetrics/blob/master/tests/AppBundle/Controller/DatabaseAwareWebTestCase.php), which loads fixtures and ensures full stack traces are shown when there is an HTTP error. Some class properties must be set for this to work:
 
 * `$this->client` - the Symfony client.
 * `$this->container` - the DI container.
 * `$this->crawler` - the DOM crawler.
 * `$this->response` - response of any requests you make.
 
-See [`ProgramControllerTest`](https://github.com/wikimedia/grantmetrics/blob/master/tests/AppBundle/Controller/ProgramControllerTest.php) for an example.
+See [`ProgramControllerTest`](https://github.com/wikimedia/eventmetrics/blob/master/tests/AppBundle/Controller/ProgramControllerTest.php) for an example.
 
 ## Deployment
 
-For maintainer documentation, see https://wikitech.wikimedia.org/wiki/Tool:Grant_Metrics
+For maintainer documentation, see https://wikitech.wikimedia.org/wiki/Tool:Event_Metrics
 
-The application currently is running on WMF's Toolforge environment at https://tools.wmflabs.org/grantmetrics
+The application currently is running on WMF's VPS environment at https://eventmetrics.wmflabs.org
 
-You'll need to run deploy commands in the bash shell for the Kubernetes container:
-
-* `webservice --backend=kubernetes php7.2 shell`
-* `sh deploy.sh`
+Deployment happens automatically after a new version tag is created.

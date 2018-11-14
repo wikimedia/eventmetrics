@@ -12,12 +12,12 @@ use AppBundle\Model\EventCategory;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Class EventCategoryTest
  */
-class EventCategoryTest extends GrantMetricsTestCase
+class EventCategoryTest extends EventMetricsTestCase
 {
     /** @var Event The Event that the EventCategory belongs to. */
     protected $event;

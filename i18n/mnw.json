@@ -33,6 +33,7 @@
 	"error-invalid": "ၚုဟ်မးဏအ်ဟွံထေက်.",
 	"event": "ပေဲါ",
 	"event-created": "အစဳအဇန်$1ခၞံကၠောန်ဗွဲမဍိုက်ပေၚ်တုဲ.",
+	"event-metrics-welcome": "ဒုၚ်တၠုၚ်ကေတ် Event Metrics",
 	"events": "ကမၠောန်ဂမၠိုၚ်",
 	"fatal-error": "ဗၠောတ်မလီုလာ်အာမာန်",
 	"feedback": "ကဵုကသပ်",
@@ -91,7 +92,6 @@
 	"username": "ယၟုညးလွပ်",
 	"view-all-data": "ရံၚ်တၚ်နၚ်ဖအိုတ်",
 	"view-source": "ရံၚ် တမ်ရိုဟ်",
-	"welcome": "ဒုၚ်တၠုၚ်ကေတ် Grant Metrics",
 	"wiki": "ဝဳကဳ",
 	"wikis": "ဝဳကဳဂမၠိုၚ်"
 }

@@ -4,13 +4,13 @@
 parameters:
     database.host: 127.0.0.1
     database.port: ~
-    database.name: grantmetrics
+    database.name: eventmetrics
     database.user: root
     database.password: ~
 
     database.test.host: 127.0.0.1
     database.test.port: ~
-    database.test.name: grantmetrics_test
+    database.test.name: eventmetrics_test
     database.test.user: root
     database.test.password: ~
 
@@ -27,7 +27,7 @@ parameters:
     mailer.transport: smtp
     mailer.from_email: 'tools.grantmetrics@tools.wmflabs.org'
     mailer.to_email: 'tools.grantmetrics@tools.wmflabs.org'
-    mailer.host: mail.tools.wmflabs.org
+    mailer.host: ~
     mailer.user: ~
     mailer.password: ~
 
@@ -38,7 +38,7 @@ parameters:
     oauth.key:                  ~
     oauth.secret:               ~
 
-    # Path from domain to get to the root of the app. On Toolforge for instance this is /grantmetrics
+    # Path from domain to get to the root of the app. On Toolforge for instance this is /eventmetrics
     # Do not include a trailing slash.
     app.root_path: ''
 

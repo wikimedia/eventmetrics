@@ -13,12 +13,12 @@ use AppBundle\Model\EventWikiStat;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use InvalidArgumentException;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the EventWikiStat class.
  */
-class EventWikiStatTest extends GrantMetricsTestCase
+class EventWikiStatTest extends EventMetricsTestCase
 {
     /**
      * Tests constructor and basic getters.

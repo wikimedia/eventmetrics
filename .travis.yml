@@ -5,7 +5,7 @@ php:
 
 env:
   global:
-    - CC_TEST_REPORTER_ID=966ea05770ea94b742ad354b39a3ededb823f7161d5b8c74085078283e01ceb9
+    - CC_TEST_REPORTER_ID=61a416728f1c3aa827c71f2e30b8fae5db873d092659773b86eea151ca7bd2c5
 
 before_install:
   - composer self-update

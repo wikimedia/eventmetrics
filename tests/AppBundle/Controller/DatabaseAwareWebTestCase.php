@@ -13,12 +13,12 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * This ensures fixtures are loaded with every functional test.
  */
-abstract class DatabaseAwareWebTestCase extends GrantMetricsTestCase
+abstract class DatabaseAwareWebTestCase extends EventMetricsTestCase
 {
     /**
      * @var ORMExecutor

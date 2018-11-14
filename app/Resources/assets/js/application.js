@@ -1,5 +1,5 @@
-grantmetrics = {};
-grantmetrics.application = {};
+eventmetrics = {};
+eventmetrics.application = {};
 
 /**
  * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
@@ -9,8 +9,8 @@ grantmetrics.application = {};
  * This gets called when the DOM is ready, on every page. Add only things that should be done globally.
  */
 $(function () {
-    grantmetrics.application.setupPanelTooltips();
-    grantmetrics.application.preventHighUtf8Strings();
+    eventmetrics.application.setupPanelTooltips();
+    eventmetrics.application.preventHighUtf8Strings();
 
     // Activate Bootstrap tooltips.
     $('[data-toggle="tooltip"]').tooltip();
@@ -20,7 +20,7 @@ $(function () {
  * Add tooltips to panel toggle links.
  * See also views/macros/layout.html.twig and assets/css/application.scss
  */
-grantmetrics.application.setupPanelTooltips = function () {
+eventmetrics.application.setupPanelTooltips = function () {
     // Panels default to expanded, so we add the collapse message.
     $('.panel .panel-title a').attr('title', $.i18n('hide-section'));
     // Toggle when clicked.
@@ -44,7 +44,7 @@ grantmetrics.application.setupPanelTooltips = function () {
  * @param {string} column Column name, either 'organizer' or 'wiki'.
  * @param {Function} [callback] Optional callback that is executed after the new row is added, passing in $newRow.
  */
-grantmetrics.application.setupAddRemove = function (model, column, callback) {
+eventmetrics.application.setupAddRemove = function (model, column, callback) {
     // Keep track of how many fields have been rendered.
     var columnPluralized = column.substr(-1) === 'y' ? column.replace(/y$/, 'ies') : column + 's',
         // Class name for the individual rows.
@@ -99,7 +99,7 @@ grantmetrics.application.setupAddRemove = function (model, column, callback) {
         if ($newRow.find('.user-input, .category-input, .page-input').length) {
             // Re-init listeners for all inputs. Existing typeaheads are destroyed, but only when the input
             // has focus, so this shouldn't pose much of a performance overhead.
-            grantmetrics.application.setupAutocompletion();
+            eventmetrics.application.setupAutocompletion();
         }
 
         if (typeof callback === 'function') {
@@ -116,7 +116,7 @@ grantmetrics.application.setupAddRemove = function (model, column, callback) {
  * One requirement is each input in the view must have a wrapper element with the CSS class '.type-row',
  * where 'type' is one of 'user', 'category' or 'page'.
  */
-grantmetrics.application.setupAutocompletion = function () {
+eventmetrics.application.setupAutocompletion = function () {
     // Loop through each type of input that needs autocompletion, and attach a typeahead instance to each.
     ['user', 'category', 'page'].forEach(function (type) {
         var $input = $('.' + type + '-input');
@@ -148,7 +148,7 @@ grantmetrics.application.setupAutocompletion = function () {
                 $wikiInput.one('change.autocompletion', function () {
                     // Turn off the listener for the input, and re-add it.
                     $(this).off('focus.autocompletion');
-                    grantmetrics.application.setupAutocompletion();
+                    eventmetrics.application.setupAutocompletion();
                 }.bind(this));
             }
 
@@ -236,7 +236,7 @@ function setupTypeahead($input, domain, type)
  *     </td>
  * See participants/show.html.twig for an example.
  */
-grantmetrics.application.setupColumnSorting = function () {
+eventmetrics.application.setupColumnSorting = function () {
     var sortDirection, sortColumn;
 
     $('.sort-link').on('click', function () {
@@ -281,7 +281,7 @@ grantmetrics.application.setupColumnSorting = function () {
  * that resolves with the shortened domain names of all the Wikipedias.
  * @return {Deferred}
  */
-grantmetrics.application.populateValidWikis = function () {
+eventmetrics.application.populateValidWikis = function () {
     var dfd = $.Deferred();
 
     $.ajax({
@@ -324,7 +324,7 @@ grantmetrics.application.populateValidWikis = function () {
  * See also TitleUserTrait::setTitle() for the same replacement being made server-side.
  * @fixme This does not get applied to inputs that are dynamically added (add/remove lists).
  */
-grantmetrics.application.preventHighUtf8Strings = function () {
+eventmetrics.application.preventHighUtf8Strings = function () {
     function replaceHighUtf8Strings()
     {
         var newVal = $(this).val().replace(/[\u{010000}-\u{10FFFF}]/gu, String.fromCodePoint(0xFFFD));

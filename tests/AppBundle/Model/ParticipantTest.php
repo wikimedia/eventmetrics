@@ -11,12 +11,12 @@ use AppBundle\Model\Event;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Participant;
 use AppBundle\Model\Program;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the Participant class.
  */
-class ParticipantTest extends GrantMetricsTestCase
+class ParticipantTest extends EventMetricsTestCase
 {
     /**
      * Tests constructor and basic getters.

@@ -67,7 +67,7 @@ abstract class Controller extends SymfonyController
     public function addFlashMessage(string $type, string $messageName, array $vars = []): void
     {
         $options = [
-            'domain' => 'grantmetrics',
+            'domain' => 'eventmetrics',
             'variables' => $vars,
         ];
         $message = $this->intuition->msg($messageName, $options);

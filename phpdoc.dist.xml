@@ -4,10 +4,10 @@
     For some reason, in the beta of phpdoc 3 this title is being ignored,
     so we're setting it in composer.json instead.
     -->
-    <title>GrantMetrics Documentation</title>
+    <title>EventMetrics Documentation</title>
     <parser>
         <target>var/docs-cache</target>
-        <default-package-name>Wikimedia/GrantMetrics</default-package-name>
+        <default-package-name>Wikimedia/EventMetrics</default-package-name>
         <markers>
             <item>TODO</item>
             <item>FIXME</item>

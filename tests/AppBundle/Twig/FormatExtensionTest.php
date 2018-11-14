@@ -12,13 +12,13 @@ use DateTime;
 use Krinkle\Intuition\Intuition;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the FormatExtension class.
  * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
  */
-class FormatExtensionTest extends GrantMetricsTestCase
+class FormatExtensionTest extends EventMetricsTestCase
 {
 
     /** @var \AppBundle\Twig\FormatExtension Instance of class */
