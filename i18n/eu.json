@@ -9,7 +9,7 @@
 	"edit-summary": "Laburpena aldatu",
 	"error-query-timeout": "Sentitzen dugu, eskatutako informazioak denbora gehiegi hartu du prozesatzeko (timeout $1 {{PLURAL:$1|segundu $1|$1 segundu}}). Baliabideak aurrezteko, kontsulta automatikoki eten da.",
 	"error-server-message": "Zerbitzariak esan du: $1",
-	"error-service-overload": "Grant Metrics orain gainkargatuta dago beste eskaera batzuekin. Mesedez, saia ezazu berriro minutu gutxiren buruan.",
+	"error-service-overload": "Event Metrics orain gainkargatuta dago beste eskaera batzuekin. Mesedez, saia ezazu berriro minutu gutxiren buruan.",
 	"fatal-error": "Fatal error",
 	"feedback": "Atzeraelikadura",
 	"help": "Laguntza",

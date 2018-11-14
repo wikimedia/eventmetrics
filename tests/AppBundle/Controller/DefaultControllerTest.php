@@ -20,7 +20,7 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', '/');
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
-        static::assertContains('Welcome to Grant Metrics', $this->crawler->filter('.splash-dialog')->text());
+        static::assertContains('Welcome to Event Metrics', $this->crawler->filter('.splash-dialog')->text());
     }
 
     /**

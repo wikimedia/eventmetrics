@@ -37,7 +37,7 @@ class ProgramRepository extends Repository
      */
     public function getUniqueMetrics(Program $program): array
     {
-        $rqb = $this->getGrantMetricsConnection()->createQueryBuilder();
+        $rqb = $this->getEventMetricsConnection()->createQueryBuilder();
 
         $eventIds = $program->getEventIds();
 
@@ -86,7 +86,7 @@ class ProgramRepository extends Repository
         $sql = "SELECT DISTINCT(ews_metric), ews_metric_offset
                 FROM event_wiki_stat
                 WHERE ews_event_wiki_id IN (?)";
-        $stmt = $this->getGrantMetricsConnection()
+        $stmt = $this->getEventMetricsConnection()
             ->executeQuery($sql, [$eventWikiIds], [Connection::PARAM_INT_ARRAY]);
         return $stmt->fetchAll(\PDO::FETCH_NUM);
     }
@@ -98,7 +98,7 @@ class ProgramRepository extends Repository
      */
     public function getNumParticipants(Program $program): int
     {
-        $rqb = $this->getGrantMetricsConnection()->createQueryBuilder();
+        $rqb = $this->getEventMetricsConnection()->createQueryBuilder();
 
         $eventIds = $program->getEventIds();
 

@@ -18,7 +18,7 @@ swiftmailer:
 doctrine:
     dbal:
         connections:
-            grantmetrics:
+            eventmetrics:
                 driver:   pdo_mysql
                 host:     localhost
                 port:     "%database.test.port%"

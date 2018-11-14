@@ -15,12 +15,12 @@ use AppBundle\Model\Organizer;
 use AppBundle\Model\Participant;
 use AppBundle\Model\Program;
 use DateTime;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the Event class.
  */
-class EventTest extends GrantMetricsTestCase
+class EventTest extends EventMetricsTestCase
 {
     /** @var Program The Program that the Event is part of. */
     protected $program;

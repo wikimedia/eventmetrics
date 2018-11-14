@@ -11,13 +11,13 @@ use AppBundle\Twig\AppExtension;
 use Krinkle\Intuition\Intuition;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the AppExtension class.
  * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
  */
-class AppExtensionTest extends GrantMetricsTestCase
+class AppExtensionTest extends EventMetricsTestCase
 {
 
     /** @var \AppBundle\Twig\AppExtension Instance of class */

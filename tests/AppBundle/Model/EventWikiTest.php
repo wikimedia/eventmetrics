@@ -13,12 +13,12 @@ use AppBundle\Model\EventWikiStat;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use Doctrine\Common\Collections\ArrayCollection;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the EventWiki class.
  */
-class EventWikiTest extends GrantMetricsTestCase
+class EventWikiTest extends EventMetricsTestCase
 {
     /** @var Event The Event that the EventWiki is part of. */
     protected $event;

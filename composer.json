@@ -1,6 +1,6 @@
 {
-    "name": "lziemba/grantmetrics",
-    "description": "WMF tool that provides grantees a simple, easy to use interface for reporting their shared metrics",
+    "name": "wikimedia/eventmetrics",
+    "description": "WMF tool that provides event organizers and grantees a simple, easy to use interface for reporting their shared metrics",
     "license": "GPL-3.0-or-later",
     "type": "project",
     "autoload": {
@@ -77,7 +77,7 @@
         ],
         "docs": [
             "build/phpdoc-install.php",
-            "bin/phpdoc run --title='GrantMetrics Documentation'"
+            "bin/phpdoc run --title='EventMetrics Documentation'"
         ],
         "unit": [
             "./vendor/bin/phpunit tests"

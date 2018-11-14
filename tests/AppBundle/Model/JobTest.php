@@ -11,12 +11,12 @@ use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the Job class.
  */
-class JobTest extends GrantMetricsTestCase
+class JobTest extends EventMetricsTestCase
 {
     /**
      * Tests constructor and basic getters/setters.

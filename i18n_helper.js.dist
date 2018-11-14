@@ -16,7 +16,7 @@ const i18nPath = './i18n/';
 const fs = require('fs');
 
 /**
- * Import messages from another project to Grant Metrics.
+ * Import messages from another project to Event Metrics.
  * To use, add this code to this file:
  *     const messagesToCopy = [
  *         'pageviews',

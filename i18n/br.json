@@ -41,13 +41,13 @@
 	"error-title-numeric": "Ne c'hall ket an titl bezañ ur sifr.",
 	"error-unconfigured-wiki": "N'eo ket kefluniet $1 evit an darvoud-mañ. Ouzhpennañ ar wiki d'an darvoud da gentañ, mar plij.",
 	"event": "Darvoud",
+	"event-metrics-welcome": "Degemer mat e Event Metrics",
 	"events": "Darvoudoù",
 	"fatal-error": "Fazi diremed",
 	"feedback": "Sonjoù",
 	"file-usage": "Retroù digor",
 	"file-usage-desc": "Niver a restroù hag a zo bet pellgarget evel ul lodenn eus an darvoud hag a zo implijet bremañ en ur pennad da nebeutañ.",
 	"files-uploaded": "Restroù pellgarget",
-	"grant-metrics": "Grant Metrics",
 	"help": "Skoazell",
 	"help-translate": "Sikour da dreiñ",
 	"hide-section": "Kuzhat ar rann-mañ",
@@ -100,7 +100,6 @@
 	"username": "Anv implijer",
 	"view-all-data": "Gwelet an holl roadennoù",
 	"view-source": "Sellet ouzh tarzh an destenn",
-	"welcome": "Degemer mat e Grant Metrics",
 	"wiki": "Wiki",
 	"wikis": "Wikioù"
 }

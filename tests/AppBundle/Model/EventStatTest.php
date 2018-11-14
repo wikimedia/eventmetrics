@@ -12,12 +12,12 @@ use AppBundle\Model\EventStat;
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
 use InvalidArgumentException;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the EventStat class.
  */
-class EventStatTest extends GrantMetricsTestCase
+class EventStatTest extends EventMetricsTestCase
 {
     /**
      * Tests constructor and basic getters.

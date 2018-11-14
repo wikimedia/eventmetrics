@@ -14,7 +14,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Psr\Container\ContainerInterface;
 
 /**
- * OrganizerSubscriber automatically sets the username on Organizers after the entity is loaded from the grantmetrics
+ * OrganizerSubscriber automatically sets the username on Organizers after the entity is loaded from the eventmetrics
  * database. Similarly it will automatically set the user_id when a Organizer is persisted.
  *
  * This class used to also do the same for Participant, but there can hundreds of these loaded at once,

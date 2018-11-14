@@ -50,7 +50,7 @@
 	"error-program-undeletable": "无法删除此计划，因为它包含一个或多个活动。",
 	"error-query-timeout": "对不起，处理请求的信息花费了太长时间（超时$1{{PLURAL:$1|秒}}）。为了保存资源，查询已自动消灭。",
 	"error-server-message": "服务器报告：$1",
-	"error-service-overload": "Grant Metrics目前正在超负荷服务其他请求。请等待几分钟后重试。",
+	"error-service-overload": "Event Metrics目前正在超负荷服务其他请求。请等待几分钟后重试。",
 	"error-title-invalid-chars": "标题不能包含下列字符：$1。",
 	"error-title-numeric": "标题不准是数字。",
 	"error-unconfigured-wiki": "$1还没有为此活动配置。请首先添加wiki至活动。",
@@ -62,6 +62,7 @@
 	"event-data-for": "活动“$1”的数据",
 	"event-deleted": "活动“$1”已被删除。",
 	"event-in-future": "无法生成统计信息，因为此活动还未开始。",
+	"event-metrics-welcome": "欢迎来到Event Metrics",
 	"event-misconfig": "此活动尚未被完全配置。若要生成统计信息，您必须添加以下内容之一：$1",
 	"event-no-data": "尚未为此活动生成统计信息。",
 	"event-updated": "活动“$1”已成功更新。可能需要重新生成统计信息。",
@@ -71,7 +72,6 @@
 	"file-usage": "使用的文件",
 	"file-usage-desc": "目前至少在一篇文章中被使用的，作为活动的一部分而上传的文件数量。",
 	"files-uploaded": "文件上传数",
-	"grant-metrics": "Grant Metrics",
 	"help": "帮助",
 	"help-translate": "帮助翻译",
 	"hide-section": "隐藏该节",
@@ -135,7 +135,6 @@
 	"username": "用户名",
 	"view-all-data": "查看全部数据",
 	"view-source": "查看源代码",
-	"welcome": "欢迎来到Grant Metrics",
 	"wiki": "Wiki",
 	"wikis": "Wiki"
 }

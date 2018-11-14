@@ -9,12 +9,12 @@ namespace Tests\AppBundle\Model;
 
 use AppBundle\Model\Organizer;
 use AppBundle\Model\Program;
-use Tests\AppBundle\GrantMetricsTestCase;
+use Tests\AppBundle\EventMetricsTestCase;
 
 /**
  * Tests for the Organizer class.
  */
-class OrganizerTest extends GrantMetricsTestCase
+class OrganizerTest extends EventMetricsTestCase
 {
     /**
      * Tests constructor and basic getters.

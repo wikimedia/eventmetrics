@@ -43,8 +43,8 @@ abstract class Repository extends EntityRepository
     /** @var LoggerInterface The log. */
     protected $log;
 
-    /** @var Connection The connection to the grantmetrics database. */
-    private $grantmetricsConnection;
+    /** @var Connection The connection to the eventmetrics database. */
+    private $eventmetricsConnection;
 
     /** @var Connection The database connection to the replicas. */
     private $replicaConnection;
@@ -200,18 +200,18 @@ abstract class Repository extends EntityRepository
      ***************/
 
     /**
-     * Get the database connection for the 'grantmetrics' database.
+     * Get the database connection for the 'eventmetrics' database.
      * @return Connection
      */
-    protected function getGrantMetricsConnection(): Connection
+    protected function getEventMetricsConnection(): Connection
     {
-        if (!$this->grantmetricsConnection instanceof Connection) {
-            $this->grantmetricsConnection = $this->container
+        if (!$this->eventmetricsConnection instanceof Connection) {
+            $this->eventmetricsConnection = $this->container
                 ->get('doctrine')
-                ->getManager('grantmetrics')
+                ->getManager('eventmetrics')
                 ->getConnection();
         }
-        return $this->grantmetricsConnection;
+        return $this->eventmetricsConnection;
     }
 
     /**

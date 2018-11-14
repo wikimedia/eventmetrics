@@ -33,6 +33,8 @@ Encore
         './app/Resources/assets/css/events.scss',
         './app/Resources/assets/css/programs.scss',
         './vendor/wikimedia/toolforge-bundle/Resources/assets/toolforge.js',
+        './public/images/logo.svg',
+        './public/favicon.ico',
     ])
 
     // Other options.
