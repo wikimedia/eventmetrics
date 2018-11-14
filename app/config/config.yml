@@ -34,6 +34,8 @@ framework:
         json_manifest_path: '%kernel.project_dir%/public/assets/manifest.json'
     php_errors:
         log: true
+    cache:
+        app: "cache.adapter.%cache.adapter%"
 
 # Twig Configuration
 twig:

@@ -20,9 +20,7 @@ parameters:
     database.replica.user: root
     database.replica.password:
 
-    # Should be something like redis://localhost:6379. If you want to connect to the Toolforge Redis
-    # instance, use SSH forwarding and provide the local port. Leave blank to disable caching.
-    cache.redis_dsn: ''
+    cache.adapter: apcu
 
     mailer.transport: smtp
     mailer.from_email: 'tools.grantmetrics@tools.wmflabs.org'

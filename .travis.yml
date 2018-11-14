@@ -21,7 +21,7 @@ before_install:
   - sudo apt-get install expect
   - ./build/ci/ssh-tunnel.sh
   #- ./build/phpdoc-install.php # Disabled until we need PhpDocumentor, see below.
-  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini # Install ext-redis
+  - echo "extension = apcu.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini # Install ext-apcu
   - npm -g install npm # Upgrade npm so we can use the ci install command.
 
 install:

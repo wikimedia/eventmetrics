@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace AppBundle\Repository;
 
 use DateInterval;
-use Doctrine\Common\Cache\RedisCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\ResultStatement;
@@ -20,7 +19,6 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
@@ -54,9 +52,6 @@ abstract class Repository extends EntityRepository
 
     /** @var Connection The meta database connection. */
     private $metaConnection;
-
-    /** @var RedisCache The Doctrine Redis connection. */
-    private $redisConnection;
 
     /** @var EntityManager The Doctrine entity manager. */
     protected $em;
@@ -102,7 +97,7 @@ abstract class Repository extends EntityRepository
     }
 
     /**
-     * Set the cache item pool.
+     * Set the cache item pool. This is called automatically when creating a Repository. See services.yml.
      * @param CacheItemPoolInterface $cache
      */
     public function setCachePool(CacheItemPoolInterface $cache): void
@@ -257,30 +252,6 @@ abstract class Repository extends EntityRepository
                 ->getConnection();
         }
         return $this->replicaConnection;
-    }
-
-    /**
-     * Get connection to the redis server.
-     * @return RedisCache|null Null if not configured.
-     */
-    protected function getRedisConnection(): ?RedisCache
-    {
-        if ($this->redisConnection instanceof RedisCache) {
-            return $this->redisConnection;
-        }
-
-        $dsn = $this->container->getParameter('cache.redis_dsn');
-
-        if (0 === strlen((string)$dsn)) {
-            return null;
-        }
-
-        $this->redisConnection = new RedisCache();
-        $this->redisConnection->setRedis(
-            RedisAdapter::createConnection($dsn)
-        );
-
-        return $this->redisConnection;
     }
 
     /*************
