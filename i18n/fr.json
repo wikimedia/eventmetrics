@@ -63,6 +63,7 @@
 	"event-data-for": "Données d'événement pour « $1 »",
 	"event-deleted": "L'événement '$1' a été supprimé.",
 	"event-in-future": "Les statistiques ne peuvent pas être générées car cet événement se produit dans le futur.",
+	"event-metrics": "Event Metrics",
 	"event-metrics-welcome": "Bienvenue dans Event Metrics",
 	"event-misconfig": "Cet événement n'a pas été complètement configuré. Pour pouvoir générer les statistiques, vous devez rajouter l'un des éléments suivants: $1",
 	"event-no-data": "Les statistiques n'ont pas encore été générées pour cet événement.",

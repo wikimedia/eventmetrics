@@ -62,6 +62,7 @@
 	"event-data-for": "Dados do evento \"$1\"",
 	"event-deleted": "O evento '$1' foi eliminado.",
 	"event-in-future": "Não é possível gerar estatísticas porque este evento ocorre no futuro.",
+	"event-metrics": "Event Metrics",
 	"event-metrics-welcome": "Bem-vindo(a) à aplicação Event Metrics",
 	"event-misconfig": "Este evento não foi completamente configurado. Para gerar estatísticas tem de adicionar uma das seguintes: $1",
 	"event-no-data": "Ainda não foram geradas estatísticas para este evento.",
