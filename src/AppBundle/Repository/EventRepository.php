@@ -388,10 +388,11 @@ class EventRepository extends Repository
                     REPLACE(page_title, '_', ' ') AS 'page',
                     page_namespace AS namespace,
                     rev_user_text AS 'username',
-                    rev_comment AS 'summary',
+                    comment_text AS 'summary',
                     '$domain' AS 'wiki'
                 FROM $dbName.$revisionTable
                 INNER JOIN $dbName.$pageTable ON page_id = rev_page
+                LEFT OUTER JOIN $dbName.comment ON rev_comment_id = comment_id
                 $catJoin
                 WHERE rev_user_text IN ($usernames)
                 AND page_namespace = $nsClause
