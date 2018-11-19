@@ -8,6 +8,8 @@
 	"pager-newer-n": "{{PLURAL:$1|жаңалау 1|жаңалау $1}}",
 	"pager-older-n": "{{PLURAL:$1|ескілеу 1|ескілеу $1}}",
 	"report-issue": "Қате туралы хабарлау",
+	"save": "Сақтау",
+	"settings": "Баптаулар",
 	"totals": "Барлығы",
 	"view-source": "Қайнарын қарау"
 }

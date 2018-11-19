@@ -82,6 +82,7 @@ class EventDataController extends EntityController
                 'numRevisions' => $eventRepo->getNumRevisions($this->event),
                 'numResultsPerPage' => $limit,
                 'offset' => $page,
+                'jobStatus' => $eventRepo->getJobStatus($this->event),
             ], $ret);
         }
 

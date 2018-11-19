@@ -10,6 +10,7 @@ namespace Tests\AppBundle\Controller;
 use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventWiki;
+use AppBundle\Model\Program;
 use DateTime;
 
 /**
@@ -195,7 +196,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     private function createSpec(): void
     {
-        $form = $this->crawler->selectButton('Submit')->form();
+        $form = $this->crawler->selectButton('Save')->form();
         $form['event[title]'] = ' The Lion King ';
         $form['event[wikis][0]'] = 'dewiki';
         $form['event[start]'] = '2017-01-01 18:00';
@@ -255,7 +256,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', $this->getEventUrl().'/edit');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
-        $form = $this->crawler->selectButton('Submit')->form();
+        $form = $this->crawler->selectButton('Save')->form();
 
         $form['event[title]'] = 'Pinocchio';
         $form['event[wikis][0]'] = 'en.wikipedia';
@@ -316,7 +317,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         static::assertEquals('fr.wikipedia', $this->crawler->filter('#event_wikis_2')->attr('value'));
 
         // Change en.wikipedia to all Wikipedias, and save.
-        $form = $this->crawler->selectButton('Submit')->form();
+        $form = $this->crawler->selectButton('Save')->form();
         $form['event[wikis][1]'] = '*.wikipedia';
         $this->crawler = $this->client->submit($form);
 
@@ -348,7 +349,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', $this->getEventUrl().'/edit');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
-        $form = $this->crawler->selectButton('Submit')->form();
+        $form = $this->crawler->selectButton('Save')->form();
         $form['event[wikis][0]'] = 'invalid_wiki';
         $this->crawler = $this->client->submit($form);
 
@@ -373,9 +374,9 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             $this->crawler->filter('.page-header')->text()
         );
 
-        // Should see the 'edit event', since we are logged in and are one of the organizers.
+        // Should see the 'Settings' button, since we are logged in and are one of the organizers.
         static::assertContains(
-            'edit event',
+            'Settings',
             $this->crawler->filter('.page-header')->text()
         );
     }
@@ -486,7 +487,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', $this->getEventUrl().'/copy');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
 
-        $form = $this->crawler->selectButton('Submit')->form();
+        $form = $this->crawler->selectButton('Save')->form();
         $form['event[title]'] = 'Pinocchio II';
         $this->crawler = $this->client->submit($form);
 

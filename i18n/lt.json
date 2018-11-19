@@ -20,6 +20,8 @@
 	"pager-newer-n": "{{PLURAL:$1|1 naujesnis|$1 naujesni|$1 naujesnių}}",
 	"pager-older-n": "{{PLURAL:$1|1 senesnis|$1 senesni|$1 senesnių}}",
 	"report-issue": "Pranešti apie problemą",
+	"save": "Išsaugoti",
+	"settings": "Nustatymai",
 	"totals": "Iš viso",
 	"unknown": "Nežinoma",
 	"username": "Naudotojo vardas",

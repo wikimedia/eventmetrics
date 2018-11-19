@@ -3,20 +3,26 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb">
-        <li>
-            <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
-        </li>
-        <li class="active">{{ bdi(program.displayTitle) }}</li>
+        <li><a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a></li>
+        <li><a href="{{ path('Program', {'programId': program.id}) }}">{{ bdi(program.displayTitle) }}</a></li>
+        <li class="active">{{ msg('program-settings') }}</li>
     </ol>
 {% endblock %}
 
 {% block body %}
     <div class="container">
-        <div class="page-header">
-            <h1>{{ msg('edit-program') }}</h1>
-        </div>
-
         {{ form_start(form, {'method': 'post', 'attr': {'autocomplete': 'off'}}) }}
+            <div class="page-header">
+                <div class="page-title">{{ msg('program-settings')|upper }}</div>
+                <div class="btn-group pull-right text-right">
+                    <a class="btn btn-default" href="{{ path('Program', {'programId': program.id}) }}">{{ msg('cancel') }}</a>
+                    {{ form_widget(form.submit, {'label': msg('save'), 'attr': {'class': 'btn-primary'}}) }}
+                </div>
+                <h1 class="page-subject-title">
+                    {{ bdi(program.displayTitle) }}
+                </h1>
+            </div>
+
             {% include 'programs/_form.html.twig' with {'form': form} %}
         {{ form_end(form) }}
     </div>

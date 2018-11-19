@@ -10,6 +10,8 @@
 	"pager-newer-n": "{{PLURAL:$1|নতুনতৰ ১টি|নতুনতৰ $1টি}}",
 	"pager-older-n": "{{PLURAL:$1|পুৰণতৰ ১|পুৰণতৰ $1}}",
 	"report-issue": "অভিযোগ দাখিল কৰক",
+	"save": "সাঁচক",
+	"settings": "ছেটিংছ",
 	"totals": "মুঠ",
 	"view-source": "উৎস চাওক"
 }

@@ -3,21 +3,30 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb">
-        <li>
-            <a href="{{ path('Program', {'programId': event.program.id}) }}">{{ bdi(event.program.displayTitle) }}</a>
-        </li>
-        <li class="active">{{ bdi(event.displayTitle) }}</li>
+        {% if isOrganizer %}
+            <li><a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a></li>
+        {% endif %}
+        <li><a href="{{ path('Program', {'programId': event.program.id}) }}">{{ bdi(event.program.displayTitle) }}</a></li>
+        <li><a href="{{ path('Event', {'programId': event.program.id, 'eventId': event.id}) }}">{{ bdi(event.displayTitle) }}</a></li>
+        <li class="active">{{ msg('event-settings') }}</li>
     </ol>
 {% endblock %}
 
 {% block body %}
     <div class="container">
-        <div class="page-header">
-            <h1>{{ msg('edit-event') }}</h1>
-        </div>
-
         {{ form_start(form, {'method': 'post', 'attr': {'id': 'event_form', 'autocomplete': 'off'}}) }}
-            {% include 'events/_form.html.twig' with {'form': form} %}
+            <div class="page-header">
+                <div class="page-title">{{ msg('event-settings')|upper }}</div>
+                <div class="btn-group pull-right text-right">
+                    <a class="btn btn-default" href="{{ path('Event', {'programId': event.program.id, 'eventId': event.id}) }}">{{ msg('cancel') }}</a>
+                    {{ form_widget(form.submit, {'label': msg('save'), 'attr': {'class': 'btn-primary'}}) }}
+                </div>
+                <h1 class="page-subject-title">
+                    <a href="{{ path('Event', {'programId': event.program.id, 'eventId': event.id}) }}">{{ bdi(event.displayTitle) }}</a>
+                </h1>
+            </div>
+
+            {% include 'events/_form.html.twig' with {'form': form, 'event': event} %}
         {{ form_end(form, {'render_rest': false}) }}
     </div>
 {% endblock %}

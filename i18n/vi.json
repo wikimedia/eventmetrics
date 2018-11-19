@@ -19,6 +19,8 @@
 	"pager-newer-n": "{{PLURAL:$1|1|$1}} mới hơn",
 	"pager-older-n": "{{PLURAL:$1|1|$1}} cũ hơn",
 	"report-issue": "Báo cáo lỗi",
+	"save": "Lưu",
+	"settings": "Thiết lập",
 	"submit": "Gửi",
 	"totals": "Tổng cộng",
 	"unknown": "Không rõ",

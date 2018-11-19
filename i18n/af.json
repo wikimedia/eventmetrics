@@ -5,5 +5,7 @@
 	"date": "Datum",
 	"documentation": "Dokumentasie",
 	"help": "Hulp",
-	"page": "Bladsy"
+	"page": "Bladsy",
+	"save": "Stoor",
+	"settings": "Instellings"
 }

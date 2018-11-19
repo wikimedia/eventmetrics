@@ -11,6 +11,8 @@
 	"pager-newer-n": "{{PLURAL:$1|pu nouvieu 1|pu nouvieus $1}}",
 	"pager-older-n": "{{PLURAL:$1|pus viu 1|pus vius $1}}",
 	"report-issue": "Signaler un problème",
+	"save": "Inrégistrer",
+	"settings": "Paramètes",
 	"totals": "Totals",
 	"view-source": "Vir l'source"
 }

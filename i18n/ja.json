@@ -19,6 +19,8 @@
 	"pager-newer-n": "{{PLURAL:$1|以後の$1件}}",
 	"pager-older-n": "{{PLURAL:$1|以前の$1件}}",
 	"report-issue": "問題の報告",
+	"save": "保存",
+	"settings": "設定",
 	"submit": "送信",
 	"totals": "合計",
 	"unknown": "不明",

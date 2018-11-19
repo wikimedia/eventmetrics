@@ -110,7 +110,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
      */
     private function createSpec(): void
     {
-        $form = $this->crawler->selectButton('Submit')->form();
+        $form = $this->crawler->selectButton('Save')->form();
         $form['program[title]'] = ' My test program ';
         $this->crawler = $this->client->submit($form);
 
@@ -133,7 +133,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
     private function updateSpec(): void
     {
         $this->crawler = $this->client->request('GET', '/programs/'.$this->programId.'/edit');
-        $form = $this->crawler->selectButton('Submit')->form();
+        $form = $this->crawler->selectButton('Save')->form();
         $form['program[title]'] = 'The Lion King';
         $this->crawler = $this->client->submit($form);
 
@@ -160,9 +160,9 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
             $this->crawler->filter('.programs-organizers')->text()
         );
 
-        // Should see the 'edit program', since we are logged in and are one of the organizers.
+        // Should see the 'Settings' button, since we are logged in and are one of the organizers.
         static::assertContains(
-            'edit program',
+            'Settings',
             $this->crawler->filter('.page-header')->text()
         );
     }

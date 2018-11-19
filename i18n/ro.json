@@ -21,6 +21,8 @@
 	"pager-newer-n": "{{PLURAL:$1|1 mai nou|$1 mai noi}}",
 	"pager-older-n": "{{PLURAL:$1|1|$1}} mai vechi",
 	"report-issue": "Raportează o problemă",
+	"save": "Salvare",
+	"settings": "Setări",
 	"submit": "Trimite",
 	"totals": "Totaluri",
 	"unknown": "Necunoscut",

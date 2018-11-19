@@ -12,6 +12,8 @@
 	"pager-newer-n": "{{PLURAL:$1|1 posterior|$1 posteriors}}",
 	"pager-older-n": "{{PLURAL:$1|anterior|$1 anteriors}}",
 	"report-issue": "Informa d'un problema",
+	"save": "Desa",
+	"settings": "Configuració",
 	"totals": "Totals",
 	"view-source": "Mostra el codi"
 }

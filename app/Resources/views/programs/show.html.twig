@@ -4,9 +4,7 @@
 {% block breadcrumb %}
     <ol class="breadcrumb">
         {% if isOrganizer %}
-            <li>
-                <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
-            </li>
+            <li><a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a></li>
         {% endif %}
         <li class="active">{{ bdi(program.displayTitle) }}</li>
     </ol>
@@ -15,18 +13,17 @@
 {% block body %}
     <div class="container">
         <div class="page-header">
-            {% if isOrganizer %}
-                <a href="{{ path('NewEvent', {'programId': program.id}) }}" class="btn btn-default pull-right">
-                    {{ msg('create-new-event') }}
-                </a>
-            {% endif %}
-            <h1>
-                {{ bdi(program.displayTitle) }}
+            <div class="page-title">{{ msg('event-list')|upper }}</div>
+            <div class="btn-group pull-right">
+                <a class="btn btn-default" href="{{ path('EditProgram', {'programId': program.id}) }}">{{ msg('settings') }}</a>
                 {% if isOrganizer %}
-                    <small>
-                        (<a href="{{ path('EditProgram', {'programId': program.id}) }}">{{ msg('edit-program')|lower }}</a>)
-                    </small>
+                    <a href="{{ path('NewEvent', {'programId': program.id}) }}" class="btn btn-primary">
+                        {{ msg('create-new-event') }}
+                    </a>
                 {% endif %}
+            </div>
+            <h1 class="page-subject-title">
+                {{ bdi(program.displayTitle) }}
             </h1>
             <div class="programs-organizers">
                 {{ msg('organizers') }}:

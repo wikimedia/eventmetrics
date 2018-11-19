@@ -10,6 +10,8 @@
 	"pager-newer-n": "{{PLURAL:$1|جدید $1}}",
 	"pager-older-n": "{{PLURAL:$1|قدیم}} $1",
 	"report-issue": "مسئلے کی نشاندہی کریں",
+	"save": "محفوظ",
+	"settings": "ترتیبات",
 	"totals": "کل",
 	"view-source": "ماخذ دیکھیے"
 }

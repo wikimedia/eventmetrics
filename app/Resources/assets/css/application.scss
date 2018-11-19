@@ -117,6 +117,24 @@ body {
     }
 }
 
+.page-header {
+    padding-bottom: 20px;
+}
+
+.page-subject-title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 10px;
+
+    a {
+        color: inherit;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
 .app-footer {
     border-radius: 0 !important;
     bottom: 0;
@@ -200,6 +218,12 @@ body {
     &.sort-link--desc::after {
         content: '\f0de';
     }
+}
+
+.page-title {
+    font-size: 12px;
+    font-variant: small-caps;
+    font-weight: bold;
 }
 
 a.disabled {

@@ -21,6 +21,8 @@
 	"pager-newer-n": "{{PLURAL:$1|नया|नये}} $1",
 	"pager-older-n": "{{PLURAL:$1|पुराना|पुराने}} $1",
 	"report-issue": "समस्या बताओ",
+	"save": "सहेजें",
+	"settings": "सेटिंग्स",
 	"submit": "जमा करें",
 	"totals": "कुल",
 	"unknown": "अज्ञात",
