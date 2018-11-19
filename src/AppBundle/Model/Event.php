@@ -39,8 +39,6 @@ class Event
      *
      * Keys are i18n message keys, values are the 'offset' values.
      *
-     * The order specified here is also the order it will appear in the interface.
-     *
      * @see EventProcessor
      * @see EventStat
      */
@@ -65,6 +63,22 @@ class Event
         'wikipedia' => ['pages-created', 'pages-improved'],
         'commons' => ['files-uploaded', 'file-usage'],
         'wikidata' => ['items-created', 'items-improved'],
+    ];
+
+    /**
+     * This defines what metrics are visible throughout the application,
+     * except for reports (which custom define what they include).
+     * The order specified here is also the order it will appear in the interface.
+     */
+    public const VISIBLE_METRICS = [
+        'new-editors',
+        'retention',
+        'pages-created',
+        'pages-improved',
+        'files-uploaded',
+        'file-usage',
+        'items-created',
+        'items-improved',
     ];
 
     /**

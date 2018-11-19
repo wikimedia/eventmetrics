@@ -3,7 +3,7 @@
         <h4>{{ msg('participants') }}</h4>
         <h3>{{ event.numParticipants|num_format }}</h3>
     </div>
-    {% for metric, offset in event.availableMetrics %}
+    {% for metric in event.visibleMetrics if metric in event.availableMetrics|keys %}
         {% set stat = event.getStatistic(metric) %}
         {% if stat is not empty %}
             <div class="text-center event-stats--tile">
