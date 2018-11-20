@@ -78,7 +78,7 @@
                         <th scope="row">{{ msg('participants') }}:</th>
                         <td>{{ event.numParticipants }}</td>
                     </tr>
-                    {% for metric in commonMetrics %}
+                    {% for metric in event.visibleMetrics if metric in commonMetrics %}
                         {% set stat = event.statistic(metric) %}
                         <tr>
                             <th scope="row">

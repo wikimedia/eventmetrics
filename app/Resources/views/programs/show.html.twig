@@ -55,10 +55,10 @@
                                 {{ msg('participants') }}
                             </div>
                         </th>
-                        {% for metric, offset in metrics %}
+                        {% for metric in visibleMetrics if metrics[metric] is defined %}
                             <th class="text-nowrap">
                                 <div class="sort-link sort-link--{{ metric }}" data-column="{{ metric }}">
-                                    {{ msg(metric, [offset]) }}
+                                    {{ msg(metric, [metrics[metric]]) }}
                                 </div>
                             </th>
                         {% endfor %}
@@ -79,7 +79,7 @@
                             <td class="text-nowrap sort-entry--participants" data-value="{{ numParticipants }}">
                                 {{ numParticipants|num_format }}
                             </td>
-                            {% for metric, offset in metrics %}
+                            {% for metric in visibleMetrics if metrics[metric] is defined %}
                                 {% set stat = event.statistic(metric) %}
                                 <td class="text-nowrap sort-entry--{{ metric }} text-nowrap" data-value="{{ stat ? stat.value : -1 }}">
                                     {{ (stat ? stat.value|num_format : '&ndash;')|raw }}

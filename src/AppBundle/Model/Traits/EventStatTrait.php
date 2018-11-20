@@ -124,6 +124,15 @@ trait EventStatTrait
     }
 
     /**
+     * Get the key names of the metrics that should be visible in the interface.
+     * @return string[]
+     */
+    public static function getVisibleMetrics(): array
+    {
+        return self::VISIBLE_METRICS;
+    }
+
+    /**
      * Get the date of the last time the EventStat's were refreshed.
      * @return DateTime|null
      */

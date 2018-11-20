@@ -5,7 +5,7 @@
             <th class="col-lg-3"></th>
             {% set sortableMetrics = ['pages-created', 'pages-improved'] %}
             {% set columnCount = 1 %}
-            {% for metric, offset in availableMetrics %}
+            {% for metric in event.visibleMetrics if metric in availableMetrics|keys %}
                 {% if metric not in commonMetrics and event.statistic(metric) is not empty %}
                     {% set columnCount = columnCount + 1 %}
                     {% set stat = event.statistic(metric) %}

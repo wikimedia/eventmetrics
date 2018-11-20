@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace AppBundle\Controller;
 
 use AppBundle\Form\ProgramType;
+use AppBundle\Model\Event;
 use AppBundle\Model\Program;
 use AppBundle\Repository\OrganizerRepository;
 use AppBundle\Repository\ProgramRepository;
@@ -44,6 +45,7 @@ class ProgramController extends EntityController
             'programRepo' => $programRepo,
             'gmTitle' => 'my-programs',
             'metrics' => $organizerRepo->getUniqueMetrics($organizer),
+            'visibleMetrics' => Event::getVisibleMetrics(),
         ]);
     }
 
@@ -125,6 +127,7 @@ class ProgramController extends EntityController
             'program' => $this->program,
             'metrics' => $programRepo->getUniqueMetrics($this->program),
             'isOrganizer' => $this->authUserIsOrganizer($this->program),
+            'visibleMetrics' => Event::getVisibleMetrics(),
         ]);
     }
 
