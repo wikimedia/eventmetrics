@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * A JobHandler spawns new jobs from the queue if there is quota.
- * An individual Job handles generating statistics for events.
+ * An individual Job handles generating statistics for an Event.
  */
 class JobHandler
 {
@@ -101,35 +101,28 @@ class JobHandler
     /**
      * Spawn the given Job, but only if there is quota.
      * @param Job $job
-     * @param OutputInterface &$output Used by Commands so that the output
-     *   can be controlled by the parent process. If this is null,
-     *   a local LoggerInterface is used instead.
-     * @return mixed[]|false The generated stats, or false if there's no quota.
+     * @param OutputInterface &$output Used by Commands so that the output can be controlled by the parent process.
+     *   If this is null, a local LoggerInterface is used instead.
      */
-    public function spawn(Job $job, ?OutputInterface &$output = null)
+    public function spawn(Job $job, ?OutputInterface &$output = null): void
     {
         $this->output = $output;
 
         /**
-         * We can't stub the number of open connections, without
-         * stubbing all database interaction with a Repository.
+         * We can't stub the number of open connections, without stubbing all database interaction with a Repository.
          * @codeCoverageIgnoreStart
          */
         if (0 === $this->getQuota()) {
-            return false;
+            return;
         }
         // @codeCoverageIgnoreEnd
 
-        return $this->processJob($job);
+        $this->processJob($job);
     }
 
     /**
      * Check for old jobs that never started or are mysteriously running for a very long time, and lay them to rest.
-     * This does NOT kill the process associated with the job, if there is one.
-     * This is called in EventController::showAction, as a bit of a hack to get around the lack of support for a
-     * cronjob to do the same thing. We actually would prefer to *start* old jobs that were never started, but we'd
-     * need to do this with a new process, otherwise it will hold up loading of the event page itself.
-     * @see https://phabricator.wikimedia.org/T192954
+     * This does NOT kill the process associated with the job, if there is one. Called in EventController::showAction.
      * @param Event $event
      */
     public function handleStaleJobs(Event $event): void
@@ -154,10 +147,9 @@ class JobHandler
     /**
      * Start a process for a single job.
      * @param Job $job
-     * @return mixed[]|null Generated stats, or null if queued or failed.
      * @codeCoverageIgnore
      */
-    private function processJob(Job $job): ?array
+    private function processJob(Job $job): void
     {
         // Flag the job as started. This must be flushed to the database
         // immediately to avoid conflicts with the cron job, and to ensure
@@ -167,7 +159,7 @@ class JobHandler
         $this->entityManager->flush();
 
         // Process the Event the Job is associated with.
-        return $this->eventProcessor->process($job->getEvent(), $this->output);
+        $this->eventProcessor->process($job->getEvent(), $this->output);
     }
 
     /**

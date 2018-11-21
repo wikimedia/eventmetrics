@@ -178,11 +178,7 @@ class EventController extends EntityController
      */
     public function showAction(EventRepository $eventRepo, JobHandler $jobHandler): Response
     {
-        /**
-         * Kill any old, stale jobs. This would normally be handled via cron but it is not trivial to add a cronjob
-         * within a Toolforge kubernetes container.
-         * @see https://phabricator.wikimedia.org/T192954
-         */
+        // Kill any old, stale jobs.
         $jobHandler->handleStaleJobs($this->event);
 
         /** @var FormView[] $forms */

@@ -45,9 +45,6 @@ class EventProcessor
     /** @var string[]|null Usernames of the new editors. */
     private $newEditors;
 
-    /** @var mixed[] The generated stats, keyed by metric. */
-    protected $stats;
-
     /** @var string[] Unique wikis where participants have made edits. */
     protected $commonWikis;
 
@@ -68,10 +65,8 @@ class EventProcessor
      * @param Event $event
      * @param OutputInterface|null &$output Used by Commands so that the output can be controlled by the parent process.
      *   If this is null, a local LoggerInterface is used instead.
-     * @return mixed[] Statistics, keyed by metric, along with 'wikis' which
-     *   is a similar array of statistics, but keyed by the wiki's domain.
      */
-    public function process(Event $event, ?OutputInterface &$output = null): array
+    public function process(Event $event, ?OutputInterface &$output = null): void
     {
         $this->loadEvent($event);
 
@@ -105,8 +100,6 @@ class EventProcessor
         $this->entityManager->flush();
 
         $this->log("\n<info>Event statistics successfully saved.</info>\n");
-
-        return $this->stats;
     }
 
     /**
@@ -166,10 +159,6 @@ class EventProcessor
                 })->toArray());
 
                 if (0 === $statsSum) {
-                    // $this->process() returns $this->stats, which gets returned in
-                    // the JSON response, so we need to remove them here.
-                    unset($this->stats['wikis'][$wiki->getDomain()]);
-
                     // Doctrine wants you to both remove from the Event and from the entity manager.
                     $this->event->removeWiki($wiki);
                     $this->entityManager->remove($wiki);
@@ -475,12 +464,6 @@ class EventProcessor
      */
     private function createOrUpdateEventStat(string $metric, $value, ?int $offset = null): EventStat
     {
-        // Update class property.
-        $this->stats[$metric] = [
-            'value' => $value,
-            'offset' => $offset,
-        ];
-
         // Create or update an EventStat.
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
@@ -515,17 +498,6 @@ class EventProcessor
         $value,
         ?int $offset = null
     ): EventWikiStat {
-        $domain = $wiki->getDomain();
-
-        // Update class property.
-        if (!isset($this->stats['wikis'][$domain])) {
-            $this->stats['wikis'][$domain] = [];
-        }
-        $this->stats['wikis'][$domain][$metric] = [
-            'value' => $value,
-            'offset' => $offset,
-        ];
-
         // Create or update an EventStat.
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')

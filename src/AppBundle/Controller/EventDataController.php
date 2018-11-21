@@ -11,10 +11,12 @@ use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -39,11 +41,7 @@ class EventDataController extends EntityController
      */
     public function revisionsAction(EventRepository $eventRepo, JobHandler $jobHandler): Response
     {
-        /**
-         * Kill any old, stale jobs. This would normally be handled via cron but it is not trivial to add a cronjob
-         * within a Toolforge kubernetes container.
-         * @see https://phabricator.wikimedia.org/T192954
-         */
+        // Kill any old, stale jobs.
         $jobHandler->handleStaleJobs($this->event);
 
         // Redirect to event page if statistics have not yet been generated.
@@ -125,14 +123,17 @@ class EventDataController extends EntityController
      * @param JobHandler $jobHandler The job handler service, provided by Symfony dependency injection.
      * @param int $eventId The ID of the event to process.
      * @param EventRepository $eventRepo
+     * @param EventDispatcherInterface $eventDispatcher
      * @return JsonResponse
      * @throws AccessDeniedHttpException
      * @throws NotFoundHttpException
-     * Coverage done on the ProcessEventCommand itself to avoid overhead of the request stack,
-     * and also because this action can only be called via AJAX.
      */
-    public function generateStatsAction(JobHandler $jobHandler, int $eventId, EventRepository $eventRepo): JsonResponse
-    {
+    public function generateStatsAction(
+        JobHandler $jobHandler,
+        int $eventId,
+        EventRepository $eventRepo,
+        EventDispatcherInterface $eventDispatcher
+    ): JsonResponse {
         // Only respond to AJAX.
         if (!$this->request->isXmlHttpRequest()) {
             throw new AccessDeniedHttpException('This endpoint is for internal use only.');
@@ -140,7 +141,7 @@ class EventDataController extends EntityController
 
         // Find the Event.
         /** @var Event $event */
-        $event = $eventRepo->findOneBy(['id' => $eventId]);
+        $event = $eventRepo->find($eventId);
 
         if (null === $event) {
             throw new NotFoundHttpException();
@@ -163,47 +164,70 @@ class EventDataController extends EntityController
         }
         // @codeCoverageIgnoreEnd
 
-        $response = $this->createJobAndGetResponse($jobHandler, $event);
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        return $response;
-    }
-
-    /**
-     * Create a Job for the given Event, and return the JSON response.
-     * @param JobHandler $jobHandler The job handler service.
-     * @param Event $event
-     * @return JsonResponse
-     * Coverage done on the ProcessEventCommand itself to avoid overhead of the request stack,
-     * and also because this action can only be called via AJAX.
-     * @codeCoverageIgnore
-     */
-    private function createJobAndGetResponse(JobHandler $jobHandler, Event $event): JsonResponse
-    {
         // Create a new Job for the Event, and flush to the database.
         $job = new Job($event);
         $this->em->persist($job);
         $this->em->flush();
 
-        $stats = $jobHandler->spawn($job);
-
-        if (is_array($stats)) {
-            return new JsonResponse(
-                [
-                    'success' => 'Statistics for event '.$event->getId().
-                        ' successfully generated.',
-                    'status' => 'complete',
-                    'data' => $stats,
-                ],
-                Response::HTTP_OK
-            );
-        }
-
-        return new JsonResponse(
+        // Create the response that the Job has been queued, and send it back to the client immediately.
+        $response = new JsonResponse(
             [
-                'success' => 'Job has successfully been queued.',
+                'id' => $job->getId(),
                 'status' => 'queued',
             ],
-            Response::HTTP_ACCEPTED
+            Response::HTTP_OK
         );
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+
+        // Only send an early response in production. Doing so in dev/test won't break anything,
+        // but for whatever reason it prints the response output to stdout.
+        if ('prod' === $this->container->get('kernel')->getEnvironment()) {
+            $response->send();
+        }
+
+        // Spawn the Job when the kernel terminates, effectively starting it as a background process.
+        $eventDispatcher->addListener(
+            KernelEvents::TERMINATE,
+            function () use ($jobHandler, $job): void {
+                $jobHandler->spawn($job);
+            }
+        );
+
+        return $response;
+    }
+
+    /**
+     * Returns the status of the Job associated with the given event.
+     * @Route("/events/job-status/{eventId}", name="EventJobStatus")
+     * @param int $eventId
+     * @param EventRepository $eventRepo
+     * @return JsonResponse
+     * @throws NotFoundHttpException
+     */
+    public function jobStatusAction(int $eventId, EventRepository $eventRepo): JsonResponse
+    {
+        // Find the Event.
+        /** @var Event $event */
+        $event = $eventRepo->find($eventId);
+
+        if (null === $event) {
+            throw new NotFoundHttpException();
+        }
+
+        /** @var Job $job */
+        $job = $event->getJobs()->first();
+
+        // Happens when job has completed. This could also happen if there is/was no job at all,
+        // but it's up to the client to only call this action after a job was started.
+        if (false === $job) {
+            return new JsonResponse([
+                'status' => 'complete',
+            ], Response::HTTP_OK);
+        }
+
+        return new JsonResponse([
+            'id' => $job->getId(),
+            'status' => $job->getStarted() ? 'running' : 'queued',
+        ], Response::HTTP_OK);
     }
 }
