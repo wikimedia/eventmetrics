@@ -264,19 +264,17 @@ class EventRepository extends Repository
         // Check cache and return if it exists, unless the Event was recently updated,
         // in which case we'll want to invalidate the cache.
         $shouldUseCache = null !== $event->getUpdated() &&
-            (int)$event->getUpdated()->format('U') < time() - $cacheDuration &&
-            null !== $this->getRedisConnection();
+            (int)$event->getUpdated()->format('U') < time() - $cacheDuration;
         $cacheKey = $this->getCacheKey(func_get_args(), 'revisions');
-        if ($shouldUseCache && $this->getRedisConnection()->contains($cacheKey)) {
-            return $this->getRedisConnection()->fetch($cacheKey);
+        if ($shouldUseCache && $this->cache->hasItem($cacheKey)) {
+            return $this->cache->getItem($cacheKey)->get();
         }
 
         $ret = $this->getRevisionsData($event, $offset, $limit, $count);
 
         // Cache for 5 minutes.
         if ($shouldUseCache) {
-            $redis = $this->getRedisConnection();
-            $redis->save($cacheKey, $ret, $cacheDuration);
+            return $this->setCache($cacheKey, $ret, 'PT5M');
         }
 
         return $ret;
