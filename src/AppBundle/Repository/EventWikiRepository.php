@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace AppBundle\Repository;
 
 use AppBundle\Model\EventWiki;
+use DateTime;
+use Doctrine\DBAL\Connection;
 
 /**
  * This class supplies and fetches data for the EventWiki class.
@@ -185,5 +187,117 @@ class EventWikiRepository extends Repository
             ->andWhere("url RLIKE '$validWikiRegex'");
 
         return $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
+     * Get all unique page IDs edited/created within the Event for the given wiki. If you need to do this for pages
+     * within specific categories, without participants, use EventCategoryRepository::getPagesInCategories().
+     * @param string $dbName
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param string[] $usernames
+     * @param string[] $categoryTitles
+     * @return int[]
+     */
+    public function getPageIds(
+        string $dbName,
+        DateTime $start,
+        DateTime $end,
+        array $usernames = [],
+        array $categoryTitles = []
+    ): array {
+        if (empty($usernames) && empty($categoryTitles)) {
+            // FIXME: This should throw an Exception or something so we can print an error message.
+            return [];
+        }
+
+        $start = $start->format('YmdHis');
+        $end = $end->format('YmdHis');
+
+        $conn = $this->getReplicaConnection();
+        $rqb = $conn->createQueryBuilder();
+
+        $revisionTable = $this->getTableName('revision');
+
+        $rqb->select('DISTINCT rev_page')
+            ->from("$dbName.$revisionTable")
+            ->join("$dbName.$revisionTable", "$dbName.page", 'page_rev', 'page_id = rev_page');
+
+        if (count($categoryTitles) > 0) {
+            $rqb->join("$dbName.$revisionTable", "$dbName.categorylinks", 'category_rev', 'cl_from = rev_page')
+                ->where('cl_to IN (:categoryTitles)');
+        }
+
+        $rqb->andWhere('page_namespace = 0')
+            ->andWhere('rev_timestamp BETWEEN :start AND :end');
+
+        if (count($usernames) > 0) {
+            $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
+                ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+        }
+
+        $rqb->setParameter('start', $start)
+            ->setParameter('end', $end);
+
+        if (count($categoryTitles) > 0) {
+            $rqb->setParameter('categoryTitles', $categoryTitles, Connection::PARAM_STR_ARRAY);
+        }
+
+        $result = $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
+        return $result ? array_map('intval', $result) : $result;
+    }
+
+    /**
+     * Get page IDs of deleted pages.
+     * @param string $dbName
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param string[] $usernames
+     * @return int[]
+     */
+    public function getDeletedPageIds(string $dbName, DateTime $start, DateTime $end, array $usernames = []): array
+    {
+        $start = $start->format('YmdHis');
+        $end = $end->format('YmdHis');
+
+        $rqb = $this->getReplicaConnection()->createQueryBuilder();
+
+        // Don't use userindex unless we're given usernames.
+        $archiveTable = $this->getTableName('archive', 0 === count($usernames) ? '' : 'userindex');
+
+        $rqb->select('DISTINCT ar_page')
+            ->from("$dbName.$archiveTable")
+            ->where('ar_namespace = 0')
+            ->andWhere('ar_timestamp BETWEEN :start AND :end');
+
+        if (count($usernames) > 0) {
+            $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
+                ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+        }
+
+        $rqb->setParameter('start', $start)
+            ->setParameter('end', $end);
+
+        $result = $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
+        return $result ? array_map('intval', $result) : $result;
+    }
+
+    /**
+     * Get the page titles of the pages with the given IDs.
+     * @param string $dbName
+     * @param int[] $pageIds
+     * @param bool $stmt Whether to get only the statement, so that the calling method can use fetch().
+     * @return string[]|\Doctrine\DBAL\Driver\ResultStatement
+     */
+    public function getPageTitles(string $dbName, array $pageIds, bool $stmt = false)
+    {
+        $rqb = $this->getReplicaConnection()->createQueryBuilder();
+        $rqb->select('page_title')
+            ->from("$dbName.page")
+            ->where($rqb->expr()->in('page_id', ':ids'))
+            ->setParameter('ids', $pageIds, Connection::PARAM_INT_ARRAY);
+        $result = $this->executeQueryBuilder($rqb);
+
+        return $stmt ? $result : $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 }

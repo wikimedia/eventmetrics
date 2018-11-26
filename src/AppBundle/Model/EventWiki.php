@@ -75,6 +75,16 @@ class EventWiki
     protected $stats;
 
     /**
+     * A bzcompressed string of all the page IDs. Compression is used so we don't have to store enormous strings.
+     * When pulled from the database, this may be of type resource and not string. Use self::getPages() to get an
+     * array representation of the page IDs.
+     * @see https://secure.php.net/manual/en/function.bzcompress.php
+     * @ORM\Column(name="ew_pages", type="blob", length=512, nullable=true)
+     * @var string|resource
+     */
+    protected $pages;
+
+    /**
      * EventWiki constructor.
      * @param Event $event Event that this EventWiki belongs to.
      * @param string $domain Domain name of the wiki, without the .org.
@@ -231,5 +241,44 @@ class EventWiki
     public function clearStatistics(): void
     {
         $this->stats->clear();
+
+        // It's safe to assume page IDs should also be cleared.
+        $this->pages = null;
+    }
+
+    /*********
+     * PAGES *
+     *********/
+
+    /**
+     * Get the cached/persisted page IDs of all pages this event touches.
+     * @return int[]
+     */
+    public function getPages(): array
+    {
+        if (null === $this->pages) {
+            return [];
+        }
+
+        $blob = is_resource($this->pages)
+            ? stream_get_contents($this->pages)
+            : $this->pages;
+
+        return explode(',', bzdecompress($blob));
+    }
+
+    /**
+     * Set the $this->pages property from the IDs, as bzcompressed and base64-encoded string.
+     * @see https://secure.php.net/manual/en/function.bzcompress.php
+     * @param int[]|null $ids
+     */
+    public function setPages(?array $ids): void
+    {
+        if (null === $ids) {
+            $this->pages = null;
+            return;
+        }
+
+        $this->pages = bzcompress(implode(',', $ids));
     }
 }

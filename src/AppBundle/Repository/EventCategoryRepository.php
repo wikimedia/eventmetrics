@@ -9,7 +9,6 @@ namespace AppBundle\Repository;
 
 use AppBundle\Model\EventCategory;
 use AppBundle\Model\EventWiki;
-use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * An EventCategoryRepository supplies and fetches data for the EventCategory class.
@@ -31,11 +30,10 @@ class EventCategoryRepository extends Repository
      * Get the IDs of pages in the given categories.
      * @param string $dbName Database name such as 'enwiki_p'.
      * @param int[] $ids IDs of categories to fetch from.
-     * @param bool $queryBuilder Whether to return just the Doctrine query builder object.
      * @param int|null $limit Max number of pages. null for no limit, but only do this if used in a subquery.
-     * @return string[]|QueryBuilder Page IDs or the QueryBuilder object.
+     * @return int[]
      */
-    public function getPagesInCategories(string $dbName, array $ids, bool $queryBuilder = false, ?int $limit = 20000)
+    public function getPagesInCategories(string $dbName, array $ids, ?int $limit = 20000): array
     {
         $rqb = $this->getReplicaConnection()->createQueryBuilder();
         $rqb->select(['DISTINCT(cl_from)'])
@@ -50,11 +48,8 @@ class EventCategoryRepository extends Repository
             $rqb->setMaxResults($limit);
         }
 
-        if ($queryBuilder) {
-            return $rqb;
-        }
-
-        return $this->executeQueryBuilder($rqb)->fetchAll();
+        $result = $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
+        return $result ? array_map('intval', $result) : [];
     }
 
     /**

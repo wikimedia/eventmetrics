@@ -60,30 +60,21 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get the number of pages edited and created within the timeframe and for the given users.
+     * Get the number of pages edited and created within the time frame and for the given users.
      * @param string $dbName Database name such as 'enwiki_p'.
+     * @param int[] $pageIds
      * @param DateTime $start
      * @param DateTime $end
      * @param string[] $usernames
-     * @param string[] $categoryTitles Only search within given categories.
      * @return int[] With keys 'edits', 'edited' and 'created'.
      */
     public function getEditStats(
         string $dbName,
+        array $pageIds,
         DateTime $start,
         DateTime $end,
-        array $usernames = [],
-        array $categoryTitles = []
+        array $usernames = []
     ): array {
-        if (empty($usernames) && empty($categoryTitles)) {
-            // FIXME: This should throw an Exception or something so we can print an error message.
-            return [
-                'edits' => 0,
-                'edited' => 0,
-                'created' => 0,
-            ];
-        }
-
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
 
@@ -98,14 +89,7 @@ class EventRepository extends Repository
                 'IFNULL(SUM(CASE WHEN rev_parent_id = 0 THEN 1 ELSE 0 END), 0) AS created',
             ])
             ->from("$dbName.$revisionTable")
-            ->join("$dbName.$revisionTable", "$dbName.page", 'page_rev', 'page_id = rev_page');
-
-        if (count($categoryTitles) > 0) {
-            $rqb->join("$dbName.$revisionTable", "$dbName.categorylinks", 'category_rev', 'cl_from = rev_page')
-                ->where('cl_to IN (:categoryTitles)');
-        }
-
-        $rqb->andWhere('page_namespace = 0')
+            ->where($rqb->expr()->in('rev_page', ':pageIds'))
             ->andWhere('rev_timestamp BETWEEN :start AND :end');
 
         if (count($usernames) > 0) {
@@ -113,12 +97,9 @@ class EventRepository extends Repository
                 ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
         }
 
-        $rqb->setParameter('start', $start)
+        $rqb->setParameter('pageIds', $pageIds, Connection::PARAM_INT_ARRAY)
+            ->setParameter('start', $start)
             ->setParameter('end', $end);
-
-        if (count($categoryTitles) > 0) {
-            $rqb->setParameter('categoryTitles', $categoryTitles, Connection::PARAM_STR_ARRAY);
-        }
 
         return $this->executeQueryBuilder($rqb)->fetch();
     }
@@ -151,7 +132,7 @@ class EventRepository extends Repository
 
     /**
      * Get the number of unique mainspace pages across all projects that are using files
-     * uploaded by the given users that were uploaded during the given timeframe.
+     * uploaded by the given users that were uploaded during the given time frame.
      * @param DateTime $start
      * @param DateTime $end
      * @param string[] $usernames
@@ -335,6 +316,7 @@ class EventRepository extends Repository
 
     /**
      * The inner SQL used when fetching revisions that are part of an Event.
+     * NOTE: This method assumes page IDs are already stored on each EventWiki.
      * @param Event $event
      * @return string
      */
@@ -348,10 +330,6 @@ class EventRepository extends Repository
         $eventWikiRepo = $this->em->getRepository('Model:EventWiki');
         $eventWikiRepo->setContainer($this->container);
 
-        /** @var EventCategoryRepository $catRepo */
-        $catRepo = $this->em->getRepository('Model:EventCategory');
-        $catRepo->setContainer($this->container);
-
         $sqlClauses = [];
 
         $revisionTable = $this->getTableName('revision');
@@ -359,27 +337,25 @@ class EventRepository extends Repository
         $usernames = $this->getUsernamesSql($event);
 
         foreach ($event->getWikis() as $wiki) {
+            // Family wikis are essentially placeholder EventWikis. They are not queryable by themselves.
             if ($wiki->isFamilyWiki()) {
                 continue;
             }
 
             $domain = $wiki->getDomain();
             $dbName = $eventWikiRepo->getDbNameFromDomain($domain);
+            $pageIdsSql = implode(',', $wiki->getPages());
 
-            $catJoin = '';
-            $catWhere = '';
-            $catIds = $event->getCategoryIdsForWiki($wiki);
-            if (count($catIds) > 0) {
-                $catJoin = "INNER JOIN $dbName.categorylinks ON cl_from = rev_page";
-                $categoryTitles = implode(',', array_map(function ($title) {
-                    return $this->getReplicaConnection()->quote($title, \PDO::PARAM_STR);
-                }, $event->getCategoryTitlesForWiki($wiki)));
-                $catWhere = "AND cl_to IN ($categoryTitles)";
+            if ('commonswiki_p' === $dbName) {
+                // For files, we query for the initial revision (when it was created).
+                $nsClause = 'AND page_namespace = 6 AND rev_parent_id = 0';
+            } elseif ('' === $pageIdsSql) {
+                // Skip if there are no pages to query (otherwise `rev_page IN` clause will cause SQL error).
+                continue;
+            } else {
+                // For non-files, we query for all revisions to the set of pages known to be edited.
+                $nsClause = "AND rev_page IN ($pageIdsSql)";
             }
-
-            $nsClause = 'commonswiki_p' === $dbName
-                ? '6 AND rev_parent_id = 0' // Only creations of File pages.
-                : '0';
 
             $sqlClauses[] = "SELECT rev_id AS 'id',
                     rev_timestamp AS 'timestamp',
@@ -391,11 +367,9 @@ class EventRepository extends Repository
                 FROM $dbName.$revisionTable
                 INNER JOIN $dbName.$pageTable ON page_id = rev_page
                 LEFT OUTER JOIN $dbName.comment ON rev_comment_id = comment_id
-                $catJoin
                 WHERE rev_user_text IN ($usernames)
-                AND page_namespace = $nsClause
-                AND rev_timestamp BETWEEN :startDate AND :endDate
-                $catWhere";
+                $nsClause
+                AND rev_timestamp BETWEEN :startDate AND :endDate";
         }
 
         $this->revisionsInnerSql = implode(' UNION ', $sqlClauses);

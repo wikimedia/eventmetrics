@@ -55,8 +55,7 @@ class Event
     ];
 
     /**
-     * This defines what metrics are available to what wiki families.
-     * '*' means all wikis are applicable.
+     * This defines what metrics are available to what wiki families. '*' means all wikis are applicable.
      */
     public const WIKI_FAMILY_METRIC_MAP = [
         '*' => ['edits', 'new-editors', 'retention'],
@@ -126,6 +125,7 @@ class Event
     /**
      * One Event has many EventWikis.
      * @ORM\OneToMany(targetEntity="EventWiki", mappedBy="event", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OrderBy({"domain" = "ASC"})
      * @var Collection|EventWiki[] Wikis that this event takes place on.
      */
     protected $wikis;

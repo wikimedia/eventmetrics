@@ -25,6 +25,7 @@
         "ext-PDO": "*",
         "ext-json": "*",
         "ext-apcu": "*",
+        "ext-bz2": "*",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.5",

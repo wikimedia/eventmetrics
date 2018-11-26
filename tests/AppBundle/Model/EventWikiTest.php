@@ -133,4 +133,19 @@ class EventWikiTest extends EventMetricsTestCase
         })->toArray();
         static::assertEquals(['*.wikipedia', 'commons.wikimedia'], array_values($domains));
     }
+
+    /**
+     * Test methods involving page IDs.
+     */
+    public function testPages(): void
+    {
+        $wiki = new EventWiki($this->event, 'test.wikipedia');
+
+        // Basic setter/getter.
+        $wiki->setPages([1, 2, 3]);
+        static::assertEquals([1, 2, 3], $wiki->getPages());
+
+        $wiki->setPages(null);
+        static::assertEquals([], $wiki->getPages());
+    }
 }

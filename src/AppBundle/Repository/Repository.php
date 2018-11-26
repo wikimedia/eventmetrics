@@ -329,6 +329,8 @@ abstract class Repository extends EntityRepository
     {
         if (null !== $suffix) {
             return $name.'_'.$suffix;
+        } elseif ('' === $suffix) {
+            return $name;
         }
 
         // For 'revision' and 'logging' tables (actually views) on the WMF replicas,

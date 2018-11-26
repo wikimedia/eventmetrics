@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Tests\AppBundle\Controller;
 
 use AppBundle\DataFixtures\ORM\LoadFixtures;
+use AppBundle\Model\Event;
 use AppBundle\Model\EventCategory;
+use AppBundle\Model\Job;
 
 /**
  * Integration/functional tests for the EventDataController.
@@ -49,10 +51,9 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         // so the revision browser should redirect to the event page.
         static::assertEquals(302, $this->response->getStatusCode());
 
-        // Set updated attribute then try again.
-        $event->setUpdated(new \DateTime('2018-09-24T00:00:00Z'));
-        $this->entityManager->persist($event);
-        $this->entityManager->flush();
+        $this->generateStats($event);
+
+        // Revision browser should now load.
         $this->crawler = $this->client->request(
             'GET',
             '/programs/My_fun_program/Oliver_and_Company/revisions'
@@ -82,7 +83,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         static::assertEquals(200, $this->response->getStatusCode());
         static::assertContains('text/plain', $this->response->headers->get('content-type'));
         static::assertRegExp(
-            '/en\.wikipedia, www\.wikidata.*Samwilson.*MusikAnimal/s',
+            '/en\.wikipedia.*www\.wikidata.*Samwilson.*MusikAnimal/s',
             $this->response->getContent()
         );
     }
@@ -115,11 +116,8 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             ->findOneBy(['title' => 'Oliver_and_Company']);
         new EventCategory($event, 'Parks in Brooklyn', 'en.wikipedia');
 
-        // Also set updated attribute, otherwise revision browser won't show.
-        $event->setUpdated(new \DateTime('2018-09-24T00:00:00Z'));
-
-        $this->entityManager->persist($event);
-        $this->entityManager->flush();
+        // This method also flushes to the database, hence the above EventCategory will be saved.
+        $this->generateStats($event);
 
         $this->crawler = $this->client->request(
             'GET',
@@ -195,5 +193,19 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             ->getRepository('Model:EventStat')
             ->findBy(['event' => $event]);
         static::assertEquals(9, count($eventStats));
+    }
+
+    /**
+     * Update the stats, creating a new Job for the Event and flushing to the database.
+     * @param Event $event
+     */
+    private function generateStats(Event $event): void
+    {
+        // Update the stats, creating a new Job for the Event and flushing to the database.
+        $job = new Job($event);
+        $this->entityManager->persist($job);
+        $this->entityManager->flush();
+        $jobHandler = self::$kernel->getContainer()->get('AppBundle\Service\JobHandler');
+        $jobHandler->spawn($job);
     }
 }
