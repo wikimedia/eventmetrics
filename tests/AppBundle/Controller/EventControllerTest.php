@@ -10,6 +10,7 @@ namespace Tests\AppBundle\Controller;
 use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventWiki;
+use AppBundle\Model\Program;
 use DateTime;
 
 /**
@@ -84,7 +85,10 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         foreach ($validRoutes as $route) {
             $this->client->request('GET', $route);
-            static::assertTrue($this->client->getResponse()->isSuccessful(), "Not found: $route");
+            static::assertTrue(
+                $this->client->getResponse()->isSuccessful() || $this->client->getResponse()->isRedirect(),
+                "Not found: $route"
+            );
         }
     }
 
@@ -123,7 +127,15 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     public function testLoggedOut(): void
     {
-        // 'My_fun_program' was already created via fixtures.
+        $this->addFixture(new LoadFixtures());
+        $this->executeFixtures();
+
+        /** @var Program $program */
+        $program = $this->entityManager
+            ->getRepository('Model:Program')
+            ->findOneBy(['title' => 'My_fun_program']);
+        $this->programId = $program->getId();
+
         $this->crawler = $this->client->request('GET', $this->getProgramUrl());
         $this->response = $this->client->getResponse();
         static::assertEquals(307, $this->response->getStatusCode());
