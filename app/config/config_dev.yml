@@ -28,6 +28,10 @@ monolog:
             type: server_log
             process_psr_3_messages: false
             host: 127.0.0.1:9911
+
+        # No email error reports on local. Comment out if you need to test this feature.
+        swift: ~
+
         # uncomment to get logging in your browser
         # you may have to allow bigger header sizes in your Web server configuration
         #firephp:
@@ -36,6 +40,3 @@ monolog:
         #chromephp:
         #    type: chromephp
         #    level: info
-
-#swiftmailer:
-#    delivery_addresses: ['me@example.com']
