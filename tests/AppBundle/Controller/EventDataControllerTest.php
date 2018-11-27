@@ -11,7 +11,6 @@ use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventCategory;
 use AppBundle\Model\Job;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Integration/functional tests for the EventDataController.

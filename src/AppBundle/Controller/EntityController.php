@@ -190,7 +190,7 @@ abstract class EntityController extends Controller
     }
 
     /**
-     * Redirect to /login if the user is logged out.
+     * Redirect to homepage if the user is logged out, showing an error message that they need to login.
      * @throws HttpException
      */
     private function validateUser(): void
@@ -199,12 +199,11 @@ abstract class EntityController extends Controller
             return;
         }
         $this->addFlashMessage('danger', 'please-login');
-        $rootPath = $this->container->getParameter('app.root_path');
         throw new HttpException(
             Response::HTTP_TEMPORARY_REDIRECT,
             null,
             null,
-            ['Location' => $rootPath]
+            ['Location' => $this->container->getParameter('app.base_url')]
         );
     }
 }

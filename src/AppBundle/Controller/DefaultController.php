@@ -38,7 +38,6 @@ class DefaultController extends Controller
     /**
      * Get the URL of a random background image.
      * @Route("/api/background/{windowSize}", name="BackgroundImage")
-     * @Route("/api/background/{windowSize}/", name="BackgroundImageSlash")
      * @param int $windowSize Device's screen size, so that we don't
      *   download imagery larger than what's necessary.
      * @return JsonResponse

@@ -31,7 +31,6 @@ class EventController extends EntityController
     /**
      * There is no list of events without a program to go with it.
      * @Route("/events", name="Events")
-     * @Route("/events/", name="EventsSlash")
      * @return RedirectResponse
      */
     public function indexAction(): RedirectResponse
@@ -42,7 +41,6 @@ class EventController extends EntityController
     /**
      * Show a form to create a new event.
      * @Route("/programs/{programId}/events/new", name="NewEvent")
-     * @Route("/programs/{programId}/events/new/", name="NewEventSlash")
      * @param Event $event Event to copy.
      * @return Response|RedirectResponse
      */
@@ -74,7 +72,6 @@ class EventController extends EntityController
     /**
      * Show a form to edit the given event.
      * @Route("/programs/{programId}/events/{eventId}/edit", name="EditEvent")
-     * @Route("/programs/{programId}/events/{eventId}/edit/", name="EditEventSlash")
      * @return Response|RedirectResponse
      */
     public function editAction(): Response
@@ -105,7 +102,6 @@ class EventController extends EntityController
      * Copy the given Event and redirect to the NewEvent action, clearing out the title,
      * and getting new instances of associated entities.
      * @Route("/programs/{programId}/events/{eventId}/copy", name="CopyEvent")
-     * @Route("/programs/{programId}/events/{eventId}/copy/", name="CopyEventSlash")
      * @return Response|RedirectResponse
      */
     public function copyAction(): Response
@@ -142,7 +138,6 @@ class EventController extends EntityController
     /**
      * Delete an event.
      * @Route("/programs/{programId}/events/{eventId}/delete", name="DeleteEvent")
-     * @Route("/programs/{programId}/events/{eventId}/delete/", name="DeleteEventSlash")
      * @return RedirectResponse
      */
     public function deleteAction(): RedirectResponse
@@ -166,10 +161,6 @@ class EventController extends EntityController
      * Show a specific event.
      * @Route("/programs/{programId}/events/{eventId}", name="Event")
      * @Route("/programs/{programId}/{eventId}", name="EventLegacy", requirements={
-     *     "eventId" = "^(?!(new|edit|delete|revisions)$)[^\/]+"
-     * })
-     * @Route("/programs/{programId}/events/{eventId}/", name="EventSlash")
-     * @Route("/programs/{programId}/{eventId}/", name="EventLegacySlash", requirements={
      *     "eventId" = "^(?!(new|edit|delete|revisions)$)[^\/]+"
      * })
      * @param EventRepository $eventRepo

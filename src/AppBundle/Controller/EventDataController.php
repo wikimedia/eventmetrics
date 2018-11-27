@@ -33,8 +33,6 @@ class EventDataController extends EntityController
      * Lists individual revisions that make up the Event.
      * @Route("/programs/{programId}/events/{eventId}/revisions", name="Revisions")
      * @Route("/programs/{programId}/{eventId}/revisions", name="RevisionsLegacy")
-     * @Route("/programs/{programId}/{eventId}/revisions/", name="RevisionsSlash")
-     * @Route("/programs/{programId}/events/{eventId}/revisions/", name="RevisionsSlashLegacy")
      * @param EventRepository $eventRepo
      * @param JobHandler $jobHandler
      * @return Response
@@ -119,7 +117,6 @@ class EventDataController extends EntityController
      * If there is quota, the job will be ran immediately and the results returned as JSON.
      * Otherwise, a job is created and it will later be ran via cron.
      * @Route("/events/process/{eventId}", name="EventProcess", requirements={"id" = "\d+"})
-     * @Route("/events/process/{eventId}/", name="EventProcessSlash", requirements={"id" = "\d+"})
      * @param JobHandler $jobHandler The job handler service, provided by Symfony dependency injection.
      * @param int $eventId The ID of the event to process.
      * @param EventRepository $eventRepo
