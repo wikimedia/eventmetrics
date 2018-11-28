@@ -20,6 +20,8 @@
 	"pager-newer-n": "{{PLURAL:$1|1 mai recenta|$1 mai recentas}}",
 	"pager-older-n": "{{PLURAL:$1|1 mai anciana|$1 mai ancianas}}",
 	"report-issue": "Senhalar un problèma",
+	"save": "Enregistrar",
+	"settings": "Paramètres",
 	"totals": "Totals",
 	"unknown": "Desconegut",
 	"username": "Nom d'utilizaire",

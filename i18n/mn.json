@@ -10,6 +10,8 @@
 	"pager-newer-n": "{{PLURAL:$1|илүү шинэ 1|илүү шинэ $1}}",
 	"pager-older-n": "{{PLURAL:$1|илүү хуучин 1|илүү хуучин $1}}",
 	"report-issue": "Алдааг мэдэгдэх",
+	"save": "Хадгалах",
+	"settings": "Тохиргоо",
 	"totals": "Нийт",
 	"unknown": "Тодорхойгүй",
 	"view-source": "Эх кодыг үзэх"

@@ -12,6 +12,8 @@
 	"pager-newer-n": "{{PLURAL:$1|newiyer 1|newiyer $1}}",
 	"pager-older-n": "{{PLURAL:$1|deha kehan 1|deha kehan $1}}",
 	"report-issue": "Problemi rapor ke",
+	"save": "Qeyd ke",
+	"settings": "Eyari",
 	"totals": "Pêro piya",
 	"view-source": "Çımey bıvêne"
 }

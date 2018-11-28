@@ -18,6 +18,8 @@
 	"pager-newer-n": "{{PLURAL:$1|1 újabb|$1 újabb}}",
 	"pager-older-n": "{{PLURAL:$1|1 régebbi|$1 régebbi}}",
 	"report-issue": "Hibabejelentés",
+	"save": "Mentés",
+	"settings": "Beállítások",
 	"totals": "Összesen",
 	"unknown": "Ismeretlen",
 	"username": "Felhasználói név",

@@ -3,20 +3,22 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb">
-        <li>
-            <a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a>
-        </li>
+        <li><a href="{{ path('Programs') }}">{{ msg('my-programs') }}</a></li>
         <li class="active">{{ msg('create-new-program') }}</li>
     </ol>
 {% endblock %}
 
 {% block body %}
     <div class="container">
-        <div class="page-header">
-            <h1>{{ msg('create-new-program') }}</h1>
-        </div>
-
         {{ form_start(form, {'method': 'post'}) }}
+            <div class="page-header">
+                <div class="btn-group pull-right text-right">
+                    <a class="btn btn-default" href="{{ path('Programs') }}">{{ msg('cancel') }}</a>
+                    {{ form_widget(form.submit, {'label': msg('save'), 'attr': {'class': 'btn-primary'}}) }}
+                </div>
+                <h1>{{ msg('create-new-program') }}</h1>
+            </div>
+
             {% include 'programs/_form.html.twig' with {'form': form} %}
         {{ form_end(form) }}
     </div>

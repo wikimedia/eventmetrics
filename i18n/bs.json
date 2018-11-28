@@ -22,6 +22,8 @@
 	"pager-newer-n": "{{PLURAL:$1|novija 1|novije $1}}",
 	"pager-older-n": "{{PLURAL:$1|starija $1|starijih $1}}",
 	"report-issue": "Prijavi problem",
+	"save": "Sačuvaj",
+	"settings": "Postavke",
 	"submit": "Pošalji",
 	"totals": "Ukupno",
 	"unknown": "Nepoznato",

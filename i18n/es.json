@@ -67,7 +67,9 @@
 	"remove": "Quitar",
 	"report-issue": "Comunicar un problema",
 	"return-to-my-programs": "Volver a Mis programas",
+	"save": "Guardar",
 	"save-participants": "Guardar participantes",
+	"settings": "Ajustes",
 	"show-section": "Enseña esta sección",
 	"start-date": "Fecha de inicio",
 	"start-time": "Hora de inicio",
@@ -81,7 +83,6 @@
 	"update-data": "Actualizar datos",
 	"updating": "Actualizando",
 	"username": "Nombre de usuario",
-	"view-all-data": "Ver todos los datos",
 	"view-source": "Ver código",
 	"wiki": "Wiki",
 	"wikis": "Wikis"

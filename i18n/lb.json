@@ -53,7 +53,9 @@
 	"program": "Programm",
 	"remove": "Ewechhuelen",
 	"report-issue": "E Problem mellen",
+	"save": "Späicheren",
 	"save-categories": "Kategorië späicheren",
+	"settings": "Astellungen",
 	"show-section": "Dësen Abschnitt weisen",
 	"start-date": "Ufanksdatum",
 	"start-time": "Ufankszäit",
@@ -67,7 +69,6 @@
 	"update-data": "Donnéeën aktualiséieren",
 	"updating": "Aktualiséieren",
 	"username": "Benotzernumm",
-	"view-all-data": "All Donnéeë weisen",
 	"view-source": "Quellcode weisen",
 	"wiki": "Wiki",
 	"wikis": "Wikien"

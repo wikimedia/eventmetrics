@@ -97,6 +97,7 @@ class EventController extends EntityController
             'form' => $form->createView(),
             'event' => $this->event,
             'gmTitle' => $this->event->getDisplayTitle(),
+            'isOrganizer' => $this->authUserIsOrganizer($this->program),
         ]);
     }
 

@@ -8,6 +8,8 @@
 	"pager-newer-n": "{{PLURAL:$1|1 plus recente|$1 plus recente}}",
 	"pager-older-n": "{{PLURAL:$1|1 minus recente|$1 minus recente}}",
 	"report-issue": "Reportar un problema",
+	"save": "Salveguardar",
+	"settings": "Configuration",
 	"totals": "Totales",
 	"view-source": "Vider codice fonte"
 }

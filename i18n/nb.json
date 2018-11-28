@@ -18,6 +18,8 @@
 	"pager-newer-n": "{{PLURAL:$1|1 nyere|$1 nyere}}",
 	"pager-older-n": "{{PLURAL:$1|1 eldre|$1 eldre}}",
 	"report-issue": "Rapporter et problem",
+	"save": "Lagre",
+	"settings": "innstillinger",
 	"submit": "Send",
 	"totals": "Totalt",
 	"unknown": "Ukjent",

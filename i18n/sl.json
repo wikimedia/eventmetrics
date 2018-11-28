@@ -10,5 +10,7 @@
 	"page": "Stran",
 	"pager-newer-n": "{{PLURAL:$1|novejši|novejša|novejši|novejših}} $1",
 	"pager-older-n": "{{PLURAL:$1|starejši|starejša|starejši|starejših}} $1",
+	"save": "Shrani",
+	"settings": "Nastavitve",
 	"view-source": "Izvorno besedilo"
 }

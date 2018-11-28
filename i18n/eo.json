@@ -3,5 +3,7 @@
 	"cancel": "Nuligi",
 	"pager-newer-n": "{{PLURAL:$1|pli novan 1|pli novajn $1}}",
 	"pager-older-n": "{{PLURAL:$1|pli malnovan 1|pli malnovajn $1}}",
+	"save": "Konservi",
+	"settings": "Agordoj",
 	"view-source": "Vidi fonton"
 }

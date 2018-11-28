@@ -39,6 +39,8 @@
 	"pager-older-n": "{{PLURAL:$1|unha anterior|$1 anteriores}}",
 	"please-login": "Por favor, inicie sesión para continuar.",
 	"report-issue": "Informar dun problema",
+	"save": "Gardar",
+	"settings": "Axustes",
 	"submit": "Enviar",
 	"totals": "Totais",
 	"unknown": "Descoñecido",
