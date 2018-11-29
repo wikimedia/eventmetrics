@@ -3,7 +3,8 @@
 		"authors": [
 			"Mainframe98",
 			"Optilete",
-			"Ndecouck"
+			"Ndecouck",
+			"Elroy"
 		]
 	},
 	"add-more-participants": "Voeg meer deelnemers toe, één per regel. Je kunt knippen/plakken van een on-wiki lijst.",
@@ -43,6 +44,11 @@
 	"event": "Evenement",
 	"event-created": "Het evenement '$1' is succesvol aangemaakt.",
 	"event-deleted": "Het evenement '$1' is verwijderd.",
+	"event-download-reports": "Uitslagen ophalen",
+	"event-edit-list": "Bewerkingslijst",
+	"event-list": "Gebeurtenislijst",
+	"event-settings": "Gebeurtenisinstellingen",
+	"event-summary": "Gebeurtenisoverzicht",
 	"events": "Evenementen",
 	"fatal-error": "Fatale fout",
 	"feedback": "Terugkoppeling",
@@ -79,6 +85,7 @@
 	"program": "Programma",
 	"program-created": "Het programma '$1' is succesvol aangemaakt.",
 	"program-deleted": "Het programma '$1' is verwijderd.",
+	"program-settings": "Programmainstellingen",
 	"program-updated": "Het programma '$1' is succesvol bijgewerkt.",
 	"queued": "In wachtrij",
 	"remove": "Verwijderen",
@@ -98,6 +105,7 @@
 	"update-data": "Data bijwerken",
 	"updating": "Bijwerken",
 	"username": "Gebruikersnaam",
+	"view-edit-list": "Bewerkingslijst weergeven",
 	"view-source": "Broncode bekijken",
 	"wiki": "Wiki",
 	"wikis": "Wiki's"
