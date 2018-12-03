@@ -3,7 +3,8 @@
 		"authors": [
 			"Liuxinyu970226",
 			"Deathkon",
-			"A Chinese Wikipedian"
+			"A Chinese Wikipedian",
+			"Angrydog001"
 		]
 	},
 	"add-category": "添加分类",
@@ -132,6 +133,7 @@
 	"updating": "正在更新",
 	"updating-desc": "请稍等，正在处理这些数字......",
 	"username": "用户名",
+	"view-edit-list": "查看编辑列表",
 	"view-source": "查看源代码",
 	"wiki": "Wiki",
 	"wikis": "Wiki"

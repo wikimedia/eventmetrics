@@ -25,6 +25,7 @@
 	"error-server-message": "Serveren sagde: $1",
 	"error-service-overload": "Event Metrics er i øjeblikket overbelastet af andre forespørgsler. Prøv igen om nogle minutter.",
 	"error-title-numeric": "Titlen kan ikke være et tal.",
+	"event-edit-list": "Redigeringsliste",
 	"fatal-error": "Fatal fejl",
 	"feedback": "Tilbagemelding",
 	"help": "Hjælp",
