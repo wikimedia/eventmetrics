@@ -17,26 +17,8 @@
                         {% endif %}
                     </button>
                 {% endif %}
-                {% if event.updated != null %}
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ msg('event-download-reports') }} <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a download="{{ program.displayTitle }} - {{ event.displayTitle }}.csv" href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id, 'format': 'csv'}) }}" class="event-export-btn">
-                                    <span class="glyphicon glyphicon-download-alt"></span>
-                                    {{ msg('download-csv') }}
-                                </a>
-                            </li>
-                            <li>
-                                <a target="_blank" href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id, 'format': 'wikitext'}) }}" class="event-export-btn">
-                                    <span class="glyphicon glyphicon-download-alt"></span>
-                                    {{ msg('download-wiki-table') }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                {% if downloadButtons is defined and event.updated != null %}
+                    {{ downloadButtons }}
                 {% endif %}
             {% endif %}
         </div> {# .btn-group #}

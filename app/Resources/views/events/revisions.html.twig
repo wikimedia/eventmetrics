@@ -15,7 +15,28 @@
 
 {% block body %}
     <div class="container">
-        {% include 'events/_header.html.twig' with {'event': event, 'pageTitle': 'event-edit-list'} %}
+        {% set downloadButtons %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ msg('event-download-reports') }} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a download="{{ program.displayTitle }} - {{ event.displayTitle }}.csv" href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id, 'format': 'csv'}) }}" class="event-export-btn">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                            {{ msg('download-csv') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id, 'format': 'wikitext'}) }}" class="event-export-btn">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                            {{ msg('download-wiki-table') }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        {% endset %}
+        {% include 'events/_header.html.twig' with {'event': event, 'pageTitle': 'event-edit-list', 'downloadButtons': downloadButtons} %}
 
         {% include 'events/_metadata.html.twig' with {'event': event} %}
 
