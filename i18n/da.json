@@ -25,6 +25,7 @@
 	"error-server-message": "Serveren sagde: $1",
 	"error-service-overload": "Event Metrics er i øjeblikket overbelastet af andre forespørgsler. Prøv igen om nogle minutter.",
 	"error-title-numeric": "Titlen kan ikke være et tal.",
+	"event-download-reports": "Hent rapporter",
 	"event-edit-list": "Redigeringsliste",
 	"fatal-error": "Fatal fejl",
 	"feedback": "Tilbagemelding",
@@ -44,6 +45,7 @@
 	"pages-created": "Oprettede sider",
 	"participants": "Deltagere",
 	"program": "Program",
+	"program-settings": "Programindstillinger",
 	"remove": "Fjern",
 	"report-issue": "Rapporter et problem",
 	"save": "Gem",
@@ -60,5 +62,6 @@
 	"update-data": "Opdater data",
 	"updating": "Opdaterer",
 	"username": "Brugernavn",
+	"view-edit-list": "Vis redigeringsliste",
 	"view-source": "Vis kildekode"
 }
