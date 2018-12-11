@@ -85,8 +85,13 @@
         {% endfor %}
     </div>
 
-    {# This is used for autocompletion on the wiki inputs. #}
     <script>
+        {# This is used for autocompletion on the wiki inputs. #}
         eventmetrics.eventshow.availableWikiPattern = {{ event.availableWikiPattern }};
+
+        {# Poll status of pending/running jobs to automatically show stats when available. #}
+        {% if jobStatus is not null %}
+            eventmetrics.eventshow.pollJob({{ event.id }});
+        {% endif %}
     </script>
 {% endblock %}

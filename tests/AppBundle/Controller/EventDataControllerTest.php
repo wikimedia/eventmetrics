@@ -11,6 +11,7 @@ use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventCategory;
 use AppBundle\Model\Job;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Integration/functional tests for the EventDataController.
@@ -144,7 +145,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
     /**
      * Generating statistics.
      */
-    public function testStats(): void
+    public function testProcessEndpoint(): void
     {
         $event = $this->entityManager
             ->getRepository('Model:Event')
@@ -166,6 +167,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
         static::assertEquals(404, $this->response->getStatusCode());
 
+        // Make a request to process the event.
         $this->crawler = $this->client->request(
             'GET',
             '/events/process/'.$event->getId(),
@@ -176,23 +178,59 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
 
-        // Quick assertion to make sure proper JSON is returned.
-        // The actual statistics are tested in the EventProcessorTest.
-        $ret = json_decode($this->response->getContent(), true);
-        static::assertEquals('complete', $ret['status']);
-        static::assertEquals(
-            [
-                'new-editors', 'wikis', 'files-uploaded', 'file-usage', 'items-created', 'items-improved',
-                'edits', 'pages-created', 'pages-improved', 'retention',
-            ],
-            array_keys($ret['data'])
-        );
-
         // Make sure the stats were saved.
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findBy(['event' => $event]);
         static::assertEquals(9, count($eventStats));
+    }
+
+    /**
+     * Test the job status action.
+     */
+    public function testJobStatus(): void
+    {
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Oliver_and_Company']);
+
+        $job = new Job($event);
+        $this->entityManager->persist($job);
+        $this->entityManager->flush();
+
+        $this->client->request('GET', '/events/job-status/'.$event->getId());
+        $this->response = $this->client->getResponse();
+        static::assertEquals(
+            'queued',
+            json_decode($this->response->getContent(), true)['status']
+        );
+
+        // Simulate the Job as having been started.
+        $job->setStarted(true);
+        $this->entityManager->persist($job);
+        $this->entityManager->flush();
+
+        $this->client->request('GET', '/events/job-status/'.$event->getId());
+        $this->response = $this->client->getResponse();
+        static::assertEquals(
+            'running',
+            json_decode($this->response->getContent(), true)['status']
+        );
+
+        // Job gets removed when completed.
+        $this->entityManager->remove($this->entityManager->merge($job));
+        $this->entityManager->flush();
+
+        $this->client->request('GET', '/events/job-status/'.$event->getId());
+        $this->response = $this->client->getResponse();
+        static::assertEquals(
+            'complete',
+            json_decode($this->response->getContent(), true)['status']
+        );
+
+        // Asking for a nonexistent Event.
+        $this->client->request('GET', '/events/job-status/9999');
+        static::assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
 
     /**

@@ -1,4 +1,5 @@
 eventmetrics.eventshow = {};
+eventmetrics.eventshow.jobPoller = null;
 
 $(function () {
     // Only run on event page.
@@ -35,36 +36,19 @@ $(function () {
 });
 
 /**
- * Listener for calculate statistics button, which hits the
- * process event endpoint, firing off a job.
+ * Listener for calculate statistics button, which hits the process event endpoint, firing off a job.
  */
 eventmetrics.eventshow.setupCalculateStats = function () {
     $('.event-process-btn').on('click', function () {
         document.activeElement.blur();
 
-        $(this).addClass('disabled').text($.i18n('updating'));
         $('.event-export-btn').addClass('disabled');
-        $('.event-stats-status').text($.i18n('updating-desc'));
+        $(this).addClass('disabled').text($.i18n('queued'));
+        $('.event-stats-status').text($.i18n('queued-desc'));
 
-        $.get(baseUrl + 'events/process/' + $(this).data('event-id')).done(function (data) {
-            $(this).removeClass('disabled').text($.i18n('update-data'));
-            $('.event-export-btn').removeClass('disabled');
-            $('.event-stats-status').text('');
+        $.get(baseUrl + 'events/process/' + $(this).data('event-id'));
 
-            // TODO: Make controller return HTML and update view with
-            // rendered Twig template, rather than having to refresh.
-            window.location.reload(true);
-        }.bind(this)).fail(function (data) {
-            $('.event-process-btn').text($.i18n('error-failed'))
-                .addClass('btn-danger');
-            var feedbackLink = "<a target='_blank' href='https://meta.wikimedia.org/wiki/Talk:Event_Metrics'>" +
-                'meta:Talk:Event Metrics</a>';
-            $('.event-stats-status').html(
-                "<strong class='text-danger'>" +
-                $.i18n('error-internal', feedbackLink) +
-                '</strong>'
-            );
-        });
+        eventmetrics.eventshow.pollJob($(this).data('event-id'));
     });
 
     // Link to process event in message shown when stats have not yet been generated.
@@ -73,6 +57,32 @@ eventmetrics.eventshow.setupCalculateStats = function () {
         $('.event-wiki-stats--empty').html('&nbsp;');
         e.preventDefault();
     });
+};
+
+/**
+ * Continually poll the server to get the status of the Job associated with the given Event.
+ * @param {Number} eventId
+ */
+eventmetrics.eventshow.pollJob = function (eventId) {
+    // If for some reason this gets called more than once, this will clear out the old poller.
+    clearInterval(eventmetrics.eventshow.jobPoller);
+
+    // Poll the server every 3 seconds, updating the view accordingly.
+    eventmetrics.eventshow.jobPoller = setInterval(function () {
+        $.get('/events/job-status/' + eventId).done(function (response) {
+            if ('running' === response.status) {
+                $(this).addClass('disabled').text($.i18n('updating'));
+                $('.event-stats-status').text($.i18n('updating-desc'));
+            } else if ('complete' === response.status) {
+                $(this).removeClass('disabled').text($.i18n('update-data'));
+                $('.event-export-btn').removeClass('disabled');
+                $('.event-stats-status').text('');
+
+                // TODO: Have controller update view with rendered Twig template, rather than having to refresh.
+                window.location.reload(true);
+            }
+        });
+    }, 3000);
 };
 
 /**
