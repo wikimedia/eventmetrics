@@ -83,12 +83,10 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             "/programs/$programId/events/$eventId/edit",
         ];
 
+        $this->client->followRedirects();
         foreach ($validRoutes as $route) {
             $this->client->request('GET', $route);
-            static::assertTrue(
-                $this->client->getResponse()->isSuccessful() || $this->client->getResponse()->isRedirect(),
-                "Not found: $route"
-            );
+            static::assertTrue($this->client->getResponse()->isSuccessful(), "Not found: $route");
         }
     }
 
@@ -127,18 +125,15 @@ class EventControllerTest extends DatabaseAwareWebTestCase
      */
     public function testLoggedOut(): void
     {
-        $this->addFixture(new LoadFixtures());
-        $this->executeFixtures();
-
-        /** @var Program $program */
-        $program = $this->entityManager
-            ->getRepository('Model:Program')
-            ->findOneBy(['title' => 'My_fun_program']);
-        $this->programId = $program->getId();
-
-        $this->crawler = $this->client->request('GET', $this->getProgramUrl());
+        $this->crawler = $this->client->request('GET', '/programs');
         $this->response = $this->client->getResponse();
-        static::assertEquals(307, $this->response->getStatusCode());
+        static::assertTrue($this->response->isRedirect());
+
+        $this->crawler = $this->client->followRedirect();
+        static::assertContains(
+            'Please login to continue',
+            $this->crawler->filter('.splash-dialog')->text()
+        );
     }
 
     /**

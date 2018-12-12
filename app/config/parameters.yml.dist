@@ -36,9 +36,8 @@ parameters:
     oauth.key:                  ~
     oauth.secret:               ~
 
-    # Path from domain to get to the root of the app. On Toolforge for instance this is /eventmetrics
-    # Do not include a trailing slash.
-    app.root_path: ''
+    # URL of the root of the app. On VPS for instance this is 'https://eventmetrics.wmflabs.org'.
+    app.base_url: 'http://localhost:8000'
 
     # Number of revisions to show per page on the Event Data page.
     app.revisions_per_page: 100
