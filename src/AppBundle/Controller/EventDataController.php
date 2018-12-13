@@ -11,12 +11,10 @@ use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -113,24 +111,18 @@ class EventDataController extends EntityController
      *************************/
 
     /**
-     * Endpoint to create a Job to calculate and store statistics for the event.
-     * If there is quota, the job will be ran immediately and the results returned as JSON.
-     * Otherwise, a job is created and it will later be ran via cron.
+     * Endpoint to create a Job to calculate and store statistics for the event. This is called only via AJAX.
+     * A Job is created and will be ran immediately if there is quota. Otherwise it will later be ran via cron.
      * @Route("/events/process/{eventId}", name="EventProcess", requirements={"id" = "\d+"})
      * @param JobHandler $jobHandler The job handler service, provided by Symfony dependency injection.
      * @param int $eventId The ID of the event to process.
      * @param EventRepository $eventRepo
-     * @param EventDispatcherInterface $eventDispatcher
-     * @return JsonResponse
+     * @return Response
      * @throws AccessDeniedHttpException
      * @throws NotFoundHttpException
      */
-    public function generateStatsAction(
-        JobHandler $jobHandler,
-        int $eventId,
-        EventRepository $eventRepo,
-        EventDispatcherInterface $eventDispatcher
-    ): JsonResponse {
+    public function generateStatsAction(JobHandler $jobHandler, int $eventId, EventRepository $eventRepo): Response
+    {
         // Only respond to AJAX.
         if (!$this->request->isXmlHttpRequest()) {
             throw new AccessDeniedHttpException('This endpoint is for internal use only.');
@@ -144,53 +136,23 @@ class EventDataController extends EntityController
             throw new NotFoundHttpException();
         }
 
-        // Check if a Job already exists. This is difficult to test, so we'll ignore...
-        // @codeCoverageIgnoreStart
-        if ($event->hasJob()) {
-            /** @var Job $job */
-            $job = $event->getJobs()[0];
+        // If a job already exists, there's nothing to be done.
+        if (!$event->hasJob()) {
+            // Create a new Job for the Event, and flush to the database.
+            $job = new Job($event);
+            $this->em->persist($job);
+            $this->em->flush();
 
-            return new JsonResponse(
-                [
-                    'error' => 'A job with ID '.$job->getId().' already exists'.
-                        ' for the event: '.$event->getDisplayTitle(),
-                    'status' => $job->getStarted() ? 'running' : 'queued',
-                ],
-                Response::HTTP_ACCEPTED
-            );
-        }
-        // @codeCoverageIgnoreEnd
+            // End the session, allowing the user to navigate away from the page.
+            // JavaScript will poll for job status and update the view accordingly.
+            $this->session->save();
 
-        // Create a new Job for the Event, and flush to the database.
-        $job = new Job($event);
-        $this->em->persist($job);
-        $this->em->flush();
-
-        // Create the response that the Job has been queued, and send it back to the client immediately.
-        $response = new JsonResponse(
-            [
-                'id' => $job->getId(),
-                'status' => 'queued',
-            ],
-            Response::HTTP_OK
-        );
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-
-        // Only send an early response in production. Doing so in dev/test won't break anything,
-        // but for whatever reason it prints the response output to stdout.
-        if ('prod' === $this->container->get('kernel')->getEnvironment()) {
-            $response->send();
+            // Attempt to start the job immediately (if there's quota).
+            $jobHandler->spawn($job);
         }
 
-        // Spawn the Job when the kernel terminates, effectively starting it as a background process.
-        $eventDispatcher->addListener(
-            KernelEvents::TERMINATE,
-            function () use ($jobHandler, $job): void {
-                $jobHandler->spawn($job);
-            }
-        );
-
-        return $response;
+        // Return empty response. The client will never see it anyway since the session was closed.
+        return new Response();
     }
 
     /**
