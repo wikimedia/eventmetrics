@@ -121,6 +121,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         $this->fileUsageSpec();
         $this->itemsCreatedAndImprovedSpec();
         $this->retentionSpec();
+        $this->pageviewsSpec();
         $this->jobFinishedSpec();
     }
 
@@ -141,7 +142,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findAll(['event' => $this->event]);
-        static::assertEquals(10, count($eventStats));
+        static::assertEquals(12, count($eventStats));
     }
 
     /**
@@ -321,6 +322,20 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'metric' => 'retention',
             ]);
         static::assertEquals(1, $eventStat->getValue());
+    }
+
+    /**
+     * Pageviews.
+     */
+    protected function pageviewsSpec(): void
+    {
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'pages-created-pageviews',
+            ]);
+        static::assertGreaterThan(18932, $eventStat->getValue());
     }
 
     /**

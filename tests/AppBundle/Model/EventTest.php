@@ -362,6 +362,8 @@ class EventTest extends EventMetricsTestCase
                 'byte-difference' => null,
                 'pages-created' => null,
                 'pages-improved' => null,
+                'pages-created-pageviews' => null,
+                'pages-improved-pageviews' => 30,
             ],
             $event->getAvailableMetrics()
         );

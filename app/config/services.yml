@@ -59,9 +59,10 @@ services:
         resource: '../../src/AppBundle/Repository/*'
         arguments: ['@doctrine.orm.entity_manager']
         calls:
-        - [setContainer, ["@service_container"]]
-        - [setLogger, ['@logger']]
-        - [setCachePool, ["@cache.app"]]
+            - [setContainer, ["@service_container"]]
+            - [setLogger, ['@logger']]
+            - [setCachePool, ["@cache.app"]]
+        exclude: '../../src/AppBundle/Repository/PageviewsRepository.php'
 
     AppBundle\Service\EventProcessor:
         public: true

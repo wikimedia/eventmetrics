@@ -9,6 +9,7 @@ namespace AppBundle\Repository;
 
 use AppBundle\Model\Event;
 use AppBundle\Model\EventWiki;
+use DateInterval;
 use DateTime;
 use Doctrine\DBAL\Connection;
 
@@ -255,6 +256,57 @@ class EventWikiRepository extends Repository
 
         $result = $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
         return $result ? array_map('intval', $result) : $result;
+    }
+
+    /**
+     * Get the total pageviews count for a set of pages, from a given date until today. Optionally reduce to an average
+     * of the last 30 days.
+     * @param string $dbName
+     * @param EventWiki $wiki
+     * @param DateTime $start
+     * @param int[] $pageIds
+     * @param bool $getDailyAverage
+     * @return int
+     */
+    public function getPageviews(
+        string $dbName,
+        EventWiki $wiki,
+        DateTime $start,
+        array $pageIds,
+        bool $getDailyAverage = false
+    ): int {
+        if (0 === count($pageIds)) {
+            return 0;
+        }
+        $pageviewsRepo = new PageviewsRepository();
+        $recentDayCount = Event::AVAILABLE_METRICS['pages-improved-pageviews'];
+        // The offset date is the start of the period over which pageviews should be averaged per day, up to today.
+        $offsetDate = (new DateTime())->sub(new DateInterval('P'.$recentDayCount.'D'));
+        $pageviewsStart = $getDailyAverage && $start < $offsetDate ? $offsetDate : $start;
+        $now = new DateTime();
+        $totalPageviews = 0;
+        $stmt = $this->getPageTitles($dbName, $pageIds, true);
+        while ($result = $stmt->fetch()) {
+            $pageviewsInfo = $pageviewsRepo->getPerArticle(
+                $wiki,
+                $result['page_title'],
+                PageviewsRepository::GRANULARITY_DAILY,
+                $pageviewsStart,
+                $now
+            );
+            if (!isset($pageviewsInfo['items'])) {
+                continue;
+            }
+            foreach ($pageviewsInfo['items'] as $item) {
+                $totalPageviews += $item['views'];
+            }
+        }
+
+        if (!$getDailyAverage) {
+            return $totalPageviews;
+        }
+        $averagePageviews = $totalPageviews / ($start < $offsetDate ? $recentDayCount : $start->diff($now)->d);
+        return (int)round($averagePageviews);
     }
 
     /**
