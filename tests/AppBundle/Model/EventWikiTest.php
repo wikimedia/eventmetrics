@@ -142,10 +142,10 @@ class EventWikiTest extends EventMetricsTestCase
         $wiki = new EventWiki($this->event, 'test.wikipedia');
 
         // Basic setter/getter.
-        $wiki->setPages([1, 2, 3]);
-        static::assertEquals([1, 2, 3], $wiki->getPages());
-
-        $wiki->setPages(null);
-        static::assertEquals([], $wiki->getPages());
+        $wiki->setPagesCreated([1, 2, 3]);
+        static::assertEquals([1, 2, 3], $wiki->getPagesCreated());
+        $wiki->setPagesEdited([4, 5, 6]);
+        static::assertEquals([4, 5, 6], $wiki->getPagesEdited());
+        static::assertEquals([1, 2, 3, 4, 5, 6], $wiki->getPages());
     }
 }

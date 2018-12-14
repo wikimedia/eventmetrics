@@ -189,7 +189,7 @@ class EventWikiRepository extends Repository
         return $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
-    /**
+   /**
      * Get all unique page IDs edited/created within the Event for the given wiki. If you need to do this for pages
      * within specific categories, without participants, use EventCategoryRepository::getPagesInCategories().
      * @param string $dbName
@@ -197,6 +197,7 @@ class EventWikiRepository extends Repository
      * @param DateTime $end
      * @param string[] $usernames
      * @param string[] $categoryTitles
+     * @param string $type Whether only pages 'created' or 'edited' should be returned. Default is to return both.
      * @return int[]
      */
     public function getPageIds(
@@ -204,7 +205,8 @@ class EventWikiRepository extends Repository
         DateTime $start,
         DateTime $end,
         array $usernames = [],
-        array $categoryTitles = []
+        array $categoryTitles = [],
+        string $type = ''
     ): array {
         if (empty($usernames) && empty($categoryTitles)) {
             // FIXME: This should throw an Exception or something so we can print an error message.
@@ -241,6 +243,13 @@ class EventWikiRepository extends Repository
 
         if (count($categoryTitles) > 0) {
             $rqb->setParameter('categoryTitles', $categoryTitles, Connection::PARAM_STR_ARRAY);
+        }
+
+        // If only pages created or edited are being requested, limit based on the presence of a parent revision. This
+        // matches the check done in EventRepository::getEditStats().
+        if (in_array($type, ['created', 'edited'])) {
+            $typeOperator = 'edited' === $type ? '!=' : '=';
+            $rqb->andWhere("rev_parent_id $typeOperator 0");
         }
 
         $result = $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
