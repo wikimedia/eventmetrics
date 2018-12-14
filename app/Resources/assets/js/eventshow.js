@@ -71,10 +71,10 @@ eventmetrics.eventshow.pollJob = function (eventId) {
     eventmetrics.eventshow.jobPoller = setInterval(function () {
         $.get('/events/job-status/' + eventId).done(function (response) {
             if ('running' === response.status) {
-                $(this).addClass('disabled').text($.i18n('updating'));
                 $('.event-stats-status').text($.i18n('updating-desc'));
+                $('.event-process-btn').text($.i18n('updating'));
             } else if ('complete' === response.status) {
-                $(this).removeClass('disabled').text($.i18n('update-data'));
+                $('.event-process-btn').removeClass('disabled').text($.i18n('update-data'));
                 $('.event-export-btn').removeClass('disabled');
                 $('.event-stats-status').text('');
 
