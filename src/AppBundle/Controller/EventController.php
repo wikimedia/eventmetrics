@@ -12,7 +12,6 @@ use AppBundle\Model\EventCategory;
 use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Participant;
-use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -163,11 +162,10 @@ class EventController extends EntityController
      * @Route("/programs/{programId}/{eventId}", name="EventLegacy", requirements={
      *     "eventId" = "^(?!(new|edit|delete|revisions)$)[^\/]+"
      * })
-     * @param EventRepository $eventRepo
      * @param JobHandler $jobHandler
      * @return Response
      */
-    public function showAction(EventRepository $eventRepo, JobHandler $jobHandler): Response
+    public function showAction(JobHandler $jobHandler): Response
     {
         // Kill any old, stale jobs.
         $jobHandler->handleStaleJobs($this->event);
@@ -208,7 +206,7 @@ class EventController extends EntityController
             'event' => $this->event,
             'stats' => $this->getEventStats($this->event),
             'isOrganizer' => $this->authUserIsOrganizer($this->program),
-            'jobStatus' => $eventRepo->getJobStatus($this->event),
+            'job' => $this->event->getJobs()->first(),
         ]);
     }
 
@@ -268,6 +266,7 @@ class EventController extends EntityController
             // Clear statistics and child wikis as the data will now be stale.
             $event->clearStatistics();
             $event->clearChildWikis();
+            $event->clearJobs();
 
             $this->em->persist($event);
             $this->em->flush();

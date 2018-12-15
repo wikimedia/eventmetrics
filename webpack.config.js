@@ -20,6 +20,7 @@ Encore
     .addEntry('app', [
         './app/Resources/assets/vendor/jquery.i18n.dist.js',
         './app/Resources/assets/vendor/bootstrap-typeahead.min',
+        './app/Resources/assets/js/core_extensions.js',
         './app/Resources/assets/js/application.js',
         './app/Resources/assets/js/dateLocales.js',
         './app/Resources/assets/js/default.js',

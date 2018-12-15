@@ -76,7 +76,7 @@ class EventDataController extends EntityController
                 'numRevisions' => $eventRepo->getNumRevisions($this->event),
                 'numResultsPerPage' => $limit,
                 'offset' => $page,
-                'jobStatus' => $eventRepo->getJobStatus($this->event),
+                'job' => $this->event->getJobs()->first(),
             ], $ret);
         }
 
@@ -128,7 +128,6 @@ class EventDataController extends EntityController
             throw new AccessDeniedHttpException('This endpoint is for internal use only.');
         }
 
-        // Find the Event.
         /** @var Event $event */
         $event = $eventRepo->find($eventId);
 
@@ -136,10 +135,23 @@ class EventDataController extends EntityController
             throw new NotFoundHttpException();
         }
 
-        // If a job already exists, there's nothing to be done.
-        if (!$event->hasJob()) {
-            // Create a new Job for the Event, and flush to the database.
-            $job = new Job($event);
+        /** @var Job|false $job */
+        $job = $this->event->getJobs()->first();
+
+        // Start new Job unless one already exists, or if the existing Job failed (users are allowed to retry).
+        if (false === $job || $job->hasFailed()) {
+            // Clear the old jobs.
+            $event->clearJobs();
+
+            if (false === $job) {
+                // Create a new Job for the Event.
+                $job = new Job($event);
+            } else {
+                // Use same Job if it already exists.
+                $job->setStatus(Job::STATUS_QUEUED);
+            }
+
+            // Flush to the database.
             $this->em->persist($job);
             $this->em->flush();
 
@@ -184,9 +196,19 @@ class EventDataController extends EntityController
             ], Response::HTTP_OK);
         }
 
+        if (Job::STATUS_QUEUED == $job->getStatus()) {
+            $status = 'queued';
+        } elseif (Job::STATUS_FAILED_TIMEOUT === $job->getStatus()) {
+            $status = 'failed-timeout';
+        } elseif (Job::STATUS_FAILED_UNKNOWN === $job->getStatus()) {
+            $status = 'failed-unknown';
+        } else {
+            $status = 'started';
+        }
+
         return new JsonResponse([
             'id' => $job->getId(),
-            'status' => $job->getStarted() ? 'running' : 'queued',
+            'status' => $status,
         ], Response::HTTP_OK);
     }
 }

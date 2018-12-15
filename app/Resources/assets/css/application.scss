@@ -276,3 +276,53 @@ a.disabled {
         }
     }
 }
+
+.modal-title {
+    font-weight: bold;
+}
+
+.spinner {
+    white-space: nowrap;
+
+    .bounce,
+    &::before,
+    &::after {
+        animation: bouncedelay 1600ms infinite ease-in-out both;
+        animation-delay: -160ms;
+        background-color: #72777d;
+        border-radius: 100%;
+        content: '';
+        display: block;
+        float: left;
+        height: 16px;
+        width: 16px;
+    }
+
+    &::before {
+        animation-delay: -330ms;
+        margin-right: 4px;
+    }
+
+    &::after {
+        animation-delay: 0s;
+        margin-left: 4px;
+    }
+}
+
+.spinner--layout {
+    display: block;
+    margin: 10px auto 48px;
+    max-width: 56px;
+}
+
+@-webkit-keyframes bouncedelay {
+    0%,
+    50%, // equals 800ms
+    100% {
+        transform: scale( 0.625 );
+    }
+    20% { // equals 320ms
+        opacity: 0.87;
+        transform: scale( 1 );
+    }
+}

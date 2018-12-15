@@ -10,6 +10,7 @@ namespace Tests\AppBundle\Controller;
 use AppBundle\DataFixtures\ORM\LoadFixtures;
 use AppBundle\Model\Event;
 use AppBundle\Model\EventWiki;
+use AppBundle\Model\Job;
 use AppBundle\Model\Program;
 use DateTime;
 
@@ -88,6 +89,51 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             $this->client->request('GET', $route);
             static::assertTrue($this->client->getResponse()->isSuccessful(), "Not found: $route");
         }
+    }
+
+    /**
+     * How the interface is shown based on whether there is a job running/queued.
+     */
+    public function testJobs(): void
+    {
+        // Load extended fixtures.
+        $this->addFixture(new LoadFixtures('extended'));
+        $this->executeFixtures();
+
+        $this->loginUser();
+
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Oliver_and_Company']);
+        $this->eventId = $event->getId();
+        $this->programId = $event->getProgram()->getId();
+
+        // The pre-persist hook in Job will set the submitted datetime when the entity is persisted.
+        // In order to test the job killing functionality, we'll manually create the record.
+        $statusId = Job::STATUS_STARTED;
+        $this->entityManager
+            ->getConnection()
+            ->exec("INSERT INTO job VALUES(NULL, $this->eventId, '2018-01-01', $statusId);");
+
+        static::assertTrue($event->hasJob());
+
+        // Job should be killed since it's stale.
+        $this->client->request('GET', $this->getEventUrl());
+        $job = $this->entityManager
+            ->getRepository('Model:Job')
+            ->findOneBy(['event' => $event]);
+        static::assertNull($job);
+
+        // Do the same again, but this time with a Job that isn't stale.
+        $job = new Job($event);
+        $job->setStatus(Job::STATUS_STARTED);
+        $event->clearStatistics(); // These get created by EventController::show() but we don't want to persist them.
+        $this->entityManager->persist($job);
+        $this->entityManager->flush();
+
+        // 'Update data' button should be disabled.
+        $this->crawler = $this->client->request('GET', $this->getEventUrl());
+        static::assertContains('disabled-state', $this->crawler->filter('body.event')->attr('class'));
     }
 
     /**

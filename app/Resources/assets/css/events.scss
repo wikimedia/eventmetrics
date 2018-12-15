@@ -141,4 +141,25 @@
             margin-left: -17px;
         }
     }
+
+    &.disabled-state {
+        // FIXME: re-implements Bootstrap's .disabled. We should be importing it (might have to switch to LESS).
+        .event-process-btn,
+        .event-export-btn,
+        .pagination {
+            background-color: #e0e0e0;
+            background-image: none;
+            border-color: #ccc;
+            cursor: not-allowed;
+            opacity: .65;
+            pointer-events: none;
+        }
+    }
+
+    .event-state--queued,
+    .event-state--started,
+    .event-state--failed-timeout,
+    .event-state--failed-unknown {
+        display: none;
+    }
 }

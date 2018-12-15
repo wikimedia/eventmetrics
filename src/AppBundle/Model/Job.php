@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     indexes={
  *         @ORM\Index(name="job_event", columns={"job_event_id"}),
  *         @ORM\Index(name="job_submitted", columns={"job_submitted_at"}),
- *         @ORM\Index(name="job_started", columns={"job_started"})
+ *         @ORM\Index(name="job_status", columns={"job_status"})
  *     },
  *     uniqueConstraints={
  *         @ORM\UniqueConstraint(name="job_event_uniq", columns={"job_event_id"})
@@ -29,6 +29,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Job
 {
+    // Constants representing the status of the Job. The Job gets deleted when complete, hence we have no such value.
+    public const STATUS_QUEUED = 0;
+    public const STATUS_STARTED = 1;
+    public const STATUS_FAILED_TIMEOUT = 2;
+    public const STATUS_FAILED_UNKNOWN = 3;
+
     /**
      * @ORM\Id
      * @ORM\Column(name="job_id", type="integer")
@@ -52,10 +58,10 @@ class Job
     protected $submitted;
 
     /**
-     * @ORM\Column(name="job_started", type="boolean", nullable=false, options={"default": false})
-     * @var bool Whether or not the job has been started by the daemon.
+     * @ORM\Column(name="job_status", type="smallint", nullable=false, options={"default": 0})
+     * @var int Status of the job. See constants at the top of this class.
      */
-    protected $started = false;
+    protected $status = self::STATUS_QUEUED;
 
     /**
      * Job constructor.
@@ -86,30 +92,48 @@ class Job
     }
 
     /**
+     * Get the status of the Job.
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the status of the Job.
+     * @param int $status
+     */
+    public function setStatus(int $status): void
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * Whether or not the Job is currently running.
+     * @return bool
+     */
+    public function hasStarted(): bool
+    {
+        return self::STATUS_STARTED === $this->status;
+    }
+
+    /**
+     * Is the job in a failed state?
+     * @return bool
+     */
+    public function hasFailed(): bool
+    {
+        return in_array($this->status, [self::STATUS_FAILED_UNKNOWN, self::STATUS_FAILED_TIMEOUT]);
+    }
+
+    /**
      * When the Job was submitted.
      * @return DateTime|null
      */
     public function getSubmitted(): ?DateTime
     {
         return $this->submitted;
-    }
-
-    /**
-     * Whether or not the Job has been initiated by the daemon.
-     * @return bool
-     */
-    public function getStarted(): bool
-    {
-        return $this->started;
-    }
-
-    /**
-     * Flag the Job as having been initiated, or false if specified.
-     * @param bool $state
-     */
-    public function setStarted(bool $state = true): void
-    {
-        $this->started = $state;
     }
 
     /**

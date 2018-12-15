@@ -189,32 +189,34 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
      */
     public function testJobStatus(): void
     {
-        $event = $this->entityManager
-            ->getRepository('Model:Event')
-            ->findOneBy(['title' => 'Oliver_and_Company']);
+        // Simulate the different states and test that the endpoint returns the right value.
 
-        $job = new Job($event);
-        $this->entityManager->persist($job);
-        $this->entityManager->flush();
+        /** @var string[] $states Keys are the constants, values are what the API should return. */
+        $states = [
+            'QUEUED' => 'queued',
+            'STARTED' => 'started',
+            'FAILED_TIMEOUT' => 'failed-timeout',
+            'FAILED_UNKNOWN' => 'failed-unknown',
+        ];
 
-        $this->client->request('GET', '/events/job-status/'.$event->getId());
-        $this->response = $this->client->getResponse();
-        static::assertEquals(
-            'queued',
-            json_decode($this->response->getContent(), true)['status']
-        );
+        foreach ($states as $constant => $value) {
+            // No idea why we have to fetch the Event on every iteration; something clashing with PHPUnit and Doctrine.
+            $event = $this->entityManager
+                ->getRepository('Model:Event')
+                ->findOneBy(['title' => 'Oliver_and_Company']);
+            $event->clearJobs();
+            $this->entityManager->persist($event);
+            $this->entityManager->flush();
 
-        // Simulate the Job as having been started.
-        $job->setStarted(true);
-        $this->entityManager->persist($job);
-        $this->entityManager->flush();
+            $job = new Job($event);
+            $job->setStatus(constant('AppBundle\Model\Job::STATUS_'.$constant));
+            $this->entityManager->persist($job);
+            $this->entityManager->flush();
 
-        $this->client->request('GET', '/events/job-status/'.$event->getId());
-        $this->response = $this->client->getResponse();
-        static::assertEquals(
-            'running',
-            json_decode($this->response->getContent(), true)['status']
-        );
+            $this->client->request('GET', '/events/job-status/'.$event->getId());
+            $this->response = $this->client->getResponse();
+            static::assertEquals($value, json_decode($this->response->getContent(), true)['status']);
+        }
 
         // Job gets removed when completed.
         $this->entityManager->remove($this->entityManager->merge($job));

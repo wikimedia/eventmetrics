@@ -250,6 +250,7 @@ class EventProcessor
      * @param EventWikiRepository $ewRepo
      * @param int &$pagesCreated
      * @param int &$pagesImproved
+     * @param int &$edits
      */
     private function setContributionsWikipedias(
         EventWiki $wiki,
