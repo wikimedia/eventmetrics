@@ -3,7 +3,8 @@
 		"authors": [
 			"Hedda",
 			"Rapsar",
-			"Sayginer"
+			"Sayginer",
+			"Sucsuzz"
 		]
 	},
 	"add-category": "Kategori ekle",
@@ -23,6 +24,7 @@
 	"edit-summary": "Yorum",
 	"edits": "Düzenlemeler",
 	"error-title-numeric": "Başlık bir sayı olamaz.",
+	"event-edit-list": "Düzenleme listesi",
 	"fatal-error": "Önemli hata",
 	"help": "Yardım",
 	"help-translate": "Çeviriye yardım edin",
@@ -44,5 +46,6 @@
 	"totals": "Toplam",
 	"unknown": "Bilinmeyen",
 	"username": "Kullanıcı adı",
+	"view-edit-list": "Düzenleme listesini görüntüle",
 	"view-source": "Kaynağı gör"
 }
