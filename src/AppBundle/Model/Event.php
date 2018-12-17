@@ -46,6 +46,7 @@ class Event
         'new-editors' => 15,
         'retention' => 7,
         'edits' => null,
+        'byte-difference' => null,
         'pages-created' => null,
         'pages-improved' => null,
         'files-uploaded' => null,
@@ -59,7 +60,7 @@ class Event
      */
     public const WIKI_FAMILY_METRIC_MAP = [
         '*' => ['edits', 'new-editors', 'retention'],
-        'wikipedia' => ['pages-created', 'pages-improved'],
+        'wikipedia' => ['pages-created', 'pages-improved', 'byte-difference'],
         'commons' => ['files-uploaded', 'file-usage'],
         'wikidata' => ['items-created', 'items-improved'],
     ];

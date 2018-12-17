@@ -114,6 +114,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         // Test each individual EventStat.
         $this->newEditorsSpec();
         $this->editCountSpec();
+        $this->byteDifferenceSpec();
         $this->pagesCreatedSpec();
         $this->pagesImprovedSpec();
         $this->filesUploadedSpec();
@@ -140,7 +141,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findAll(['event' => $this->event]);
-        static::assertEquals(9, count($eventStats));
+        static::assertEquals(10, count($eventStats));
     }
 
     /**
@@ -169,6 +170,28 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'metric' => 'edits',
             ]);
         static::assertEquals(18, $eventStat->getValue());
+    }
+
+    /**
+     * Number of edits
+     */
+    private function byteDifferenceSpec(): void
+    {
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
+                'metric' => 'byte-difference',
+            ]);
+        static::assertEquals(4830, $eventWikiStat->getValue());
+
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'byte-difference',
+            ]);
+        static::assertEquals(4830, $eventStat->getValue());
     }
 
     /**

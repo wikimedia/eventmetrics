@@ -395,4 +395,24 @@ class EventRepository extends Repository
 
         return ltrim(implode(',', $usernames), ',');
     }
+
+    /**
+     * Get the status of the existing job for this event, if any.
+     *
+     * @param Event $event
+     * @return bool|null true if job has been started, false if queued, null if nonexistent.
+     */
+    public function getJobStatus(Event $event): ?bool
+    {
+        $conn = $this->getEventMetricsConnection();
+        $rqb = $conn->createQueryBuilder();
+        $eventId = $event->getId();
+
+        $rqb->select('job_started')
+            ->from('job')
+            ->where("job_event_id = $eventId");
+
+        $ret = $this->executeQueryBuilder($rqb, -1)->fetch();
+        return isset($ret['job_started']) ? (bool)$ret['job_started'] : null;
+    }
 }

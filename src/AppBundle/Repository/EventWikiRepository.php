@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Repository;
 
+use AppBundle\Model\Event;
 use AppBundle\Model\EventWiki;
 use DateTime;
 use Doctrine\DBAL\Connection;
@@ -308,5 +309,65 @@ class EventWikiRepository extends Repository
         $result = $this->executeQueryBuilder($rqb);
 
         return $stmt ? $result : $result->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * Calculates the number of bytes changed during an event
+     *
+     * @param Event $event
+     * @param string $dbName
+     * @param int[] $pageIds
+     * @param string[] $usernames
+     * @return int
+     */
+    public function getBytesChanged(Event $event, string $dbName, array $pageIds, array $usernames): int
+    {
+        $revisionTable = $this->getTableName('revision');
+        $pageTable = $this->getTableName('page');
+        if ($usernames) {
+            $usernamesCond = 'AND cur.rev_user_text IN (:usernames)';
+        } else {
+            $usernamesCond = '';
+        }
+
+        $after = "SELECT COALESCE(rev_len, 0)
+            FROM $dbName.$revisionTable cur
+            WHERE rev_page=page_id
+              AND rev_timestamp BETWEEN :start AND :end
+              {$usernamesCond}
+            ORDER BY rev_timestamp DESC
+            LIMIT 1";
+
+        $before = "SELECT COALESCE(prev.rev_len, 0)
+            FROM $dbName.$revisionTable cur
+                LEFT JOIN $dbName.$revisionTable prev ON cur.rev_parent_id=prev.rev_id
+            WHERE cur.rev_page=page_id
+              AND cur.rev_timestamp BETWEEN :start AND :end
+              {$usernamesCond}
+            ORDER BY cur.rev_timestamp ASC
+            LIMIT 1";
+
+        $outerSql = "SELECT SUM(after) - SUM(before_)
+            FROM (
+                SELECT ($after) after, ($before) before_
+                    FROM $dbName.$pageTable
+                    WHERE page_id IN (:pageIds)
+                ) t1";
+
+        $res = $this->executeReplicaQueryWithTypes(
+            $outerSql,
+            [
+                'start' => $event->getStart()->format('YmdHis'),
+                'end' => $event->getEnd()->format('YmdHis'),
+                'pageIds' => $pageIds,
+                'usernames' => $usernames,
+            ],
+            [
+                'pageIds' => Connection::PARAM_INT_ARRAY,
+                'usernames' => Connection::PARAM_STR_ARRAY,
+            ]
+        );
+
+        return (int)$res->fetchColumn();
     }
 }

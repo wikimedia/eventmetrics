@@ -17,6 +17,7 @@
 	"attribution-background": "Background image available on Commons at $1",
 	"attribution-font": "$1 font available under the $2 license, courtesy of $3",
 	"attribution-font-awesome": "$1 icons released under $2 courtesy of $3",
+	"byte-difference": "Bytes added",
 	"calculate-totals": "Calculate totals",
 	"cancel": "Cancel",
 	"categories": "Categories",

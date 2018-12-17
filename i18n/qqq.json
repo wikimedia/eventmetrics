@@ -17,6 +17,7 @@
 	"attribution-background": "Text giving credit to the background image (which is variable). $1 is a link to the image on Commons.",
 	"attribution-font": "Text giving credit to the author of the font used in the application. $1 is a link to the font homepage, $2 is a link to the license, and $3 is a link to the author.",
 	"attribution-font-awesome": "Text giving credit to the author of the Font Awsome icon set. $1 is a link to the font homepage, $2 is a link to the license, and $3 is a link to the author.",
+	"byte-difference": "Heading for the column listing the number of bytes added during a program, shown in the 'My Programs' table.",
 	"calculate-totals": "Label for button to calculate the statistics for an event.",
 	"cancel": "Label for button\n{{Identical|Cancel}}",
 	"categories": "Label for section showing MediaWiki categories associated with an Event.\n{{Identical|Category}}",

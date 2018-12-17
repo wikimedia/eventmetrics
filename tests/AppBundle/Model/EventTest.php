@@ -359,6 +359,7 @@ class EventTest extends EventMetricsTestCase
                 'new-editors' => 15,
                 'retention' => 7,
                 'edits' => null,
+                'byte-difference' => null,
                 'pages-created' => null,
                 'pages-improved' => null,
             ],
