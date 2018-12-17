@@ -6,7 +6,7 @@ Encore
     .setOutputPath('./public/assets/')
 
     // Public URL path used by the web server to access the output path.
-    .setPublicPath('assets/')
+    .setPublicPath('/assets/')
 
     /*
      * ENTRY CONFIG
@@ -42,6 +42,7 @@ Encore
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
+    .enableSingleRuntimeChunk()
 ;
 
 module.exports = Encore.getWebpackConfig();
