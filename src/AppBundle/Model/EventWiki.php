@@ -10,6 +10,7 @@ namespace AppBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -75,14 +76,21 @@ class EventWiki
     protected $stats;
 
     /**
-     * A bzcompressed string of all the page IDs. Compression is used so we don't have to store enormous strings.
-     * When pulled from the database, this may be of type resource and not string. Use self::getPages() to get an
-     * array representation of the page IDs.
+     * A bzcompressed string of all the IDs of pages created. Compression is used so we don't have to store enormous
+     * strings. When pulled from the database, this may be of type resource and not string. Use self::getPages() to get
+     * an array representation of the page IDs.
      * @see https://secure.php.net/manual/en/function.bzcompress.php
-     * @ORM\Column(name="ew_pages", type="blob", length=512, nullable=true)
+     * @ORM\Column(name="ew_pages_created", type="blob", nullable=true)
      * @var string|resource
      */
-    protected $pages;
+    protected $pagesCreated;
+
+    /**
+     * A bzcompressed string of all the IDs of pages improved. See note above in $pagesCreated docblock about storage.
+     * @ORM\Column(name="ew_pages_edited", type="blob", nullable=true)
+     * @var string|resource
+     */
+    protected $pagesEdited;
 
     /**
      * EventWiki constructor.
@@ -243,7 +251,8 @@ class EventWiki
         $this->stats->clear();
 
         // It's safe to assume page IDs should also be cleared.
-        $this->pages = null;
+        $this->pagesCreated = null;
+        $this->pagesEdited = null;
     }
 
     /*********
@@ -251,18 +260,66 @@ class EventWiki
      *********/
 
     /**
-     * Get the cached/persisted page IDs of all pages this event touches.
+     * Get the cached/persisted page IDs of all pages this event touches (both created and improved).
      * @return int[]
      */
     public function getPages(): array
     {
-        if (null === $this->pages) {
+        return array_merge($this->getPagesCreated(), $this->getPagesEdited());
+    }
+
+    /**
+     * Get the cached/persisted page IDs of all pages created during this event.
+     * @return int[]
+     */
+    public function getPagesCreated(): array
+    {
+        return $this->getPageIds('created');
+    }
+
+    /**
+     * @param int[]|null $ids
+     */
+    public function setPagesCreated(?array $ids): void
+    {
+        $this->setPageIds('created', $ids);
+    }
+
+    /**
+     * Get the cached/persisted page IDs of all pages edited during this event (they may also have been created).
+     * @return int[]
+     */
+    public function getPagesEdited(): array
+    {
+        return $this->getPageIds('edited');
+    }
+
+    /**
+     * @param int[]|null $ids
+     */
+    public function setPagesEdited(?array $ids): void
+    {
+        $this->setPageIds('edited', $ids);
+    }
+
+    /**
+     * @param string $type Which type of page IDs to return.
+     * @return int[]
+     * @throws Exception With invalid type.
+     */
+    protected function getPageIds(string $type): array
+    {
+        if (!in_array($type, ['created', 'edited'])) {
+            throw new Exception('$type must be "created" or "edited".');
+        }
+        $propertyName = 'pages'.ucfirst($type);
+        if (null === $this->$propertyName) {
             return [];
         }
 
-        $blob = is_resource($this->pages)
-            ? stream_get_contents($this->pages)
-            : $this->pages;
+        $blob = is_resource($this->$propertyName)
+            ? stream_get_contents($this->$propertyName)
+            : $this->$propertyName;
 
         return explode(',', bzdecompress($blob));
     }
@@ -270,15 +327,20 @@ class EventWiki
     /**
      * Set the $this->pages property from the IDs, as bzcompressed and base64-encoded string.
      * @see https://secure.php.net/manual/en/function.bzcompress.php
+     * @param string $type Which type of page IDs to store: 'created' or 'edited'.
      * @param int[]|null $ids
+     * @throws Exception With invalid type.
      */
-    public function setPages(?array $ids): void
+    protected function setPageIds(string $type, ?array $ids):void
     {
+        if (!in_array($type, ['created', 'edited'])) {
+            throw new Exception('$type must be "created" or "edited".');
+        }
+        $propertyName = 'pages'.ucfirst($type);
         if (null === $ids) {
-            $this->pages = null;
+            $this->$propertyName = null;
             return;
         }
-
-        $this->pages = bzcompress(implode(',', $ids));
+        $this->$propertyName = bzcompress(implode(',', $ids));
     }
 }

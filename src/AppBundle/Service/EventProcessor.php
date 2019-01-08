@@ -249,13 +249,13 @@ class EventProcessor
      * @param EventWiki $wiki
      * @param EventWikiRepository $ewRepo
      * @param int &$pagesCreated
-     * @param int &$pagesImproved
+     * @param int &$pagesEdited
      */
     private function setContributionsWikipedias(
         EventWiki $wiki,
         EventWikiRepository $ewRepo,
         int &$pagesCreated,
-        int &$pagesImproved,
+        int &$pagesEdited,
         int &$edits
     ): void {
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
@@ -265,15 +265,18 @@ class EventProcessor
         $end = $this->event->getEndWithTimezone();
         $usernames = $this->getParticipantNames();
         $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
-        $pageIds = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles);
+        $pageIdsCreated = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'created');
+        $pageIdsEdited = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'edited');
 
         // Set on the EventWiki, so this will get persisted to the database.
-        $wiki->setPages($pageIds);
+        $wiki->setPagesCreated($pageIdsCreated);
+        $wiki->setPagesEdited($pageIdsEdited);
 
+        $pageIds = array_merge($pageIdsCreated, $pageIdsEdited);
         $ret = $this->eventRepo->getEditStats($dbName, $pageIds, $start, $end, $usernames);
 
         $pagesCreated += $ret['created'];
-        $pagesImproved += $ret['edited'];
+        $pagesEdited += $ret['edited'];
         $edits += $ret['edits'];
 
         $this->createOrUpdateEventWikiStat($wiki, 'edits', $ret['edits']);
@@ -319,13 +322,16 @@ class EventProcessor
         $end = $this->event->getEndWithTimezone();
         $usernames = $this->getParticipantNames();
         $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
-        $pageIds = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles);
+        $pageIdsCreated = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'created');
+        $pageIdsEdited = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'edited');
 
         // Set on the EventWiki, so this will get persisted to the database.
-        $wiki->setPages($pageIds);
+        $wiki->setPagesCreated($pageIdsCreated);
+        $wiki->setPagesEdited($pageIdsEdited);
 
         // Re-use the same metric calculator as is used for Wikipedia pages above,
         // but store the values under a different name.
+        $pageIds = array_merge($pageIdsCreated, $pageIdsEdited);
         $ret = $this->eventRepo->getEditStats('wikidatawiki_p', $pageIds, $start, $end, $usernames);
 
         // Report the counts, and record them both for this wiki and the event (there's only ever one Wikidata wiki).
