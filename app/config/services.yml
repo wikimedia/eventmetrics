@@ -52,6 +52,9 @@ services:
             - { name: kernel.event_listener, event: kernel.exception }
         arguments: ['@templating', '@logger', '%kernel.environment%']
 
+    AppBundle\Logger\WebRequestProcessor:
+        tags: { name: monolog.processor }
+
     AppBundle\Repository\:
         resource: '../../src/AppBundle/Repository/*'
         arguments: ['@doctrine.orm.entity_manager']
