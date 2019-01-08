@@ -60,7 +60,12 @@ class EventCategoryRepository extends Repository
      */
     public function getCategoryId(string $domain, string $title): ?int
     {
-        // First get the database name.
+        // If no domain provided, no category can have an ID.
+        if (empty($domain)) {
+            return null;
+        }
+
+        // Get the database name.
         $ewRepo = $this->em->getRepository(EventWiki::class);
         $ewRepo->setContainer($this->container);
         $dbName = $ewRepo->getDbNameFromDomain($domain);

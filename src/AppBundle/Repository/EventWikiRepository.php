@@ -11,6 +11,7 @@ use AppBundle\Model\Event;
 use AppBundle\Model\EventWiki;
 use DateTime;
 use Doctrine\DBAL\Connection;
+use Exception;
 
 /**
  * This class supplies and fetches data for the EventWiki class.
@@ -86,11 +87,12 @@ class EventWikiRepository extends Repository
     }
 
     /**
-     * Get the database name of the given EventWiki.
-     * @param string $domain
-     * @return string|null Null if not found.
+     * Get the database name of the given (partial) domain name.
+     * @param string $domain The domain name, without trailing '.org'.
+     * @return string
+     * @throws Exception If the database name could not be determined.
      */
-    public function getDbNameFromDomain(string $domain): ?string
+    public function getDbNameFromDomain(string $domain): string
     {
         $projectUrl = "https://$domain.org";
 
@@ -101,8 +103,11 @@ class EventWikiRepository extends Repository
             ->where('url = :projectUrl')
             ->setParameter('projectUrl', $projectUrl);
 
-        return $this->executeQueryBuilder($rqb)
-            ->fetch()['dbname'];
+        $row = $this->executeQueryBuilder($rqb)->fetch();
+        if (!isset($row['dbname'])) {
+            throw new Exception("Unable to determine database name for domain '$domain'.");
+        }
+        return $row['dbname'];
     }
 
     /**
