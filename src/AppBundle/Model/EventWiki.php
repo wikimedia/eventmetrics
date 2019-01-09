@@ -321,7 +321,8 @@ class EventWiki
             ? stream_get_contents($this->$propertyName)
             : $this->$propertyName;
 
-        return explode(',', bzdecompress($blob));
+        // Decompressing the empty string or null results in an empty string, so array_filter removes this.
+        return array_filter(explode(',', bzdecompress($blob)));
     }
 
     /**
@@ -341,6 +342,13 @@ class EventWiki
             $this->$propertyName = null;
             return;
         }
-        $this->$propertyName = bzcompress(implode(',', $ids));
+        $filteredIds = array_filter($ids, function ($id) {
+            if (!is_numeric($id)) {
+                // Will be filtered out.
+                return null;
+            }
+            return (int)$id;
+        });
+        $this->$propertyName = bzcompress(implode(',', $filteredIds));
     }
 }
