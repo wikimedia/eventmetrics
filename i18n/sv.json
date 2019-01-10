@@ -62,6 +62,7 @@
 	"event-edit-list": "Redigera lista",
 	"event-in-future": "Statistik kan inte genereras eftersom denna händelse äger rum i framtiden.",
 	"event-list": "Händelselista",
+	"event-metrics": "Event Metrics",
 	"event-metrics-welcome": "Välkommen till Event Metrics",
 	"event-misconfig": "Denna händelse har inte konfigurerats helt och hållet. För att generera statistik måste du lägga till en av följande: $1",
 	"event-no-data": "Statistik har ännu inte genereras för denna händelse.",
