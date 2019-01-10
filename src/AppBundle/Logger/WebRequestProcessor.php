@@ -29,8 +29,8 @@ class WebRequestProcessor
     /**
      * Adds extra information to the log entry.
      * @see https://symfony.com/doc/current/logging/processors.html
-     * @param array $record
-     * @return array
+     * @param mixed[] $record
+     * @return mixed[]
      */
     public function __invoke(array $record): array
     {
