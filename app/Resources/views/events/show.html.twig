@@ -17,7 +17,7 @@
 
         {% if event.updated != null %}
             <div class="btn-group event-export pull-right">
-                <a href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id}) }}" class="btn btn-default event-export-btn{% if jobStatus is not null %} disabled{% endif %}">
+                <a href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id}) }}" class="btn btn-default event-export-btn">
                     <span class="glyphicon glyphicon-export"></span>
                     {{ msg('view-edit-list') }}
                 </a>
@@ -61,7 +61,7 @@
                 {% endif %}
             {% else %}
                 <div class="text-center event-wiki-stats--empty">
-                    {% if jobStatus is not null %}
+                    {% if event.hasJob %}
                         &nbsp;
                     {% elseif event.numParticipants == 0 %}
                         {# FIXME: ^ also check for event.numCategories == 0 and add msg('categories') once T194707#4620358 is resolved #}
@@ -84,14 +84,4 @@
             {% include ('events/_' ~ formType|lower ~ '.html.twig') with {'form': form, 'event': event, 'isOrganizer': isOrganizer} %}
         {% endfor %}
     </div>
-
-    <script>
-        {# This is used for autocompletion on the wiki inputs. #}
-        eventmetrics.eventshow.availableWikiPattern = {{ event.availableWikiPattern }};
-
-        {# Poll status of pending/running jobs to automatically show stats when available. #}
-        {% if jobStatus is not null %}
-            eventmetrics.eventshow.pollJob({{ event.id }});
-        {% endif %}
-    </script>
 {% endblock %}

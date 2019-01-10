@@ -2,19 +2,26 @@
     <div class="page-title">{{ msg(pageTitle)|upper }}</div>
     <div class="pull-right text-right">
         <div class="btn-group">
-            <a class="btn btn-default" href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings') }}</a>
+            <a class="btn btn-default event-settings-link" href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings') }}</a>
             {% if event.isValid %}
+                {##
+                 # Check the job status and set messages and CSS classes accordingly.
+                 #}
+                {% if event.updated == null %}
+                    {% set statsBtnText = msg('calculate-totals') %}
+                    {% set statsDesc = '' %}
+                {% else %}
+                    {% set statsBtnText = msg('update-data') %}
+                    {% set statsDesc = msg('last-updated', [event.updatedWithTimezone|date_localize]) ~ ' (' ~ event.displayTimezone ~ ')' %}
+                {% endif %}
+                {% if job != false and (job.status == constant('STATUS_STARTED', job) or job.status == constant('STATUS_QUEUED', job)) %}
+                    {% set statsBtnText = msg('updating') %}
+                    {% set statsDesc = msg('updating-desc') %}
+                {% endif %}
+
                 {% if isOrganizer %}
-                    <button type="button" class="btn btn-default event-process-btn{% if jobStatus is not null %} disabled{% endif %}" data-event-id="{{ event.id }}">
-                        {% if jobStatus == true %}
-                            {{ msg('updating') }}
-                        {% elseif jobStatus is same as(false) %}
-                            {{ msg('queued') }}
-                        {% elseif event.updated == null %}
-                            {{ msg('calculate-totals') }}
-                        {% else %}
-                            {{ msg('update-data') }}
-                        {% endif %}
+                    <button type="button" class="btn btn-default event-process-btn" data-event-id="{{ event.id }}">
+                        {{ statsBtnText }}
                     </button>
                 {% endif %}
                 {% if downloadButtons is defined and event.updated != null %}
@@ -25,14 +32,9 @@
 
         {% if event.isValid %}
             <div class="event-stats-status">
-                {% if jobStatus == true %}
-                    {{ msg('updating-desc') }}
-                {% elseif jobStatus is same as(false) %}
-                    {{ msg('queued-desc') }}
-                {% elseif event.updated != null %}
-                    {{ msg('last-updated', [event.updatedWithTimezone|date_localize]) }}
-                    ({{ event.displayTimezone }})
-                {% endif %}
+                <span class="event-state--initial">{{ statsDesc|raw }}</span>
+                <span class="event-state--started event-state--queued">{{ msg('updating-desc') }}</span>
+                <span class="event-state--failed-timeout event-state--failed-unknown">{{ statsDesc|raw }}</span>
             </div>
         {% endif %}
     </div>
@@ -45,3 +47,15 @@
         {% endif %}
     </h1>
 </div>
+
+<script>
+    {# This is used for autocompletion on the wiki inputs. #}
+    eventmetrics.eventshow.availableWikiPattern = {{ event.availableWikiPattern }};
+
+    {# Poll status of pending/running jobs to automatically show stats when available. #}
+    {% if event.hasJob and not(job.hasFailed) %}
+        $(function () {
+            eventmetrics.eventshow.pollJob({{ event.id }});
+        });
+    {% endif %}
+</script>

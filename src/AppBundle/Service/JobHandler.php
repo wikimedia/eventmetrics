@@ -10,6 +10,7 @@ namespace AppBundle\Service;
 use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\DriverException;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,9 +21,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class JobHandler
 {
-    // Max number of open connections allowed. We intentionally
-    // set this lower to allow for wiggle room for queries in the main
-    // application, unrelated to processing jobs.
+    // Max number of open connections allowed. We intentionally set this lower to allow for wiggle room for
+    // queries in the main application, unrelated to processing jobs.
     private const DATABASE_QUOTA = 5;
 
     /** @var ContainerInterface The application's container interface. */
@@ -151,15 +151,24 @@ class JobHandler
      */
     private function processJob(Job $job): void
     {
-        // Flag the job as started. This must be flushed to the database
-        // immediately to avoid conflicts with the cron job, and to ensure
-        // the flag is set at the beginning of processing.
-        $job->setStarted();
+        // Flag the job as started. This must be flushed to the database immediately to avoid conflicts with the
+        // cron job, and to ensure the flag is set at the beginning of processing.
+        $job->setStatus(Job::STATUS_STARTED);
         $this->entityManager->persist($job);
         $this->entityManager->flush();
 
-        // Process the Event the Job is associated with.
-        $this->eventProcessor->process($job->getEvent(), $this->output);
+        try {
+            // Process the Event the Job is associated with.
+            $this->eventProcessor->process($job->getEvent(), $this->output);
+        } catch (\Exception $e) {
+            if ($e instanceof DriverException && in_array($e->getErrorCode(), [1969, 2006, 2013])) {
+                $job->setStatus(Job::STATUS_FAILED_TIMEOUT);
+            } else {
+                $job->setStatus(Job::STATUS_FAILED_UNKNOWN);
+            }
+            $this->entityManager->persist($job);
+            $this->entityManager->flush();
+        }
     }
 
     /**
@@ -174,7 +183,7 @@ class JobHandler
 
         return $this->entityManager
             ->getRepository('Model:Job')
-            ->findBy(['started' => false], [], $limit);
+            ->findBy(['status' => Job::STATUS_QUEUED], [], $limit);
     }
 
     /**
