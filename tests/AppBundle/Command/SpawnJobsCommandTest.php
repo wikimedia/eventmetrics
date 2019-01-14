@@ -110,7 +110,7 @@ class SpawnJobsCommandTest extends EventMetricsTestCase
         $this->spawnSpec($job);
 
         // Revive the job and run once more.
-        $job->setStarted(false);
+        $job->setStatus(Job::STATUS_QUEUED);
         $this->entityManager->persist($job);
         $this->entityManager->flush();
 
@@ -141,7 +141,7 @@ class SpawnJobsCommandTest extends EventMetricsTestCase
             (new DateTime())->format('Ymd'),
             $job->getSubmitted()->format('Ymd')
         );
-        static::assertFalse($job->getStarted());
+        static::assertFalse($job->hasStarted());
     }
 
     /**
@@ -151,7 +151,7 @@ class SpawnJobsCommandTest extends EventMetricsTestCase
     private function spawnSpec(Job $job): void
     {
         $this->commandTester->execute([]);
-        static::assertTrue($job->getStarted());
+        static::assertTrue($job->hasStarted());
         $output = $this->commandTester->getDisplay();
         static::assertContains('Event statistics successfully saved', $output);
         static::assertEquals(0, $this->commandTester->getStatusCode());
@@ -170,7 +170,7 @@ class SpawnJobsCommandTest extends EventMetricsTestCase
         static::assertEquals(1, $this->commandTester->getStatusCode());
 
         $this->commandTester->execute(['--id' => $job->getId()]);
-        static::assertTrue($job->getStarted());
+        static::assertTrue($job->hasStarted());
         $output = $this->commandTester->getDisplay();
         static::assertContains('Event statistics successfully saved', $output);
         static::assertEquals(0, $this->commandTester->getStatusCode());

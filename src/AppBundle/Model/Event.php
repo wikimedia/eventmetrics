@@ -753,6 +753,15 @@ class Event
     }
 
     /**
+     * A convenience method to get the first Job (which should be the only one, for now).
+     * @return Job|false
+     */
+    public function getJob()
+    {
+        return $this->jobs->first();
+    }
+
+    /**
      * Get jobs associated with this Event (in theory there should be only one).
      * @return Collection of Jobs.
      */

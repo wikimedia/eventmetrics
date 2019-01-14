@@ -1,5 +1,6 @@
 eventmetrics.eventshow = {};
 eventmetrics.eventshow.jobPoller = null;
+eventmetrics.eventshow.state = 'initial';
 
 $(function () {
     // Only run on event page.
@@ -10,7 +11,7 @@ $(function () {
     eventmetrics.application.setupAddRemove('event', 'participant');
     eventmetrics.application.setupAddRemove('event', 'category', function ($newRow) {
         // Fill in the wiki with the last valid one.
-        var lastWiki = $('.event__categories .wiki-input').eq(-2).val();
+        const lastWiki = $('.event__categories .wiki-input').eq(-2).val();
 
         if (lastWiki) {
             $newRow.find('.wiki-input').val(lastWiki);
@@ -23,7 +24,7 @@ $(function () {
 
     // The event page contains multiple forms. Here we jump to the one with errors,
     // if any, since the user may otherwise not see it.
-    var erroneousForm = $('.has-error').parents('.panel').get(0);
+    const erroneousForm = $('.has-error').parents('.panel').get(0);
     if (erroneousForm) {
         erroneousForm.scrollIntoView();
     }
@@ -42,12 +43,12 @@ eventmetrics.eventshow.setupCalculateStats = function () {
     $('.event-process-btn').on('click', function () {
         document.activeElement.blur();
 
-        $('.event-export-btn').addClass('disabled');
-        $(this).addClass('disabled').text($.i18n('queued'));
-        $('.event-stats-status').text($.i18n('queued-desc'));
-
         $.get(baseUrl + 'events/process/' + $(this).data('event-id'));
 
+        // Set the state to 'started', which shows the modal, and show/hides messages accordingly.
+        eventmetrics.eventshow.setState('started');
+
+        // Continually check the progress of the job and update the view accordingly.
         eventmetrics.eventshow.pollJob($(this).data('event-id'));
     });
 
@@ -60,6 +61,36 @@ eventmetrics.eventshow.setupCalculateStats = function () {
 };
 
 /**
+ * Set the state of the event. This will update the view accordingly, including messages.
+ * @param {String} state
+ */
+eventmetrics.eventshow.setState = function (state) {
+    if (state === eventmetrics.eventshow.state) {
+        // Nothing to do.
+        return;
+    }
+
+    // Keep track of the state.
+    eventmetrics.eventshow.state = state;
+
+    if ('complete' === state) {
+        // For display purposes, complete is the same as initial (though the page will be refreshed anyway).
+        state = 'initial';
+    }
+
+    // Show/hide messages accordingly.
+    $('.event-state--initial, .event-state--started, .event-state--failed-timeout, .event-state--failed-unknown').hide();
+    $('.event-state--' + state).show();
+
+    // Disable the form/buttons/etc. accordingly.
+    if ('started' === state) {
+        $('body').addClass('disabled-state');
+    } else {
+        $('body').removeClass('disabled-state');
+    }
+};
+
+/**
  * Continually poll the server to get the status of the Job associated with the given Event.
  * @param {Number} eventId
  */
@@ -67,22 +98,22 @@ eventmetrics.eventshow.pollJob = function (eventId) {
     // If for some reason this gets called more than once, this will clear out the old poller.
     clearInterval(eventmetrics.eventshow.jobPoller);
 
-    // Poll the server every 3 seconds, updating the view accordingly.
-    eventmetrics.eventshow.jobPoller = setInterval(function () {
+    const pollFunc = function () {
         $.get('/events/job-status/' + eventId).done(function (response) {
-            if ('running' === response.status) {
-                $('.event-stats-status').text($.i18n('updating-desc'));
-                $('.event-process-btn').text($.i18n('updating'));
+            eventmetrics.eventshow.setState(response.status);
+            if (response.status.includes('failed')) {
+                clearInterval(eventmetrics.eventshow.jobPoller);
             } else if ('complete' === response.status) {
-                $('.event-process-btn').removeClass('disabled').text($.i18n('update-data'));
-                $('.event-export-btn').removeClass('disabled');
-                $('.event-stats-status').text('');
-
-                // TODO: Have controller update view with rendered Twig template, rather than having to refresh.
                 window.location.reload(true);
             }
         });
-    }, 3000);
+    };
+
+    // First execute immediately.
+    pollFunc();
+
+    // Poll the server every 3 seconds, updating the view accordingly.
+    eventmetrics.eventshow.jobPoller = setInterval(pollFunc, 3000);
 };
 
 /**

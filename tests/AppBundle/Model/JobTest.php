@@ -34,11 +34,15 @@ class JobTest extends EventMetricsTestCase
         );
 
         $job = new Job($event);
-        $job->setStarted();
+        $job->setStatus(Job::STATUS_STARTED);
 
         // Getters.
         static::assertEquals($event, $job->getEvent());
-        static::assertTrue($job->getStarted());
+        static::assertEquals(Job::STATUS_STARTED, $job->getStatus());
+        static::assertFalse($job->hasFailed());
+
+        $job->setStatus(Job::STATUS_FAILED_TIMEOUT);
+        static::assertTrue($job->hasFailed());
 
         // Record hasn't been persisted yet.
         static::assertNull($job->getId());

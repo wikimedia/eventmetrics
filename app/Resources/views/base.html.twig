@@ -31,7 +31,7 @@
             <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/app.css') }}">
         {% endblock %}
     </head>
-    <body class="{% if exception is not defined %}{{ getControllerName() }} {{ getControllerName() }}-{{ getActionName() }}{% endif %}{% if is_rtl() %} rtl{% endif %}">
+    <body class="{% if exception is not defined %}{{ getControllerName() }} {{ getControllerName() }}-{{ getActionName() }}{% endif %}{% if is_rtl() %} rtl{% endif %}{% if event is defined and event.hasJob %} disabled-state{% endif %}">
         <header class="app-header navbar navbar-default" role="navigation">
             <div class="container-fluid">
                 <span class="navbar-left">
