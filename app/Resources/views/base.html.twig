@@ -139,5 +139,21 @@
         </main>
         {{ include('_footer.html.twig') }}
         {% include('_attribution.html.twig') %}
+
+        {% if 'prod' == app.environment %}
+            {# Matomo usage tracking #}
+            <script type="text/javascript">
+                var _paq = _paq || [];
+                _paq.push(['trackPageView']);
+                _paq.push(['enableLinkTracking']);
+                (function() {
+                    var u="//piwik.wikimedia.org/";
+                    _paq.push(['setTrackerUrl', u+'piwik.php']);
+                    _paq.push(['setSiteId', '19']);
+                    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+                })();
+            </script>
+        {% endif %}
     </body>
 </html>
