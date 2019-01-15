@@ -11,6 +11,15 @@ A Wikimedia Foundation tool that provides event organizers and grantees a simple
 
 ## Installation for development
 
+### With Docker
+
+Prerequisites: Docker, and Docker Compose.
+
+After cloning the repository run `docker-compose up`.
+Event Metrics will be available at [http://localhost:8000](http://localhost:8000).
+
+### Local install
+
 Prerequisites:
 
 * PHP 7.2 and MySQL.
