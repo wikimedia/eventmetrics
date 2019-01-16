@@ -25,7 +25,7 @@ parameters:
     mailer.transport: smtp
     mailer.from_email: 'tools.grantmetrics@tools.wmflabs.org'
     mailer.to_email: 'tools.grantmetrics@tools.wmflabs.org'
-    mailer.host: mail.tools.wmflabs.org
+    mailer.host: ~
     mailer.user: ~
     mailer.password: ~
 
