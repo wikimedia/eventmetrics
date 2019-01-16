@@ -181,7 +181,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findBy(['event' => $event]);
-        static::assertEquals(9, count($eventStats));
+        static::assertEquals(10, count($eventStats));
     }
 
     /**

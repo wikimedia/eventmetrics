@@ -48,6 +48,18 @@ class EventProcessor
     /** @var string[] Unique wikis where participants have made edits. */
     protected $commonWikis;
 
+    /** @var int Number of edits made during the event */
+    private $edits = 0;
+
+    /** @var int Number of pages edited during the event */
+    private $pagesImproved = 0;
+
+    /** @var int Number of pages created */
+    private $pagesCreated = 0;
+
+    /** @var int Bytes changed */
+    private $byteDifference = 0;
+
     /**
      * Constructor for the EventProcessor.
      * @param LoggerInterface $logger
@@ -199,10 +211,6 @@ class EventProcessor
     {
         $this->log("\nFetching number of pages created or improved...");
 
-        $edits = 0;
-        $pagesImproved = 0;
-        $pagesCreated = 0;
-
         /** @var EventWikiRepository $ewRepo */
         $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
@@ -219,7 +227,7 @@ class EventProcessor
             // Different stats based on wiki family.
             switch ($wiki->getFamilyName()) {
                 case 'wikipedia':
-                    $this->setContributionsWikipedias($wiki, $ewRepo, $pagesCreated, $pagesImproved, $edits);
+                    $this->setContributionsWikipedias($wiki, $ewRepo);
                     $pageStats = true;
                     break;
                 case 'commons':
@@ -234,29 +242,26 @@ class EventProcessor
         // Only save pages-created and pages-improved as EventStats
         // if they were also saved as EventWikiStats.
         if ($pageStats) {
-            $this->createOrUpdateEventStat('edits', $edits);
-            $this->createOrUpdateEventStat('pages-created', $pagesCreated);
-            $this->createOrUpdateEventStat('pages-improved', $pagesImproved);
+            $this->createOrUpdateEventStat('edits', $this->edits);
+            $this->createOrUpdateEventStat('pages-created', $this->pagesCreated);
+            $this->createOrUpdateEventStat('pages-improved', $this->pagesImproved);
+            $this->createOrUpdateEventStat('byte-difference', $this->byteDifference);
         }
 
-        $this->log(">> <info>Edits: $edits</info>");
-        $this->log(">> <info>Pages created: $pagesCreated</info>");
-        $this->log(">> <info>Pages improved: $pagesImproved</info>");
+        $this->log(">> <info>Edits: {$this->edits}</info>");
+        $this->log(">> <info>Pages created: {$this->pagesCreated}</info>");
+        $this->log(">> <info>Pages improved: {$this->pagesImproved}</info>");
+        $this->log(">> <info>Bytes added: {$this->byteDifference}</info>");
     }
 
     /**
      * Set pages created/improved for the given Wikipedia.
      * @param EventWiki $wiki
      * @param EventWikiRepository $ewRepo
-     * @param int &$pagesCreated
-     * @param int &$pagesEdited
      */
     private function setContributionsWikipedias(
         EventWiki $wiki,
-        EventWikiRepository $ewRepo,
-        int &$pagesCreated,
-        int &$pagesEdited,
-        int &$edits
+        EventWikiRepository $ewRepo
     ): void {
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
 
@@ -275,13 +280,17 @@ class EventProcessor
         $pageIds = array_merge($pageIdsCreated, $pageIdsEdited);
         $ret = $this->eventRepo->getEditStats($dbName, $pageIds, $start, $end, $usernames);
 
-        $pagesCreated += $ret['created'];
-        $pagesEdited += $ret['edited'];
-        $edits += $ret['edits'];
+        $diff = $ewRepo->getBytesChanged($this->event, $dbName, $pageIds, $usernames);
+
+        $this->pagesCreated += $ret['created'];
+        $this->pagesImproved += $ret['edited'];
+        $this->edits += $ret['edits'];
+        $this->byteDifference += $diff;
 
         $this->createOrUpdateEventWikiStat($wiki, 'edits', $ret['edits']);
         $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $ret['created']);
         $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $ret['edited']);
+        $this->createOrUpdateEventWikiStat($wiki, 'byte-difference', $diff);
     }
 
     /**

@@ -42,6 +42,7 @@ class EventWikiStat
      */
     public const METRIC_TYPES = [
         'edits',
+        'byte-difference',
         'pages-created',
         'pages-improved',
 

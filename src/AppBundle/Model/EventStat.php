@@ -43,6 +43,7 @@ class EventStat
 
         // These are also stored on a per-wiki basis as a EventWikiStat
         'edits',
+        'byte-difference',
         'pages-created',
         'pages-improved',
 

@@ -85,6 +85,8 @@ abstract class Repository extends EntityRepository
     public function setContainer(Container $container): void
     {
         $this->container = $container;
+        // HACK: DI should do this automatically via setCachePool() but it doesn't
+        $this->cache = $container->get('cache.app');
     }
 
     /**
@@ -327,10 +329,10 @@ abstract class Repository extends EntityRepository
      */
     protected function getTableName(string $name, ?string $suffix = null): string
     {
-        if (null !== $suffix) {
-            return $name.'_'.$suffix;
-        } elseif ('' === $suffix) {
+        if ('' === $suffix) {
             return $name;
+        } elseif (null !== $suffix) {
+            return $name.'_'.$suffix;
         }
 
         // For 'revision' and 'logging' tables (actually views) on the WMF replicas,
@@ -347,6 +349,29 @@ abstract class Repository extends EntityRepository
      * Execute a query using the projects connection, handling certain Exceptions.
      * @param string $sql
      * @param mixed[] $params Parameters to bound to the prepared query.
+     * @param int[] $types Optional types of parameters from $params.
+     * @param int|null $timeout Maximum statement time in seconds. null will use the
+     *   default specified by the app.query_timeout config parameter. -1 will set no timeout.
+     * @return ResultStatement
+     */
+    public function executeReplicaQueryWithTypes(
+        string $sql,
+        array $params = [],
+        array $types = [],
+        ?int $timeout = null
+    ): ResultStatement {
+        try {
+            $sql = $this->getQueryTimeoutClause($timeout).$sql;
+            return $this->getReplicaConnection()->executeQuery($sql, $params, $types);
+        } catch (DriverException $e) {
+            $this->handleDriverError($e, $timeout);
+        }
+    }
+
+    /**
+     * Execute a query using the projects connection, handling certain Exceptions.
+     * @param string $sql
+     * @param mixed[] $params Parameters to bound to the prepared query.
      * @param int|null $timeout Maximum statement time in seconds. null will use the
      *   default specified by the app.query_timeout config parameter. -1 will set no timeout.
      * @return ResultStatement
@@ -355,12 +380,7 @@ abstract class Repository extends EntityRepository
      */
     public function executeReplicaQuery(string $sql, array $params = [], ?int $timeout = null): ResultStatement
     {
-        try {
-            $sql = $this->getQueryTimeoutClause($timeout).$sql;
-            return $this->getReplicaConnection()->executeQuery($sql, $params);
-        } catch (DriverException $e) {
-            $this->handleDriverError($e, $timeout);
-        }
+        return $this->executeReplicaQueryWithTypes($sql, $params, [], $timeout);
     }
 
     /**
