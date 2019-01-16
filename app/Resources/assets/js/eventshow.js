@@ -100,12 +100,12 @@ eventmetrics.eventshow.pollJob = function (eventId) {
 
     const pollFunc = function () {
         $.get('/events/job-status/' + eventId).done(function (response) {
-            eventmetrics.eventshow.setState(response.status);
             if (response.status.includes('failed')) {
                 clearInterval(eventmetrics.eventshow.jobPoller);
             } else if ('complete' === response.status) {
-                window.location.reload(true);
+                return window.location.reload(true);
             }
+            eventmetrics.eventshow.setState(response.status);
         });
     };
 
