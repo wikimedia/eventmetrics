@@ -110,12 +110,12 @@ class Job
     }
 
     /**
-     * Whether or not the Job is currently running.
+     * Whether or not the Job is currently running or is queued.
      * @return bool
      */
-    public function hasStarted(): bool
+    public function isBusy(): bool
     {
-        return self::STATUS_STARTED === $this->status;
+        return in_array($this->status, [self::STATUS_QUEUED, self::STATUS_STARTED]);
     }
 
     /**

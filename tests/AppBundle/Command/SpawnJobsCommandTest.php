@@ -141,7 +141,8 @@ class SpawnJobsCommandTest extends EventMetricsTestCase
             (new DateTime())->format('Ymd'),
             $job->getSubmitted()->format('Ymd')
         );
-        static::assertFalse($job->hasStarted());
+        static::assertTrue($job->isBusy());
+        static::assertEquals(Job::STATUS_QUEUED, $job->getStatus());
     }
 
     /**
@@ -151,7 +152,7 @@ class SpawnJobsCommandTest extends EventMetricsTestCase
     private function spawnSpec(Job $job): void
     {
         $this->commandTester->execute([]);
-        static::assertTrue($job->hasStarted());
+        static::assertTrue($job->isBusy());
         $output = $this->commandTester->getDisplay();
         static::assertContains('Event statistics successfully saved', $output);
         static::assertEquals(0, $this->commandTester->getStatusCode());
@@ -170,7 +171,7 @@ class SpawnJobsCommandTest extends EventMetricsTestCase
         static::assertEquals(1, $this->commandTester->getStatusCode());
 
         $this->commandTester->execute(['--id' => $job->getId()]);
-        static::assertTrue($job->hasStarted());
+        static::assertTrue($job->isBusy());
         $output = $this->commandTester->getDisplay();
         static::assertContains('Event statistics successfully saved', $output);
         static::assertEquals(0, $this->commandTester->getStatusCode());

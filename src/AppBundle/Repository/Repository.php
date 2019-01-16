@@ -419,7 +419,7 @@ abstract class Repository extends EntityRepository
 
         if (1226 === $e->getErrorCode()) {
             throw new ServiceUnavailableHttpException(30, 'error-service-overload', null, 503);
-        } elseif (1969 === $e->getErrorCode()) {
+        } elseif (in_array($e->getErrorCode(), [1969, 2006])) {
             throw new HttpException(504, 'error-query-timeout', null, [], $timeout);
         } else {
             throw $e;

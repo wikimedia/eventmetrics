@@ -10,7 +10,6 @@ namespace AppBundle\Service;
 use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\DriverException;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -160,14 +159,20 @@ class JobHandler
         try {
             // Process the Event the Job is associated with.
             $this->eventProcessor->process($job->getEvent(), $this->output);
-        } catch (\Exception $e) {
-            if ($e instanceof DriverException && in_array($e->getErrorCode(), [1969, 2006, 2013])) {
+        } catch (\Throwable $e) {
+            // Doctrine DriverExceptions are handled in Repository::handleDriverError().
+            // This code checks the exceptions that methods throws.
+            if ('error-query-timeout' === $e->getMessage()) {
                 $job->setStatus(Job::STATUS_FAILED_TIMEOUT);
             } else {
                 $job->setStatus(Job::STATUS_FAILED_UNKNOWN);
             }
             $this->entityManager->persist($job);
             $this->entityManager->flush();
+
+            // The client will make requests to get the status of the Job and act accordingly.
+            // We still want to throw the exception.
+            throw $e;
         }
     }
 

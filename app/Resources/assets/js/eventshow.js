@@ -43,7 +43,7 @@ eventmetrics.eventshow.setupCalculateStats = function () {
     $('.event-process-btn').on('click', function () {
         document.activeElement.blur();
 
-        $.get(baseUrl + 'events/process/' + $(this).data('event-id'));
+        $.post(baseUrl + 'events/process/' + $(this).data('event-id'));
 
         // Set the state to 'started', which shows the modal, and show/hides messages accordingly.
         eventmetrics.eventshow.setState('started');
@@ -83,10 +83,17 @@ eventmetrics.eventshow.setState = function (state) {
     $('.event-state--' + state).show();
 
     // Disable the form/buttons/etc. accordingly.
-    if ('started' === state) {
-        $('body').addClass('disabled-state');
-    } else {
-        $('body').removeClass('disabled-state');
+    $('body').toggleClass('disabled-state', 'started' === state);
+
+    // Show the modal if needed.
+    if (['failed-timeout', 'failed-unknown'].includes(state)) {
+        $('#progress_modal').modal('show').on('hide.bs.modal', function () {
+            // Delete the job now that they've seen the message.
+            $.ajax({
+                url: baseUrl + 'events/delete-job/' + $('.event-process-btn').data('event-id'),
+                type: 'DELETE',
+            })
+        });
     }
 };
 

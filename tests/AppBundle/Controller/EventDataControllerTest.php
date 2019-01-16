@@ -150,14 +150,9 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'Oliver_and_Company']);
 
-        // Without the XMLHttpRequest header (not AJAX).
-        $this->crawler = $this->client->request('GET', '/events/process/'.$event->getId());
-        $this->response = $this->client->getResponse();
-        static::assertEquals(403, $this->response->getStatusCode());
-
         // Nonexistent Event.
         $this->crawler = $this->client->request(
-            'GET',
+            'POST',
             '/events/process/12345',
             [],
             [],
@@ -168,14 +163,14 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 
         // Make a request to process the event.
         $this->crawler = $this->client->request(
-            'GET',
+            'POST',
             '/events/process/'.$event->getId(),
             [],
             [],
             ['HTTP_X-Requested-With' => 'XMLHttpRequest']
         );
         $this->response = $this->client->getResponse();
-        static::assertEquals(200, $this->response->getStatusCode());
+        static::assertEquals(204, $this->response->getStatusCode());
 
         // Make sure the stats were saved.
         $eventStats = $this->entityManager
@@ -185,9 +180,9 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
     }
 
     /**
-     * Test the job status action.
+     * Test the job status and delete job actions.
      */
-    public function testJobStatus(): void
+    public function testJobApis(): void
     {
         // Simulate the different states and test that the endpoint returns the right value.
 
@@ -219,8 +214,8 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         }
 
         // Job gets removed when completed.
-        $this->entityManager->remove($this->entityManager->merge($job));
-        $this->entityManager->flush();
+        $this->client->request('DELETE', '/events/delete-job/'.$event->getId());
+        static::assertTrue($this->client->getResponse()->isSuccessful());
 
         $this->client->request('GET', '/events/job-status/'.$event->getId());
         $this->response = $this->client->getResponse();
