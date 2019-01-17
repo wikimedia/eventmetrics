@@ -48,12 +48,39 @@
     </h1>
 </div>
 
+{### PROGRESS MODAL ###}
+<div class="modal fade" id="progress_modal" tabindex="-1" role="dialog" aria-labelledby="progress_modal_label">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="progress_modal_label">
+                    <span class="event-state--failed-timeout">{{ msg('error-event-timeout') }}</span>
+                    <span class="event-state--failed-unknown">{{ msg('error-unknown') }}</span>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p id="progress_modal_body">
+                    {##
+                     # Currently we're only showing a modal for when something went wrong, and it uses the same message.
+                     # If you add more state-specific messages, wrap each in their respective CSS class (e.g. event-state--queued).
+                     #}
+                    {% set feedbackLink = "<a target='_blank' href='https://meta.wikimedia.org/wiki/Talk:Event_Metrics'>" ~ msg('error-event-retry-link') ~ "</a>" %}
+                    {{ msg('error-event-retry', [feedbackLink]) }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     {# This is used for autocompletion on the wiki inputs. #}
     eventmetrics.eventshow.availableWikiPattern = {{ event.availableWikiPattern }};
 
     {# Poll status of pending/running jobs to automatically show stats when available. #}
-    {% if event.hasJob and not(job.hasFailed) %}
+    {% if event.hasJob %}
         $(function () {
             eventmetrics.eventshow.pollJob({{ event.id }});
         });

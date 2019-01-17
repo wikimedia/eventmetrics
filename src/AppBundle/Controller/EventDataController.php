@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
-use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
@@ -18,8 +17,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * The EventDataController handles the event data page, export options,
- * and statistics generation.
+ * The EventDataController handles the event data page, export options, and statistics generation.
  */
 class EventDataController extends EntityController
 {
@@ -113,39 +111,22 @@ class EventDataController extends EntityController
     /**
      * Endpoint to create a Job to calculate and store statistics for the event. This is called only via AJAX.
      * A Job is created and will be ran immediately if there is quota. Otherwise it will later be ran via cron.
-     * @Route("/events/process/{eventId}", name="EventProcess", requirements={"id" = "\d+"})
+     * @Route("/events/process/{eventId}", name="EventProcess", requirements={"id" = "\d+"}, methods={"POST"})
      * @param JobHandler $jobHandler The job handler service, provided by Symfony dependency injection.
-     * @param int $eventId The ID of the event to process.
-     * @param EventRepository $eventRepo
      * @return Response
      * @throws AccessDeniedHttpException
      * @throws NotFoundHttpException
      */
-    public function generateStatsAction(JobHandler $jobHandler, int $eventId, EventRepository $eventRepo): Response
+    public function generateStatsAction(JobHandler $jobHandler): Response
     {
-        // Only respond to AJAX.
-        if (!$this->request->isXmlHttpRequest()) {
-            throw new AccessDeniedHttpException('This endpoint is for internal use only.');
-        }
-
-        /** @var Event $event */
-        $event = $eventRepo->find($eventId);
-
-        if (null === $event) {
-            throw new NotFoundHttpException();
-        }
-
-        /** @var Job|false $job */
+        /** @var Job $job */
         $job = $this->event->getJob();
 
         // Start new Job unless one already exists, or if the existing Job failed (users are allowed to retry).
         if (false === $job || $job->hasFailed()) {
-            // Clear the old jobs.
-            $event->clearJobs();
-
             if (false === $job) {
                 // Create a new Job for the Event.
-                $job = new Job($event);
+                $job = new Job($this->event);
             } else {
                 // Use same Job if it already exists.
                 $job->setStatus(Job::STATUS_QUEUED);
@@ -164,29 +145,19 @@ class EventDataController extends EntityController
         }
 
         // Return empty response. The client will never see it anyway since the session was closed.
-        return new Response();
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 
     /**
      * Returns the status of the Job associated with the given event.
-     * @Route("/events/job-status/{eventId}", name="EventJobStatus")
-     * @param int $eventId
-     * @param EventRepository $eventRepo
+     * @Route("/events/job-status/{eventId}", name="EventJobStatus", requirements={"id" = "\d+"})
      * @return JsonResponse
      * @throws NotFoundHttpException
      */
-    public function jobStatusAction(int $eventId, EventRepository $eventRepo): JsonResponse
+    public function jobStatusAction(): JsonResponse
     {
-        // Find the Event.
-        /** @var Event $event */
-        $event = $eventRepo->find($eventId);
-
-        if (null === $event) {
-            throw new NotFoundHttpException();
-        }
-
         /** @var Job $job */
-        $job = $event->getJobs()->first();
+        $job = $this->event->getJob();
 
         // Happens when job has completed. This could also happen if there is/was no job at all,
         // but it's up to the client to only call this action after a job was started.
@@ -210,5 +181,24 @@ class EventDataController extends EntityController
             'id' => $job->getId(),
             'status' => $status,
         ], Response::HTTP_OK);
+    }
+
+    /**
+     * Delete jobs associated with the given Event.
+     * @Route("/events/delete-job/{eventId}", name="EventDeleteJob", methods={"DELETE"})
+     * @return JsonResponse
+     */
+    public function deleteJobAction(): JsonResponse
+    {
+        /** @var Job $job */
+        $job = $this->event->getJob();
+
+        if (false !== $job) {
+            $this->event->clearJobs();
+            $this->em->persist($this->event);
+            $this->em->flush();
+        }
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 }
