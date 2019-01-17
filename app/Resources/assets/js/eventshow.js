@@ -83,7 +83,7 @@ eventmetrics.eventshow.setState = function (state) {
     $('.event-state--' + state).show();
 
     // Disable the form/buttons/etc. accordingly.
-    $('body').toggleClass('disabled-state', 'started' === state);
+    $('body').toggleClass('disabled-state', ['queued', 'started'].includes(state));
 
     // Show the modal if needed.
     if (['failed-timeout', 'failed-unknown'].includes(state)) {

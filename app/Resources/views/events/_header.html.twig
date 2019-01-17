@@ -21,7 +21,8 @@
 
                 {% if isOrganizer %}
                     <button type="button" class="btn btn-default event-process-btn" data-event-id="{{ event.id }}">
-                        {{ statsBtnText }}
+                        <span class="event-state--initial">{{ statsBtnText }}</span>
+                        <span class="event-state--started event-state--queued">{{ msg('updating') }}</span>
                     </button>
                 {% endif %}
                 {% if downloadButtons is defined and event.updated != null %}
