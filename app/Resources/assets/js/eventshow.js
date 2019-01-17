@@ -92,7 +92,7 @@ eventmetrics.eventshow.setState = function (state) {
             $.ajax({
                 url: baseUrl + 'events/delete-job/' + $('.event-process-btn').data('event-id'),
                 type: 'DELETE',
-            })
+            });
         });
     }
 };
