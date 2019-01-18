@@ -46,6 +46,8 @@ class EventStat
         'byte-difference',
         'pages-created',
         'pages-improved',
+        'pages-created-pageviews',
+        'pages-improved-pageviews',
 
         // For Commons
         'files-uploaded',

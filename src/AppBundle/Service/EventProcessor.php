@@ -96,6 +96,9 @@ class EventProcessor
 
         $this->setContributionStats();
 
+        // This must be called after setContributionStats, because that method sets the page IDs.
+        $this->setPageviewsStats();
+
         // Remove EventWikis that are part of a family where there are no statistics.
         $this->removeEventWikisWithNoStats();
 
@@ -201,6 +204,43 @@ class EventProcessor
             $this->newEditors = $this->eventRepo->getNewEditors($this->event);
         }
         return $this->newEditors;
+    }
+
+    /**
+     * Set pageviews stats of pages created and improved (the latter as an average over up to the last 30 days).
+     */
+    protected function setPageviewsStats(): void
+    {
+        $this->log("\nFetching pageviews...");
+
+        /** @var EventWikiRepository $ewRepo */
+        $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
+        $ewRepo->setContainer($this->container);
+
+        $start = $this->event->getStartWithTimezone();
+        $pageviewsCreatedTotal = 0;
+        $pageviewsImprovedTotal = 0;
+        foreach ($this->event->getWikis() as $wiki) {
+            // No pageviews for anything other than Wikipedias.
+            if ($wiki->isFamilyWiki() || 'wikipedia' !== $wiki->getFamilyName()) {
+                continue;
+            }
+
+            $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
+            $pageviewsCreated = $ewRepo->getPageviews($dbName, $wiki, $start, $wiki->getPagesCreated());
+            $pageviewsImproved = $ewRepo->getPageviews($dbName, $wiki, $start, $wiki->getPagesEdited(), true);
+
+            $pageviewsCreatedTotal += $pageviewsCreated;
+            $pageviewsImprovedTotal += $pageviewsImproved;
+
+            $this->createOrUpdateEventWikiStat($wiki, 'pages-created-pageviews', $pageviewsCreated);
+            $this->createOrUpdateEventWikiStat($wiki, 'pages-improved-pageviews', $pageviewsImproved);
+        }
+
+        $this->createOrUpdateEventStat('pages-created-pageviews', $pageviewsCreatedTotal);
+        $this->createOrUpdateEventStat('pages-improved-pageviews', $pageviewsImprovedTotal);
+        $this->log(">> <info>Pageviews of pages created: $pageviewsCreatedTotal</info>");
+        $this->log(">> <info>Avgerage daily pageviews of pages edited: $pageviewsImprovedTotal</info>");
     }
 
     /**
