@@ -160,19 +160,23 @@ class JobHandler
             // Process the Event the Job is associated with.
             $this->eventProcessor->process($job->getEvent(), $this->output);
         } catch (\Throwable $e) {
+            $eventId = $job->getEvent()->getId();
+
             // Doctrine DriverExceptions are handled in Repository::handleDriverError().
             // This code checks the exceptions that methods throws.
             if ('error-query-timeout' === $e->getMessage()) {
                 $job->setStatus(Job::STATUS_FAILED_TIMEOUT);
+                $errorMessage = "Job for event $eventId timed out";
             } else {
                 $job->setStatus(Job::STATUS_FAILED_UNKNOWN);
+                $errorMessage = "Job for event $eventId failed";
             }
             $this->entityManager->persist($job);
             $this->entityManager->flush();
 
             // The client will make requests to get the status of the Job and act accordingly.
-            // We still want to throw the exception.
-            throw $e;
+            // We still want to throw the exception so we can get notified by email.
+            throw new \Exception($errorMessage, 0, $e);
         }
     }
 
