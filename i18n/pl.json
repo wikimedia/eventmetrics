@@ -29,8 +29,6 @@
 	"end-date": "Data zakończenia",
 	"end-time": "Czas zakończenia",
 	"error-event-undeletable": "Tego wydarzenia nie można usunąć, ponieważ ma jednego lub więcej uczestników.",
-	"error-failed": "Nieudane :(",
-	"error-internal": "Coś poszło nie tak! Możesz zgłosić to w $1. Podaj link do swojego wydarzenia.",
 	"error-invalid": "Ta wartość jest nieprawidłowa.",
 	"error-non-organizer": "Nie masz uprawnień do oglądania tego programu, ponieważ nie jesteś organizatorem.",
 	"error-program-undeletable": "Tego programu nie można usunąć, ponieważ zawiera jedno lub więcej wydarzeń.",

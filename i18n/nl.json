@@ -34,7 +34,6 @@
 	"end-date": "Einddatum",
 	"end-time": "Eindtijd",
 	"error-event-undeletable": "Dit evenement kan niet worden verwijderd omdat het één of meer deelnemers heeft.",
-	"error-failed": "Mislukt :(",
 	"error-invalid": "Deze waarde is niet geldig.",
 	"error-program-undeletable": "Dit programma kan niet worden verwijderd omdat het meer dan een evenement bevat.",
 	"error-title-invalid-chars": "De titel mag geen van de volgende tekens bevatten: $1.",

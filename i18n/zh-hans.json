@@ -42,8 +42,6 @@
 	"end-time": "结束日期",
 	"error-categories": "$1个{{PLURAL:$1|分类}}无效。请编辑或移除它们，并重新提交保存。检查错误拼写并确保wiki有效。",
 	"error-event-undeletable": "无法删除此活动，因为它包含一个或多个参与者。",
-	"error-failed": "失败:(",
-	"error-internal": "出了些问题！您可以在$1报告此事。请提供您活动的链接。",
 	"error-invalid": "该值无效。",
 	"error-non-organizer": "您无权查看此计划，因为您不是组织者。",
 	"error-not-found": "找不到请求的计划或活动。它可能已被删除或重命名。",

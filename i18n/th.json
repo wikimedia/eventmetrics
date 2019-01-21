@@ -1,10 +1,27 @@
 {
+	"@metadata": {
+		"authors": [
+			"B20180",
+			"Geonuch",
+			"TMo3289"
+		]
+	},
+	"add-more-participants": "เพิ่มผู้ร่วมสร้างสรรค์ หนึ่งคนต่อหนึ่งบรรทัด",
+	"add-organizer": "เพิ่มผู้ประสานงาน/ผู้จัดการ",
+	"add-wiki": "เพิ่มวิกิ",
 	"all": "ทั้งหมด",
+	"all-wikipedias": "วิกิพีเดียทั้งหมด",
 	"apply": "ใช้งาน",
+	"attribution": "การแสดงที่มา",
+	"byte-difference": "เพิ่มไบต์แล้ว",
 	"cancel": "ยกเลิก",
 	"date": "วันที่",
 	"documentation": "เอกสาร",
 	"edit-summary": "ความคิดเห็น",
+	"error-event-retry": "โปรดลองอีกครั้งหรือ $1 (อย่าลืมรวมลิงก์ไปยังกิจกรรมของคุณ)",
+	"error-event-retry-link": "รายงานปัญหานี้",
+	"error-event-timeout": "กระบวนการนี้ใช้เวลานานเกินไปและหยุดทำงาน",
+	"error-unknown": "มีบางอย่างผิดพลาด",
 	"fatal-error": "การผิดพลาดร้ายแรง",
 	"help": "วิธีใช้",
 	"help-translate": "ช่วยแปลภาษา",
@@ -25,5 +42,5 @@
 	"totals": "ทั้งหมด",
 	"unknown": "ไม่ทราบ",
 	"username": "ชื่อผู้ใช้",
-	"view-source": "ดูโค้ด"
+	"view-source": "ดูต้นฉบับ"
 }
