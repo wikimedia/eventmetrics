@@ -35,9 +35,8 @@ class EventWikiStat
     use StatTrait;
 
     /**
-     * Allowed metric types. Keys are the i18n key for the metric, and is what
-     * is stored in the database. Values are the applicable wikis for that type
-     * of metric, with null meaning all wikis.
+     * Allowed metric types. Keys are the i18n key for the metric, and is what is stored in the database.
+     * Values are the applicable wikis for that type of metric, with null meaning all wikis.
      * @see StatTrait Shared methods that use this constant.
      */
     public const METRIC_TYPES = [
@@ -47,8 +46,6 @@ class EventWikiStat
         'pages-improved',
         'pages-created-pageviews',
         'pages-improved-pageviews',
-
-        // For Commons
         'files-uploaded',
         'file-usage',
 

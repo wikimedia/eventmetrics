@@ -37,3 +37,8 @@ AppBundle\Model\Participant:
         # Old editor, 3 items created in period, 5 improved.
         __construct: ['@event1']
         userId: 6398
+    JeBonSer:
+        # See https://en.wikipedia.org/w/index.php?title=Special:Contributions/JeBonSer&start=2018-06-10&end=2018-06-11
+        # Old editor, 2 pages created, 2 local uploads.
+        __construct: ['@event1']
+        userId: 10120606
