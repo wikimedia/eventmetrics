@@ -45,6 +45,9 @@ class EventProcessor
     /** @var string[]|null Usernames of the new editors. */
     private $newEditors;
 
+    /** @var string[] Array with usernames of editors from page IDs as keys */
+    private $implicitEditors = [];
+
     /** @var string[] Unique wikis where participants have made edits. */
     protected $commonWikis;
 
@@ -93,7 +96,6 @@ class EventProcessor
         $this->log('Processing event '.$event->getId());
 
         // Generate and persist each type of EventStat/EventWikiStat.
-        $this->setNewEditors();
 
         // If there is an associated EventWiki that represents a family, we need to first find
         // the common wikis where participants have edited. From there we will create new EventWikis
@@ -107,6 +109,10 @@ class EventProcessor
 
         // Remove EventWikis that are part of a family where there are no statistics.
         $this->removeEventWikisWithNoStats();
+
+        $this->setParticipants();
+
+        $this->setNewEditors();
 
         $this->setRetention();
 
@@ -189,6 +195,18 @@ class EventProcessor
     }
 
     /**
+     * Compute and persist the number of participants.
+     */
+    private function setParticipants(): void
+    {
+        $this->log("\nFetching number of participants...");
+        $usernames = $this->getParticipantNames() ?: $this->implicitEditors;
+        $count = count($usernames);
+        $this->createOrUpdateEventStat('participants', $count);
+        $this->log(">> <info>Participants: $count</info>");
+    }
+
+    /**
      * Compute and persist a new EventStat for the number of new editors.
      */
     private function setNewEditors(): void
@@ -207,7 +225,8 @@ class EventProcessor
     private function getNewEditors(): array
     {
         if (!is_array($this->newEditors)) {
-            $this->newEditors = $this->eventRepo->getNewEditors($this->event);
+            $usernames = $this->getParticipantNames() ?: $this->implicitEditors;
+            $this->newEditors = $this->eventRepo->getNewEditors($this->event, $usernames);
         }
         return $this->newEditors;
     }
@@ -285,6 +304,8 @@ class EventProcessor
                     $this->setItemsCreatedOrImprovedOnWikidata($wiki, $ewRepo);
                     break;
             }
+
+            $this->setUserCounts($wiki, $ewRepo);
         }
 
         // Only save some metrics as EventStats if they were also saved as EventWikiStats.
@@ -397,6 +418,24 @@ class EventProcessor
         $this->createOrUpdateEventWikiStat($wiki, 'items-improved', $ret['edited']);
         $this->createOrUpdateEventStat('items-created', $ret['created']);
         $this->createOrUpdateEventStat('items-improved', $ret['edited']);
+    }
+
+    /**
+     * If current event is category based, find out participants and add them to
+     * $this->implicitEditors.
+     * @param EventWiki $wiki
+     * @param EventWikiRepository $ewRepo
+     */
+    private function setUserCounts(EventWiki $wiki, EventWikiRepository $ewRepo): void
+    {
+        $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
+
+        $pageIds = $wiki->getPages();
+        $usernames = $this->getParticipantNames();
+        if ($pageIds && !$usernames && $this->event->getNumCategories() > 0) {
+            $usernames = $ewRepo->getUsersFromPageIDs($dbName, $pageIds, $this->event);
+            $this->implicitEditors += array_flip($usernames);
+        }
     }
 
     /**

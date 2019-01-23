@@ -33,11 +33,6 @@
                                 {{ msg('events') }}
                             </div>
                         </th>
-                        <th class="text-nowrap">
-                            <div class="sort-link sort-link--participants" data-column="participants">
-                                {{ msg('participants') }}
-                            </div>
-                        </th>
                         {% for metric in visibleMetrics if metrics[metric] is defined %}
                             <th class="text-nowrap">
                                 <div class="sort-link sort-link--{{ metric }}" data-column="{{ metric }}">
@@ -58,10 +53,6 @@
                             </td>
                             <td class="sort-entry--events text-nowrap" data-value="{{ program.numEvents }}">
                                 {{ program.numEvents|num_format }}
-                            </td>
-                            {% set numParticipants = programRepo.numParticipants(program) %}
-                            <td class="sort-entry--participants text-nowrap" data-value="{{ numParticipants }}">
-                                {{ numParticipants|num_format }}
                             </td>
                             {% for metric in visibleMetrics if metrics[metric] is defined %}
                                 <td class="sort-entry--{{ metric }} text-nowrap" data-value="{{ program.statistic(metric) }}">

@@ -1,8 +1,4 @@
 <div class="row event-stats">
-    <div class="text-center event-stats--tile">
-        <h4>{{ msg('participants') }}</h4>
-        <h3>{{ event.numParticipants|num_format }}</h3>
-    </div>
     {% for metric in event.visibleMetrics if metric in event.availableMetrics|keys %}
         {% set stat = event.getStatistic(metric) %}
         {% if stat is not empty %}

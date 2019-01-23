@@ -14,6 +14,11 @@ AppBundle\Model\Event:
         timezone: 'America/New_York'
         start: '2018-06-09T00:00:00Z'
         end: '2018-06-11T23:59:59Z'
+    event2:
+        __construct: ['@program1', 'Event without participants']
+        timezone: 'America/New_York'
+        start: '2018-06-09T00:00:00Z'
+        end: '2018-06-11T23:59:59Z'
 AppBundle\Model\EventWiki:
     eventwiki1:
         __construct: ['@event1', 'en.wikipedia']
@@ -21,6 +26,8 @@ AppBundle\Model\EventWiki:
         __construct: ['@event1', 'commons.wikimedia']
     eventWiki3:
         __construct: ['@event1', 'www.wikidata']
+    event2wiki:
+        __construct: ['@event2', 'en.wikipedia']
 AppBundle\Model\Participant:
     MusikAnimal:
         # See https://en.wikipedia.org/wiki/Special:Contribs/MusikAnimal?namespace=0&start=2018-06-10&end=2018-06-11
@@ -42,3 +49,6 @@ AppBundle\Model\Participant:
         # Old editor, 2 pages created, 2 local uploads.
         __construct: ['@event1']
         userId: 10120606
+AppBundle\Model\EventCategory:
+    eventCategory1:
+        __construct: ['@event2', 'Parks in Brooklyn', 'en.wikipedia']

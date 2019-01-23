@@ -43,6 +43,7 @@ class Event
      * @see EventStat
      */
     public const AVAILABLE_METRICS = [
+        'participants' => null,
         'new-editors' => 15,
         'retention' => 7,
         'edits' => null,
@@ -61,7 +62,7 @@ class Event
      * This defines what metrics are available to what wiki families. '*' means all wikis are applicable.
      */
     public const WIKI_FAMILY_METRIC_MAP = [
-        '*' => ['edits', 'new-editors', 'retention'],
+        '*' => ['edits', 'participants', 'new-editors', 'retention'],
         'wikipedia' => [
             'pages-created',
             'pages-improved',
@@ -81,6 +82,7 @@ class Event
      * The order specified here is also the order it will appear in the interface.
      */
     public const VISIBLE_METRICS = [
+        'participants',
         'new-editors',
         'retention',
         'pages-created',

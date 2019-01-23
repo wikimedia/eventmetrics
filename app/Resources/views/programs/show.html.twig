@@ -47,11 +47,6 @@
                         {% if isOrganizer %}
                             <th class="text-nowrap"></th>
                         {% endif %}
-                        <th class="text-nowrap">
-                            <div class="sort-link sort-link--participants" data-column="participants">
-                                {{ msg('participants') }}
-                            </div>
-                        </th>
                         {% for metric in visibleMetrics if metrics[metric] is defined %}
                             <th class="text-nowrap">
                                 <div class="sort-link sort-link--{{ metric }}" data-column="{{ metric }}">

@@ -427,4 +427,28 @@ class EventWikiRepository extends Repository
 
         return (int)$res->fetchColumn();
     }
+
+    /**
+     * Get the list of users participating in an event with no predefined user list
+     *
+     * @param string $dbName
+     * @param int[] $pageIds
+     * @param Event $event
+     * @return string[]
+     */
+    public function getUsersFromPageIDs(string $dbName, array $pageIds, Event $event): array
+    {
+        $revisionTable = $this->getTableName('revision');
+        $rqb = $this->getReplicaConnection()->createQueryBuilder();
+        $rqb->select('DISTINCT(rev_user_text)')
+            ->from("$dbName.$revisionTable")
+            ->where('rev_page IN (:pageIds)')
+            ->andWhere('rev_user <> 0')
+            ->andWhere('rev_timestamp BETWEEN :start AND :end')
+            ->setParameter('pageIds', $pageIds, Connection::PARAM_INT_ARRAY)
+            ->setParameter('start', $event->getStart()->format('YmdHis'))
+            ->setParameter('end', $event->getEnd()->format('YmdHis'));
+
+        return $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
+    }
 }

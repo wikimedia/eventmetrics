@@ -356,6 +356,7 @@ class EventTest extends EventMetricsTestCase
         // Statistics available based on associated families.
         static::assertEquals(
             [
+                'participants' => null,
                 'new-editors' => 15,
                 'retention' => 7,
                 'edits' => null,

@@ -34,11 +34,15 @@ class EventRepository extends Repository
     /**
      * Get the usernames of participants who are new editors, relative to the time of the event.
      * @param Event $event The Event in question.
+     * @param string[]|null $usernames Usernames of already known editors or null to use the list from the event
      * @return string[] Usernames of new editors.
      */
-    public function getNewEditors(Event $event): array
+    public function getNewEditors(Event $event, ?array $usernames = null): array
     {
-        $userIds = $event->getParticipantIds();
+        if ([] === $usernames) {
+            return [];
+        }
+
         $offset = Event::getAllAvailableMetrics()['new-editors'];
         $start = (new DateTime($event->getStart()->format('YmdHis')))
             ->sub(new DateInterval('P'.$offset.'D'))
@@ -49,11 +53,18 @@ class EventRepository extends Repository
         $rqb = $conn->createQueryBuilder();
         $rqb->select('gu_name')
             ->from('globaluser')
-            ->where('gu_id IN (:userIds)')
-            ->andWhere("gu_registration BETWEEN :start AND :end")
-            ->setParameter('userIds', $userIds, Connection::PARAM_STR_ARRAY)
+            ->where("gu_registration BETWEEN :start AND :end")
             ->setParameter('start', $start)
             ->setParameter('end', $end);
+
+        if ($usernames) {
+            $rqb->andWhere('gu_name IN (:usernames)')
+                ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+        } else {
+            $userIds = $event->getParticipantIds();
+            $rqb->andWhere('gu_id IN (:userIds)')
+                ->setParameter('userIds', $userIds, Connection::PARAM_STR_ARRAY);
+        }
 
         $ret = $this->executeQueryBuilder($rqb)->fetchAll();
         return array_column($ret, 'gu_name');

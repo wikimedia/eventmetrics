@@ -38,6 +38,7 @@ class EventStat
      * @see StatTrait Shared methods that use this constant.
      */
     public const METRIC_TYPES = [
+        'participants',
         'new-editors',
         'retention',
 
