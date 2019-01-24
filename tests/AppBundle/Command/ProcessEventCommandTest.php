@@ -160,7 +160,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
     }
 
     /**
-     * Number of edits
+     * Number of edits.
      */
     private function editCountSpec(): void
     {
@@ -170,11 +170,11 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'edits',
             ]);
-        static::assertEquals(18, $eventStat->getValue());
+        static::assertEquals(20, $eventStat->getValue());
     }
 
     /**
-     * Number of edits
+     * Bytes difference.
      */
     private function byteDifferenceSpec(): void
     {
@@ -184,7 +184,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
                 'metric' => 'byte-difference',
             ]);
-        static::assertEquals(4830, $eventWikiStat->getValue());
+        static::assertEquals(12806, $eventWikiStat->getValue());
 
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
@@ -192,7 +192,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'byte-difference',
             ]);
-        static::assertEquals(4830, $eventStat->getValue());
+        static::assertEquals(12806, $eventStat->getValue());
     }
 
     /**
@@ -207,7 +207,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'pages-created',
             ]);
-        static::assertEquals(1, $eventStat->getValue());
+        static::assertEquals(3, $eventStat->getValue());
 
         // As an EventWikiStat...
         $eventWikiStat = $this->entityManager
@@ -216,7 +216,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
                 'metric' => 'pages-created',
             ]);
-        static::assertEquals(1, $eventWikiStat->getValue());
+        static::assertEquals(3, $eventWikiStat->getValue());
     }
 
     /**
@@ -231,7 +231,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(7, $eventStat->getValue());
+        static::assertEquals(9, $eventStat->getValue());
 
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
@@ -239,7 +239,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(7, $eventWikiStat->getValue());
+        static::assertEquals(9, $eventWikiStat->getValue());
     }
 
     /**
@@ -253,7 +253,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'files-uploaded',
             ]);
-        static::assertEquals(1, $eventStat->getValue());
+        static::assertEquals(3, $eventStat->getValue());
 
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
@@ -262,6 +262,14 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'metric' => 'files-uploaded',
             ]);
         static::assertEquals(1, $eventWikiStat->getValue());
+
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
+                'metric' => 'files-uploaded',
+            ]);
+        static::assertEquals(2, $eventWikiStat->getValue());
     }
 
     /**
@@ -275,8 +283,10 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'file-usage',
             ]);
-        // Used at least on [[Domino Park]], but there could eventually be others.
-        static::assertGreaterThan(0, $eventStat->getValue());
+
+        // Used on [[Domino Park]], [[As Long as It Matters]], and [[Need to Be Next to You]],
+        // but there could eventually be others.
+        static::assertGreaterThan(2, $eventStat->getValue());
 
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
@@ -285,6 +295,15 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'metric' => 'file-usage',
             ]);
         static::assertGreaterThan(0, $eventWikiStat->getValue());
+
+        // Used on [[As Long as It Matters]] and [[Need to Be Next to You]], eventually there may be more.
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
+                'metric' => 'file-usage',
+            ]);
+        static::assertGreaterThan(1, $eventWikiStat->getValue());
     }
 
     /**

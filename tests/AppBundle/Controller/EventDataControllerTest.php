@@ -126,18 +126,24 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
 
         // Exactly 31 edits.
-        static::assertEquals(31, $this->crawler->filter('.event-revision')->count());
+        static::assertEquals(33, $this->crawler->filter('.event-revision')->count());
 
-        // 12 edits to enwiki.
+        // 14 edits to enwiki.
         static::assertEquals(
-            12,
+            14,
             substr_count($this->response->getContent(), '<td class="text-nowrap">en.wikipedia</td>')
         );
 
-        // All are to [[Domino Park]].
+        // 12 are to [[Domino Park]].
         static::assertEquals(
             12,
             substr_count($this->response->getContent(), 'https://en.wikipedia.org/wiki/Domino Park')
+        );
+
+        // 3 are files.
+        static::assertEquals(
+            3,
+            substr_count($this->response->getContent(), '/wiki/File:')
         );
     }
 

@@ -48,8 +48,6 @@ class EventStat
         'pages-improved',
         'pages-created-pageviews',
         'pages-improved-pageviews',
-
-        // For Commons
         'files-uploaded',
         'file-usage',
 

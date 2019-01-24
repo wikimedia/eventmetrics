@@ -68,6 +68,8 @@ class Event
             'byte-difference',
             'pages-created-pageviews',
             'pages-improved-pageviews',
+            'files-uploaded',
+            'file-usage',
         ],
         'commons' => ['files-uploaded', 'file-usage'],
         'wikidata' => ['items-created', 'items-improved'],

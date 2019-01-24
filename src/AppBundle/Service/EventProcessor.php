@@ -48,17 +48,23 @@ class EventProcessor
     /** @var string[] Unique wikis where participants have made edits. */
     protected $commonWikis;
 
-    /** @var int Number of edits made during the event */
+    /** @var int Number of edits made during the event. */
     private $edits = 0;
 
-    /** @var int Number of pages edited during the event */
+    /** @var int Number of pages edited during the event. */
     private $pagesImproved = 0;
 
-    /** @var int Number of pages created */
+    /** @var int Number of pages created. */
     private $pagesCreated = 0;
 
-    /** @var int Bytes changed */
+    /** @var int Bytes changed. */
     private $byteDifference = 0;
+
+    /** @var int Files uploaded. */
+    private $filesUploaded = 0;
+
+    /** @var int Number of pages that use the uploaded files. */
+    private $fileUsage = 0;
 
     /**
      * Constructor for the EventProcessor.
@@ -240,7 +246,7 @@ class EventProcessor
         $this->createOrUpdateEventStat('pages-created-pageviews', $pageviewsCreatedTotal);
         $this->createOrUpdateEventStat('pages-improved-pageviews', $pageviewsImprovedTotal);
         $this->log(">> <info>Pageviews of pages created: $pageviewsCreatedTotal</info>");
-        $this->log(">> <info>Avgerage daily pageviews of pages edited: $pageviewsImprovedTotal</info>");
+        $this->log(">> <info>Average daily pageviews of pages edited: $pageviewsImprovedTotal</info>");
     }
 
     /**
@@ -255,8 +261,8 @@ class EventProcessor
         $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
 
-        /** @var bool $pageStats Whether or not EventWikiStats for pages-created or pages-improved are being saved. */
-        $pageStats = false;
+        /** @var bool $saveEventStats Whether or not EventWikiStats are being saved. */
+        $saveEventStats = false;
 
         foreach ($this->event->getWikis() as $wiki) {
             // No stats for EventWikis that represent a family.
@@ -268,10 +274,12 @@ class EventProcessor
             switch ($wiki->getFamilyName()) {
                 case 'wikipedia':
                     $this->setContributionsWikipedias($wiki, $ewRepo);
-                    $pageStats = true;
+                    $this->setFilesUploaded($wiki, $ewRepo);
+                    $saveEventStats = true;
                     break;
                 case 'commons':
-                    $this->setFilesUploadedCommons($wiki);
+                    $this->setFilesUploaded($wiki, $ewRepo);
+                    $saveEventStats = true;
                     break;
                 case 'wikidata':
                     $this->setItemsCreatedOrImprovedOnWikidata($wiki, $ewRepo);
@@ -279,19 +287,22 @@ class EventProcessor
             }
         }
 
-        // Only save pages-created and pages-improved as EventStats
-        // if they were also saved as EventWikiStats.
-        if ($pageStats) {
+        // Only save some metrics as EventStats if they were also saved as EventWikiStats.
+        if ($saveEventStats) {
             $this->createOrUpdateEventStat('edits', $this->edits);
             $this->createOrUpdateEventStat('pages-created', $this->pagesCreated);
             $this->createOrUpdateEventStat('pages-improved', $this->pagesImproved);
             $this->createOrUpdateEventStat('byte-difference', $this->byteDifference);
+            $this->createOrUpdateEventStat('files-uploaded', $this->filesUploaded);
+            $this->createOrUpdateEventStat('file-usage', $this->fileUsage);
         }
 
         $this->log(">> <info>Edits: {$this->edits}</info>");
         $this->log(">> <info>Pages created: {$this->pagesCreated}</info>");
         $this->log(">> <info>Pages improved: {$this->pagesImproved}</info>");
         $this->log(">> <info>Bytes added: {$this->byteDifference}</info>");
+        $this->log(">> <info>Files uploaded: {$this->filesUploaded}</info>");
+        $this->log(">> <info>File usage: {$this->fileUsage}</info>");
     }
 
     /**
@@ -299,10 +310,8 @@ class EventProcessor
      * @param EventWiki $wiki
      * @param EventWikiRepository $ewRepo
      */
-    private function setContributionsWikipedias(
-        EventWiki $wiki,
-        EventWikiRepository $ewRepo
-    ): void {
+    private function setContributionsWikipedias(EventWiki $wiki, EventWikiRepository $ewRepo): void
+    {
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
 
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
@@ -334,27 +343,25 @@ class EventProcessor
     }
 
     /**
-     * Set the number of files uploaded on Commons.
+     * Set the number of files uploaded on the given wiki.
      * @param EventWiki $wiki
+     * @param EventWikiRepository $ewRepo
      */
-    private function setFilesUploadedCommons(EventWiki $wiki): void
+    private function setFilesUploaded(EventWiki $wiki, EventWikiRepository $ewRepo): void
     {
-        $this->log("> Fetching files uploaded on Commons and global file usage...");
+        $this->log("> Fetching files uploaded on {$wiki->getDomain()} and global file usage...");
 
+        $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
         $start = $this->event->getStartWithTimezone();
         $end = $this->event->getEndWithTimezone();
 
-        $ret = $this->eventRepo->getFilesUploadedCommons($start, $end, $this->getParticipantNames());
+        $ret = $this->eventRepo->getFilesUploaded($dbName, $start, $end, $this->getParticipantNames());
         $this->createOrUpdateEventWikiStat($wiki, 'files-uploaded', $ret);
-        $this->createOrUpdateEventStat('files-uploaded', $ret);
+        $this->filesUploaded += $ret;
 
-        $this->log(">> <info>Files uploaded: $ret</info>");
-
-        $ret = $this->eventRepo->getFileUsage($start, $end, $this->getParticipantNames());
+        $ret = $this->eventRepo->getFileUsage($dbName, $start, $end, $this->getParticipantNames());
         $this->createOrUpdateEventWikiStat($wiki, 'file-usage', $ret);
-        $this->createOrUpdateEventStat('file-usage', $ret);
-
-        $this->log(">> <info>Pages where files are used: $ret</info>");
+        $this->fileUsage += $ret;
     }
 
     /**

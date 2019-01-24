@@ -106,12 +106,13 @@ class EventRepository extends Repository
 
     /**
      * Get the number of files uploaded in the given time period by given users.
+     * @param string $dbName Database name such as 'enwiki_p'.
      * @param DateTime $start
      * @param DateTime $end
      * @param string[] $usernames
      * @return int
      */
-    public function getFilesUploadedCommons(DateTime $start, DateTime $end, array $usernames): int
+    public function getFilesUploaded(string $dbName, DateTime $start, DateTime $end, array $usernames): int
     {
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
@@ -120,7 +121,7 @@ class EventRepository extends Repository
         $rqb = $conn->createQueryBuilder();
 
         $rqb->select(['COUNT(DISTINCT(img_name)) AS count'])
-            ->from('commonswiki_p.image')
+            ->from("$dbName.image")
             ->where('img_timestamp BETWEEN :start AND :end')
             ->andWhere('img_user_text IN (:usernames)')
             ->setParameter('start', $start)
@@ -133,12 +134,13 @@ class EventRepository extends Repository
     /**
      * Get the number of unique mainspace pages across all projects that are using files
      * uploaded by the given users that were uploaded during the given time frame.
+     * @param string $dbName Database name such as 'enwiki_p'. For 'commonswiki_p' this will be global usage.
      * @param DateTime $start
      * @param DateTime $end
      * @param string[] $usernames
      * @return int
      */
-    public function getFileUsage(DateTime $start, DateTime $end, array $usernames): int
+    public function getFileUsage(string $dbName, DateTime $start, DateTime $end, array $usernames): int
     {
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
@@ -146,12 +148,20 @@ class EventRepository extends Repository
         $conn = $this->getReplicaConnection();
         $rqb = $conn->createQueryBuilder();
 
-        $rqb->select(['COUNT(DISTINCT(img_name)) AS count'])
-            ->from('commonswiki_p.globalimagelinks')
-            ->join('commonswiki_p.globalimagelinks', 'commonswiki_p.image', null, 'gil_to = img_name')
-            ->where('img_timestamp BETWEEN :start AND :end')
+        $rqb->select(['COUNT(DISTINCT(img_name)) AS count']);
+
+        if ('commonswiki_p' === $dbName) {
+            $rqb->from('commonswiki_p.globalimagelinks')
+                ->join('commonswiki_p.globalimagelinks', 'commonswiki_p.image', null, 'gil_to = img_name')
+                ->where('gil_page_namespace_id = 0');
+        } else {
+            $rqb->from("$dbName.imagelinks")
+                ->join("$dbName.imagelinks", "$dbName.image", null, 'il_to = img_name')
+                ->where('il_from_namespace = 0');
+        }
+
+        $rqb->andWhere('img_timestamp BETWEEN :start AND :end')
             ->andWhere('img_user_text IN (:usernames)')
-            ->andWhere('gil_page_namespace_id = 0')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
@@ -353,8 +363,13 @@ class EventRepository extends Repository
                 // Skip if there are no pages to query (otherwise `rev_page IN` clause will cause SQL error).
                 continue;
             } else {
-                // For non-files, we query for all revisions to the set of pages known to be edited.
-                $nsClause = "AND rev_page IN ($pageIdsSql)";
+                // For other wikis, we query for all revisions to the set of pages known to be edited.
+                // This includes local file uploads.
+                $nsClause = "AND (
+                    rev_page IN ($pageIdsSql) OR (
+                        page_namespace = 6 AND rev_parent_id = '0'
+                    )
+                )";
             }
 
             $sqlClauses[] = "SELECT rev_id AS 'id',
