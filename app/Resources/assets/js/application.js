@@ -11,6 +11,7 @@ eventmetrics.application = {};
 $(function () {
     eventmetrics.application.setupPanelTooltips();
     eventmetrics.application.preventHighUtf8Strings();
+    eventmetrics.application.preventDoubleSubmission();
 
     // Activate Bootstrap tooltips.
     $('[data-toggle="tooltip"]').tooltip();
@@ -331,4 +332,16 @@ eventmetrics.application.preventHighUtf8Strings = function () {
         $(this).val(newVal);
     }
     $('input, textarea').on({ keydown: replaceHighUtf8Strings, change: replaceHighUtf8Strings });
+};
+
+/**
+ * Prevent forms from being submitted more than once.
+ */
+eventmetrics.application.preventDoubleSubmission = function () {
+    $('form').one('submit', function () {
+        $(this).find('[type=submit]').prop('disabled', true);
+        $(this).on('submit', function () {
+            return false;
+        });
+    });
 };
