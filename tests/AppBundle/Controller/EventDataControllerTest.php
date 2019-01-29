@@ -248,4 +248,32 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $jobHandler = self::$kernel->getContainer()->get('AppBundle\Service\JobHandler');
         $jobHandler->spawn($job);
     }
+
+    /**
+     * Event Summary report.
+     */
+    public function testEventSummary(): void
+    {
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Oliver_and_Company']);
+
+        // Make a request to process the event.
+        $this->crawler = $this->client->request(
+            'POST',
+            '/events/process/'.$event->getId(),
+            [],
+            [],
+            ['HTTP_X-Requested-With' => 'XMLHttpRequest']
+        );
+
+        $this->client->request(
+            'GET',
+            "/programs/{$event->getProgram()->getId()}/events/{$event->getId()}/summary?format=wikitext"
+        );
+        $this->response = $this->client->getResponse();
+
+        // Basic assertion to ensure data is being outputed.
+        static::assertContains("Pages created\n| 3", $this->response->getContent());
+    }
 }
