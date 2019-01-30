@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Beta16"
+			"Beta16",
+			"Lorelai87"
 		]
 	},
 	"add-category": "Aggiungi categoria",
@@ -23,6 +24,7 @@
 	"edit-summary": "Commento",
 	"edits": "Modifiche",
 	"error-event-retry-link": "segnala questo problema",
+	"error-event-timeout": "Questo processo ha richiesto troppo tempo ed è stato interrotto.",
 	"error-program-undeletable": "Questo programma non può essere cancellato perché contiene uno o più eventi.",
 	"error-title-numeric": "Il titolo non può contenere soltanto caratteri numerici.",
 	"error-unknown": "Qualcosa è andato storto",
