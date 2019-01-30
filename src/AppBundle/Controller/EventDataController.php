@@ -80,23 +80,38 @@ class EventDataController extends EntityController
 
         $ret['revisions'] = $eventRepo->getRevisions($this->event, $offset, $limit);
 
-        return $this->getFormattedRevisionsResponse($format, $ret);
+        return $this->getFormattedResponse($format, 'revisions', $ret);
+    }
+
+    /**
+     * Event Summary report.
+     * @Route("/programs/{programId}/events/{eventId}/summary", name="EventSummary")
+     * @return Response
+     */
+    public function eventSummaryAction(): Response
+    {
+        if ('csv' === $this->request->query->get('format')) {
+            return $this->getFormattedResponse('csv', 'event_summary', ['event' => $this->event]);
+        } else {
+            return $this->getFormattedResponse('wikitext', 'event_summary', ['event' => $this->event]);
+        }
     }
 
     /**
      * Get the rendered template for the requested format.
-     * @param string $format One of 'html', 'csv' or 'wikitext'
-     * @param mixed[] $ret Data that should be passed to the view.
+     * @param string $format One of 'html', 'csv' or 'wikitext'.
+     * @param string $template E.g. 'revisions' or 'event_summary'.
+     * @param mixed[] $params Data that should be passed to the view.
      * @return Response
      */
-    private function getFormattedRevisionsResponse(string $format, array $ret): Response
+    private function getFormattedResponse(string $format, string $template, array $params): Response
     {
         $formatMap = [
             'wikitext' => 'text/plain',
             'csv' => 'text/csv',
         ];
 
-        $response = $this->render("events/revisions.$format.twig", $ret);
+        $response = $this->render("events/$template.$format.twig", $params);
 
         $contentType = $formatMap[$format] ?? 'text/html';
         $response->headers->set('Content-Type', $contentType);
