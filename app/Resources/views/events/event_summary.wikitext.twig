@@ -1,8 +1,9 @@
 {% import 'macros/wiki.html.twig' as wikiHelper %}
-=== {{ msg('event-summary') }} &ndash; {{ event.displayTitle }} ===
-<small>Data snapshot as of {{ event.updatedWithTimezone|date_localize }} ({{ event.displayTimezone }})</small>
+=== {{ msg('event-summary') }} &bull; {{ event.displayTitle }} ===
+<small>''Data snapshot as of {{ event.updatedWithTimezone|date_localize }} ({{ event.displayTimezone }})''
+&bull; [https://meta.wikimedia.org/wiki/Event_Metrics/Definitions_of_metrics {{ msg('metrics-about-link') }}]</small>
 
-{| class="wikitext"
+{| class="wikitable"
 |-
 | {{ msg('participants') }}
 | {{ event.numParticipants }}{#-
@@ -12,7 +13,7 @@
 
 |-
 | {{ msg(metric, [stat.offset]) }}
-| {% if stat.value is null %}&ndash;{% else %}{{ stat.value|num_format }}{% endif %}
+| {% if stat.value is null %}&ndash;{% else %}{% if metric == 'byte-difference' and stat.value > 0 %}+{% endif %}{{ stat.value|num_format }}{% endif %}
 {% endif %}
 {% endfor %}
 
