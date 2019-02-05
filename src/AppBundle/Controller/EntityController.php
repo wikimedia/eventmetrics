@@ -82,6 +82,15 @@ abstract class EntityController extends Controller
     }
 
     /**
+     * Get the Program associated with the Request.
+     * @return Program
+     */
+    public function getProgram(): Program
+    {
+        return $this->program;
+    }
+
+    /**
      * Check the request and if the programId is set, find and set $this->program with the corresponding entity.
      * @throws NotFoundHttpException
      */
@@ -106,6 +115,15 @@ abstract class EntityController extends Controller
         if (!is_a($this->program, Program::class)) {
             throw new NotFoundHttpException('error-not-found');
         }
+    }
+
+    /**
+     * Get the Event associated with the Request.
+     * @return Event
+     */
+    public function getEvent(): Event
+    {
+        return $this->event;
     }
 
     /**

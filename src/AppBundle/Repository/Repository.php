@@ -169,6 +169,8 @@ abstract class Repository extends EntityRepository
         } elseif (is_array($arg)) {
             // Assumed to be an array of objects that can be parsed into a string.
             return '.'.join('', $arg);
+        } elseif ($arg instanceof \DateTime) {
+            return $arg->format('YmdHis');
         } else {
             // Assumed to be a string, number or boolean.
             return '.'.md5((string)$arg);

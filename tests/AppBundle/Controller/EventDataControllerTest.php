@@ -276,4 +276,41 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         // Basic assertion to ensure data is being outputed.
         static::assertContains("Pages created\n| 3", $this->response->getContent());
     }
+
+    /**
+     * Pages Created report.
+     */
+    public function testPagesCreated(): void
+    {
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Oliver_and_Company']);
+
+        // Make a request to process the event.
+        $this->crawler = $this->client->request(
+            'POST',
+            '/events/process/'.$event->getId(),
+            [],
+            [],
+            ['HTTP_X-Requested-With' => 'XMLHttpRequest']
+        );
+
+        $this->client->request(
+            'GET',
+            "/programs/{$event->getProgram()->getId()}/events/{$event->getId()}/pages-created?format=wikitext"
+        );
+        $this->response = $this->client->getResponse();
+
+        $snippet = <<<EOD
+| [https://en.wikipedia.org/wiki/Domino_Park Domino Park]
+| [https://en.wikipedia.org/wiki/User:MusikAnimal MusikAnimal]
+| en.wikipedia
+| {{FORMATNUM:12}}
+| +{{FORMATNUM:4641}}
+| {{FORMATNUM:19695}}
+| {{FORMATNUM:25}}
+| {{FORMATNUM:218}}
+EOD;
+        static::assertcontains($snippet, $this->response->getContent());
+    }
 }
