@@ -364,7 +364,7 @@ class EventTest extends EventMetricsTestCase
                 'pages-created' => null,
                 'pages-improved' => null,
                 'pages-created-pageviews' => null,
-                'pages-improved-pageviews' => 30,
+                'pages-improved-pageviews-avg' => 30,
                 'files-uploaded' => null,
                 'file-usage' => null,
             ],

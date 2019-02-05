@@ -48,7 +48,7 @@ class EventStat
         'pages-created',
         'pages-improved',
         'pages-created-pageviews',
-        'pages-improved-pageviews',
+        'pages-improved-pageviews-avg',
         'files-uploaded',
         'file-usage',
 

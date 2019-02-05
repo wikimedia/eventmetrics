@@ -143,8 +143,7 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get the number of unique mainspace pages across all projects that are using files
-     * uploaded by the given users that were uploaded during the given time frame.
+     * Get the number of files uploaded that are currently being used in at least one article, across all wikis.
      * @param string $dbName Database name such as 'enwiki_p'. For 'commonswiki_p' this will be global usage.
      * @param DateTime $start
      * @param DateTime $end

@@ -284,7 +284,7 @@ class EventWikiRepository extends Repository
             return 0;
         }
         $pageviewsRepo = new PageviewsRepository();
-        $recentDayCount = Event::AVAILABLE_METRICS['pages-improved-pageviews'];
+        $recentDayCount = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
         // The offset date is the start of the period over which pageviews should be averaged per day, up to today.
         $offsetDate = (new DateTime())->sub(new DateInterval('P'.$recentDayCount.'D'));
         $pageviewsStart = $getDailyAverage && $start < $offsetDate ? $offsetDate : $start;

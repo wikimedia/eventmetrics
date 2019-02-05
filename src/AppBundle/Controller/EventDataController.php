@@ -90,11 +90,8 @@ class EventDataController extends EntityController
      */
     public function eventSummaryAction(): Response
     {
-        if ('csv' === $this->request->query->get('format')) {
-            return $this->getFormattedResponse('csv', 'event_summary', ['event' => $this->event]);
-        } else {
-            return $this->getFormattedResponse('wikitext', 'event_summary', ['event' => $this->event]);
-        }
+        $format = 'csv' === $this->request->query->get('format') ? 'csv' : 'wikitext';
+        return $this->getFormattedResponse($format, 'event_summary', ['event' => $this->event]);
     }
 
     /**
