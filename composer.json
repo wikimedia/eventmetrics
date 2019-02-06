@@ -37,7 +37,7 @@
         "symfony/monolog-bundle": "^3.3",
         "symfony/polyfill-apcu": "^1.0",
         "symfony/swiftmailer-bundle": "^3.0",
-        "symfony/symfony": "4.1.9",
+        "symfony/symfony": "^4.2",
         "symfony/webpack-encore-pack": "^1.0",
         "twig/twig": "^2.0",
         "wikimedia/toolforge-bundle": "^0.7"
