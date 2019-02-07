@@ -88,7 +88,8 @@ eventmetrics.eventedit.setupDateRangePicker = function () {
     // Populate hidden start/end datetime fields on form submission.
     $('#event_form').on('submit', function () {
         var rangeData = $('#event_time').data().daterangepicker;
-        $('#event_start').val(rangeData.startDate.format('YYYY-MM-DDTHH:mm:00-00:00'));
-        $('#event_end').val(rangeData.endDate.format('YYYY-MM-DDTHH:mm:00-00:00'));
+        // These date formats match what's defined in EventType.php
+        $('#event_start').val(rangeData.startDate.format('YYYY-MM-DD HH:mm:00-00:00'));
+        $('#event_end').val(rangeData.endDate.format('YYYY-MM-DD HH:mm:00-00:00'));
     });
 };
