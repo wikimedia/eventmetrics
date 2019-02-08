@@ -74,6 +74,9 @@ class EventType extends AbstractType
                 'html5' => false,
                 'view_timezone' => 'UTC',
                 'constraints' => [new Valid()],
+                // Set the full ISO8601 format here because Moment.js is finicky about the format it accepts and without
+                // the UTC timezone appended it converts to the browser's local time. We only want
+                'format' => 'yyyy-MM-dd HH:mm:ssxxx',
             ])
             ->add('end', DateTimeType::class, [
                 'widget' => 'single_text',
@@ -81,6 +84,8 @@ class EventType extends AbstractType
                 'html5' => false,
                 'view_timezone' => 'UTC',
                 'constraints' => [new Valid()],
+                // See note above in 'start'.
+                'format' => 'yyyy-MM-dd HH:mm:ssxxx',
             ])
             ->add('timezone', TimezoneType::class, [
                 'choices' => $this->getTimezones(),
