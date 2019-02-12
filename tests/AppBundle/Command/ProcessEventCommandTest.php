@@ -69,11 +69,6 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         $this->getFixtureLoader()->addFixture(new LoadFixtures('extended'));
         $this->fixtureExecutor->execute($this->getFixtureLoader()->getFixtures());
 
-        // We need the event created in the fixtures.
-        $this->event = $this->entityManager
-            ->getRepository('Model:Event')
-            ->findOneBy(['title' => 'Oliver_and_Company']);
-
         $application = new Application(self::$kernel);
         $application->add(new ProcessEventCommand(
             $container,
@@ -95,17 +90,33 @@ class ProcessEventCommandTest extends EventMetricsTestCase
     }
 
     /**
+     * @param string[] $conds
+     */
+    private function prepareEvent(array $conds = ['title' => 'Oliver_and_Company']): void
+    {
+        // We need the event created in the fixtures.
+        $this->event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy($conds);
+    }
+
+    private function persistJob(): void
+    {
+        // Create a Job for the Event and flush it to the database.
+        $job = new Job($this->event);
+        $this->entityManager->persist($job);
+        $this->entityManager->flush();
+    }
+
+    /**
      * Start of test suite, run the command and make the assertions.
      */
     public function testProcess(): void
     {
         $this->nonexistentSpec();
 
-        // Create a Job for the Event and flush it to the database.
-        $job = new Job($this->event);
-        $this->entityManager->persist($job);
-        $this->entityManager->flush();
-
+        $this->prepareEvent();
+        $this->persistJob();
         $this->commandTester->execute(['eventId' => $this->event->getId()]);
         static::assertEquals(0, $this->commandTester->getStatusCode());
 
@@ -142,7 +153,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findAll(['event' => $this->event]);
-        static::assertEquals(12, count($eventStats));
+        static::assertEquals(13, count($eventStats));
     }
 
     /**
@@ -375,15 +386,12 @@ class ProcessEventCommandTest extends EventMetricsTestCase
      */
     public function testCategories(): void
     {
+        $this->prepareEvent();
         // Add https://en.wikipedia.org/wiki/Category:Parks_in_Brooklyn.
         // This will include [[Domino Park]] created and edited by MusikAnimal.
         new EventCategory($this->event, 'Parks in Brooklyn', 'en.wikipedia');
 
-        // Create a Job for the Event and flush it to the database.
-        $job = new Job($this->event);
-        $this->entityManager->persist($job);
-        $this->entityManager->flush();
-
+        $this->persistJob();
         $this->commandTester->execute(['eventId' => $this->event->getId()]);
 
         // Should be only 1 page created and improved, ([[Domino Park]]).
@@ -399,6 +407,30 @@ class ProcessEventCommandTest extends EventMetricsTestCase
             ->findOneBy([
                 'event' => $this->event,
                 'metric' => 'pages-improved',
+            ]);
+        static::assertEquals(1, $eventStat->getValue());
+    }
+
+    public function testEventsWithoutParticipants(): void
+    {
+        $this->prepareEvent(['title' => 'Event_without_participants']);
+        $this->persistJob();
+        $this->commandTester->execute(['eventId' => $this->event->getId()]);
+        static::assertEquals(0, $this->commandTester->getStatusCode());
+
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'retention',
+            ]);
+        static::assertEquals(1, $eventStat->getValue());
+
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'new-editors',
             ]);
         static::assertEquals(1, $eventStat->getValue());
     }

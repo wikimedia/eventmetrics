@@ -6,8 +6,7 @@
 {| class="wikitable"
 |-
 | {{ msg('participants') }}
-| {{ event.numParticipants }}{#-
--#}{% for metric in ['participants', 'pages-created', 'pages-improved', 'byte-difference', 'files-uploaded', 'items-created', 'items-improved', 'pages-created-pageviews', 'pages-improved-pageviews'] %}
+| {% for metric in ['participants', 'pages-created', 'pages-improved', 'byte-difference', 'files-uploaded', 'items-created', 'items-improved', 'pages-created-pageviews', 'pages-improved-pageviews'] %}
 {% set stat = event.getStatistic(metric) %}
 {% if stat is not empty %}
 

@@ -90,28 +90,4 @@ class ProgramRepository extends Repository
             ->executeQuery($sql, [$eventWikiIds], [Connection::PARAM_INT_ARRAY]);
         return $stmt->fetchAll(\PDO::FETCH_NUM);
     }
-
-    /**
-     * Get the number of participants of Events belonging to the Program.
-     * @param Program $program
-     * @return int
-     */
-    public function getNumParticipants(Program $program): int
-    {
-        $rqb = $this->getEventMetricsConnection()->createQueryBuilder();
-
-        $eventIds = $program->getEventIds();
-
-        // Don't run a query unless you need to.
-        if (0 === count($eventIds)) {
-            return 0;
-        }
-
-        return (int)$rqb->select(['COUNT(DISTINCT(par_user_id))'])
-            ->from('participant')
-            ->where('par_event_id IN (:eventIds)')
-            ->setParameter('eventIds', $eventIds, Connection::PARAM_INT_ARRAY)
-            ->execute()
-            ->fetchColumn();
-    }
 }
