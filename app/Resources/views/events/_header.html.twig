@@ -12,7 +12,7 @@
                     {% set statsDesc = '' %}
                 {% else %}
                     {% set statsBtnText = msg('update-data') %}
-                    {% set statsDesc = msg('last-updated', [event.updatedWithTimezone|date_localize]) ~ ' (' ~ event.displayTimezone ~ ')' %}
+                    {% set statsDesc = msg('last-updated', [event.updatedUTC|date_localize]) ~ ' (' ~ event.displayTimezone ~ ')' %}
                 {% endif %}
                 {% if job != false and (job.status == constant('STATUS_STARTED', job) or job.status == constant('STATUS_QUEUED', job)) %}
                     {% set statsBtnText = msg('updating') %}

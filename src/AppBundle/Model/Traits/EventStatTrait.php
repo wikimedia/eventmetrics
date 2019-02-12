@@ -134,6 +134,7 @@ trait EventStatTrait
 
     /**
      * Get the date of the last time the EventStat's were refreshed.
+     * @see self::getUpdatedUTC() if you need to use the datestamp in an SQL query.
      * @return DateTime|null
      */
     public function getUpdated(): ?DateTime
@@ -142,10 +143,10 @@ trait EventStatTrait
     }
 
     /**
-     * Get the update at value adjusted with the Event's timezone.
+     * Get the updated at value as UTC. This is what should be used in SQL queries.
      * @return DateTime
      */
-    public function getUpdatedWithTimezone(): DateTime
+    public function getUpdatedUTC(): DateTime
     {
         $this->updated->setTimezone(new DateTimeZone($this->timezone));
         return new DateTime(

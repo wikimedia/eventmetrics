@@ -223,7 +223,7 @@ class EventProcessor
         $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
 
-        $start = $this->event->getStartWithTimezone();
+        $start = $this->event->getStartUTC();
         $pageviewsCreatedTotal = 0;
         $pageviewsImprovedTotal = 0;
         foreach ($this->event->getWikis() as $wiki) {
@@ -315,8 +315,8 @@ class EventProcessor
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
 
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
-        $start = $this->event->getStartWithTimezone();
-        $end = $this->event->getEndWithTimezone();
+        $start = $this->event->getStartUTC();
+        $end = $this->event->getEndUTC();
         $usernames = $this->getParticipantNames();
         $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
         $pageIdsCreated = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'created');
@@ -352,8 +352,8 @@ class EventProcessor
         $this->log("> Fetching files uploaded on {$wiki->getDomain()} and global file usage...");
 
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
-        $start = $this->event->getStartWithTimezone();
-        $end = $this->event->getEndWithTimezone();
+        $start = $this->event->getStartUTC();
+        $end = $this->event->getEndUTC();
 
         $ret = $this->eventRepo->getFilesUploaded($dbName, $start, $end, $this->getParticipantNames());
         $this->createOrUpdateEventWikiStat($wiki, 'files-uploaded', $ret);
@@ -374,8 +374,8 @@ class EventProcessor
         $this->log("> Fetching items created or improved on Wikidata...");
 
         $dbName = 'wikidatawiki_p';
-        $start = $this->event->getStartWithTimezone();
-        $end = $this->event->getEndWithTimezone();
+        $start = $this->event->getStartUTC();
+        $end = $this->event->getEndUTC();
         $usernames = $this->getParticipantNames();
         $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
         $pageIdsCreated = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'created');
@@ -427,7 +427,7 @@ class EventProcessor
         $this->log("\nFetching retention...");
 
         $retentionOffset = Event::getAllAvailableMetrics()['retention'];
-        $end = $this->event->getEndWithTimezone()->modify("+$retentionOffset days");
+        $end = $this->event->getEndUTC()->modify("+$retentionOffset days");
 
         // Only calculate for new editors.
         $usernames = $this->getNewEditors();

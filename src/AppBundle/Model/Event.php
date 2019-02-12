@@ -179,7 +179,8 @@ class Event
      *     length=64,
      *     options={"default":"UTC"}
      * )
-     * @var string The end date and time of the the event.
+     * @var string The timezone of the Event. Should be a PHP-supported timezone.
+     * @see https://secure.php.net/manual/en/timezones.php
      */
     protected $timezone;
 
@@ -263,7 +264,7 @@ class Event
         return $this->wikis->count() > 0 &&
             null !== $this->start &&
             null !== $this->end &&
-            $this->getStartWithTimezone() < new DateTime() &&
+            $this->getStartUTC() < new DateTime() &&
             (
                 $this->participants->count() > 0
                 // FIXME: uncomment once issues at T194707#4620358 are resolved.
@@ -290,6 +291,7 @@ class Event
 
     /**
      * Get the start date of this Event.
+     * @see self::getStartUTC() if you need to use the datestamp in an SQL query.
      * @return DateTime|null
      */
     public function getStart(): ?DateTime
@@ -307,10 +309,10 @@ class Event
     }
 
     /**
-     * Get the start date adjusted with the Event's timezone.
+     * Get the start date in UTC. This is what should be used in SQL queries.
      * @return DateTime
      */
-    public function getStartWithTimezone(): DateTime
+    public function getStartUTC(): DateTime
     {
         $dateStr = $this->start->format('YmdHis');
         $dt = new DateTime($dateStr, new DateTimeZone($this->timezone));
@@ -320,6 +322,7 @@ class Event
 
     /**
      * Get the end date of this Event.
+     * @see self::getEndUTC() if you need to use the datestamp in an SQL query.
      * @return DateTime|null
      */
     public function getEnd(): ?DateTime
@@ -328,10 +331,10 @@ class Event
     }
 
     /**
-     * Get the end date adjusted with the Event's timezone.
+     * Get the end date in UTC. This is what should be used in SQL queries.
      * @return DateTime
      */
-    public function getEndWithTimezone(): DateTime
+    public function getEndUTC(): DateTime
     {
         $dateStr = $this->end->format('YmdHis');
         $dt = new DateTime($dateStr, new DateTimeZone($this->timezone));

@@ -40,7 +40,7 @@ class EventRepository extends Repository
     {
         $userIds = $event->getParticipantIds();
         $offset = Event::getAllAvailableMetrics()['new-editors'];
-        $start = (new DateTime($event->getStart()->format('YmdHis')))
+        $start = (new DateTime($event->getStartUTC()->format('YmdHis')))
             ->sub(new DateInterval('P'.$offset.'D'))
             ->format('YmdHis');
         $end = $event->getEnd()->format('YmdHis');
@@ -278,7 +278,7 @@ class EventRepository extends Repository
      * @param int|null $offset Number of rows to offset, used for pagination.
      * @param int|null $limit Number of rows to fetch.
      * @param bool $count Whether to get a COUNT instead of the actual revisions.
-     * @return int|string[] Count of revisions, or string array with keys 'id',
+     * @return int|mixed[] Count of revisions, or string array with keys 'id',
      *     'timestamp', 'page', 'wiki', 'username', 'summary'.
      */
     private function getRevisionsData(Event $event, ?int $offset, ?int $limit, bool $count)
@@ -299,8 +299,8 @@ class EventRepository extends Repository
             $sql .= "\nLIMIT $offset, $limit";
         }
 
-        $start = $event->getStart()->format('Ymd000000');
-        $end = $event->getEnd()->format('Ymd235959');
+        $start = $event->getStartUTC()->format('YmdHis');
+        $end = $event->getEndUTC()->format('YmdHis');
 
         $stmt = $this->executeReplicaQuery($sql, [
             'startDate' => $start,

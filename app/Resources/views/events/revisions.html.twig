@@ -57,7 +57,7 @@
                     <tr class="event-revision">
                         <td class="text-nowrap">
                             ({{ wiki.pageLink('Special:Diff/' ~ rev.id, rev.wiki, msg('diff')|lower) }})
-                            {{ wiki.pageLink('Special:PermaLink/' ~ rev.id, rev.wiki, rev.timestamp|date_localize) }}
+                            {{ wiki.pageLink('Special:PermaLink/' ~ rev.id, rev.wiki, rev.timestamp|date_localize(event.timezone)) }}
                         </td>
                         <td>
                             {# TODO: programatically fetch namespace name from meta API #}

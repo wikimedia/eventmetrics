@@ -81,8 +81,8 @@ class EventTest extends EventMetricsTestCase
         );
         static::assertEquals(new DateTime('2017-01-01 16:00'), $event->getStart());
         static::assertEquals(new DateTime('2017-03-01 21:00'), $event->getEnd());
-        static::assertEquals(new DateTime('2017-01-01 21:00'), $event->getStartWithTimezone());
-        static::assertEquals(new DateTime('2017-03-02 02:00'), $event->getEndWithTimezone());
+        static::assertEquals(new DateTime('2017-01-01 21:00'), $event->getStartUTC());
+        static::assertEquals(new DateTime('2017-03-02 02:00'), $event->getEndUTC());
 
         // Date types reversed.
         $event2 = new Event(
@@ -320,7 +320,7 @@ class EventTest extends EventMetricsTestCase
         static::assertEquals($datetime, $event->getUpdated());
         static::assertEquals(
             new DateTime('2017-01-01 12:00'),
-            $event->getUpdatedWithTimezone()
+            $event->getUpdatedUTC()
         );
     }
 
