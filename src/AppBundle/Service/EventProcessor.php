@@ -69,6 +69,9 @@ class EventProcessor
     /** @var int Number of pages that use the uploaded files. */
     private $fileUsage = 0;
 
+    /** @var int Pages using uploaded files. */
+    private $pagesUsingFiles = 0;
+
     /**
      * Constructor for the EventProcessor.
      * @param LoggerInterface $logger
@@ -323,7 +326,8 @@ class EventProcessor
         $this->log(">> <info>Pages improved: {$this->pagesImproved}</info>");
         $this->log(">> <info>Bytes added: {$this->byteDifference}</info>");
         $this->log(">> <info>Files uploaded: {$this->filesUploaded}</info>");
-        $this->log(">> <info>File usage: {$this->fileUsage}</info>");
+        $this->log(">> <info>Files used: {$this->fileUsage}</info>");
+        $this->log(">> <info>Pages using uploaded files: {$this->pagesUsingFiles}</info>");
     }
 
     /**
@@ -380,9 +384,13 @@ class EventProcessor
         $this->createOrUpdateEventWikiStat($wiki, 'files-uploaded', $ret);
         $this->filesUploaded += $ret;
 
-        $ret = $this->eventRepo->getFileUsage($dbName, $start, $end, $this->getParticipantNames());
+        $ret = $this->eventRepo->getUsedFiles($dbName, $start, $end, $this->getParticipantNames());
         $this->createOrUpdateEventWikiStat($wiki, 'file-usage', $ret);
         $this->fileUsage += $ret;
+
+        $ret = $this->eventRepo->getPagesUsingFiles($dbName, $start, $end, $this->getParticipantNames());
+        $this->createOrUpdateEventWikiStat($wiki, 'pages-using-files', $ret);
+        $this->pagesUsingFiles += $ret;
     }
 
     /**

@@ -315,6 +315,22 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'metric' => 'file-usage',
             ]);
         static::assertGreaterThan(1, $eventWikiStat->getValue());
+
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
+                'metric' => 'pages-using-files',
+            ]);
+        static::assertGreaterThan(0, $eventWikiStat->getValue());
+
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikiByDomain('commons.wikimedia'),
+                'metric' => 'pages-using-files',
+            ]);
+        static::assertGreaterThan(0, $eventWikiStat->getValue());
     }
 
     /**
