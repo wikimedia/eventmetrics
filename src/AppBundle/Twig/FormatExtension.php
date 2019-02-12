@@ -9,6 +9,7 @@ namespace AppBundle\Twig;
 
 use AppBundle\Repository\EventWikiRepository;
 use DateTime;
+use DateTimeZone;
 use IntlDateFormatter;
 use NumberFormatter;
 
@@ -93,14 +94,14 @@ class FormatExtension extends Extension
     /**
      * Localize the given date based on language settings.
      * @param string|DateTime $datetime
+     * @param string $timezone Convert the timestamp to the given timezone.
      * @return string
      */
-    public function dateFormat($datetime): string
+    public function dateFormat($datetime, string $timezone = 'UTC'): string
     {
-        // If the language is 'en' with no country code,
-        // override the US English format that's provided by ICU.
+        // If the language is 'en' with no country code, override the US English format that's provided by ICU.
         if ('en' === $this->intuition->getLang()) {
-            return $this->dateFormatStd($datetime);
+            return $this->dateFormatStd($datetime, $timezone);
         }
 
         // Otherwise, format it according to the current locale.
@@ -116,19 +117,24 @@ class FormatExtension extends Extension
             $datetime = new DateTime($datetime);
         }
 
+        $datetime->setTimezone(new DateTimeZone($timezone));
+
         return $this->dateFormatter->format($datetime);
     }
 
     /**
      * Format the given date to ISO 8601.
      * @param string|DateTime $datetime
+     * @param string $timezone Convert the timestamp to the given timezone.
      * @return string
      */
-    public function dateFormatStd($datetime): string
+    public function dateFormatStd($datetime, string $timezone = 'UTC'): string
     {
         if (is_string($datetime) || is_int($datetime)) {
             $datetime = new DateTime($datetime);
         }
+
+        $datetime->setTimezone(new DateTimeZone($timezone));
 
         return $datetime->format('Y-m-d H:i');
     }

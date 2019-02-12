@@ -62,7 +62,7 @@
                     {% elseif event.numParticipants == 0 %}
                         {# FIXME: ^ also check for event.numCategories == 0 and add msg('categories') once T194707#4620358 is resolved #}
                         {{ msg('event-misconfig', [msg('participants')]) }}
-                    {% elseif event.startWithTimezone > date() %}
+                    {% elseif event.startUTC > date() %}
                         {{ msg('event-in-future') }}
                         (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings')|lower }}</a>)
                     {% else %}

@@ -31,7 +31,7 @@ AppBundle\Model\EventWiki:
 AppBundle\Model\Participant:
     MusikAnimal:
         # See https://en.wikipedia.org/wiki/Special:Contribs/MusikAnimal?namespace=0&start=2018-06-10&end=2018-06-11
-        # Old editor, 5 edits in period, 1 page creation.
+        # Old editor, 5 pages improved, 1 page creation, 1 Commons upload.
         __construct: ['@event1']
         userId: 10584730
     SingleTransferrableNerd:
@@ -41,7 +41,7 @@ AppBundle\Model\Participant:
         userId: 54502394
     Samwilson:
         # See https://www.wikidata.org/wiki/Special:Contribs/Samwilson?namespace=0&start=2018-06-10&end=2018-06-11
-        # Old editor, 3 items created in period, 5 improved.
+        # Old editor, 3 items created in period, 5 improved. 1 more edit outside list, because we can't give Special:Contribs exact times.
         __construct: ['@event1']
         userId: 6398
     JeBonSer:

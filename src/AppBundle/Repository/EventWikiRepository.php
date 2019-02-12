@@ -414,8 +414,8 @@ class EventWikiRepository extends Repository
         $res = $this->executeReplicaQueryWithTypes(
             $outerSql,
             [
-                'start' => $event->getStart()->format('YmdHis'),
-                'end' => $event->getEnd()->format('YmdHis'),
+                'start' => $event->getStartUTC()->format('YmdHis'),
+                'end' => $event->getEndUTC()->format('YmdHis'),
                 'pageIds' => $pageIds,
                 'usernames' => $usernames,
             ],
