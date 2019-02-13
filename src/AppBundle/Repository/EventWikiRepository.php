@@ -292,19 +292,13 @@ class EventWikiRepository extends Repository
         $totalPageviews = 0;
         $stmt = $this->getPageTitles($dbName, $pageIds, true);
         while ($result = $stmt->fetch()) {
-            $pageviewsInfo = $pageviewsRepo->getPerArticle(
+            $totalPageviews += (int)$this->getPageviewsPerArticle(
+                $pageviewsRepo,
                 $wiki,
                 $result['page_title'],
-                PageviewsRepository::GRANULARITY_DAILY,
                 $pageviewsStart,
                 $now
             );
-            if (!isset($pageviewsInfo['items'])) {
-                continue;
-            }
-            foreach ($pageviewsInfo['items'] as $item) {
-                $totalPageviews += $item['views'];
-            }
         }
 
         if (!$getDailyAverage) {
@@ -312,6 +306,39 @@ class EventWikiRepository extends Repository
         }
         $averagePageviews = $totalPageviews / ($start < $offsetDate ? $recentDayCount : $start->diff($now)->d);
         return (int)round($averagePageviews);
+    }
+
+    /**
+     * Get the sum of daily pageviews for the given article and date range.
+     * @param PageviewsRepository $pageviewsRepo
+     * @param EventWiki $wiki
+     * @param string $pageTitle
+     * @param DateTime $start
+     * @param DateTime $end
+     * @return int|null null if no data was found (could be new article, 404, etc.).
+     */
+    public function getPageviewsPerArticle(
+        PageviewsRepository $pageviewsRepo,
+        EventWiki $wiki,
+        string $pageTitle,
+        DateTime $start,
+        DateTime $end
+    ): ?int {
+        $pageviews = 0;
+        $pageviewsInfo = $pageviewsRepo->getPerArticle(
+            $wiki,
+            $pageTitle,
+            PageviewsRepository::GRANULARITY_DAILY,
+            $start,
+            $end
+        );
+        if (!isset($pageviewsInfo['items'])) {
+            return null;
+        }
+        foreach ($pageviewsInfo['items'] as $item) {
+            $pageviews += $item['views'];
+        }
+        return $pageviews;
     }
 
     /**
