@@ -71,21 +71,21 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get the number of pages edited and created within the time frame and for the given users.
+     * Get the number of edits made within the time frame and for the given users.
      * @param string $dbName Database name such as 'enwiki_p'.
      * @param int[] $pageIds
      * @param DateTime $start
      * @param DateTime $end
      * @param string[] $usernames
-     * @return int[] With keys 'edits', 'edited' and 'created'.
+     * @return int
      */
-    public function getEditStats(
+    public function getTotalEditCount(
         string $dbName,
         array $pageIds,
         DateTime $start,
         DateTime $end,
         array $usernames = []
-    ): array {
+    ): int {
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
 
@@ -94,11 +94,7 @@ class EventRepository extends Repository
 
         $revisionTable = $this->getTableName('revision');
 
-        $rqb->select([
-                'COUNT(*) AS edits',
-                'COUNT(DISTINCT(rev_page)) AS edited',
-                'IFNULL(SUM(CASE WHEN rev_parent_id = 0 THEN 1 ELSE 0 END), 0) AS created',
-            ])
+        $rqb->select(['COUNT(*) AS total'])
             ->from("$dbName.$revisionTable")
             ->where($rqb->expr()->in('rev_page', ':pageIds'))
             ->andWhere('rev_timestamp BETWEEN :start AND :end');
@@ -112,7 +108,8 @@ class EventRepository extends Repository
             ->setParameter('start', $start)
             ->setParameter('end', $end);
 
-        return $this->executeQueryBuilder($rqb)->fetch();
+        $result = $this->executeQueryBuilder($rqb)->fetch();
+        return (int)$result['total'];
     }
 
     /**

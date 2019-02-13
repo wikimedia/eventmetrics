@@ -242,7 +242,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(9, $eventStat->getValue());
+        static::assertEquals(7, $eventStat->getValue());
 
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
@@ -250,7 +250,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(9, $eventWikiStat->getValue());
+        static::assertEquals(7, $eventWikiStat->getValue());
     }
 
     /**
