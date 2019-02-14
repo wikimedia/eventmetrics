@@ -9,6 +9,7 @@ namespace AppBundle\Twig;
 
 use IntlDateFormatter;
 use NumberFormatter;
+use Symfony\Component\Process\Process;
 
 /**
  * Various Twig functions and filters.
@@ -47,6 +48,7 @@ class AppExtension extends Extension
             new \Twig_SimpleFunction('isAdmin', [$this, 'isAdmin']),
             new \Twig_SimpleFunction('shortHash', [$this, 'gitShortHash']),
             new \Twig_SimpleFunction('hash', [$this, 'gitHash']),
+            new \Twig_SimpleFunction('branch', [$this, 'gitBranch']),
             new \Twig_SimpleFunction('wikiPath', [$this, 'wikiPath']),
         ];
     }
@@ -78,18 +80,36 @@ class AppExtension extends Extension
     /**
      * Get the short hash of the currently checked-out Git commit.
      * @return string
+     * @codeCoverageIgnore
      */
     public function gitShortHash(): string
     {
-        return exec('git rev-parse --short HEAD');
+        $process = new Process('git rev-parse --short HEAD');
+        $process->run();
+        return trim($process->getOutput());
     }
 
     /**
-     * Get the full hash of the currently checkout-out Git commit.
+     * Get the full hash of the currently checked-out Git commit.
      * @return string
+     * @codeCoverageIgnore
      */
     public function gitHash(): string
     {
-        return exec('git rev-parse HEAD');
+        $process = new Process('git rev-parse HEAD');
+        $process->run();
+        return trim($process->getOutput());
+    }
+
+    /**
+     * Get the currently checked-out Git branch.
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function gitBranch(): string
+    {
+        $process = new Process('git rev-parse --symbolic-full-name --abbrev-ref HEAD');
+        $process->run();
+        return trim($process->getOutput());
     }
 }

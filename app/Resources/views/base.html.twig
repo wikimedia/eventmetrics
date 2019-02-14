@@ -115,6 +115,12 @@
             <div class="site-notice container-full text-center">
                 <div class="alert alert-{{ siteNoticeStyle }} alert-dismissible" role="alert">
                     {{ siteNoticeText|raw }}
+
+                    {% if 'localhost' in baseUrl or 'eventmetrics-dev' in baseUrl %}
+                        Current branch:
+                        <strong>{{ branch() }}</strong>
+                        (<a href="https://github.com/wikimedia/eventmetrics/tree/{{ hash() }}">{{ shortHash() }}</a>)
+                    {% endif %}
                 </div>
             </div>
         {% endif %}

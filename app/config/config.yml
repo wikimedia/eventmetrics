@@ -45,6 +45,7 @@ twig:
     globals:
         siteNoticeText: '%app.notice.text%'
         siteNoticeStyle: '%app.notice.style%'
+        baseUrl: '%app.base_url%'
 
 # Doctrine Configuration
 doctrine:
