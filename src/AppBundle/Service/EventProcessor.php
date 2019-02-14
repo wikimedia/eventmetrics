@@ -259,11 +259,11 @@ class EventProcessor
             $pageviewsImprovedTotal += $pageviewsImproved;
 
             $this->createOrUpdateEventWikiStat($wiki, 'pages-created-pageviews', $pageviewsCreated);
-            $this->createOrUpdateEventWikiStat($wiki, 'pages-improved-pageviews', $pageviewsImproved);
+            $this->createOrUpdateEventWikiStat($wiki, 'pages-improved-pageviews-avg', $pageviewsImproved);
         }
 
         $this->createOrUpdateEventStat('pages-created-pageviews', $pageviewsCreatedTotal);
-        $this->createOrUpdateEventStat('pages-improved-pageviews', $pageviewsImprovedTotal);
+        $this->createOrUpdateEventStat('pages-improved-pageviews-avg', $pageviewsImprovedTotal);
         $this->log(">> <info>Pageviews of pages created: $pageviewsCreatedTotal</info>");
         $this->log(">> <info>Average daily pageviews of pages edited: $pageviewsImprovedTotal</info>");
     }
