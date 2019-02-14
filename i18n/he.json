@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Mooeypoo"
+			"Mooeypoo",
+			"YaronSh"
 		]
 	},
 	"add-more-participants": "הוספת משתתפים, אחד לשורה. ניתן להעתיק ולהדביק מרשימה קיימת בויקי.",
@@ -13,6 +14,7 @@
 	"apply": "החלה",
 	"attribution-background": "תמונת הרקע זמינה בויקישיתוף בקישור $1",
 	"attribution-font": "הגופן $1 זמין תחת רשיון $2, באדיבות $3",
+	"byte-difference": "בתים השתנו",
 	"calculate-totals": "חישוב סכומים",
 	"cancel": "ביטול",
 	"close": "סגירה",
@@ -46,6 +48,7 @@
 	"files-uploaded": "קבצים שהועלו",
 	"help": "עזרה",
 	"help-translate": "עזור לתרגם",
+	"items-created": "נוצרו פריטי ויקינתונים",
 	"last-updated": "עדכון אחרון $1",
 	"login-with-oauth": "כניסה עם OAuth",
 	"logout": "יציאה מהחשבון",

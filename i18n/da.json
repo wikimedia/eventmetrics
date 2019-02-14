@@ -45,6 +45,7 @@
 	"help": "Hjælp",
 	"help-translate": "Hjælp til med at oversætte",
 	"logout": "Log ud",
+	"metrics-about-link": "Om disse figurer",
 	"my-programs": "Mine programmer",
 	"no-results": "Ingen resultater blev fundet",
 	"num-days": "{{PLURAL: $1|dag|dage}}",

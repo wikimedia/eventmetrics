@@ -5,7 +5,8 @@
 			"Movses",
 			"Okras",
 			"Shaleych",
-			"Stjn"
+			"Stjn",
+			"Facenapalm"
 		]
 	},
 	"add-category": "Добавить категорию",
@@ -19,6 +20,7 @@
 	"attribution": "Атрибуция",
 	"attribution-background": "Фоновое изображение доступно на Викискладе: $1",
 	"attribution-font": "Шрифт $1 доступен под лицензией $2, благодарность $3",
+	"attribution-font-awesome": "Иконки $1 распространяются под лицензией $2 благодаря $3",
 	"byte-difference": "Байт изменено",
 	"cancel": "Отменить",
 	"categories": "Категории",
