@@ -352,18 +352,20 @@ class EventProcessor
         $wiki->setPagesEdited($pageIdsEdited);
 
         $pageIds = array_merge($pageIdsCreated, $pageIdsEdited);
-        $ret = $this->eventRepo->getEditStats($dbName, $pageIds, $start, $end, $usernames);
+        $totalEditCount = $this->eventRepo->getTotalEditCount($dbName, $pageIds, $start, $end, $usernames);
 
         $diff = $ewRepo->getBytesChanged($this->event, $dbName, $pageIds, $usernames);
 
-        $this->pagesCreated += $ret['created'];
-        $this->pagesImproved += $ret['edited'];
-        $this->edits += $ret['edits'];
+        $totalCreated = count($pageIdsCreated);
+        $totalEdited = count($pageIdsEdited);
+        $this->pagesCreated += $totalCreated;
+        $this->pagesImproved += $totalEdited;
+        $this->edits += $totalEditCount;
         $this->byteDifference += $diff;
 
-        $this->createOrUpdateEventWikiStat($wiki, 'edits', $ret['edits']);
-        $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $ret['created']);
-        $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $ret['edited']);
+        $this->createOrUpdateEventWikiStat($wiki, 'edits', $totalEditCount);
+        $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $totalCreated);
+        $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $totalEdited);
         $this->createOrUpdateEventWikiStat($wiki, 'byte-difference', $diff);
     }
 
@@ -414,18 +416,15 @@ class EventProcessor
         $wiki->setPagesCreated($pageIdsCreated);
         $wiki->setPagesEdited($pageIdsEdited);
 
-        // Re-use the same metric calculator as is used for Wikipedia pages above,
-        // but store the values under a different name.
-        $pageIds = array_merge($pageIdsCreated, $pageIdsEdited);
-        $ret = $this->eventRepo->getEditStats('wikidatawiki_p', $pageIds, $start, $end, $usernames);
-
         // Report the counts, and record them both for this wiki and the event (there's only ever one Wikidata wiki).
-        $this->log(">> <info>Items created: {$ret['created']}</info>");
-        $this->log(">> <info>Items improved: {$ret['edited']}</info>");
-        $this->createOrUpdateEventWikiStat($wiki, 'items-created', $ret['created']);
-        $this->createOrUpdateEventWikiStat($wiki, 'items-improved', $ret['edited']);
-        $this->createOrUpdateEventStat('items-created', $ret['created']);
-        $this->createOrUpdateEventStat('items-improved', $ret['edited']);
+        $totalCreated = count($pageIdsCreated);
+        $totalEdited = count($pageIdsEdited);
+        $this->log(">> <info>Items created: $totalCreated</info>");
+        $this->log(">> <info>Items improved: $totalEdited</info>");
+        $this->createOrUpdateEventWikiStat($wiki, 'items-created', $totalCreated);
+        $this->createOrUpdateEventWikiStat($wiki, 'items-improved', $totalEdited);
+        $this->createOrUpdateEventStat('items-created', $totalCreated);
+        $this->createOrUpdateEventStat('items-improved', $totalEdited);
     }
 
     /**
