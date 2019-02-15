@@ -51,6 +51,7 @@ class EventStat
         'pages-improved-pageviews-avg',
         'files-uploaded',
         'file-usage',
+        'pages-using-files',
 
         // For Wikidata. These are the same metric as pages-created and -improved, but only stored per-event.
         'items-created',

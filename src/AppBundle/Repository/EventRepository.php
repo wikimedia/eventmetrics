@@ -11,6 +11,7 @@ use AppBundle\Model\Event;
 use DateInterval;
 use DateTime;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * This class supplies and fetches data for the Event class.
@@ -150,15 +151,81 @@ class EventRepository extends Repository
      * @param string[] $usernames
      * @return int
      */
-    public function getFileUsage(string $dbName, DateTime $start, DateTime $end, array $usernames): int
+    public function getUsedFiles(string $dbName, DateTime $start, DateTime $end, array $usernames): int
+    {
+        $rqb = $this->getFileUsageBuilder($dbName, $start, $end, $usernames);
+
+        $rqb->select(['COUNT(DISTINCT(img_name)) AS count']);
+
+        return (int)$this->executeQueryBuilder($rqb)->fetchColumn();
+    }
+
+    /**
+     * Get the number of unique mainspace pages using the given file.
+     * @param string $dbName
+     * @param string $filename
+     * @return int
+     */
+    public function getPagesUsingFile(string $dbName, string $filename): int
+    {
+        $conn = $this->getReplicaConnection();
+        $rqb = $conn->createQueryBuilder();
+
+        if ('commonswiki_p' === $dbName) {
+            $rqb->select('COUNT(DISTINCT(CONCAT(gil_wiki, gil_page)))')
+                ->from('commonswiki_p.globalimagelinks')
+                ->where('gil_to = :filename')
+                ->andWhere('gil_page_namespace_id = 0');
+        } else {
+            $rqb->select('COUNT(DISTINCT(il_from)) AS count')
+                ->from("$dbName.imagelinks")
+                ->where('il_to = :filename')
+                ->andWhere('il_from_namespace = 0');
+        }
+
+        $rqb->setParameter('filename', $filename);
+
+        return (int)$this->executeQueryBuilder($rqb)->fetchColumn();
+    }
+
+    /**
+     * Get the number of unique mainspace pages across all projects that are using files
+     * uploaded by the given users that were uploaded during the given time frame.
+     * @param string $dbName Database name such as 'enwiki_p'. For 'commonswiki_p' this will be global usage.
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param string[] $usernames
+     * @return int
+     */
+    public function getPagesUsingFiles(string $dbName, DateTime $start, DateTime $end, array $usernames): int
+    {
+        $rqb = $this->getFileUsageBuilder($dbName, $start, $end, $usernames);
+
+        if ('commonswiki_p' === $dbName) {
+            $rqb->select('COUNT(DISTINCT(CONCAT(gil_wiki, gil_page)))');
+        } else {
+            $rqb->select('COUNT(DISTINCT(il_from))');
+        }
+
+        return (int)$this->executeQueryBuilder($rqb)->fetchColumn();
+    }
+
+    /**
+     * Helper for getUsedFiles() and getPagesUsingFiles().
+     *
+     * @param string $dbName
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param string[] $usernames
+     * @return QueryBuilder
+     */
+    private function getFileUsageBuilder(string $dbName, DateTime $start, DateTime $end, array $usernames): QueryBuilder
     {
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
 
         $conn = $this->getReplicaConnection();
         $rqb = $conn->createQueryBuilder();
-
-        $rqb->select(['COUNT(DISTINCT(img_name)) AS count']);
 
         if ('commonswiki_p' === $dbName) {
             $rqb->from('commonswiki_p.globalimagelinks')
@@ -176,7 +243,7 @@ class EventRepository extends Repository
             ->setParameter('end', $end)
             ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
 
-        return (int)$this->executeQueryBuilder($rqb)->fetchColumn();
+        return $rqb;
     }
 
     /**
