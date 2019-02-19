@@ -68,9 +68,6 @@
                                     {{ layout.actionButtons('Event', event, {'programId': program.id, 'eventId': event.id}, numParticipants == 0) }}
                                 </td>
                             {% endif %}
-                            <td class="text-nowrap sort-entry--participants" data-value="{{ numParticipants }}">
-                                {{ numParticipants|num_format }}
-                            </td>
                             {% for metric in visibleMetrics if metrics[metric] is defined %}
                                 {% set stat = event.statistic(metric) %}
                                 <td class="text-nowrap sort-entry--{{ metric }} text-nowrap" data-value="{{ stat ? stat.value : -1 }}">

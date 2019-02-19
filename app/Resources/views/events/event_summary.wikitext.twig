@@ -3,10 +3,7 @@
 <small>''{{ msg('last-updated', [event.updatedUTC|date_localize]) }} ({{ event.displayTimezone }})''
 &bull; [https://meta.wikimedia.org/wiki/Event_Metrics/Definitions_of_metrics {{ msg('metrics-about-link') }}]</small>
 
-{| class="wikitable"
-|-
-| {{ msg('participants') }}
-| {{ event.numParticipants }}{#-
+{| class="wikitable"{#-
 -#}{% for metric in ['participants', 'pages-created', 'pages-improved', 'byte-difference', 'files-uploaded', 'items-created', 'items-improved', 'pages-created-pageviews', 'pages-improved-pageviews-avg'] %}
 {% set stat = event.getStatistic(metric) %}
 {% if stat is not empty %}

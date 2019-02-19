@@ -30,7 +30,7 @@
             {% if event.updated is not null %}
                 {% if event.wikis|length > 1 %}
                     <h2>{{ msg('statistics') }}</h2>
-                    {% set commonMetrics = ['new-editors', 'retention'] %}
+                    {% set commonMetrics = ['participants', 'new-editors', 'retention'] %}
                     <table class="event-metadata event-metadata--grouped">
                         {% for metric in event.visibleMetrics if metric in commonMetrics %}
                             {% set stat = event.statistic(metric) %}
