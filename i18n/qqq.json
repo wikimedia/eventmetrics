@@ -113,6 +113,7 @@
 	"pages-improved": "Heading for the column listing the number of pages improved during a program, shown in the 'My Programs' table.",
 	"pages-improved-desc": "Description for the 'pages improved' metric.",
 	"pages-improved-pageviews-avg": "Label for the metric that indicates the average daily pageviews there were to the pages improved during an event.",
+	"pages-using-files": "Label for the metric indicating how many unique content pages use the files that were uploaded during the event.",
 	"participants": "Heading for the column listing the number of participants of a program in the 'My Programs' table.",
 	"please-login": "Error message saying the user needs to login in order to continue.",
 	"program": "Heading for the column listing program titles in the 'My Programs' table.\n{{Identical|Program}}",
