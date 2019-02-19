@@ -78,10 +78,11 @@
     {% endif %}
 {% endset %}
 
+{# Here we use event.participants.count, ensuring it's the number of manually entered participants (and not derived). #}
 {{
     layout.panel(
         'participants',
-        event.numParticipants ~ ' ' ~ msg('num-participants', [event.numParticipants]),
+        event.participants.count ~ ' ' ~ msg('num-participants', [event.participants.count]),
         content
     )
 }}
