@@ -319,6 +319,7 @@ class EventProcessor
             $this->createOrUpdateEventStat('byte-difference', $this->byteDifference);
             $this->createOrUpdateEventStat('files-uploaded', $this->filesUploaded);
             $this->createOrUpdateEventStat('file-usage', $this->fileUsage);
+            $this->createOrUpdateEventStat('pages-using-files', $this->pagesUsingFiles);
         }
 
         $this->log(">> <info>Edits: {$this->edits}</info>");

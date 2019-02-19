@@ -153,7 +153,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findAll(['event' => $this->event]);
-        static::assertEquals(13, count($eventStats));
+        static::assertEquals(14, count($eventStats));
     }
 
     /**
