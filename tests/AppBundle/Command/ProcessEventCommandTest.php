@@ -345,15 +345,15 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         // Event-wiki stats.
         $wikidata = $this->event->getWikiByDomain('www.wikidata');
         $ewItemsCreatedStat = $eventWikiStat->findOneBy(['wiki' => $wikidata, 'metric' => 'items-created']);
-        static::assertEquals(3, $ewItemsCreatedStat->getValue());
+        static::assertEquals(2, $ewItemsCreatedStat->getValue());
         $ewItemsImprovedStat = $eventWikiStat->findOneBy(['wiki' => $wikidata, 'metric' => 'items-improved']);
-        static::assertEquals(5, $ewItemsImprovedStat->getValue());
+        static::assertEquals(4, $ewItemsImprovedStat->getValue());
 
         // Event stats.
         $eItemsCreatedStat = $eventStat->findOneBy(['event' => $this->event, 'metric' => 'items-created']);
-        static::assertEquals(3, $eItemsCreatedStat->getValue());
+        static::assertEquals(2, $eItemsCreatedStat->getValue());
         $eItemsImprovedStat = $eventStat->findOneBy(['event' => $this->event, 'metric' => 'items-improved']);
-        static::assertEquals(5, $eItemsImprovedStat->getValue());
+        static::assertEquals(4, $eItemsImprovedStat->getValue());
     }
 
     /**

@@ -41,6 +41,7 @@ class EventCategoryRepository extends Repository
             ->join("$dbName.categorylinks", "$dbName.category", 'cl', 'cl_to = cat_title')
             ->join("$dbName.categorylinks", "$dbName.page", 'p', 'cl_from = page_id')
             ->where('page_namespace = 0')
+            ->andWhere('page_is_redirect = 0')
             // IDs are validated as integers in the model, and hence safe to put directly in the SQL.
             ->andWhere('cat_id IN ('.implode(',', $ids).')');
 
