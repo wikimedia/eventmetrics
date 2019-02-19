@@ -25,9 +25,9 @@ class EventWikiRepositoryTest extends EventMetricsTestCase
         $from = new DateTime('2003-11-16 13:15');
         $to = new DateTime('2003-11-16 15:19');
         $users = ['Someone else'];
-        $allPagesExpected     = [368527, 2112961, 368654, 368673];
-        $pagesCreatedExpected = [368527,          368654, 368673];
-        $pagesEditedExpected  = [        2112961                ];
+        $allPagesExpected     = [2112961, 368673];
+        $pagesCreatedExpected = [         368673];
+        $pagesEditedExpected  = [2112961        ];
         // All pages.
         $allPagesActual = $repo->getPageIds($dbName, $from, $to, $users, []);
         static::assertEquals($allPagesExpected, $allPagesActual);

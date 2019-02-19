@@ -125,8 +125,8 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         );
         $this->response = $this->client->getResponse();
 
-        // Exactly 33 edits.
-        static::assertEquals(34, $this->crawler->filter('.event-revision')->count());
+        // Exactly 29 edits.
+        static::assertEquals(29, $this->crawler->filter('.event-revision')->count());
 
         // 14 edits to enwiki.
         static::assertEquals(

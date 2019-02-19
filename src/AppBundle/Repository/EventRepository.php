@@ -457,6 +457,7 @@ class EventRepository extends Repository
                 INNER JOIN $dbName.$pageTable ON page_id = rev_page
                 LEFT OUTER JOIN $dbName.comment ON rev_comment_id = comment_id
                 WHERE rev_user_text IN ($usernames)
+                AND page_is_redirect = 0
                 $nsClause
                 AND rev_timestamp BETWEEN :startDate AND :endDate";
         }

@@ -41,7 +41,7 @@ AppBundle\Model\Participant:
         userId: 54502394
     Samwilson:
         # See https://www.wikidata.org/wiki/Special:Contribs/Samwilson?namespace=0&start=2018-06-10&end=2018-06-11
-        # Old editor, 3 items created in period, 5 improved. 1 more edit outside list, because we can't give Special:Contribs exact times.
+        # Old editor, 2 items created in period, 4 improved (no redirects). 1 more edit outside list, because we can't give Special:Contribs exact times.
         __construct: ['@event1']
         userId: 6398
     JeBonSer:

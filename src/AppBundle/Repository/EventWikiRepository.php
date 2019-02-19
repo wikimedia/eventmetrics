@@ -238,6 +238,7 @@ class EventWikiRepository extends Repository
         }
 
         $rqb->andWhere('page_namespace = 0')
+            ->andWhere('page_is_redirect = 0')
             ->andWhere('rev_timestamp BETWEEN :start AND :end');
 
         if (count($usernames) > 0) {
