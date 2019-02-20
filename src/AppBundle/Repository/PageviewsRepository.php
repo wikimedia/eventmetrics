@@ -21,6 +21,9 @@ class PageviewsRepository
 
     public const GRANULARITY_MONTHLY = 'monthly';
 
+    /** @var string YYYY-MM-DD format of the earliest data available in the Pageviews API. */
+    public const MINIMUM_START_DATE = '2015-07-01';
+
     /** @var string Base URL for the REST endpoint. */
     protected $endpointUrl = 'https://wikimedia.org/api/rest_v1/metrics/pageviews';
 

@@ -9,6 +9,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Model\Job;
 use AppBundle\Repository\EventRepository;
+use AppBundle\Repository\EventWikiRepository;
 use AppBundle\Service\JobHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +22,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class EventDataController extends EntityController
 {
-    /**********************
-     * BROWSING REVISIONS *
-     **********************/
+    /***********
+     * REPORTS *
+     ***********/
 
     /**
      * Lists individual revisions that make up the Event.
@@ -33,18 +34,10 @@ class EventDataController extends EntityController
      * @param JobHandler $jobHandler
      * @return Response
      */
-    public function revisionsAction(EventRepository $eventRepo, JobHandler $jobHandler): Response
+    public function revisionsReportAction(EventRepository $eventRepo, JobHandler $jobHandler): Response
     {
         // Kill any old, stale jobs.
         $jobHandler->handleStaleJobs($this->event);
-
-        // Redirect to event page if statistics have not yet been generated.
-        if (null === $this->event->getUpdated()) {
-            return $this->redirectToRoute('Event', [
-                'programId' => $this->program->getId(),
-                'eventId' => $this->event->getId(),
-            ]);
-        }
 
         $ret = [
             'gmTitle' => $this->event->getDisplayTitle(),
@@ -88,10 +81,33 @@ class EventDataController extends EntityController
      * @Route("/programs/{programId}/events/{eventId}/summary", name="EventSummary")
      * @return Response
      */
-    public function eventSummaryAction(): Response
+    public function eventSummaryReportAction(): Response
     {
         $format = 'csv' === $this->request->query->get('format') ? 'csv' : 'wikitext';
         return $this->getFormattedResponse($format, 'event_summary', ['event' => $this->event]);
+    }
+
+    /**
+     * Pages Created report.
+     * @Route("/programs/{programId}/events/{eventId}/pages-created", name="EventPagesCreated")
+     * @param EventWikiRepository $ewRepo
+     * @return Response
+     */
+    public function pagesCreatedReportAction(EventWikiRepository $ewRepo): Response
+    {
+        $format = 'csv' === $this->request->query->get('format') ? 'csv' : 'wikitext';
+
+        $userIds = $this->event->getParticipantIds();
+        $usernames = array_column(
+            $ewRepo->getUsernamesFromIds($userIds),
+            'user_name'
+        );
+
+        return $this->getFormattedResponse($format, 'pages_created', [
+            'event' => $this->event,
+            'ewRepo' => $ewRepo,
+            'usernames' => $usernames,
+        ]);
     }
 
     /**

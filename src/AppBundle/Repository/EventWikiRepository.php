@@ -292,20 +292,16 @@ class EventWikiRepository extends Repository
         $now = new DateTime();
         $totalPageviews = 0;
         $stmt = $this->getPageTitles($dbName, $pageIds, true);
+
+        // FIXME: make async requests for pageviews, 100 pages at a time.
         while ($result = $stmt->fetch()) {
-            $pageviewsInfo = $pageviewsRepo->getPerArticle(
+            $totalPageviews += (int)$this->getPageviewsPerArticle(
+                $pageviewsRepo,
                 $wiki,
                 $result['page_title'],
-                PageviewsRepository::GRANULARITY_DAILY,
                 $pageviewsStart,
                 $now
             );
-            if (!isset($pageviewsInfo['items'])) {
-                continue;
-            }
-            foreach ($pageviewsInfo['items'] as $item) {
-                $totalPageviews += $item['views'];
-            }
         }
 
         if (!$getDailyAverage) {
@@ -313,6 +309,56 @@ class EventWikiRepository extends Repository
         }
         $averagePageviews = $totalPageviews / ($start < $offsetDate ? $recentDayCount : $start->diff($now)->d);
         return (int)round($averagePageviews);
+    }
+
+    /**
+     * Get the sum of daily pageviews for the given article and date range.
+     * @param PageviewsRepository $pageviewsRepo
+     * @param EventWiki $wiki
+     * @param string $pageTitle
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param bool $includeAverage Whether to also return the average over the past N days
+     *   (as specified by Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'], safe to say they should be in sync).
+     * @return int|int[]|null Sum of pageviews, or [sum of pageviews, average],
+     *   or null if no data was found (could be new article, 404, etc.).
+     */
+    public function getPageviewsPerArticle(
+        PageviewsRepository $pageviewsRepo,
+        EventWiki $wiki,
+        string $pageTitle,
+        DateTime $start,
+        DateTime $end,
+        bool $includeAverage = false
+    ) {
+        $pageviewsInfo = $pageviewsRepo->getPerArticle(
+            $wiki,
+            $pageTitle,
+            PageviewsRepository::GRANULARITY_DAILY,
+            $start,
+            $end
+        );
+
+        if (!isset($pageviewsInfo['items'])) {
+            return null;
+        }
+
+        $pageviews = 0;
+        $recentPageviews = 0;
+        $recentDayCount = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
+
+        foreach (array_reverse($pageviewsInfo['items']) as $index => $item) {
+            if ($index < $recentDayCount) {
+                $recentPageviews += $item['views'];
+            }
+            $pageviews += $item['views'];
+        }
+
+        if ($includeAverage) {
+            return [$pageviews, (int)round($recentPageviews / $recentDayCount)];
+        }
+
+        return $pageviews;
     }
 
     /**
@@ -355,12 +401,14 @@ class EventWikiRepository extends Repository
      * @param string $dbName
      * @param int[] $pageIds
      * @param bool $stmt Whether to get only the statement, so that the calling method can use fetch().
-     * @return string[]|\Doctrine\DBAL\Driver\ResultStatement
+     * @param bool $includePageIds Whether to include page IDs in the result.
+     * @return mixed[]|\Doctrine\DBAL\Driver\ResultStatement
      */
-    public function getPageTitles(string $dbName, array $pageIds, bool $stmt = false)
+    public function getPageTitles(string $dbName, array $pageIds, bool $stmt = false, bool $includePageIds = false)
     {
         $rqb = $this->getReplicaConnection()->createQueryBuilder();
-        $rqb->select('page_title')
+        $select = $includePageIds ? ['page_id', 'page_title'] : 'page_title';
+        $rqb->select($select)
             ->from("$dbName.page")
             ->where($rqb->expr()->in('page_id', ':ids'))
             ->setParameter('ids', $pageIds, Connection::PARAM_INT_ARRAY);
@@ -451,5 +499,118 @@ class EventWikiRepository extends Repository
             ->setParameter('end', $event->getEnd()->format('YmdHis'));
 
         return $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * Get data for a single page, to be included in the Pages Created report.
+     * @param string $dbName
+     * @param int $pageId
+     * @param string $pageTitle
+     * @param string[] $usernames
+     * @param DateTime $end
+     * @return string[]
+     */
+    public function getSingePageCreatedData(
+        string $dbName,
+        int $pageId,
+        string $pageTitle,
+        array $usernames,
+        DateTime $end
+    ): array {
+        // Use cache if it exists.
+        $cacheKey = $this->getCacheKey(func_get_args(), 'pages_created_info');
+        if ($this->cache->hasItem($cacheKey)) {
+            return $this->cache->getItem($cacheKey)->get();
+        }
+
+        $end = $end->format('YmdHis');
+
+        $sql = "SELECT `metric`, `value` FROM (
+                    (
+                        SELECT 'creator' AS `metric`, rev_user_text AS `value`
+                        FROM $dbName.revision
+                        WHERE rev_page = :pageId
+                        LIMIT 1
+                    ) UNION (
+                        SELECT 'edits' AS `metric`, COUNT(*) AS `value`
+                        FROM $dbName.revision_userindex
+                        WHERE rev_page = :pageId
+                            AND rev_timestamp <= :end
+                            AND rev_user_text IN (:usernames)
+                    ) UNION (
+                        SELECT 'bytes' AS `metric`, rev_len AS `value`
+                        FROM $dbName.revision
+                        WHERE rev_page = :pageId
+                            AND rev_timestamp <= :end
+                        ORDER BY rev_timestamp DESC
+                        LIMIT 1
+                    ) UNION (
+                        SELECT 'links' AS `metric`, COUNT(*) AS `value`
+                        FROM $dbName.pagelinks
+                        WHERE pl_from_namespace = 0
+                            AND pl_namespace = 0
+                            AND pl_title = :pageTitle
+                    )
+                ) t1";
+
+        $ret = $this->executeReplicaQueryWithTypes(
+            $sql,
+            [
+                'pageId' => $pageId,
+                'pageTitle' => $pageTitle,
+                'usernames' => $usernames,
+                'end' => $end,
+            ],
+            [
+                'usernames' => Connection::PARAM_STR_ARRAY,
+            ]
+        )->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        // Cache for 10 minutes.
+        return $this->setCache($cacheKey, $ret, 'PT10M');
+    }
+
+    /**
+     * Get the data needed for the Pages Created report, for a single EventWiki.
+     * @param EventWiki $wiki
+     * @param string[] $usernames
+     * @return mixed[]
+     */
+    public function getPagesCreatedData(EventWiki $wiki, array $usernames): array
+    {
+        $dbName = $this->getDbNameFromDomain($wiki->getDomain());
+        $pageviewsRepo = new PageviewsRepository();
+        $pages = $this->getPageTitles($dbName, $wiki->getPagesCreated(), true, true);
+        $start = $wiki->getEvent()->getStart();
+        $end = $wiki->getEvent()->getEnd();
+        $now = new DateTime();
+        $data = [];
+
+        while ($page = $pages->fetch()) {
+            // FIXME: async?
+            [$pageviews, $avgPageviews] = $this->getPageviewsPerArticle(
+                $pageviewsRepo,
+                $wiki,
+                $page['page_title'],
+                $start,
+                $now,
+                true
+            );
+
+            $pageInfo = $this->getSingePageCreatedData(
+                $dbName,
+                (int)$page['page_id'],
+                $page['page_title'],
+                $usernames,
+                $end
+            );
+
+            $data[$page['page_title']] = array_merge($pageInfo, [
+                'pageviews' => $pageviews,
+                'avgPageviews' => $avgPageviews,
+            ]);
+        }
+
+        return $data;
     }
 }
