@@ -62,7 +62,6 @@
 	"event-created": "O evento '$1' foi criado.",
 	"event-deleted": "O evento '$1' foi eliminado.",
 	"event-download-reports": "Relatórios de download",
-	"event-edit-list": "Editar lista",
 	"event-in-future": "Não é possível gerar estatísticas porque este evento ocorre no futuro.",
 	"event-list": "Lista de eventos",
 	"event-metrics": "Event Metrics",
@@ -145,7 +144,6 @@
 	"updating": "Atualizando",
 	"updating-desc": "Aguarde, por favor, cálculos em curso...",
 	"username": "Nome de usuário",
-	"view-edit-list": "Ver lista de edições",
 	"view-source": "Ver código-fonte",
 	"wiki": "Wiki",
 	"wikis": "Wikis"

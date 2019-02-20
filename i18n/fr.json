@@ -63,7 +63,6 @@
 	"event-created": "L'événement '$1' a été créé avec succès.",
 	"event-deleted": "L'événement '$1' a été supprimé.",
 	"event-download-reports": "Télécharger les rapports",
-	"event-edit-list": "Modifier la liste",
 	"event-in-future": "Les statistiques ne peuvent pas être générées car cet événement se produit dans le futur.",
 	"event-list": "Liste d’événements",
 	"event-metrics": "Event Metrics",
@@ -146,7 +145,6 @@
 	"updating": "En cours de mise à jour",
 	"updating-desc": "Veuillez attendre, croquage des numéros en cours...",
 	"username": "Nom d'utilisateur",
-	"view-edit-list": "Afficher la liste des modifications",
 	"view-source": "Voir la source",
 	"wiki": "Wiki",
 	"wikis": "Wikis"

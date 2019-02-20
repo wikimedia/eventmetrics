@@ -62,7 +62,6 @@
 	"event-created": "Das Ereignis „$1“ wurde erfolgreich erstellt.",
 	"event-deleted": "Das Ereignis „$1“ wurde gelöscht.",
 	"event-download-reports": "Berichte herunterladen",
-	"event-edit-list": "Bearbeitungsliste",
 	"event-in-future": "Es können keine Statistiken erzeugt werden, da das Ereignis in der Zukunft stattfindet.",
 	"event-list": "Ereignisliste",
 	"event-metrics": "Event Metrics",
@@ -145,7 +144,6 @@
 	"updating": "Aktualisiere …",
 	"updating-desc": "Bitte warten, bis die Zahlen aktualisiert wurden …",
 	"username": "Benutzername",
-	"view-edit-list": "Bearbeitungsliste ansehen",
 	"view-source": "Quellcode ansehen",
 	"wiki": "Wiki",
 	"wikis": "Wikis"

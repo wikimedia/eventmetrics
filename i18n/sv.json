@@ -61,7 +61,6 @@
 	"event-created": "Händelsen \"$1\" skapades.",
 	"event-deleted": "Händelsen \"$1\" raderades.",
 	"event-download-reports": "Ladda ned rapporter",
-	"event-edit-list": "Redigera lista",
 	"event-in-future": "Statistik kan inte genereras eftersom denna händelse äger rum i framtiden.",
 	"event-list": "Händelselista",
 	"event-metrics": "Event Metrics",
@@ -141,7 +140,6 @@
 	"updating": "Uppdaterar",
 	"updating-desc": "Var god vänta, metriker uppdateras...",
 	"username": "Användarnamn",
-	"view-edit-list": "Visa redigeringslista",
 	"view-source": "Visa källkod",
 	"wiki": "Wiki",
 	"wikis": "Wikis"

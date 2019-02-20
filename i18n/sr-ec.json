@@ -51,7 +51,6 @@
 	"event-created": "Догађај „$1” је успешно направљен.",
 	"event-deleted": "Догађај „$1” је избрисан.",
 	"event-download-reports": "Преузимање извештаја",
-	"event-edit-list": "Листа измена",
 	"event-list": "Листа догађаја",
 	"event-metrics": "Метрика догађаја",
 	"event-metrics-welcome": "Добро дошли на Метрику догађаја",
@@ -121,7 +120,6 @@
 	"update-data": "Ажурирај податке",
 	"updating": "Ажурирање",
 	"username": "Корисничко име",
-	"view-edit-list": "Прикажи листу измена",
 	"view-source": "Прикажи извор",
 	"wiki": "Вики",
 	"wikis": "Викији"

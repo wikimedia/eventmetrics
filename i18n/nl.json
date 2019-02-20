@@ -44,7 +44,6 @@
 	"event-created": "Het evenement '$1' is succesvol aangemaakt.",
 	"event-deleted": "Het evenement '$1' is verwijderd.",
 	"event-download-reports": "Uitslagen ophalen",
-	"event-edit-list": "Bewerkingslijst",
 	"event-list": "Gebeurtenislijst",
 	"event-settings": "Gebeurtenisinstellingen",
 	"event-summary": "Gebeurtenisoverzicht",
@@ -104,7 +103,6 @@
 	"update-data": "Data bijwerken",
 	"updating": "Bijwerken",
 	"username": "Gebruikersnaam",
-	"view-edit-list": "Bewerkingslijst weergeven",
 	"view-source": "Broncode bekijken",
 	"wiki": "Wiki",
 	"wikis": "Wiki's"

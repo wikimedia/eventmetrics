@@ -62,7 +62,6 @@
 	"event-created": "事項「$1」已成功創建。",
 	"event-deleted": "事項「$1」已刪除。",
 	"event-download-reports": "下載報告",
-	"event-edit-list": "編輯清單",
 	"event-in-future": "無法產生統計內容，因為這是安排在往後時間的事項。",
 	"event-list": "事項清單",
 	"event-metrics": "Event Metrics",
@@ -145,7 +144,6 @@
 	"updating": "更新中",
 	"updating-desc": "請等待，目前在處理數目中...",
 	"username": "使用者名稱",
-	"view-edit-list": "檢視編輯清單",
 	"view-source": "查看原始碼",
 	"wiki": "Wiki",
 	"wikis": "Wikis"
