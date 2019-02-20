@@ -34,15 +34,17 @@
                     <table class="event-metadata event-metadata--grouped">
                         {% for metric in event.visibleMetrics if metric in commonMetrics %}
                             {% set stat = event.statistic(metric) %}
-                            <tr>
-                                <th scope="row">
-                                    {{ msg(metric, [stat.offset]) }}:
-                                    {% if msg_exists(stat.metric ~ '-desc', [stat.offset]) %}
-                                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"></span>
-                                    {% endif %}
-                                </th>
-                                <td>{{ stat.value|num_format }}</td>
-                            </tr>
+                            {% if stat is not null %}
+                                <tr>
+                                    <th scope="row">
+                                        {{ msg(metric, [stat.offset]) }}:
+                                        {% if msg_exists(stat.metric ~ '-desc', [stat.offset]) %}
+                                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"></span>
+                                        {% endif %}
+                                    </th>
+                                    <td>{{ stat.value|num_format }}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     </table>
 
