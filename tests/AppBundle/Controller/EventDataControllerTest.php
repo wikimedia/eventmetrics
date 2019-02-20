@@ -307,9 +307,6 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 | en.wikipedia
 | {{FORMATNUM:12}}
 | +{{FORMATNUM:4641}}
-| {{FORMATNUM:19695}}
-| {{FORMATNUM:25}}
-| {{FORMATNUM:218}}
 EOD;
         static::assertcontains($snippet, $this->response->getContent());
     }
