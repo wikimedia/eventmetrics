@@ -540,7 +540,7 @@ class Event
         // Use the derived participant count if available, otherwise raw count of Participant objects.
         // This is to accommodate events with no explicit participants entered (e.g. only a category).
         $parStat = $this->getStatistic('participants');
-        return null !== $parStat ? (int)$parStat->getValue() : $this->participants->count();
+        return $parStat && null !== $parStat->getValue() ? (int)$parStat->getValue() : $this->participants->count();
     }
 
     /**
