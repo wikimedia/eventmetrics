@@ -42,7 +42,7 @@
     </div>
     <h1 class="page-subject-title">
         {# Only link to the event page if on the edit list page. #}
-        {% if pageTitle == 'event-edit-list' %}
+        {% if pageTitle == 'event-all-edits' %}
             <a href="{{ path('Event', {'programId': event.program.id, 'eventId': event.id}) }}">{{ bdi(event.displayTitle) }}</a>
         {% else %}
             {{ bdi(event.displayTitle) }}

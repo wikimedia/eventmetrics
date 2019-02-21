@@ -37,7 +37,6 @@
 	"error-title-numeric": "Titlen kan ikke være et tal.",
 	"error-unknown": "Noget gik galt",
 	"event-download-reports": "Hent rapporter",
-	"event-edit-list": "Redigeringsliste",
 	"events": "Begivenheder",
 	"fatal-error": "Fatal fejl",
 	"feedback": "Tilbagemelding",
@@ -80,7 +79,6 @@
 	"update-data": "Opdater data",
 	"updating": "Opdaterer",
 	"username": "Brugernavn",
-	"view-edit-list": "Vis redigeringsliste",
 	"view-source": "Vis kildekode",
 	"wiki": "Wiki",
 	"wikis": "Wikier"

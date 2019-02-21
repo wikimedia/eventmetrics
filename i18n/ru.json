@@ -61,7 +61,6 @@
 	"event-created": "Событие «$1» было успешно создано.",
 	"event-deleted": "Событие «$1» было удалено.",
 	"event-download-reports": "Скачать отчёт",
-	"event-edit-list": "Список правок",
 	"event-list": "Список событий",
 	"event-metrics-welcome": "Добро пожаловать в Event Metrics",
 	"event-settings": "Настройки события",
@@ -133,7 +132,6 @@
 	"updating": "Обновление",
 	"updating-desc": "Подождите. Обрабатываются числа...",
 	"username": "Имя участника",
-	"view-edit-list": "Показать список правок",
 	"view-source": "Просмотреть код",
 	"wiki": "Вики",
 	"wikis": "Вики"

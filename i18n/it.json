@@ -30,7 +30,6 @@
 	"error-unknown": "Qualcosa è andato storto",
 	"event": "Evento",
 	"event-deleted": "L'evento '$1' è stato cancellato.",
-	"event-edit-list": "Modifica elenco",
 	"event-list": "Elenco degli eventi",
 	"event-no-data": "Le statistiche non sono ancora state generate per questo evento.",
 	"event-settings": "Impostazioni evento",
@@ -87,7 +86,6 @@
 	"totals": "Totali",
 	"unknown": "Sconosciuto",
 	"username": "Nome utente",
-	"view-edit-list": "Vedi elenco delle modifiche",
 	"view-source": "Visualizza sorgente",
 	"wiki": "Wiki",
 	"wikis": "Wiki"
