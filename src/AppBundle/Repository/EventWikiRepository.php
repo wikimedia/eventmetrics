@@ -547,9 +547,11 @@ class EventWikiRepository extends Repository
                     ) UNION (
                         SELECT 'links' AS `metric`, COUNT(*) AS `value`
                         FROM $dbName.pagelinks
+                        JOIN $dbName.page ON page_id = pl_from
                         WHERE pl_from_namespace = 0
                             AND pl_namespace = 0
                             AND pl_title = :pageTitle
+                            AND page_is_redirect = 0
                     )
                 ) t1";
 
@@ -578,6 +580,10 @@ class EventWikiRepository extends Repository
      */
     public function getPagesCreatedData(EventWiki $wiki, array $usernames): array
     {
+        if ($wiki->isFamilyWiki()) {
+            return [];
+        }
+
         $dbName = $this->getDbNameFromDomain($wiki->getDomain());
         $pageviewsRepo = new PageviewsRepository();
         $pages = $this->getPageTitles($dbName, $wiki->getPagesCreated(), true, true);
@@ -605,7 +611,9 @@ class EventWikiRepository extends Repository
                 $end
             );
 
-            $data[$page['page_title']] = array_merge($pageInfo, [
+            $data[] = array_merge($pageInfo, [
+                'pageTitle' => $page['page_title'],
+                'wiki' => $wiki->getDomain(),
                 'pageviews' => $pageviews,
                 'avgPageviews' => $avgPageviews,
             ]);

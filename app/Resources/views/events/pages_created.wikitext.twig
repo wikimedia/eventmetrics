@@ -14,19 +14,17 @@
 ! {{ msg('pageviews-average') }}
 ! {{ msg('incoming-links') }}
 ! {{ msg('more-page-metrics') }}
-{% for wiki in event.wikis %}
-{% for pageTitle, data in ewRepo.pagesCreatedData(wiki, usernames) %}
+{% for page in pagesCreated %}
 |-
-| [https://{{ wiki.domain }}.org/wiki/{{ pageTitle }} {{ pageTitle|replace({'_': ' '}) }}]
-| [https://{{ wiki.domain }}.org/wiki/User:{{ data.creator|replace({' ': '_'}) }} {{ data.creator }}]
-| {{ wiki.domain }}
-| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ data.edits }}}}
-| +{% verbatim %}{{FORMATNUM:{% endverbatim %}{{ data.bytes }}}}
-| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ data.pageviews }}}}
-| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ data.avgPageviews }}}}
-| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ data.links }}}}
-| [https://xtools.wmflabs.org/articleinfo/{{ wiki.domain }}/{{ pageTitle }} XTools]
+| [https://{{ page.wiki }}.org/wiki/{{ page.pageTitle }} {{ page.pageTitle|replace({'_': ' '}) }}]
+| [https://{{ page.wiki }}.org/wiki/User:{{ page.creator|replace({' ': '_'}) }} {{ page.creator }}]
+| {{ page.wiki }}
+| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.edits }}}}
+| +{% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.bytes }}}}
+| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.pageviews }}}}
+| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.avgPageviews }}}}
+| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.links }}}}
+| [https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle }} XTools]
 |-
-{% endfor %}
 {% endfor %}
 |}

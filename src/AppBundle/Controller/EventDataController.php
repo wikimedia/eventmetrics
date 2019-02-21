@@ -9,7 +9,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Model\Job;
 use AppBundle\Repository\EventRepository;
-use AppBundle\Repository\EventWikiRepository;
 use AppBundle\Service\JobHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,23 +89,22 @@ class EventDataController extends EntityController
     /**
      * Pages Created report.
      * @Route("/programs/{programId}/events/{eventId}/pages-created", name="EventPagesCreated")
-     * @param EventWikiRepository $ewRepo
+     * @param EventRepository $eventRepo
      * @return Response
      */
-    public function pagesCreatedReportAction(EventWikiRepository $ewRepo): Response
+    public function pagesCreatedReportAction(EventRepository $eventRepo): Response
     {
         $format = 'csv' === $this->request->query->get('format') ? 'csv' : 'wikitext';
 
         $userIds = $this->event->getParticipantIds();
         $usernames = array_column(
-            $ewRepo->getUsernamesFromIds($userIds),
+            $eventRepo->getUsernamesFromIds($userIds),
             'user_name'
         );
 
         return $this->getFormattedResponse($format, 'pages_created', [
             'event' => $this->event,
-            'ewRepo' => $ewRepo,
-            'usernames' => $usernames,
+            'pagesCreated' => $eventRepo->getPagesCreatedData($this->event, $usernames),
         ]);
     }
 

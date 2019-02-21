@@ -505,4 +505,33 @@ class EventRepository extends Repository
         $ret = $this->executeQueryBuilder($rqb, -1)->fetch();
         return isset($ret['job_started']) ? (bool)$ret['job_started'] : null;
     }
+
+    /**
+     * Get the data needed for the Pages Created report.
+     * @param Event $event
+     * @param string[] $usernames
+     * @return mixed[]
+     */
+    public function getPagesCreatedData(Event $event, array $usernames): array
+    {
+        $data = [];
+
+        /** @var EventWikiRepository $ewRepo */
+        $ewRepo = $this->em->getRepository('Model:EventWiki');
+        $ewRepo->setContainer($this->container);
+
+        foreach ($event->getWikis()->getIterator() as $wiki) {
+            $data = array_merge($data, $ewRepo->getPagesCreatedData($wiki, $usernames));
+        }
+
+        // Sort by avg. pageviews.
+        usort($data, function ($a, $b) {
+            if ($a['avgPageviews'] == $b['avgPageviews']) {
+                return 0;
+            }
+            return $a['avgPageviews'] < $b['avgPageviews'] ? 1 : -1;
+        });
+
+        return $data;
+    }
 }
