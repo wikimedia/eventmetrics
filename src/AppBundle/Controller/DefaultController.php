@@ -38,7 +38,7 @@ class DefaultController extends Controller
     /**
      * Get the URL of a random background image.
      * @Route("/api/background/{windowSize}", name="BackgroundImage")
-     * @param int $windowSize Device's screen size, so that we don't
+     * @param int|null $windowSize Device's screen size, so that we don't
      *   download imagery larger than what's necessary.
      * @return JsonResponse
      * This requires access to the API, and while we have a MediaWiki install

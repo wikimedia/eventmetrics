@@ -9,7 +9,6 @@ namespace AppBundle\Form;
 
 use AppBundle\Model\Event;
 use AppBundle\Model\EventCategory;
-use AppBundle\Repository\EventCategoryRepository;
 use AppBundle\Repository\EventWikiRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -33,7 +32,6 @@ class CategoryType extends AbstractType
     /**
      * CategoryType constructor.
      * @param EventWikiRepository $ewRepo
-     * @param EventCategoryRepository $ecRepo
      */
     public function __construct(EventWikiRepository $ewRepo)
     {

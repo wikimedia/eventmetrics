@@ -22,16 +22,18 @@
     },
     "require": {
         "php": "^7.2",
+        "ext-ast": "*",
         "ext-PDO": "*",
         "ext-bz2": "*",
-        "ext-json": "*",
         "ext-intl": "*",
+        "ext-json": "*",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.5",
         "eightpoints/guzzle-bundle": "^7.0",
         "incenteev/composer-parameter-handler": "^2.1",
         "leafo/scssphp": "^0.7.1",
+        "phan/phan": "^1.2",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/cache": "^4.1",
         "symfony/monolog-bundle": "^3.3",
@@ -97,6 +99,9 @@
         "fix": [
             "./vendor/bin/phpcbf .",
             "./vendor/bin/minus-x fix ."
+        ],
+        "phan": [
+            "./vendor/bin/phan -k .phan.php"
         ]
     },
     "config": {

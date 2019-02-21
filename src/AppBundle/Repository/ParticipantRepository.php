@@ -28,7 +28,7 @@ class ParticipantRepository extends Repository
     /**
      * Fetch participant SQL rows.
      * @param string[] $usernames
-     * @return string[] with keys 'user_name' and 'user_id'. 'user_id' is
+     * @return string[][] Array of arrays with keys 'user_name' and 'user_id'. 'user_id' is
      *                  null if no record was found in `centralauth_p.globaluser`.
      */
     public function getRowsFromUsernames(array $usernames): array
