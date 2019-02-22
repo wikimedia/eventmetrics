@@ -69,8 +69,11 @@ class EventProcessor
     /** @var int Number of pages that use the uploaded files. */
     private $fileUsage = 0;
 
-    /** @var int Pages using uploaded files. */
+    /** @var int Number of pages using uploaded files. */
     private $pagesUsingFiles = 0;
+
+    /** @var mixed[][] Array containing arrays with keys 'dbName' and 'pageId']. */
+    private $pageTitlesUsingFiles = [];
 
     /**
      * Constructor for the EventProcessor.
@@ -247,7 +250,9 @@ class EventProcessor
 
         $start = $this->event->getStartUTC();
         $pageviewsCreatedTotal = 0;
-        $pageviewsImprovedTotal = 0;
+        $avgPageviewsImprovedTotal = 0;
+        $avgPageviewsPagesUsingFilesTotal = 0;
+
         foreach ($this->event->getWikis() as $wiki) {
             // No pageviews for anything other than Wikipedias.
             if ($wiki->isFamilyWiki() || 'wikipedia' !== $wiki->getFamilyName()) {
@@ -256,19 +261,42 @@ class EventProcessor
 
             $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
             $pageviewsCreated = $ewRepo->getPageviews($dbName, $wiki, $start, $wiki->getPagesCreated());
-            $pageviewsImproved = $ewRepo->getPageviews($dbName, $wiki, $start, $wiki->getPagesEdited(), true);
+            $avgPageviewsImproved = $ewRepo->getPageviews($dbName, $wiki, $start, $wiki->getPagesEdited(), true);
+
+            $filePageIds = $this->getFilePageIdsFromDbName($dbName);
+            $avgPageviewsPagesUsingFilesTotal += $ewRepo->getPageviews($dbName, $wiki, $start, $filePageIds, true);
 
             $pageviewsCreatedTotal += $pageviewsCreated;
-            $pageviewsImprovedTotal += $pageviewsImproved;
+            $avgPageviewsImprovedTotal += $avgPageviewsImproved;
 
             $this->createOrUpdateEventWikiStat($wiki, 'pages-created-pageviews', $pageviewsCreated);
-            $this->createOrUpdateEventWikiStat($wiki, 'pages-improved-pageviews-avg', $pageviewsImproved);
+            $this->createOrUpdateEventWikiStat($wiki, 'pages-improved-pageviews-avg', $avgPageviewsImproved);
         }
 
         $this->createOrUpdateEventStat('pages-created-pageviews', $pageviewsCreatedTotal);
-        $this->createOrUpdateEventStat('pages-improved-pageviews-avg', $pageviewsImprovedTotal);
+        $this->createOrUpdateEventStat('pages-improved-pageviews-avg', $avgPageviewsImprovedTotal);
+        $this->createOrUpdateEventStat('pages-using-files-pageviews-avg', $avgPageviewsPagesUsingFilesTotal);
         $this->log(">> <info>Pageviews of pages created: $pageviewsCreatedTotal</info>");
-        $this->log(">> <info>Average daily pageviews of pages edited: $pageviewsImprovedTotal</info>");
+        $this->log(">> <info>Average daily pageviews of pages edited: $avgPageviewsImprovedTotal</info>");
+        $this->log(">> <info>Average daily pageviews to pages using files: $avgPageviewsPagesUsingFilesTotal</info>");
+    }
+
+    /**
+     * Get the file page IDs of the files uploaded to the given wiki.
+     * @param string $dbName
+     * @return int[]
+     */
+    private function getFilePageIdsFromDbName(string $dbName): array
+    {
+        $pageIds = [];
+
+        foreach ($this->pageTitlesUsingFiles as $row) {
+            if ($row['dbName'] === $dbName) {
+                $pageIds[] = $row['pageId'];
+            }
+        }
+
+        return $pageIds;
     }
 
     /**
@@ -392,8 +420,9 @@ class EventProcessor
         $this->fileUsage += $ret;
 
         $ret = $this->eventRepo->getPagesUsingFiles($dbName, $start, $end, $this->getParticipantNames());
-        $this->createOrUpdateEventWikiStat($wiki, 'pages-using-files', $ret);
-        $this->pagesUsingFiles += $ret;
+        $this->createOrUpdateEventWikiStat($wiki, 'pages-using-files', count($ret));
+        $this->pagesUsingFiles += count($ret);
+        $this->pageTitlesUsingFiles = array_merge($this->pageTitlesUsingFiles, $ret);
     }
 
     /**

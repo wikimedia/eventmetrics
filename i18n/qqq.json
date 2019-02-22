@@ -119,6 +119,7 @@
 	"pages-improved-desc": "Description for the 'pages improved' metric.",
 	"pages-improved-pageviews-avg": "Label for the metric that indicates the average daily pageviews there were to the pages improved during an event.",
 	"pages-using-files": "Label for the metric indicating how many unique content pages use the files that were uploaded during the event.",
+	"pages-using-files-pageviews-avg": "Label for the metric indicating the average pageviews to content pages that use the files that were uploading during the event.",
 	"pageviews-average": "Label for value that is the average number of pageviews a page has received per day.",
 	"pageviews-cumulative": "Label for value that is the number of pageviews a page has received to date.",
 	"participants": "Heading for the column listing the number of participants of a program in the 'My Programs' table.",

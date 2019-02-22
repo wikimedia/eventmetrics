@@ -41,6 +41,7 @@ class EventStat
         'participants',
         'new-editors',
         'retention',
+        'pages-using-files-pageviews-avg',
 
         // These are also stored on a per-wiki basis as a EventWikiStat
         'edits',
