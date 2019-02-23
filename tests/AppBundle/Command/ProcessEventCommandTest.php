@@ -153,7 +153,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         $eventStats = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findAll(['event' => $this->event]);
-        static::assertEquals(14, count($eventStats));
+        static::assertEquals(15, count($eventStats));
     }
 
     /**
@@ -382,6 +382,14 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'metric' => 'pages-created-pageviews',
             ]);
         static::assertGreaterThan(18932, $eventStat->getValue());
+
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'pages-using-files-pageviews-avg',
+            ]);
+        static::assertGreaterThan(0, $eventStat->getValue());
     }
 
     /**

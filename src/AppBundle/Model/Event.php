@@ -55,6 +55,7 @@ class Event
         'files-uploaded' => null,
         'file-usage' => null,
         'pages-using-files' => null,
+        'pages-using-files-pageviews-avg' => 30,
         'items-created' => null,
         'items-improved' => null,
     ];
@@ -73,8 +74,14 @@ class Event
             'files-uploaded',
             'file-usage',
             'pages-using-files',
+            'pages-using-files-pageviews-avg',
         ],
-        'commons' => ['files-uploaded', 'file-usage', 'pages-using-files'],
+        'commons' => [
+            'files-uploaded',
+            'file-usage',
+            'pages-using-files',
+            'pages-using-files-pageviews-avg',
+        ],
         'wikidata' => ['items-created', 'items-improved'],
     ];
 

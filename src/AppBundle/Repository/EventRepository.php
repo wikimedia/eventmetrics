@@ -186,25 +186,25 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get the number of unique mainspace pages across all projects that are using files
+     * Get the mainspace pages across all projects that are using files
      * uploaded by the given users that were uploaded during the given time frame.
      * @param string $dbName Database name such as 'enwiki_p'. For 'commonswiki_p' this will be global usage.
      * @param DateTime $start
      * @param DateTime $end
      * @param string[] $usernames
-     * @return int
+     * @return mixed[][] Array containing arrays with keys 'dbName' and 'pageId'].
      */
-    public function getPagesUsingFiles(string $dbName, DateTime $start, DateTime $end, array $usernames): int
+    public function getPagesUsingFiles(string $dbName, DateTime $start, DateTime $end, array $usernames): array
     {
         $rqb = $this->getFileUsageBuilder($dbName, $start, $end, $usernames);
 
         if ('commonswiki_p' === $dbName) {
-            $rqb->select('COUNT(DISTINCT(CONCAT(gil_wiki, gil_page)))');
+            $rqb->select(["CONCAT(gil_wiki, '_p') AS dbName", 'gil_page AS pageId']);
         } else {
-            $rqb->select('COUNT(DISTINCT(il_from))');
+            $rqb->select(["'$dbName' AS dbName", 'il_from AS pageId']);
         }
 
-        return (int)$this->executeQueryBuilder($rqb)->fetchColumn();
+        return $this->executeQueryBuilder($rqb)->fetchAll();
     }
 
     /**

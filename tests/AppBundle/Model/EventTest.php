@@ -368,6 +368,7 @@ class EventTest extends EventMetricsTestCase
                 'files-uploaded' => null,
                 'file-usage' => null,
                 'pages-using-files' => null,
+                'pages-using-files-pageviews-avg' => 30,
             ],
             $event->getAvailableMetrics()
         );
