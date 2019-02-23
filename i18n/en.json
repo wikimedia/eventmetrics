@@ -91,6 +91,7 @@
 	"items-improved": "Wikidata items improved",
 	"items-improved-desc": "Number of edits made to existing Wikidata items.",
 	"last-updated": "Last updated $1",
+	"last-updated-table": "Last updated",
 	"login-with-oauth": "Login with OAuth",
 	"logout": "Log out",
 	"metrics-about-link": "About these figures",

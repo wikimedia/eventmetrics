@@ -90,6 +90,7 @@
 	"items-improved": "Heading for the column listing the number of Wikidata Items improved during an event.",
 	"items-improved-desc": "Description for the 'items improved' metric.",
 	"last-updated": "Brief text showing when statistics were last updated. $1 is the date, in localized format.",
+	"last-updated-table": "Heading for a report row showing when event statistics were last updated.",
 	"login-with-oauth": "Label for button that allows the user to login with OAuth. This is shown on the homepage.",
 	"logout": "Label for Log out button\n{{Identical|Log out}}",
 	"metrics-about-link": "Text for link to documentation for the metrics available in Event Metrics.",
