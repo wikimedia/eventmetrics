@@ -25,6 +25,7 @@
 	"copy": "복사",
 	"create-new-event": "새 이벤트 만들기",
 	"create-new-program": "새 프로그램 만들기",
+	"creator": "만든이",
 	"date": "날짜",
 	"delete": "삭제",
 	"diff": "차이",
@@ -51,6 +52,7 @@
 	"error-unknown": "무언가가 잘못되었습니다",
 	"error-wikis": "{{PLURAL:$1|위키}} $1개가 유효하지 {{PLURAL:$1|않습니다}}. 철자를 확인하십시오.",
 	"event": "이벤트",
+	"event-all-edits": "모든 편집",
 	"event-created": "'$1' 이벤트가 성공적으로 생성되었습니다.",
 	"event-deleted": "'$1' 이벤트가 삭제되었습니다.",
 	"event-download-reports": "보고서 다운로드",
@@ -127,6 +129,7 @@
 	"updating": "업데이트 중",
 	"updating-desc": "현재 계산 중이니 기다려 주십시오...",
 	"username": "사용자 이름",
+	"view-all-edits": "모든 편집 보기",
 	"view-source": "원본 보기",
 	"wiki": "위키",
 	"wikis": "위키"

@@ -65,6 +65,7 @@
 	"pager-newer-n": "{{PLURAL:$1|הבאה|$1 הבאות}}",
 	"pager-older-n": "{{PLURAL:$1|הקודמת|$1 הקודמות}}",
 	"pages-created": "דפים שנוצרו",
+	"pages-improved-pageviews-avg": "כמות הצפיות הממוצעת לעמודים ליום השתפרה",
 	"participants": "משתתפים",
 	"queued": "בתור",
 	"remove": "הסרה",

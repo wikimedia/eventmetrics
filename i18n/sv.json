@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"WikiPhoenix"
+			"WikiPhoenix",
+			"Sturban"
 		]
 	},
 	"add-category": "Lägg till kategori",
@@ -58,6 +59,7 @@
 	"error-usernames": "$1 {{PLURAL:$1|användarnamn}} är {{PLURAL:$1|ogiltig|ogiltiga}}. Redigera eller ta bort och sedan skicka igen för att spara. Leta efter stavfel, ogiltig versalisering och extra formatering.",
 	"error-wikis": "$1 {{PLURAL:$1|wiki|wikis}} är {{PLURAL:$1|ogiltig|ogiltiga}}. Kontrollera stavningen.",
 	"event": "Händelse",
+	"event-all-edits": "Alla redigeringar",
 	"event-created": "Händelsen \"$1\" skapades.",
 	"event-deleted": "Händelsen \"$1\" raderades.",
 	"event-download-reports": "Ladda ned rapporter",
@@ -140,6 +142,7 @@
 	"updating": "Uppdaterar",
 	"updating-desc": "Var god vänta, metriker uppdateras...",
 	"username": "Användarnamn",
+	"view-all-edits": "Visa alla redigeringar",
 	"view-source": "Visa källkod",
 	"wiki": "Wiki",
 	"wikis": "Wikis"

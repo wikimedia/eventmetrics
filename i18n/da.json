@@ -36,6 +36,7 @@
 	"error-service-overload": "Event Metrics er i øjeblikket overbelastet af andre forespørgsler. Prøv igen om nogle minutter.",
 	"error-title-numeric": "Titlen kan ikke være et tal.",
 	"error-unknown": "Noget gik galt",
+	"event-all-edits": "Alle redigeringer",
 	"event-download-reports": "Hent rapporter",
 	"events": "Begivenheder",
 	"fatal-error": "Fatal fejl",
