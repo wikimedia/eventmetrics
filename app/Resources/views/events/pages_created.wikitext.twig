@@ -16,8 +16,8 @@
 ! {{ msg('more-page-metrics') }}
 {% for page in pagesCreated %}
 |-
-| [https://{{ page.wiki }}.org/wiki/{{ page.pageTitle }} {{ page.pageTitle|replace({'_': ' '}) }}]
-| [https://{{ page.wiki }}.org/wiki/User:{{ page.creator|replace({' ': '_'}) }} {{ page.creator }}]
+| {{ wikiHelper.pageLink(page.pageTitle, page.wiki, null, true) }}
+| {{ wikiHelper.pageLink('User:' ~ page.creator, page.wiki, page.creator, true) }}
 | {{ page.wiki }}
 | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.edits }}}}
 | +{% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.bytes }}}}

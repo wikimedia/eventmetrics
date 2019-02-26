@@ -27,8 +27,8 @@
 | style="white-space: nowrap;" | ([https://{{ rev.wiki }}.org/wiki/Special:Diff/{{ rev.id }} {{ msg('diff')|lower }}]) [https://{{ rev.wiki }}.org/wiki/Special:PermaLink/{{ rev.id }} {% verbatim %}{{#dateformat:{% endverbatim %}{{ rev.timestamp|date_format|date('Y-m-d H:i', event.timezone) }}}}]
 | {{ wikiHelper.pageLink(wikiHelper.pagePath(rev), rev.wiki, null, true) }}
 | {{ rev.wiki }}
-| [https://{{ rev.wiki }}.org/wiki/User:{{ rev.username|replace({' ': '_'}) }} {{ rev.username }}]
-| ''{{ rev.summary }}''
+| {{ wikiHelper.pageLink(rev.username, rev.wiki, null, true) }}
+| ''<nowiki>{{ rev.summary }}</nowiki>''
 |-
 {% endfor %}
 |}

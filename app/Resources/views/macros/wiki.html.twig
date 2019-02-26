@@ -9,7 +9,10 @@
 {% macro pageLink(pageTitle, domain, label = null, wikitext = false) %}{% spaceless %}
     {% from _self import extLink as extLink %}
     {% if wikitext %}
-        [{{ 'https://' ~ domain ~ '.org/wiki/' ~ pageTitle|replace({' ': '_'}) }} {{ pageTitle|replace({'_': ' '}) }}]
+        {% if label is empty %}
+            {% set label = pageTitle %}
+        {% endif %}
+        [{{ 'https://' ~ domain ~ '.org/wiki/' ~ pageTitle|replace({' ': '_'}) }} {{ label|replace({'_': ' '}) }}]
     {% else %}
         {{ extLink('https://' ~ domain ~ '.org/wiki/' ~ pageTitle, pageTitle|replace({'_': ' '}), label) }}
     {% endif %}

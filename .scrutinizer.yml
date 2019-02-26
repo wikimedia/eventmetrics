@@ -31,4 +31,4 @@ build_failure_conditions:
     - 'issues.label("coding-style").new.count > 5' # More than 5 new coding style issues.
     - 'issues.severity(>= MAJOR).new.exists'       # New issues of major or higher severity
 
-    - 'project.metric("scrutinizer.quality", < 9)' # Code Quality Rating drops below 9
+    - 'project.metric("scrutinizer.quality", < 8)' # Code Quality Rating drops below 9
