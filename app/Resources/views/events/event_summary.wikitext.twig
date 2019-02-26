@@ -1,4 +1,3 @@
-{% import 'macros/wiki.html.twig' as wikiHelper %}
 === {{ msg('event-summary') }} &bull; {{ event.displayTitle }} ===
 <small>''{{ msg('last-updated', [event.updatedUTC|date_localize]) }} ({{ event.displayTimezone }})''
 &bull; [https://meta.wikimedia.org/wiki/Event_Metrics/Definitions_of_metrics {{ msg('metrics-about-link') }}]</small>
