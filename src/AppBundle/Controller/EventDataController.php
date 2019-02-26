@@ -83,16 +83,7 @@ class EventDataController extends EntityController
     public function eventSummaryReportAction(): Response
     {
         $format = 'csv' === $this->request->query->get('format') ? 'csv' : 'wikitext';
-        $response = $this->getFormattedResponse($format, 'event_summary', ['event' => $this->event]);
-        $eventName = $this->getFilenameFriendlyEventName();
-        if ('csv' === $format && '' !== $eventName) {
-            $response->headers->set(
-                'Content-Disposition',
-                "attachment; filename=\"summary_{$eventName}.csv\""
-            );
-        }
-
-        return $response;
+        return $this->getFormattedResponse($format, 'event_summary', ['event' => $this->event]);
     }
 
     /**
@@ -135,6 +126,15 @@ class EventDataController extends EntityController
 
         $contentType = $formatMap[$format] ?? 'text/html';
         $response->headers->set('Content-Type', $contentType);
+
+        // Prettier file names for CSV.
+        $eventName = $this->getFilenameFriendlyEventName();
+        if ('csv' === $format && '' !== $eventName) {
+            $response->headers->set(
+                'Content-Disposition',
+                "attachment; filename=\"{$template}_{$eventName}.csv\""
+            );
+        }
 
         return $response;
     }

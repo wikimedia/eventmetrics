@@ -154,6 +154,7 @@
 	"update-data": "Label for button to update the statistics for an event.",
 	"updating": "Label for the update button while calculation is in progress (the button is also disabled).",
 	"updating-desc": "Text shown while statistics are being updated.",
+	"url": "\n{{Identical|URL}}",
 	"username": "Label for value showing the username of an editor.\n{{Identical|Username}}",
 	"view-all-edits": "Link for button to view a list of all the edits made in an Event.",
 	"view-source": "Link to the source code for the tool\n{{Identical|View source}}",
