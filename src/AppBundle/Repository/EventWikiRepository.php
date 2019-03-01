@@ -318,8 +318,8 @@ class EventWikiRepository extends Repository
      * @param string $pageTitle
      * @param DateTime $start
      * @param DateTime $end
-     * @param bool $includeAverage Whether to also return the average over the past N days
-     *   (as specified by Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'], safe to say they should be in sync).
+     * @param bool $includeAverage Whether to also return the average over the past N days. This figure is the minimum
+     *   of Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'] and the number of days of available data.
      * @return int|int[]|null Sum of pageviews, or [sum of pageviews, average],
      *   or null if no data was found (could be new article, 404, etc.).
      */
@@ -345,11 +345,13 @@ class EventWikiRepository extends Repository
 
         $pageviews = 0;
         $recentPageviews = 0;
-        $recentDayCount = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
+        $recentDayLimit = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
+        $recentDayCount = 0;
 
         foreach (array_reverse($pageviewsInfo['items']) as $index => $item) {
-            if ($index < $recentDayCount) {
+            if ($index < $recentDayLimit) {
                 $recentPageviews += $item['views'];
+                $recentDayCount++;
             }
             $pageviews += $item['views'];
         }
