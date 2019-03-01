@@ -124,8 +124,8 @@ abstract class Repository extends EntityRepository
      * Get a unique cache key for the given list of arguments. Assuming each argument of
      * your function should be accounted for, you can pass in them all with func_get_args:
      *   $this->getCacheKey(func_get_args(), 'unique key for function');
-     * Arugments that are a model should implement their own getCacheKey() that returns
-     * a unique identifier for an instance of that model. See User::getCacheKey() for example.
+     * Arguments that are a model should implement their own getCacheKey() that returns
+     * a unique identifier for an instance of that model. See Event::getCacheKey() for example.
      * @param mixed[]|mixed $args Array of arguments or a single argument.
      * @param string $key Unique key for this function. If omitted the function name itself
      *   is used, which is determined using `debug_backtrace`.
@@ -168,7 +168,7 @@ abstract class Repository extends EntityRepository
             return '.'.$arg->getCacheKey();
         } elseif (is_array($arg)) {
             // Assumed to be an array of objects that can be parsed into a string.
-            return '.'.join('', $arg);
+            return '.'.md5(implode('', $arg));
         } elseif ($arg instanceof \DateTime) {
             return $arg->format('YmdHis');
         } else {
