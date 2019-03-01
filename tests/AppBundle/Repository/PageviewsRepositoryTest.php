@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\AppBundle\Repository;
 
-use AppBundle\Model\Event;
-use AppBundle\Model\EventWiki;
-use AppBundle\Model\Organizer;
-use AppBundle\Model\Program;
 use AppBundle\Repository\PageviewsRepository;
 use Tests\AppBundle\EventMetricsTestCase;
 
@@ -28,10 +24,8 @@ class PageviewsRepositoryTest extends EventMetricsTestCase
      */
     public function testPerArticle():void
     {
-        $program = new Program(new Organizer('Example user'));
-        $eventWiki = new EventWiki(new Event($program, 'Test'), 'zh.wikipedia');
         $pageviews = $this->repo->getPerArticle(
-            $eventWiki,
+            'zh.wikipedia',
             '一期一會',
             PageviewsRepository::GRANULARITY_DAILY,
             new \DateTime('2019-01-01'),
