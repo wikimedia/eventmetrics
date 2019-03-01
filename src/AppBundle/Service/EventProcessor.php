@@ -251,7 +251,6 @@ class EventProcessor
         $start = $this->event->getStartUTC();
         $pageviewsCreatedTotal = 0;
         $avgPageviewsImprovedTotal = 0;
-        $avgPageviewsPagesUsingFilesTotal = 0;
 
         foreach ($this->event->getWikis() as $wiki) {
             // No pageviews for anything other than Wikipedias.
@@ -260,11 +259,14 @@ class EventProcessor
             }
 
             $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
-            $pageviewsCreated = $ewRepo->getPageviews($dbName, $wiki, $start, $wiki->getPagesCreated());
-            $avgPageviewsImproved = $ewRepo->getPageviews($dbName, $wiki, $start, $wiki->getPagesEdited(), true);
-
-            $filePageIds = $this->getFilePageIdsFromDbName($dbName);
-            $avgPageviewsPagesUsingFilesTotal += $ewRepo->getPageviews($dbName, $wiki, $start, $filePageIds, true);
+            $pageviewsCreated = $ewRepo->getPageviews($dbName, $wiki->getDomain(), $start, $wiki->getPagesCreated());
+            $avgPageviewsImproved = $ewRepo->getPageviews(
+                $dbName,
+                $wiki->getDomain(),
+                $start,
+                $wiki->getPagesEdited(),
+                true
+            );
 
             $pageviewsCreatedTotal += $pageviewsCreated;
             $avgPageviewsImprovedTotal += $avgPageviewsImproved;
@@ -273,30 +275,43 @@ class EventProcessor
             $this->createOrUpdateEventWikiStat($wiki, 'pages-improved-pageviews-avg', $avgPageviewsImproved);
         }
 
+        $avgPageviewsPagesUsingFiles = $this->getFilePageviews($ewRepo, $start);
+
         $this->createOrUpdateEventStat('pages-created-pageviews', $pageviewsCreatedTotal);
         $this->createOrUpdateEventStat('pages-improved-pageviews-avg', $avgPageviewsImprovedTotal);
-        $this->createOrUpdateEventStat('pages-using-files-pageviews-avg', $avgPageviewsPagesUsingFilesTotal);
+        $this->createOrUpdateEventStat('pages-using-files-pageviews-avg', $avgPageviewsPagesUsingFiles);
         $this->log(">> <info>Pageviews of pages created: $pageviewsCreatedTotal</info>");
         $this->log(">> <info>Average daily pageviews of pages edited: $avgPageviewsImprovedTotal</info>");
-        $this->log(">> <info>Average daily pageviews to pages using files: $avgPageviewsPagesUsingFilesTotal</info>");
+        $this->log(">> <info>Average daily pageviews to pages using files: $avgPageviewsPagesUsingFiles</info>");
     }
 
     /**
-     * Get the file page IDs of the files uploaded to the given wiki.
-     * @param string $dbName
-     * @return int[]
+     * Set the pageviews of files uploaded, across all wikis.
+     * @param EventWikiRepository $ewRepo
+     * @param DateTime $start
+     * @return int
      */
-    private function getFilePageIdsFromDbName(string $dbName): array
+    private function getFilePageviews(EventWikiRepository $ewRepo, DateTime $start): int
     {
-        $pageIds = [];
+        /** @var array $pageIdsByDbName Keys are dbNames, values is an array of page IDs. */
+        $pageIdsByDbName = [];
+        $avgPageviewsPagesUsingFiles = 0;
 
+        // First group by database.
         foreach ($this->pageTitlesUsingFiles as $row) {
-            if ($row['dbName'] === $dbName) {
-                $pageIds[] = $row['pageId'];
+            if (!isset($pageIdsByDbName[$row['dbName']])) {
+                $pageIdsByDbName[$row['dbName']] = [$row['pageId']];
+            } else {
+                $pageIdsByDbName[$row['dbName']][] = $row['pageId'];
             }
         }
 
-        return $pageIds;
+        foreach ($pageIdsByDbName as $dbName => $pageIds) {
+            $domain = $ewRepo->getDomainFromEventWikiInput($dbName);
+            $avgPageviewsPagesUsingFiles += $ewRepo->getPageviews($dbName, $domain, $start, $pageIds, true);
+        }
+
+        return $avgPageviewsPagesUsingFiles;
     }
 
     /**

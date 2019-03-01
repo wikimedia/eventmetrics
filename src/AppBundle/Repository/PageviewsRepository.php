@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace AppBundle\Repository;
 
-use AppBundle\Model\EventWiki;
 use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -30,7 +29,7 @@ class PageviewsRepository
     /**
      * Given a Mediawiki article and a date range, returns a daily timeseries of its pageview counts.
      * @link https://wikimedia.org/api/rest_v1/#!/Pageviews_data/get_metrics_pageviews_per_article_project_access_agent_article_granularity_start_end
-     * @param EventWiki $eventWiki
+     * @param string $domain
      * @param string $article Page title with underscores. Will be URL-encoded.
      * @param string $granularity The time unit for the response data, either GRANULARITY_DAILY or GRANULARITY_MONTHLY.
      * @param DateTime $startTime
@@ -38,18 +37,17 @@ class PageviewsRepository
      * @return string[][]
      */
     public function getPerArticle(
-        EventWiki $eventWiki,
+        string $domain,
         string $article,
         string $granularity,
         DateTime $startTime,
         DateTime $endTime
     ) : array {
-        $project = $eventWiki->getDomain().'.org';
         $article = urlencode($article);
         $dateFormat = 'Ymd';
         $start = $startTime->format($dateFormat);
         $end = $endTime->format($dateFormat);
-        $url = $this->endpointUrl."/per-article/$project/all-access/user/$article/$granularity/$start/$end";
+        $url = $this->endpointUrl."/per-article/$domain/all-access/user/$article/$granularity/$start/$end";
         return $this->fetch($url);
     }
 
@@ -60,16 +58,16 @@ class PageviewsRepository
      * @param string $granularity The time unit for the response data, one of this class' GRANULARITY_* constants.
      * @param DateTime $startTime The first hour/day/month to include.
      * @param DateTime $endTime The last hour/day/month to include.
-     * @param EventWiki $eventWiki The project to query. If not given, pages views on all projects will be returned.
+     * @param string|null $domain The project to query. If not given, pages views on all projects will be returned.
      * @return string[][]
      */
     public function getAggregate(
         string $granularity,
         DateTime $startTime,
         DateTime $endTime,
-        ?EventWiki $eventWiki = null
+        ?string $domain = null
     ) : array {
-        $project = $eventWiki ? $eventWiki->getDomain() : 'all-projects';
+        $project = $domain ?? 'all-projects';
         $dateFormat = 'Ymdh';
         $start = $startTime->format($dateFormat);
         $end = $endTime->format($dateFormat);

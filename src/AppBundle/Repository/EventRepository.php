@@ -209,7 +209,6 @@ class EventRepository extends Repository
 
     /**
      * Helper for getUsedFiles() and getPagesUsingFiles().
-     *
      * @param string $dbName
      * @param DateTime $start
      * @param DateTime $end

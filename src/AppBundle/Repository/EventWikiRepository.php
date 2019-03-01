@@ -49,7 +49,7 @@ class EventWikiRepository extends Repository
             ->where($rqb->expr()->eq('dbname', ':project'))
             ->orWhere($rqb->expr()->like('url', ':projectUrl'))
             ->orWhere($rqb->expr()->like('url', ':projectUrl2'))
-            ->setParameter('project', $value)
+            ->setParameter('project', str_replace('_p', '', $value))
             ->setParameter('projectUrl', "https://$value")
             ->setParameter('projectUrl2', "https://$value.org");
         $ret = $this->executeQueryBuilder($rqb)->fetch();
@@ -268,7 +268,7 @@ class EventWikiRepository extends Repository
      * Get the total pageviews count for a set of pages, from a given date until today. Optionally reduce to an average
      * of the last 30 days.
      * @param string $dbName
-     * @param EventWiki $wiki
+     * @param string $domain
      * @param DateTime $start
      * @param int[] $pageIds
      * @param bool $getDailyAverage
@@ -276,7 +276,7 @@ class EventWikiRepository extends Repository
      */
     public function getPageviews(
         string $dbName,
-        EventWiki $wiki,
+        string $domain,
         DateTime $start,
         array $pageIds,
         bool $getDailyAverage = false
@@ -297,7 +297,7 @@ class EventWikiRepository extends Repository
         while ($result = $stmt->fetch()) {
             $totalPageviews += (int)$this->getPageviewsPerArticle(
                 $pageviewsRepo,
-                $wiki,
+                $domain,
                 $result['page_title'],
                 $pageviewsStart,
                 $now
@@ -314,7 +314,7 @@ class EventWikiRepository extends Repository
     /**
      * Get the sum of daily pageviews for the given article and date range.
      * @param PageviewsRepository $pageviewsRepo
-     * @param EventWiki $wiki
+     * @param string $domain
      * @param string $pageTitle
      * @param DateTime $start
      * @param DateTime $end
@@ -325,14 +325,14 @@ class EventWikiRepository extends Repository
      */
     public function getPageviewsPerArticle(
         PageviewsRepository $pageviewsRepo,
-        EventWiki $wiki,
+        string $domain,
         string $pageTitle,
         DateTime $start,
         DateTime $end,
         bool $includeAverage = false
     ) {
         $pageviewsInfo = $pageviewsRepo->getPerArticle(
-            $wiki,
+            $domain,
             $pageTitle,
             PageviewsRepository::GRANULARITY_DAILY,
             $start,
@@ -596,7 +596,7 @@ class EventWikiRepository extends Repository
             // FIXME: async?
             [$pageviews, $avgPageviews] = $this->getPageviewsPerArticle(
                 $pageviewsRepo,
-                $wiki,
+                $wiki->getDomain(),
                 $page['page_title'],
                 $start,
                 $now,
