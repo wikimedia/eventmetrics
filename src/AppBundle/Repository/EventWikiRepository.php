@@ -587,8 +587,8 @@ class EventWikiRepository extends Repository
         $dbName = $this->getDbNameFromDomain($wiki->getDomain());
         $pageviewsRepo = new PageviewsRepository();
         $pages = $this->getPageTitles($dbName, $wiki->getPagesCreated(), true, true);
-        $start = $wiki->getEvent()->getStart();
-        $end = $wiki->getEvent()->getEnd();
+        $start = $wiki->getEvent()->getStartUTC();
+        $end = $wiki->getEvent()->getEndUTC();
         $now = new DateTime();
         $data = [];
 
