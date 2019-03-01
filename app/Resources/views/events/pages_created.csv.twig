@@ -1,0 +1,10 @@
+"{{ msg('title') }}","{{ msg('url') }}","{{ msg('wiki') }}","{{ msg('edits-during-event') }}","{{ msg('byte-difference-during-event') }}","{{ msg('pageviews-cumulative') }}","{{ msg('pageviews-average') }}","{{ msg('incoming-links') }}","{{ msg('more-page-metrics') }}"
+{% for page in pagesCreated %}
+"{{ page.pageTitle|replace({'_': ' '}) }}","https://{{ page.wiki }}.org/wiki/{{ page.pageTitle }}",{{ page.wiki }},{{ page.edits }},{{ page.bytes }},{{ page.pageviews }},{{ page.avgPageviews }},{{ page.links }},"https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle }}"
+{% endfor %}
+
+{{ msg('pages-created') }},{{ event.displayTitle }}
+{{ msg('timezone') }}, {{ event.displayTimezone }}
+{{ msg('start-date') }},{{ event.start|date_localize }}
+{{ msg('end-date') }},{{ event.end|date_localize }}
+{{ msg('last-updated-table') }},{{ event.updatedUTC|date_localize }}
