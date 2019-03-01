@@ -243,6 +243,6 @@ class EventDataController extends EntityController
      */
     private function getFilenameFriendlyEventName(): string
     {
-        return trim(preg_replace('/[-\/\\:;*?|<>%#]+/', '-', $this->event->getTitle()));
+        return trim(preg_replace('/[-\/\\:;*?|<>%#"]+/', '-', $this->event->getTitle()));
     }
 }
