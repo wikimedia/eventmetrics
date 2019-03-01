@@ -2,7 +2,7 @@
     #}{% set stat = event.getStatistic(metric) %}{#
     #}{% if stat is not empty %}{#
         #}{{ msg(metric, [stat.offset]) }},{#
-        #}{% if stat.value is null %} {% else %}{% if metric == 'byte-difference' and stat.value > 0 %}+{% endif %}{{ stat.value }}{% endif %}
+        #}{% if stat.value is null %} {% else %}{{ stat.value }}{% endif %}
 
 {% endif %}{#
 #}{% endfor %}
