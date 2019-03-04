@@ -11,15 +11,40 @@ use Tests\AppBundle\EventMetricsTestCase;
  */
 class EventRepositoryTest extends EventMetricsTestCase
 {
-    public function testGetPagesUsingFile():void
+    /** @var EventRepository */
+    private $repo;
+
+    public function setUp(): void
     {
         $kernel = static::bootKernel();
         /** @var \Doctrine\ORM\EntityManager $entityManager */
         $entityManager = $kernel->getContainer()->get('doctrine')->getManager();
-        $repo = new EventRepository($entityManager);
-        $repo->setContainer($kernel->getContainer());
+        $this->repo = new EventRepository($entityManager);
+        $this->repo->setContainer($kernel->getContainer());
 
-        static::assertGreaterThan(0, $repo->getPagesUsingFile('commonswiki_p', 'Ultrasonic_humidifier.jpg'));
-        static::assertGreaterThan(0, $repo->getPagesUsingFile('enwiki_p', '2-cube.png'));
+        parent::setUp();
+    }
+
+    public function testGetPagesUsingFile():void
+    {
+        static::assertGreaterThan(0, $this->repo->getPagesUsingFile('commonswiki_p', 'Ultrasonic_humidifier.jpg'));
+        static::assertGreaterThan(0, $this->repo->getPagesUsingFile('enwiki_p', '2-cube.png'));
+    }
+
+    /**
+     * Ensures we only count unique pages that are using the files.
+     * For this example we use an old abandoned account with numerous files used on the same page.
+     * @see https://commons.wikimedia.org/wiki/Special:Contributions/Krupin.1
+     */
+    public function testGetPagesUsingFiles(): void
+    {
+        $ret = $this->repo->getPagesUsingFiles(
+            'commonswiki_p',
+            new \DateTime('2014-12-01'),
+            new \DateTime('2014-12-02'),
+            ['Krupin.1']
+        );
+
+        static::assertCount(1, $ret);
     }
 }

@@ -204,6 +204,8 @@ class EventRepository extends Repository
             $rqb->select(["'$dbName' AS dbName", 'il_from AS pageId']);
         }
 
+        $rqb->groupBy(['dbName', 'pageId']);
+
         return $this->executeQueryBuilder($rqb)->fetchAll();
     }
 
