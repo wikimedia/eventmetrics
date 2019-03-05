@@ -202,6 +202,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 
         foreach ($states as $constant => $value) {
             // No idea why we have to fetch the Event on every iteration; something clashing with PHPUnit and Doctrine.
+            /** @var Event $event */
             $event = $this->entityManager
                 ->getRepository('Model:Event')
                 ->findOneBy(['title' => 'Oliver_and_Company']);
@@ -274,7 +275,10 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
 
         // Basic assertion to ensure data is being outputed.
-        static::assertContains("Pages created\n| 3", $this->response->getContent());
+        static::assertContains(
+            "Pages created\n| style=\"text-align:right\" | 3",
+            $this->response->getContent()
+        );
     }
 
     /**
@@ -305,8 +309,8 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 | [https://en.wikipedia.org/wiki/Domino_Park Domino Park]
 | [https://en.wikipedia.org/wiki/User:MusikAnimal MusikAnimal]
 | en.wikipedia
-| {{FORMATNUM:12}}
-| +{{FORMATNUM:4636}}
+| style="text-align:right" | {{FORMATNUM:12}}
+| style="text-align:right" | +{{FORMATNUM:4636}}
 EOD;
         static::assertcontains($snippet, $this->response->getContent());
     }
