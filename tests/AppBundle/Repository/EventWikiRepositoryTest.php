@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\AppBundle\Repository;
 
 use AppBundle\Repository\EventWikiRepository;
-use AppBundle\Repository\PageviewsRepository;
 use DateTime;
 use Tests\AppBundle\EventMetricsTestCase;
 
@@ -51,37 +50,5 @@ class EventWikiRepositoryTest extends EventMetricsTestCase
         // Pages edited.
         $pagesEditedActual = $this->repo->getPageIds($dbName, $from, $to, $users, [], 'edited');
         static::assertEquals($pagesEditedExpected, $pagesEditedActual);
-    }
-
-    /**
-     * @covers \AppBundle\Repository\EventWikiRepository::getPageviews()
-     */
-    public function testPageviews(): void
-    {
-        $pvRepo = new PageviewsRepository();
-
-        $start = new DateTime('2018-06-06');
-        $end = new DateTime('2018-06-12');
-
-        // Raw total pageviews.
-        static::assertEquals(
-            361,
-            $this->repo->getPageviewsPerArticle($pvRepo, 'en.wikipedia', 'Domino_Park', $start, $end)
-        );
-
-        [$total, $avg] = $this->repo->getPageviewsPerArticle(
-            $pvRepo,
-            'en.wikipedia',
-            'Domino_Park',
-            $start,
-            $end,
-            true
-        );
-
-        // First element should be the same as total pageviews.
-        static::assertEquals(361, $total);
-
-        // Average during the period, which should only apply to the days the article existed (June 10 - June 12).
-        static::assertEquals(120, $avg);
     }
 }
