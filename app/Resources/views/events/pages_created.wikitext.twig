@@ -19,11 +19,11 @@
 | {{ wikiHelper.pageLink(page.pageTitle, page.wiki, null, true) }}
 | {{ wikiHelper.pageLink('User:' ~ page.creator, page.wiki, page.creator, true) }}
 | {{ page.wiki }}
-| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.edits }}}}
-| +{% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.bytes }}}}
-| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.pageviews }}}}
-| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.avgPageviews }}}}
-| {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.links }}}}
+| style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.edits }}}}
+| style="text-align:right" | +{% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.bytes }}}}
+| style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.pageviews }}}}
+| style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.avgPageviews }}}}
+| style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.links }}}}
 | [https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle }} XTools]
 |-
 {% endfor %}
