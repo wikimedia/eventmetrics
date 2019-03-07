@@ -57,6 +57,7 @@
 	"items-created": "Създадени обекти на Уикиданните",
 	"items-improved": "Подобрени обекти на Уикиданните",
 	"last-updated": "Последно обновяване: $1",
+	"last-updated-table": "Последно обновяване",
 	"login-with-oauth": "Влизане чрез OAuth",
 	"logout": "Излизане",
 	"more-page-metrics": "Още мерила за страници",
@@ -83,6 +84,7 @@
 	"report-issue": "Съобщаване за проблем",
 	"save": "Съхраняване",
 	"settings": "Настройки",
+	"url": "URL",
 	"username": "Потребителско име",
 	"view-all-edits": "Преглед на всички редакции",
 	"view-source": "Преглед на кода"

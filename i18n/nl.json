@@ -4,7 +4,8 @@
 			"Mainframe98",
 			"Optilete",
 			"Ndecouck",
-			"Elroy"
+			"Elroy",
+			"Romaine"
 		]
 	},
 	"add-more-participants": "Voeg meer deelnemers toe, één per regel. Je kunt knippen/plakken van een on-wiki lijst.",
@@ -41,6 +42,7 @@
 	"error-usernames": "$1 {{PLURAL:$1|gebruikersnaam|gebruikersnamen}} {{PLURAL:$1|is|zijn}} onjuist. Wijzig of verwijder deze en verstuur opnieuw om de gebruikersnamen op te slaan. Controleer op onjuiste spelling, hoofdlettergebruik en andere formattering.",
 	"error-wikis": "$1 {{PLURAL:$1|wiki|wiki's}} {{PLURAL:$1|is|zijn}} onjuist. Controleer de spelling.",
 	"event": "Evenement",
+	"event-all-edits": "Alle bewerkingen",
 	"event-created": "Het evenement '$1' is succesvol aangemaakt.",
 	"event-deleted": "Het evenement '$1' is verwijderd.",
 	"event-download-reports": "Uitslagen ophalen",
@@ -55,7 +57,9 @@
 	"files-uploaded": "Bestanden geupload",
 	"help": "Hulp",
 	"help-translate": "Helpen met vertalen",
+	"incoming-links": "Binnenkomende koppelingen",
 	"last-updated": "Laatst bijgewerkt: $1",
+	"last-updated-table": "Laatst bijgewerkt",
 	"login-with-oauth": "Aanmelden met OAuth",
 	"logout": "Afmelden",
 	"my-programs": "Mijn programma's",
@@ -78,6 +82,7 @@
 	"pages-created-desc": "Een inhoudspagina is een pagina in de hoofd- of bestandsnaamruimte.",
 	"pages-improved": "Pagina's verbeterd",
 	"pages-improved-desc": "Een inhoudspagina is een pagina in de hoofd- of bestandsnaamruimte.",
+	"pages-using-files": "Unieke pagina's met geplaatste bestanden",
 	"participants": "Deelnemers",
 	"please-login": "Meld u aan om door te gaan.",
 	"program": "Programma",
@@ -102,7 +107,9 @@
 	"unknown": "Onbekend",
 	"update-data": "Data bijwerken",
 	"updating": "Bijwerken",
+	"url": "URL",
 	"username": "Gebruikersnaam",
+	"view-all-edits": "Alle bewerkingen weergeven",
 	"view-source": "Broncode bekijken",
 	"wiki": "Wiki",
 	"wikis": "Wiki's"

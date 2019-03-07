@@ -6,7 +6,8 @@
 			"Okras",
 			"Shaleych",
 			"Stjn",
-			"Facenapalm"
+			"Facenapalm",
+			"Romanko Mikhail"
 		]
 	},
 	"add-category": "Добавить категорию",
@@ -78,6 +79,7 @@
 	"items-improved": "Улучшено объектов Викиданных",
 	"items-improved-desc": "Число правок, сделанных в существующих объектах Викиданных",
 	"last-updated": "Последнее обновление: $1",
+	"last-updated-table": "Последнее обновление",
 	"login-with-oauth": "Войти через OAuth",
 	"logout": "Завершение сеанса",
 	"my-programs": "Мои программы",
@@ -131,6 +133,7 @@
 	"update-data": "Обновить данные",
 	"updating": "Обновление",
 	"updating-desc": "Подождите. Обрабатываются числа...",
+	"url": "URL",
 	"username": "Имя участника",
 	"view-all-edits": "См. все правки",
 	"view-source": "Просмотреть код",
