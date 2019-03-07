@@ -111,6 +111,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
      */
     public function testCategory(): void
     {
+        /** @var Event $event */
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'Oliver_and_Company']);
@@ -137,13 +138,13 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         // 12 are to [[Domino Park]].
         static::assertEquals(
             12,
-            substr_count($this->response->getContent(), 'https://en.wikipedia.org/wiki/Domino Park')
+            substr_count($this->response->getContent(), 'https://en.wikipedia.org/wiki/Domino_Park')
         );
 
         // 3 are files.
         static::assertEquals(
             3,
-            substr_count($this->response->getContent(), '/wiki/File:')
+            substr_count($this->response->getContent(), '/wiki/File%3A')
         );
     }
 
@@ -307,7 +308,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 
         $snippet = <<<EOD
 | [https://en.wikipedia.org/wiki/Domino_Park Domino Park]
-| [https://en.wikipedia.org/wiki/User:MusikAnimal MusikAnimal]
+| [https://en.wikipedia.org/wiki/User%3AMusikAnimal MusikAnimal]
 | en.wikipedia
 | style="text-align:right" | {{FORMATNUM:12}}
 | style="text-align:right" | +{{FORMATNUM:4636}}
