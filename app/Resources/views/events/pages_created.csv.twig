@@ -1,6 +1,6 @@
 "{{ msg('title') }}","{{ msg('url') }}","{{ msg('creator') }}","{{ msg('wiki') }}","{{ msg('edits-during-event') }}","{{ msg('byte-difference-during-event') }}","{{ msg('pageviews-cumulative') }}","{{ msg('pageviews-average') }}","{{ msg('incoming-links') }}","{{ msg('more-page-metrics') }}"
 {% for page in pagesCreated %}
-"{{ page.pageTitle|replace({'_': ' '}) }}","https://{{ page.wiki }}.org/wiki/{{ page.pageTitle }}","{{ page.creator }}",{{ page.wiki }},{{ page.edits }},{{ page.bytes }},{{ page.pageviews }},{{ page.avgPageviews }},{{ page.links }},"https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle }}"
+"{{ page.pageTitle|replace({'_': ' '})|raw }}","https://{{ page.wiki }}.org/wiki/{{ page.pageTitle|e('url') }}","{{ page.creator }}",{{ page.wiki }},{{ page.edits }},{{ page.bytes }},{{ page.pageviews }},{{ page.avgPageviews }},{{ page.links }},"https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle|e('url') }}"
 {% endfor %}
 
 {{ msg('pages-created') }},{{ event.displayTitle }}

@@ -12,9 +12,9 @@
         {% if label is empty %}
             {% set label = pageTitle %}
         {% endif %}
-        [{{ 'https://' ~ domain ~ '.org/wiki/' ~ pageTitle|replace({' ': '_'}) }} {{ label|replace({'_': ' '}) }}]
+        [{{ 'https://' ~ domain ~ '.org/wiki/' ~ pageTitle|replace({' ': '_'})|e('url') }} {{ label|replace({'_': ' '}) }}]
     {% else %}
-        {{ extLink('https://' ~ domain ~ '.org/wiki/' ~ pageTitle, pageTitle|replace({'_': ' '}), label) }}
+        {{ extLink('https://' ~ domain ~ '.org/wiki/' ~ pageTitle|e('url'), pageTitle|replace({'_': ' '}), label) }}
     {% endif %}
 {% endspaceless %}{% endmacro %}
 
@@ -27,5 +27,5 @@
     {% if rev is not iterable %}
         {% set rev = {page: rev, namespace: ns} %}
     {% endif %}
-    {{ (rev.namespace == 6 ? 'File:' : '') ~ rev.page }}
+    {{ ((rev.namespace == 6 ? 'File:' : '') ~ rev.page|replace({' ': '_'}))|raw }}
 {% endspaceless %}{% endmacro %}
