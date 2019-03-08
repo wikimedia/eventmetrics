@@ -9,6 +9,11 @@ imports:
 
 monolog:
     handlers:
+        event_processor:
+            level: debug
+            type: stream
+            path: '%kernel.logs_dir%/event_processor.log'
+            channels: [event_processor]
         main:
             type: fingers_crossed
             action_level: critical

@@ -147,6 +147,7 @@ class JobHandler
      * Start a process for a single job.
      * @param Job $job
      * @codeCoverageIgnore
+     * @throws \Exception
      */
     private function processJob(Job $job): void
     {

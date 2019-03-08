@@ -23,9 +23,9 @@
     "require": {
         "php": "^7.2",
         "ext-PDO": "*",
-        "ext-json": "*",
         "ext-apcu": "*",
         "ext-bz2": "*",
+        "ext-json": "*",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.5",
@@ -36,6 +36,7 @@
         "symfony/cache": "^4.1",
         "symfony/monolog-bundle": "^3.3",
         "symfony/polyfill-apcu": "^1.0",
+        "symfony/stopwatch": "^4.2",
         "symfony/swiftmailer-bundle": "^3.0",
         "symfony/symfony": "^4.2",
         "symfony/webpack-encore-pack": "^1.0",

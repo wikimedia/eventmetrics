@@ -69,6 +69,8 @@ services:
 
     AppBundle\Service\EventProcessor:
         public: true
+        tags:
+            - { name: monolog.logger, channel: event_processor }
 
     AppBundle\Service\JobHandler:
         public: true

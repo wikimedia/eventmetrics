@@ -18,6 +18,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * An EventProcessor handles generating statistics for an Event.
@@ -75,16 +76,21 @@ class EventProcessor
     /** @var mixed[][] Array containing arrays with keys 'dbName' and 'pageId']. */
     private $pageTitlesUsingFiles = [];
 
+    /** @var Stopwatch used to profile performance. */
+    private $stopwatch;
+
     /**
      * Constructor for the EventProcessor.
      * @param LoggerInterface $logger
      * @param ContainerInterface $container
+     * @param Stopwatch $stopwatch
      */
-    public function __construct(LoggerInterface $logger, ContainerInterface $container)
+    public function __construct(LoggerInterface $logger, ContainerInterface $container, Stopwatch $stopwatch)
     {
         $this->logger = $logger;
         $this->container = $container;
         $this->entityManager = $container->get('doctrine')->getManager();
+        $this->stopwatch = $stopwatch;
     }
 
     /**
@@ -205,10 +211,12 @@ class EventProcessor
      */
     private function setParticipants(): void
     {
-        $this->log("\nFetching number of participants...");
+        $logKey = 'participants';
+        $this->logStart("\nFetching number of participants...", $logKey);
         $usernames = $this->getParticipantNames() ?: $this->implicitEditors;
         $count = count($usernames);
         $this->createOrUpdateEventStat('participants', $count);
+        $this->logEnd($logKey);
         $this->log(">> <info>Participants: $count</info>");
     }
 
@@ -217,10 +225,12 @@ class EventProcessor
      */
     private function setNewEditors(): void
     {
-        $this->log("\nFetching number of new editors...");
+        $logKey = 'new_editors';
+        $this->logStart("\nFetching number of new editors...", $logKey);
         $numNewEditors = count($this->getNewEditors());
         $newEditorOffset = Event::getAllAvailableMetrics()['new-editors'];
         $this->createOrUpdateEventStat('new-editors', $numNewEditors, $newEditorOffset);
+        $this->logEnd($logKey);
         $this->log(">> <info>New editors: $numNewEditors</info>");
     }
 
@@ -258,6 +268,9 @@ class EventProcessor
                 continue;
             }
 
+            $logKey = 'pageviews_'.$wiki->getDomain();
+            $this->logStart("> Fetching pageviews for {$wiki->getDomain()}...", $logKey);
+
             $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
             $pageviewsCreated = $ewRepo->getPageviews($dbName, $wiki->getDomain(), $start, $wiki->getPagesCreated());
             $avgPageviewsImproved = $ewRepo->getPageviews(
@@ -270,6 +283,8 @@ class EventProcessor
 
             $pageviewsCreatedTotal += $pageviewsCreated;
             $avgPageviewsImprovedTotal += $avgPageviewsImproved;
+
+            $this->logEnd($logKey);
 
             $this->createOrUpdateEventWikiStat($wiki, 'pages-created-pageviews', $pageviewsCreated);
             $this->createOrUpdateEventWikiStat($wiki, 'pages-improved-pageviews-avg', $avgPageviewsImproved);
@@ -293,6 +308,9 @@ class EventProcessor
      */
     private function getFilePageviews(EventWikiRepository $ewRepo, DateTime $start): int
     {
+        $logKey = 'pageviews_files_uploaded';
+        $this->logStart("> Fetching pageviews of pages containing files uploaded...", $logKey);
+
         /** @var array $pageIdsByDbName Keys are dbNames, values is an array of page IDs. */
         $pageIdsByDbName = [];
         $avgPageviewsPagesUsingFiles = 0;
@@ -310,6 +328,8 @@ class EventProcessor
             $domain = $ewRepo->getDomainFromEventWikiInput($dbName);
             $avgPageviewsPagesUsingFiles += $ewRepo->getPageviews($dbName, $domain, $start, $pageIds, true);
         }
+
+        $this->logEnd($logKey);
 
         return $avgPageviewsPagesUsingFiles;
     }
@@ -382,12 +402,14 @@ class EventProcessor
     private function setContributionsWikipedias(EventWiki $wiki, EventWikiRepository $ewRepo): void
     {
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
-
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
         $start = $this->event->getStartUTC();
         $end = $this->event->getEndUTC();
         $usernames = $this->getParticipantNames();
         $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
+
+        $logKey = 'page_ids'.$wiki->getDomain();
+        $this->logStart(">> Fetching page IDs...", $logKey);
         $pageIdsCreated = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'created');
         $pageIdsEdited = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'edited');
 
@@ -398,6 +420,10 @@ class EventProcessor
         $pageIds = array_merge($pageIdsCreated, $pageIdsEdited);
         $totalEditCount = $this->eventRepo->getTotalEditCount($dbName, $pageIds, $start, $end, $usernames);
 
+        $this->logEnd($logKey);
+
+        $logKey = 'bytes_changed';
+        $this->logStart(">> Fetching bytes changed...", $logKey);
         $diff = $ewRepo->getBytesChanged($this->event, $dbName, $pageIds, $usernames);
 
         $totalCreated = count($pageIdsCreated);
@@ -406,6 +432,8 @@ class EventProcessor
         $this->pagesImproved += $totalEdited;
         $this->edits += $totalEditCount;
         $this->byteDifference += $diff;
+
+        $this->logEnd($logKey);
 
         $this->createOrUpdateEventWikiStat($wiki, 'edits', $totalEditCount);
         $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $totalCreated);
@@ -420,7 +448,8 @@ class EventProcessor
      */
     private function setFilesUploaded(EventWiki $wiki, EventWikiRepository $ewRepo): void
     {
-        $this->log("> Fetching files uploaded on {$wiki->getDomain()} and global file usage...");
+        $logKey = 'files_uploaded_'.$wiki->getDomain();
+        $this->logStart("> Fetching files uploaded on {$wiki->getDomain()} and global file usage...", $logKey);
 
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
         $start = $this->event->getStartUTC();
@@ -438,6 +467,8 @@ class EventProcessor
         $this->createOrUpdateEventWikiStat($wiki, 'pages-using-files', count($ret));
         $this->pagesUsingFiles += count($ret);
         $this->pageTitlesUsingFiles = array_merge($this->pageTitlesUsingFiles, $ret);
+
+        $this->logEnd($logKey);
     }
 
     /**
@@ -447,7 +478,8 @@ class EventProcessor
      */
     private function setItemsCreatedOrImprovedOnWikidata(EventWiki $wiki, EventWikiRepository $ewRepo): void
     {
-        $this->log("> Fetching items created or improved on Wikidata...");
+        $logKey = 'wikidata_items';
+        $this->logStart("> Fetching items created or improved on Wikidata...", $logKey);
 
         $dbName = 'wikidatawiki_p';
         $start = $this->event->getStartUTC();
@@ -460,6 +492,8 @@ class EventProcessor
         // Set on the EventWiki, so this will get persisted to the database.
         $wiki->setPagesCreated($pageIdsCreated);
         $wiki->setPagesEdited($pageIdsEdited);
+
+        $this->logEnd($logKey);
 
         // Report the counts, and record them both for this wiki and the event (there's only ever one Wikidata wiki).
         $totalCreated = count($pageIdsCreated);
@@ -480,6 +514,9 @@ class EventProcessor
      */
     private function setUserCounts(EventWiki $wiki, EventWikiRepository $ewRepo): void
     {
+        $logKey = 'user_counts';
+        $this->logStart("> Fetching user counts for {$wiki->getDomain()}...", $logKey);
+
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
 
         $pageIds = $wiki->getPages();
@@ -488,6 +525,8 @@ class EventProcessor
             $usernames = $ewRepo->getUsersFromPageIDs($dbName, $pageIds, $this->event);
             $this->implicitEditors += array_flip($usernames);
         }
+
+        $this->logEnd($logKey);
     }
 
     /**
@@ -515,7 +554,8 @@ class EventProcessor
      */
     private function setRetention(): void
     {
-        $this->log("\nFetching retention...");
+        $logKey = 'retention';
+        $this->logStart("\nFetching retention...\n", $logKey);
 
         $retentionOffset = Event::getAllAvailableMetrics()['retention'];
         $end = $this->event->getEndUTC()->modify("+$retentionOffset days");
@@ -535,6 +575,7 @@ class EventProcessor
 
         $this->createOrUpdateEventStat('retention', $numUsersRetained, $retentionOffset);
 
+        $this->logEnd($logKey);
         $this->log(">> <info>Number of users retained: $numUsersRetained</info>");
     }
 
@@ -692,17 +733,47 @@ class EventProcessor
      * Log a message using the LoggerInterface or OutputInterface,
      * the latter being used when running EventProcessor from a Command.
      * @param string $message
+     * @param bool $inline If set, a new line will not be appended to $message.
      *
      * This is simple logging. The LoggerInterface portion cannot easily
      * be tested, but the output via $this->output does have test coverage.
      * @codeCoverageIgnore
      */
-    private function log(string $message): void
+    private function log(string $message, bool $inline = false): void
     {
         if (null === $this->output) {
             $this->logger->info($message);
+        } elseif ($inline) {
+            $this->output->write($message);
         } else {
             $this->output->writeln($message);
         }
+    }
+
+    /**
+     * Log a message and start the stopwatch.
+     * @param string $message
+     * @param string $key Unique key for this profile.
+     */
+    private function logStart(string $message, string $key): void
+    {
+        // Show message inline, later $this->logDone() will be called that adds a new line.
+        $this->log($message, true);
+
+        // Start profiling runtime.
+        $this->stopwatch->start($key);
+    }
+
+    /**
+     * Declare the profile done, stopping the stop watch and logging the runtime.
+     * @param string $key Unique key for this profile.
+     * @param string|null $message
+     */
+    private function logEnd(string $key, ?string $message = null): void
+    {
+        $this->stopwatch->stop($key);
+        $message = $message ?? 'Done';
+        $duration = round($this->stopwatch->getEvent($key)->getDuration(), 2);
+        $this->log(" <comment>$message ($duration ms)</comment>");
     }
 }
