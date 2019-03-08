@@ -26,9 +26,32 @@
                         <span class="event-state--failed-timeout event-state--failed-unknown">{{ statsBtnText }}</span>
                     </button>
                 {% endif %}
-                {% if downloadButtons is defined and event.updated != null %}
-                    {{ downloadButtons }}
-                {% endif %}
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ msg('event-download-reports') }} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        {% set reports = [
+                            { title: 'event-summary-report', route: 'EventSummary', link: 'event-summary' },
+                            { title: 'pages-created-report', route: 'EventPagesCreated', link: 'pages-created' },
+                            { title: 'event-all-edits-report', route: 'Revisions', link: 'event-all-edits' },
+                        ] %}
+                        {% for report in reports %}
+                        <li>
+                            <a
+                               {% if not event.updated %}
+                               class="disabled"
+                               {% else %}
+                               data-toggle="modal" data-target="#download-modal"
+                               data-modal-title="{{ msg(report.title) }}"
+                               data-csv-link="{{ path(report.route, {'programId': program.id, 'eventId': event.id, 'format': 'csv'}) }}"
+                               data-wikitext-link="{{ path(report.route, {'programId': program.id, 'eventId': event.id, 'format': 'wikitext'}) }}"
+                               {% endif %}
+                            >{{ msg(report.link) }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             {% endif %}
         </div> {# .btn-group #}
 
@@ -48,6 +71,26 @@
             {{ bdi(event.displayTitle) }}
         {% endif %}
     </h1>
+</div>
+
+{### DOWNLOAD REPORT MODAL ###}
+<div id="download-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{ msg('event-download-reports') }}{# Will be overwritten in JS. #}</h4>
+            </div>
+            <div class="modal-body">{{ msg('select-report-format') }}</div>
+            <div class="modal-footer">
+                <p>
+                    <a class="btn btn-default wikitext-link">{{ msg('event-download-wikitext') }}</a>
+                    <a class="btn btn-default csv-link">{{ msg('event-download-csv') }}</a>
+                </p>
+                <p class="event-status"></p>
+            </div>
+        </div>
+    </div>
 </div>
 
 {### PROGRESS MODAL ###}

@@ -34,6 +34,7 @@ $(function () {
 
     eventmetrics.eventshow.setupWikiInputs();
     eventmetrics.eventshow.setupCalculateStats();
+    eventmetrics.eventshow.setupReportModal();
 });
 
 /**
@@ -140,4 +141,20 @@ eventmetrics.eventshow.setupWikiInputs = function () {
             });
         });
     });
+};
+
+/**
+ * Model for downloading reports.
+ * The title and links of the model are modified when the user selects a report from the menu.
+ */
+eventmetrics.eventshow.setupReportModal = function () {
+    $('#download-modal').on('show.bs.modal', function (event) {
+        var modal = $(this),
+            reportLink = $(event.relatedTarget);
+        modal.find('.modal-title').text(reportLink.data('modal-title'));
+        modal.find('.wikitext-link').attr('href', reportLink.data('wikitext-link'));
+        modal.find('.csv-link').attr('href', reportLink.data('csv-link'));
+        // Also append the event status, duplicated from the underlying page.
+        modal.find('.event-status').html($('.event-stats-status').html());
+    })
 };
