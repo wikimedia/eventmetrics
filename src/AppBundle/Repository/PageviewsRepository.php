@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Repository;
 
+use DateInterval;
 use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -49,6 +50,75 @@ class PageviewsRepository
         $end = $endTime->format($dateFormat);
         $url = $this->endpointUrl."/per-article/$domain/all-access/user/$article/$granularity/$start/$end";
         return $this->fetch($url);
+    }
+
+    /**
+     * Get the sum of daily pageviews for the given article and date range.
+     * @param string $domain
+     * @param string $pageTitle
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param int|null $avgDaysOffset Specifies the number of days over which to compute the daily average pageviews.
+     * @see PageviewsRepository::getPageviewsPerArticle() if you only need the average.
+     * @return int|int[]|null Sum of pageviews, or [sum of pageviews, average],
+     *   or null if no data was found (could be new article, 404, etc.).
+     */
+    public function getPageviewsPerArticle(
+        string $domain,
+        string $pageTitle,
+        DateTime $start,
+        DateTime $end,
+        ?int $avgDaysOffset = null
+    ) {
+        $pageviewsInfo = $this->getPerArticle(
+            $domain,
+            $pageTitle,
+            PageviewsRepository::GRANULARITY_DAILY,
+            $start,
+            $end
+        );
+
+        if (!isset($pageviewsInfo['items'])) {
+            return null;
+        }
+
+        $avgOffsetDate = (clone $end)->sub(new DateInterval('P'.(int)$avgDaysOffset.'D'));
+        $lastAvgDate = null;
+        $pageviews = 0;
+        $recentPageviews = 0;
+
+        foreach (array_reverse($pageviewsInfo['items']) as $item) {
+            $date = DateTime::createFromFormat('YmdHi', $item['timestamp'].'00');
+            if ($date >= $avgOffsetDate) {
+                $recentPageviews += $item['views'];
+                $lastAvgDate = $date;
+            }
+            $pageviews += $item['views'];
+        }
+
+        if (is_int($avgDaysOffset)) {
+            $numDays = $end->diff($lastAvgDate)->days + 1; // +1 because dates are inclusive.
+            return [$pageviews, (int)round($recentPageviews / $numDays)];
+        }
+
+        return $pageviews;
+    }
+
+    /**
+     * Get the sum of daily pageviews for the given article and date range.
+     * @param string $domain
+     * @param string $pageTitle
+     * @param int $offset Specifies the number of days from today over which to compute the daily average pageviews.
+     * @return int|null
+     */
+    public function getAvgPageviewsPerArticle(
+        string $domain,
+        string $pageTitle,
+        int $offset = 30
+    ) : ?int {
+        $end = new DateTime('yesterday midnight');
+        $start = (clone $end)->sub(new DateInterval('P'.$offset.'D'));
+        return $this->getPageviewsPerArticle($domain, $pageTitle, $start, $end, $offset)[1] ?? null;
     }
 
     /**

@@ -266,7 +266,7 @@ class EventWikiRepository extends Repository
 
     /**
      * Get the total pageviews count for a set of pages, from a given date until today. Optionally reduce to an average
-     * of the last 30 days.
+     * of the last N days, where N is Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'].
      * @param string $dbName
      * @param string $domain
      * @param DateTime $start
@@ -284,80 +284,27 @@ class EventWikiRepository extends Repository
         if (0 === count($pageIds)) {
             return 0;
         }
+
         $pageviewsRepo = new PageviewsRepository();
         $recentDayCount = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
+
         // The offset date is the start of the period over which pageviews should be averaged per day, up to today.
-        $offsetDate = (new DateTime())->sub(new DateInterval('P'.$recentDayCount.'D'));
-        $pageviewsStart = $getDailyAverage && $start < $offsetDate ? $offsetDate : $start;
-        $now = new DateTime();
-        $totalPageviews = 0;
-        $stmt = $this->getPageTitles($dbName, $pageIds, true);
-
-        // FIXME: make async requests for pageviews, 100 pages at a time.
-        while ($result = $stmt->fetch()) {
-            $totalPageviews += (int)$this->getPageviewsPerArticle(
-                $pageviewsRepo,
-                $domain,
-                $result['page_title'],
-                $pageviewsStart,
-                $now
-            );
-        }
-
-        if (!$getDailyAverage) {
-            return $totalPageviews;
-        }
-        $averagePageviews = $totalPageviews / ($start < $offsetDate ? $recentDayCount : $start->diff($now)->d);
-        return (int)round($averagePageviews);
-    }
-
-    /**
-     * Get the sum of daily pageviews for the given article and date range.
-     * @param PageviewsRepository $pageviewsRepo
-     * @param string $domain
-     * @param string $pageTitle
-     * @param DateTime $start
-     * @param DateTime $end
-     * @param bool $includeAverage Whether to also return the average over the past N days. This figure is the minimum
-     *   of Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'] and the number of days of available data.
-     * @return int|int[]|null Sum of pageviews, or [sum of pageviews, average],
-     *   or null if no data was found (could be new article, 404, etc.).
-     */
-    public function getPageviewsPerArticle(
-        PageviewsRepository $pageviewsRepo,
-        string $domain,
-        string $pageTitle,
-        DateTime $start,
-        DateTime $end,
-        bool $includeAverage = false
-    ) {
-        $pageviewsInfo = $pageviewsRepo->getPerArticle(
-            $domain,
-            $pageTitle,
-            PageviewsRepository::GRANULARITY_DAILY,
-            $start,
-            $end
-        );
-
-        if (!isset($pageviewsInfo['items'])) {
-            return null;
-        }
+        $offsetDate = (new DateTime('yesterday midnight'))->sub(new DateInterval('P'.$recentDayCount.'D'));
+        $start = $getDailyAverage && $start < $offsetDate ? $offsetDate : $start;
+        $end = new DateTime('yesterday midnight');
 
         $pageviews = 0;
-        $recentPageviews = 0;
-        $recentDayLimit = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
-        $recentDayCount = 0;
+        $stmt = $this->getPageTitles($dbName, $pageIds, true);
 
-        foreach (array_reverse($pageviewsInfo['items']) as $index => $item) {
-            if ($index < $recentDayLimit) {
-                $recentPageviews += $item['views'];
-                $recentDayCount++;
+        // FIXME: make async requests for pageviews, 200 pages at a time.
+        while ($result = $stmt->fetch()) {
+            $pageTitle = $result['page_title'];
+
+            if ($getDailyAverage) {
+                $pageviews += $pageviewsRepo->getAvgPageviewsPerArticle($domain, $pageTitle, $recentDayCount);
+            } else {
+                $pageviews += $pageviewsRepo->getPageviewsPerArticle($domain, $pageTitle, $start, $end);
             }
-            $pageviews += $item['views'];
-        }
-
-        if ($includeAverage) {
-            return [$pageviews, (int)round($recentPageviews / $recentDayCount)];
         }
 
         return $pageviews;
@@ -588,6 +535,7 @@ class EventWikiRepository extends Repository
 
         $dbName = $this->getDbNameFromDomain($wiki->getDomain());
         $pageviewsRepo = new PageviewsRepository();
+        $avgPageviewsOffset = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
         $pages = $this->getPageTitles($dbName, $wiki->getPagesCreated(), true, true);
         $start = $wiki->getEvent()->getStartUTC();
         $end = $wiki->getEvent()->getEndUTC();
@@ -596,13 +544,12 @@ class EventWikiRepository extends Repository
 
         while ($page = $pages->fetch()) {
             // FIXME: async?
-            [$pageviews, $avgPageviews] = $this->getPageviewsPerArticle(
-                $pageviewsRepo,
+            [$pageviews, $avgPageviews] = $pageviewsRepo->getPageviewsPerArticle(
                 $wiki->getDomain(),
                 $page['page_title'],
                 $start,
                 $now,
-                true
+                $avgPageviewsOffset
             );
 
             $pageInfo = $this->getSingePageCreatedData(
@@ -616,8 +563,8 @@ class EventWikiRepository extends Repository
             $data[] = array_merge($pageInfo, [
                 'pageTitle' => $page['page_title'],
                 'wiki' => $wiki->getDomain(),
-                'pageviews' => $pageviews,
-                'avgPageviews' => $avgPageviews,
+                'pageviews' => (int)$pageviews,
+                'avgPageviews' => (int)$avgPageviews,
             ]);
         }
 
