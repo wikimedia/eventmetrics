@@ -42,7 +42,8 @@ class EventRepositoryTest extends EventMetricsTestCase
             'commonswiki_p',
             new \DateTime('2014-12-01'),
             new \DateTime('2014-12-02'),
-            ['Krupin.1']
+            ['Krupin.1'],
+            []
         );
 
         static::assertCount(1, $ret);
