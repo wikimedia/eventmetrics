@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f37c2bdad13139a5a0eb2c5ee57fb206",
+    "content-hash": "01c0146dcb7c0ba054c51a48469b3297",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2917,16 +2917,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v4.2.3",
+            "version": "v4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "323bfa04458188fbac1be4fbc60b83b9b2496cfc"
+                "reference": "7998cfb802cd3b91719a9b428f0f97ea5bbabe10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/323bfa04458188fbac1be4fbc60b83b9b2496cfc",
-                "reference": "323bfa04458188fbac1be4fbc60b83b9b2496cfc",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/7998cfb802cd3b91719a9b428f0f97ea5bbabe10",
+                "reference": "7998cfb802cd3b91719a9b428f0f97ea5bbabe10",
                 "shasum": ""
             },
             "require": {
@@ -3074,7 +3074,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2019-02-03T12:47:44+00:00"
+            "time": "2019-03-03T19:38:27+00:00"
         },
         {
             "name": "symfony/webpack-encore-pack",
@@ -5311,9 +5311,9 @@
     "platform": {
         "php": "^7.2",
         "ext-pdo": "*",
-        "ext-json": "*",
         "ext-apcu": "*",
-        "ext-bz2": "*"
+        "ext-bz2": "*",
+        "ext-json": "*"
     },
     "platform-dev": [],
     "platform-overrides": {
