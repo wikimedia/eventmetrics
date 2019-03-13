@@ -97,6 +97,10 @@ class PageviewsRepository
         }
 
         if (is_int($avgDaysOffset)) {
+            if (null === $lastAvgDate) {
+                // No recent pageviews, so average is 0.
+                return [$pageviews, 0];
+            }
             $numDays = $end->diff($lastAvgDate)->days + 1; // +1 because dates are inclusive.
             return [$pageviews, (int)round($recentPageviews / $numDays)];
         }
