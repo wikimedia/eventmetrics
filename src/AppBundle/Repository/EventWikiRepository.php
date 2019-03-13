@@ -539,7 +539,7 @@ class EventWikiRepository extends Repository
         $pages = $this->getPageTitles($dbName, $wiki->getPagesCreated(), true, true);
         $start = $wiki->getEvent()->getStartUTC();
         $end = $wiki->getEvent()->getEndUTC();
-        $now = new DateTime();
+        $now = new DateTime('yesterday midnight');
         $data = [];
 
         while ($page = $pages->fetch()) {
