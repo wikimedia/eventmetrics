@@ -226,7 +226,7 @@ class EventWikiRepository extends Repository
         $conn = $this->getReplicaConnection();
         $rqb = $conn->createQueryBuilder();
 
-        $revisionTable = $this->getTableName('revision');
+        $revisionTable = $this->getTableName('revision', 0 === count($usernames) ? '' : 'userindex');
 
         $rqb->select('DISTINCT rev_page')
             ->from("$dbName.$revisionTable")
@@ -237,7 +237,8 @@ class EventWikiRepository extends Repository
                 ->where('cl_to IN (:categoryTitles)');
         }
 
-        $rqb->andWhere('page_namespace = 0')
+        $nsId = 'files' === $type ? 6 : 0;
+        $rqb->andWhere("page_namespace = $nsId")
             ->andWhere('page_is_redirect = 0')
             ->andWhere('rev_timestamp BETWEEN :start AND :end');
 
@@ -253,9 +254,9 @@ class EventWikiRepository extends Repository
             $rqb->setParameter('categoryTitles', $categoryTitles, Connection::PARAM_STR_ARRAY);
         }
 
-        // If only pages created or edited are being requested, limit based on the presence of a parent revision. This
-        // matches the check done in EventRepository::getEditStats().
-        if (in_array($type, ['created', 'edited'])) {
+        // If only pages created, edited or files are being requested, limit based on the presence of a parent revision.
+        // This matches the check done in EventRepository::getEditStats().
+        if (in_array($type, ['created', 'edited', 'files'])) {
             $typeOperator = 'edited' === $type ? '!=' : '=';
             $rqb->andWhere("rev_parent_id $typeOperator 0");
         }

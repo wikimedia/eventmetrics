@@ -456,15 +456,16 @@ class EventProcessor
         $start = $this->event->getStartUTC();
         $end = $this->event->getEndUTC();
 
-        $ret = $this->eventRepo->getFilesUploaded($dbName, $start, $end, $this->getParticipantNames(), $categories);
-        $this->createOrUpdateEventWikiStat($wiki, 'files-uploaded', $ret);
-        $this->filesUploaded += $ret;
+        $pageIds = $ewRepo->getPageIds($dbName, $start, $end, $this->getParticipantNames(), $categories, 'files');
+        $this->createOrUpdateEventWikiStat($wiki, 'files-uploaded', count($pageIds));
+        $wiki->setPagesFiles($pageIds);
+        $this->filesUploaded += count($pageIds);
 
-        $ret = $this->eventRepo->getUsedFiles($dbName, $start, $end, $this->getParticipantNames(), $categories);
+        $ret = $this->eventRepo->getUsedFiles($dbName, $pageIds);
         $this->createOrUpdateEventWikiStat($wiki, 'file-usage', $ret);
         $this->fileUsage += $ret;
 
-        $ret = $this->eventRepo->getPagesUsingFiles($dbName, $start, $end, $this->getParticipantNames(), $categories);
+        $ret = $this->eventRepo->getPagesUsingFiles($dbName, $pageIds);
         $this->createOrUpdateEventWikiStat($wiki, 'pages-using-files', count($ret));
         $this->pagesUsingFiles += count($ret);
         $this->pageTitlesUsingFiles = array_merge($this->pageTitlesUsingFiles, $ret);

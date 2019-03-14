@@ -93,6 +93,14 @@ class EventWiki
     protected $pagesEdited;
 
     /**
+     * A bzcompressed string of all the IDs of the pages for files uploaded.
+     * See note above in $pagesCreated docblock about storage.
+     * @ORM\Column(name="ew_pages_files", type="blob", nullable=true)
+     * @var string|resource
+     */
+    protected $pagesFiles;
+
+    /**
      * EventWiki constructor.
      * @param Event $event Event that this EventWiki belongs to.
      * @param string $domain Domain name of the wiki, without the .org.
@@ -253,6 +261,7 @@ class EventWiki
         // It's safe to assume page IDs should also be cleared.
         $this->pagesCreated = null;
         $this->pagesEdited = null;
+        $this->pagesFiles = null;
     }
 
     /*********
@@ -303,6 +312,23 @@ class EventWiki
     }
 
     /**
+     * Get the cached/persisted page IDs of all pages for files uploaded during this event.
+     * @return int[]
+     */
+    public function getPagesFiles(): array
+    {
+        return $this->getPageIds('files');
+    }
+
+    /**
+     * @param int[]|null $ids
+     */
+    public function setPagesFiles(?array $ids): void
+    {
+        $this->setPageIds('files', $ids);
+    }
+
+    /**
      * @param string $type Which type of page IDs to return.
      * @return int[]
      * @throws Exception With invalid type.
@@ -334,8 +360,8 @@ class EventWiki
      */
     protected function setPageIds(string $type, ?array $ids):void
     {
-        if (!in_array($type, ['created', 'edited'])) {
-            throw new Exception('$type must be "created" or "edited".');
+        if (!in_array($type, ['created', 'edited', 'files'])) {
+            throw new Exception('$type must be "created", "edited" or "files".');
         }
         $propertyName = 'pages'.ucfirst($type);
         if (null === $ids) {
