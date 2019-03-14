@@ -99,10 +99,10 @@ class EventStat
      * EventStat constructor.
      * @param Event $event Event the statistic applies to.
      * @param string $metric Name of event metric, e.g. 'retention', 'pages-created', 'pages-improved'.
-     * @param mixed $value Value of the associated metric.
-     * @param int $offset Offset value associated with the metric, such as number of days retention.
+     * @param int $value Value of the associated metric.
+     * @param int|null $offset Offset value associated with the metric, such as number of days retention.
      */
-    public function __construct(Event $event, string $metric, $value, $offset = null)
+    public function __construct(Event $event, string $metric, int $value = 0, ?int $offset = null)
     {
         $this->event = $event;
         $this->event->addStatistic($this);

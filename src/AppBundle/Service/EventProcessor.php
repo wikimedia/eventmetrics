@@ -220,7 +220,7 @@ class EventProcessor
         $count = count($usernames);
         $this->createOrUpdateEventStat('participants', $count);
         $this->logEnd($logKey);
-        $this->log(">> <info>Participants: $count</info>");
+        $this->log("> <info>Participants: $count</info>");
     }
 
     /**
@@ -234,7 +234,7 @@ class EventProcessor
         $newEditorOffset = Event::getAllAvailableMetrics()['new-editors'];
         $this->createOrUpdateEventStat('new-editors', $numNewEditors, $newEditorOffset);
         $this->logEnd($logKey);
-        $this->log(">> <info>New editors: $numNewEditors</info>");
+        $this->log("> <info>New editors: $numNewEditors</info>");
     }
 
     /**
@@ -455,6 +455,12 @@ class EventProcessor
         $logKey = 'files_uploaded_'.$wiki->getDomain();
         $this->logStart("> Fetching files uploaded on {$wiki->getDomain()} and global file usage...", $logKey);
 
+        if (false === $wiki->canHaveFilesUploaded()) {
+            $this->logEnd($logKey);
+            $this->log(">> <comment>File metrics not applicable, skipping</comment>");
+            return;
+        }
+
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
         $start = $this->event->getStartUTC();
         $end = $this->event->getEndUTC();
@@ -532,7 +538,7 @@ class EventProcessor
         $usernames = $this->getParticipantNames();
         if ($pageIds && !$usernames && $this->event->getNumCategories() > 0) {
             $usernames = $ewRepo->getUsersFromPageIDs($dbName, $pageIds, $this->event);
-            $this->implicitEditors += array_flip($usernames);
+            $this->implicitEditors = array_merge($this->implicitEditors, $usernames);
         }
 
         $this->logEnd($logKey);
@@ -781,7 +787,7 @@ class EventProcessor
     {
         $this->stopwatch->stop($key);
         $message = $message ?? 'Done';
-        $duration = round($this->stopwatch->getEvent($key)->getDuration(), 2);
+        $duration = round($this->stopwatch->getEvent($key)->getDuration());
         $this->log(" <comment>$message ($duration ms)</comment>");
     }
 }

@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Tests\AppBundle\Model;
 
 use AppBundle\Model\Event;
+use AppBundle\Model\EventCategory;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\EventWikiStat;
 use AppBundle\Model\Organizer;
+use AppBundle\Model\Participant;
 use AppBundle\Model\Program;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tests\AppBundle\EventMetricsTestCase;
@@ -153,5 +155,42 @@ class EventWikiTest extends EventMetricsTestCase
         static::assertEquals([], $wiki->getPagesCreated());
         $wiki->setPagesCreated(['', '123', null, '', 456, 'foo']);
         static::assertEquals([123, 456], $wiki->getPagesCreated());
+    }
+
+    /**
+     * @covers \AppBundle\Model\EventWiki::isValid()
+     * @covers \AppBundle\Model\EventWiki::canHaveFilesUploaded()
+     */
+    public function testValidity(): void
+    {
+        $enwiki = new EventWiki($this->event, 'en.wikipedia');
+
+        // No participants, no categories.
+        static::assertFalse($enwiki->isValid());
+        static::assertFalse($enwiki->canHaveFilesUploaded());
+
+        // Add participant.
+        $participant = new Participant($this->event);
+        static::assertTrue($enwiki->isValid());
+        static::assertTrue($enwiki->canHaveFilesUploaded());
+
+        // Remove participant, add category.
+        $this->event->removeParticipant($participant);
+        new EventCategory($this->event, 'Parks in Brooklyn', 'en.wikipedia');
+        static::assertTrue($enwiki->isValid());
+        // Can't have files uploaded if we only hvae a category.
+        static::assertFalse($enwiki->canHaveFilesUploaded());
+
+        // Similar tests but on Commons (where it always can have files uploaded).
+        $commons = new EventWiki($this->event, 'commons.wikimedia');
+
+        // No participants, no categories.
+        static::assertFalse($commons->isValid());
+        static::assertFalse($commons->canHaveFilesUploaded());
+
+        // Add a category.
+        new EventCategory($this->event, 'Test category', 'commons.wikimedia');
+        static::assertTrue($commons->isValid());
+        static::assertTrue($commons->canHaveFilesUploaded());
     }
 }

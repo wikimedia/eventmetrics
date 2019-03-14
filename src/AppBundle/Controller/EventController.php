@@ -9,12 +9,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Model\Event;
 use AppBundle\Model\EventCategory;
-use AppBundle\Model\EventStat;
 use AppBundle\Model\EventWiki;
 use AppBundle\Model\Participant;
 use AppBundle\Service\JobHandler;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -204,39 +201,9 @@ class EventController extends EntityController
             'forms' => $forms,
             'program' => $this->program,
             'event' => $this->event,
-            'stats' => $this->getEventStats($this->event),
             'isOrganizer' => $this->authUserIsOrganizer($this->program),
             'job' => $this->event->getJob(),
         ]);
-    }
-
-    /**
-     * Get EventStats from the given Event. If there are none, empty EventStats are returned for each metric type
-     * specified by EventStat::METRIC_TYPES, with the default 'offset' values specified by Event::getAvailableMetrics().
-     * This way we can show placeholders in the view.
-     * @param Event $event
-     * @return Collection|EventStat[]
-     */
-    private function getEventStats(Event $event): Collection
-    {
-        if (count($event->getStatistics()) > 0) {
-            return $event->getStatistics();
-        }
-
-        $availableMetrics = $event->getAvailableMetrics();
-        $stats = new ArrayCollection();
-
-        foreach (EventStat::getMetricTypes() as $metric) {
-            if (!in_array($metric, array_keys($availableMetrics))) {
-                continue;
-            }
-
-            $stats->add(
-                new EventStat($event, $metric, null, $availableMetrics[$metric])
-            );
-        }
-
-        return $stats;
     }
 
     /****************

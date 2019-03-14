@@ -144,6 +144,34 @@ class EventWiki
         return self::VALID_WIKI_PATTERN;
     }
 
+    /**
+     * Is the EventWiki valid? If false, statistics will not be able to be generated.
+     * This is analogous to Event::isValid().
+     * @return bool
+     */
+    public function isValid(): bool
+    {
+        return $this->event->getParticipants()->count() > 0 ||
+            $this->event->getCategoriesForWiki($this)->count() > 0;
+    }
+
+    /**
+     * Is the EventWiki capable of deriving files uploaded?
+     * @return bool
+     */
+    public function canHaveFilesUploaded(): bool
+    {
+        return (
+            // Commons must have a category or participants.
+            'commons.wikimedia' === $this->domain &&
+            $this->isValid()
+        ) || (
+            // Content wikis must have participants.
+            !in_array($this->domain, ['commons.wikimedia', 'www.wikidata']) &&
+            $this->event->getParticipants()->count() > 0
+        );
+    }
+
     /***************
      * WIKI FAMILY *
      ***************/
@@ -269,13 +297,12 @@ class EventWiki
      *********/
 
     /**
-     * Get the cached/persisted page IDs of all pages this event touches (both created and improved).
-     * File are handled separately. Use self::getPagesFiles().
+     * Get the cached/persisted page IDs of all pages this event touches.
      * @return int[]
      */
     public function getPages(): array
     {
-        return array_merge($this->getPagesCreated(), $this->getPagesEdited());
+        return array_unique(array_merge($this->getPagesCreated(), $this->getPagesEdited(), $this->getPagesFiles()));
     }
 
     /**
