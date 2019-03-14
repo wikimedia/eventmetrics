@@ -22,7 +22,16 @@
                 {% if isOrganizer %}
                     <button type="button" class="btn btn-default event-process-btn" data-event-id="{{ event.id }}">
                         <span class="event-state--initial">{{ statsBtnText }}</span>
-                        <span class="event-state--started event-state--queued">{{ msg('updating') }}</span>
+                        <span class="event-state--started event-state--queued">
+                            <span class="inner">
+                                {{ msg('updating') }}
+                                <span class="dots">
+                                    <span class="dot dot1"></span>
+                                    <span class="dot dot2"></span>
+                                    <span class="dot dot3"></span>
+                                </span>
+                            </span>
+                        </span>
                         <span class="event-state--failed-timeout event-state--failed-unknown">{{ statsBtnText }}</span>
                     </button>
                 {% endif %}
