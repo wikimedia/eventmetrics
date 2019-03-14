@@ -102,6 +102,9 @@ abstract class DatabaseAwareWebTestCase extends EventMetricsTestCase
      */
     public function tearDown(): void
     {
+        // Must be called before parent::tearDown() to have access to the container.
+        $this->killDbConnections();
+
         parent::tearDown();
 
         if (isset($this->response) && !$this->response->isSuccessful() && false === $this->suppressErrors) {
@@ -127,6 +130,29 @@ abstract class DatabaseAwareWebTestCase extends EventMetricsTestCase
                 $prop->setValue($this, null);
             }
         }
+    }
+
+    /**
+     * Kill active database connections, which can persist between tests and consequently exceed the connection limit.
+     */
+    protected function killDbConnections(): void
+    {
+        if (!self::$container) {
+            return;
+        }
+
+        self::$container->get('doctrine')
+            ->getManager('replicas')
+            ->getConnection()
+            ->close();
+        self::$container->get('doctrine')
+            ->getManager('centralauth')
+            ->getConnection()
+            ->close();
+        self::$container->get('doctrine')
+            ->getManager('meta')
+            ->getConnection()
+            ->close();
     }
 
     /**
