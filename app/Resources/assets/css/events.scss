@@ -162,6 +162,59 @@
         }
     }
 
+    .event-state--queued .inner {
+        display: flex;
+        .dots {
+            text-align: center;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dots .dot {
+            flex: 1;
+            position: relative;
+            background-color: #a9adb2;
+            border-radius: 4px;
+            width: 8px;
+            height: 8px;
+            margin: 0 4px;
+        }
+        .dots .dot1 {
+            animation: dot1 1.5s infinite linear;
+        }
+        .dots .dot2 {
+            animation: dot2 1.5s infinite linear;
+        }
+        .dots .dot3 {
+            animation: dot3 1.5s infinite linear;
+        }
+        @keyframes dot1 {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.2); }
+            40% { transform: scale(1.6); }
+            60% { transform: scale(1); }
+            80% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+        @keyframes dot2 {
+            0%   { transform: scale(1); }
+            20%  { transform: scale(1); }
+            40%  { transform: scale(1.2); }
+            60%  { transform: scale(1.6); }
+            80%  { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+        @keyframes dot3 {
+            0%   { transform: scale(1); }
+            20%  { transform: scale(1); }
+            40%  { transform: scale(1); }
+            60%  { transform: scale(1.2); }
+            80%  { transform: scale(1.6); }
+            100% { transform: scale(1); }
+        }
+    }
+
     .event-state--queued,
     .event-state--started,
     .event-state--failed-timeout,
