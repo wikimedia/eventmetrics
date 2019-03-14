@@ -11,8 +11,6 @@ use AppBundle\Model\Event;
 use DateInterval;
 use DateTime;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 /**
  * This class supplies and fetches data for the Event class.
@@ -115,57 +113,40 @@ class EventRepository extends Repository
     }
 
     /**
-     * Get the number of files uploaded in the given time period by given users.
-     * @param string $dbName Database name such as 'enwiki_p'.
-     * @param DateTime $start
-     * @param DateTime $end
-     * @param string[] $usernames
-     * @param string[] $categories
-     * @return int
-     */
-    public function getFilesUploaded(
-        string $dbName,
-        DateTime $start,
-        DateTime $end,
-        array $usernames,
-        array $categories
-    ): int {
-        $start = $start->format('YmdHis');
-        $end = $end->format('YmdHis');
-
-        $conn = $this->getReplicaConnection();
-        $rqb = $conn->createQueryBuilder();
-
-        $rqb->select(['COUNT(DISTINCT(img_name)) AS count'])
-            ->from("$dbName.image")
-            ->where('img_timestamp BETWEEN :start AND :end')
-            ->setParameter('start', $start)
-            ->setParameter('end', $end);
-
-        $this->applyUsersOrCategories($rqb, $dbName, $usernames, $categories);
-
-        return (int)$this->executeQueryBuilder($rqb)->fetchColumn();
-    }
-
-    /**
      * Get the number of files uploaded that are currently being used in at least one article, across all wikis.
      * @param string $dbName Database name such as 'enwiki_p'. For 'commonswiki_p' this will be global usage.
-     * @param DateTime $start
-     * @param DateTime $end
-     * @param string[] $usernames
-     * @param string[] $categories
+     * @param int[] $pageIds
      * @return int
      */
     public function getUsedFiles(
         string $dbName,
-        DateTime $start,
-        DateTime $end,
-        array $usernames,
-        array $categories
+        array $pageIds
     ): int {
-        $rqb = $this->getFileUsageBuilder($dbName, $start, $end, $usernames, $categories);
+        $conn = $this->getReplicaConnection();
+        $rqb = $conn->createQueryBuilder();
 
-        $rqb->select(['COUNT(DISTINCT(img_name)) AS count']);
+        if ('commonswiki_p' === $dbName) {
+            $rqb->select(['COUNT(DISTINCT(gil_page)) AS count'])
+                ->from('commonswiki_p.globalimagelinks')
+                ->join(
+                    'commonswiki_p.globalimagelinks',
+                    'commonswiki_p.page',
+                    null,
+                    'gil_to = page_title AND page_namespace = 6'
+                );
+        } else {
+            $rqb->select(['COUNT(DISTINCT(il_from)) AS count'])
+                ->from("$dbName.imagelinks")
+                ->join(
+                    "$dbName.imagelinks",
+                    "$dbName.page",
+                    null,
+                    'il_to = page_title AND page_namespace = 6'
+                );
+        }
+
+        $rqb->andWhere('page_id IN (:pageIds)');
+        $rqb->setParameter('pageIds', $pageIds, Connection::PARAM_STR_ARRAY);
 
         return (int)$this->executeQueryBuilder($rqb)->fetchColumn();
     }
@@ -202,107 +183,37 @@ class EventRepository extends Repository
      * Get the mainspace pages across all projects that are using files
      * uploaded by the given users that were uploaded during the given time frame.
      * @param string $dbName Database name such as 'enwiki_p'. For 'commonswiki_p' this will be global usage.
-     * @param DateTime $start
-     * @param DateTime $end
-     * @param string[] $usernames
-     * @param string[] $categories
+     * @param int[] $pageIds
      * @return mixed[][] Array containing arrays with keys 'dbName' and 'pageId'].
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \Doctrine\DBAL\Exception\DriverException
      */
     public function getPagesUsingFiles(
         string $dbName,
-        DateTime $start,
-        DateTime $end,
-        array $usernames,
-        array $categories
+        array $pageIds
     ): array {
-        $rqb = $this->getFileUsageBuilder($dbName, $start, $end, $usernames, $categories);
-
-        if ('commonswiki_p' === $dbName) {
-            $rqb->select(["CONCAT(gil_wiki, '_p') AS dbName", 'gil_page AS pageId']);
-        } else {
-            $rqb->select(["'$dbName' AS dbName", 'il_from AS pageId']);
-        }
-
-        $rqb->groupBy(['dbName', 'pageId']);
-
-        return $this->executeQueryBuilder($rqb)->fetchAll();
-    }
-
-    /**
-     * Helper for getUsedFiles() and getPagesUsingFiles().
-     * @param string $dbName
-     * @param DateTime $start
-     * @param DateTime $end
-     * @param string[] $usernames
-     * @param string[] $categories
-     * @return QueryBuilder
-     */
-    private function getFileUsageBuilder(
-        string $dbName,
-        DateTime $start,
-        DateTime $end,
-        array $usernames,
-        array $categories
-    ): QueryBuilder {
-        $start = $start->format('YmdHis');
-        $end = $end->format('YmdHis');
-
         $conn = $this->getReplicaConnection();
         $rqb = $conn->createQueryBuilder();
 
         if ('commonswiki_p' === $dbName) {
-            $rqb->from('commonswiki_p.globalimagelinks')
-                ->join('commonswiki_p.globalimagelinks', 'commonswiki_p.image', null, 'gil_to = img_name')
-                ->where('gil_page_namespace_id = 0');
+            $rqb->select(["CONCAT(gil_wiki, '_p') AS dbName", 'gil_page AS pageId'])
+                ->from('commonswiki_p.globalimagelinks')
+                ->join('commonswiki_p.globalimagelinks', 'commonswiki_p.image', 'links_image', 'gil_to = img_name')
+                ->join('links_image', 'commonswiki_p.page', 'image_page', 'gil_to = page_title AND page_namespace = 6')
+                ->where('gil_page_namespace_id = 0')
+                ->andWhere('page_id IN (:pageIds)');
         } else {
-            $rqb->from("$dbName.imagelinks")
-                ->join("$dbName.imagelinks", "$dbName.image", null, 'il_to = img_name')
-                ->where('il_from_namespace = 0');
+            $rqb->select(["'$dbName' AS dbName", 'il_from AS pageId'])
+                ->from("$dbName.imagelinks")
+                ->join("$dbName.imagelinks", "$dbName.image", 'links_image', 'il_to = img_name')
+                ->join('links_image', "$dbName.page", 'image_page', 'il_to = page_title AND page_namespace = 6')
+                ->where('il_from_namespace = 0')
+                ->andWhere('page_id IN (:pageIds)');
         }
 
-        $rqb->andWhere('img_timestamp BETWEEN :start AND :end')
-            ->setParameter('start', $start)
-            ->setParameter('end', $end)
-            ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+        $rqb->andWhere('page_id IN (:pageIds)');
+        $rqb->setParameter('pageIds', $pageIds, Connection::PARAM_STR_ARRAY);
+        $rqb->groupBy(['dbName', 'pageId']);
 
-        $this->applyUsersOrCategories($rqb, $dbName, $usernames, $categories);
-
-        return $rqb;
-    }
-
-    /**
-     * @param QueryBuilder $rqb
-     * @param string $dbName
-     * @param string[] $usernames
-     * @param string[] $categories
-     */
-    private function applyUsersOrCategories(
-        QueryBuilder $rqb,
-        string $dbName,
-        array $usernames,
-        array $categories
-    ): void {
-        if (!$usernames && !$categories) {
-            throw new InvalidParameterException('Events need either users or categories');
-        }
-
-        $namespace = 'commonswiki_p' === $dbName ? 6 /* NS_FILE */ : 0 /* NS_MAIN */;
-        if ($usernames) {
-            $rqb->andWhere("img_user_text IN (:usernames)")
-                ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
-        } elseif ($categories) {
-            $rqb->join(
-                "$dbName.image",
-                "$dbName.page",
-                null,
-                "img_name = page_title AND page_namespace = $namespace"
-            )
-                ->join("$dbName.page", "$dbName.categorylinks", null, 'cl_from = page_id')
-                ->andWhere('cl_to IN (:categories)')
-                ->setParameter('categories', $categories, Connection::PARAM_STR_ARRAY);
-        }
+        return $this->executeQueryBuilder($rqb)->fetchAll();
     }
 
     /**
