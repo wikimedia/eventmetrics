@@ -21,8 +21,6 @@
 	"error-event-undeletable": "Este acontecemento non pode ser eliminado porque ten un ou máis participantes.",
 	"error-not-found": "O programa ou evento non se atopou. Pode que fora eliminado ou renomeado.",
 	"error-server-message": "O servidor respondeu: $1",
-	"event-download-csv": "Descargar como CSV",
-	"event-download-wikitext": "Descargar como táboa wiki.",
 	"fatal-error": "Erro fatal",
 	"feedback": "Comentarios",
 	"help": "Axuda",

@@ -36,7 +36,6 @@
 	"error-title-numeric": "Titlen kan ikke være et tal.",
 	"error-unknown": "Noget gik galt",
 	"event-all-edits": "Alle redigeringer",
-	"event-download-csv": "Download som CSV",
 	"event-download-reports": "Hent rapporter",
 	"events": "Begivenheder",
 	"fatal-error": "Fatal fejl",

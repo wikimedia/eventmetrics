@@ -34,7 +34,6 @@
 	"event": "Tapahtuma",
 	"event-created": "Tapahtuma '$1' luotiin onnistuneesti.",
 	"event-deleted": "Tapahtuma '$1' poistettiin.",
-	"event-download-csv": "Lataa CSV-tiedostona",
 	"events": "Tapahtumat",
 	"fatal-error": "Vakava virhe",
 	"feedback": "Palaute",

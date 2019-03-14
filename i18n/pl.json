@@ -37,7 +37,6 @@
 	"event": "Wydarzenie",
 	"event-created": "Wydarzenie '$1' zostało pomyślnie utworzone.",
 	"event-deleted": "Wydarzenie '$1' zostało usunięte.",
-	"event-download-csv": "Pobierz jako CSV",
 	"event-in-future": "Statystyki nie mogą zostać wygenerowane, ponieważ zdarzenie to ma miejsce w przyszłości.",
 	"event-metrics-welcome": "Witamy w Event Metrics",
 	"event-no-data": "Statystyki nie zostały jeszcze wygenerowane dla tego wydarzenia.",
