@@ -102,17 +102,16 @@ class JobHandler
      * @param Job $job
      * @param OutputInterface &$output Used by Commands so that the output can be controlled by the parent process.
      *   If this is null, a local LoggerInterface is used instead.
+     * @throws \Exception
      */
     public function spawn(Job $job, ?OutputInterface &$output = null): void
     {
         $this->output = $output;
 
-        /**
-         * We can't stub the number of open connections, without stubbing all database interaction with a Repository.
-         * @codeCoverageIgnoreStart
-         */
+        // We can't stub the number of open connections, without stubbing all database interaction with a Repository.
+        // @codeCoverageIgnoreStart
         if (0 === $this->getQuota()) {
-            return;
+            throw new \Exception('Database quota exceeded!');
         }
         // @codeCoverageIgnoreEnd
 

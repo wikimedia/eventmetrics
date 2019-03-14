@@ -37,6 +37,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
      */
     public function testRevisions(): void
     {
+        /** @var Event $event */
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'Oliver_and_Company']);
