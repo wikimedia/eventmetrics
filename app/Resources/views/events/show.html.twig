@@ -42,7 +42,13 @@
                                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"></span>
                                         {% endif %}
                                     </th>
-                                    <td>{{ stat.value|num_format }}</td>
+                                    <td>
+                                        {% if stat.value is null %}
+                                            &ndash;
+                                        {% else %}
+                                            {{ stat.value|num_format }}
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endif %}
                         {% endfor %}

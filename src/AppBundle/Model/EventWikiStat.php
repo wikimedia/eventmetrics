@@ -86,8 +86,8 @@ class EventWikiStat
     protected $offset;
 
     /**
-     * @ORM\Column(name="ews_value", type="integer", options={"default":0})
-     * @var int Value of the associated metric.
+     * @ORM\Column(name="ews_value", type="integer", options={"default":0}, nullable=true)
+     * @var int|null Value of the associated metric.
      */
     protected $value;
 

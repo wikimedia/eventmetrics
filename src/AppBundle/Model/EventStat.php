@@ -90,8 +90,8 @@ class EventStat
     protected $offset;
 
     /**
-     * @ORM\Column(name="es_value", type="integer", options={"default":0})
-     * @var int Value of the associated metric.
+     * @ORM\Column(name="es_value", type="integer", options={"default":0}, nullable=true)
+     * @var int|null Value of the associated metric.
      */
     protected $value;
 
@@ -99,10 +99,10 @@ class EventStat
      * EventStat constructor.
      * @param Event $event Event the statistic applies to.
      * @param string $metric Name of event metric, e.g. 'retention', 'pages-created', 'pages-improved'.
-     * @param mixed $value Value of the associated metric.
-     * @param int $offset Offset value associated with the metric, such as number of days retention.
+     * @param int|null $value Value of the associated metric.
+     * @param int|null $offset Offset value associated with the metric, such as number of days retention.
      */
-    public function __construct(Event $event, string $metric, $value, $offset = null)
+    public function __construct(Event $event, string $metric, ?int $value = null, ?int $offset = null)
     {
         $this->event = $event;
         $this->event->addStatistic($this);
