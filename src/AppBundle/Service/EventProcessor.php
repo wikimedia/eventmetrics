@@ -448,6 +448,7 @@ class EventProcessor
      */
     private function setFilesUploaded(EventWiki $wiki, EventWikiRepository $ewRepo): void
     {
+        $categories = $this->event->getCategoryTitlesForWiki($wiki);
         $logKey = 'files_uploaded_'.$wiki->getDomain();
         $this->logStart("> Fetching files uploaded on {$wiki->getDomain()} and global file usage...", $logKey);
 
@@ -455,15 +456,15 @@ class EventProcessor
         $start = $this->event->getStartUTC();
         $end = $this->event->getEndUTC();
 
-        $ret = $this->eventRepo->getFilesUploaded($dbName, $start, $end, $this->getParticipantNames());
+        $ret = $this->eventRepo->getFilesUploaded($dbName, $start, $end, $this->getParticipantNames(), $categories);
         $this->createOrUpdateEventWikiStat($wiki, 'files-uploaded', $ret);
         $this->filesUploaded += $ret;
 
-        $ret = $this->eventRepo->getUsedFiles($dbName, $start, $end, $this->getParticipantNames());
+        $ret = $this->eventRepo->getUsedFiles($dbName, $start, $end, $this->getParticipantNames(), $categories);
         $this->createOrUpdateEventWikiStat($wiki, 'file-usage', $ret);
         $this->fileUsage += $ret;
 
-        $ret = $this->eventRepo->getPagesUsingFiles($dbName, $start, $end, $this->getParticipantNames());
+        $ret = $this->eventRepo->getPagesUsingFiles($dbName, $start, $end, $this->getParticipantNames(), $categories);
         $this->createOrUpdateEventWikiStat($wiki, 'pages-using-files', count($ret));
         $this->pagesUsingFiles += count($ret);
         $this->pageTitlesUsingFiles = array_merge($this->pageTitlesUsingFiles, $ret);

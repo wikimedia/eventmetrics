@@ -29,7 +29,8 @@
     </div>
 
     {{ form_start(form, {'method': 'post', 'name': 'categoryForm', 'attr': {'class': 'save-categories-form', 'autocomplete': 'off'}}) }}
-    <p>{{ msg('category-description') }}</p>
+    <p class="save-categories-form__description">{{ msg('categories-description') }}</p>
+    <p>{{ msg('categories-commons-explanation') }}</p>
 
     <div class="event__categories">
         {% for category in form.categories %}
