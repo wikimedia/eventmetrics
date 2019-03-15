@@ -168,6 +168,16 @@ class EventCategory
         $this->categoryId = $categoryId;
     }
 
+    /**
+     * Get the fully-qualified URL for this category's page on-wiki.
+     * @TODO Use localized name for Category namespace name (relying on canonical name redirecting for now).
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return 'https://'.$this->getDomain().'.org/wiki/Category:'.$this->getTitle(true);
+    }
+
     /***************
      * VALIDATIONS *
      ***************/

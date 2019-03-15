@@ -1,27 +1,41 @@
-<table class="event-metadata">
-    <tr>
-        <td>{{ msg('wikis') }}:</td>
-        <td>
-            {% if event.orphanWikisAndFamilies|length > 0 %}
-                {% for wiki in event.orphanWikisAndFamilies %}
-                    {{ wiki.domain }}{% if not loop.last %},{% endif %}
+<div class="row event-metadata">
+    <div class="col-sm-4">
+        <p class="dates">
+            {{ msg('metadata-dates-from-to', [
+                '<time>'~(event.start|date_localize)~'</time>',
+                '<time>'~(event.end|date_localize)~'</time>',
+                event.displayTimezone
+            ]) }}
+        </p>
+    </div>
+    <div class="col-sm-8">
+        <ul class="wikis-and-categories">
+            <li>
+                {# @TODO This count isn't quite right, because we want to display plural even if there's only one '*.wikipedia'. #}
+                <strong>{{ msg('metadata-wikis-label', [event.orphanWikisAndFamilies|length]) }}</strong>
+                {% set wikiLinks = [] %}
+                {% for eventWiki in event.orphanWikisAndFamilies %}
+                    {% if eventWiki.isFamilyWiki %}
+                        {% set wikiLink = eventWiki.domain %}
+                    {% else %}
+                        {% set wikiLink = '<a href="https://'~eventWiki.domain~'.org/" target="_blank">'~eventWiki.domain~'</a>' %}
+                    {% endif %}
+                    {% set wikiLinks = wikiLinks|merge([wikiLink]) %}
+                {% else %}
+                    {{ msg('all') }}
                 {% endfor %}
-            {% else %}
-                {{ msg('all') }}
-            {% endif %}
-        </td>
-    </tr>
-    <tr>
-        <td>{{ msg('start-date') }}:</td>
-        <td>
-            {{ event.start|date_localize }}
-            ({{ event.displayTimezone }})
-        </td>
-    </tr>
-    <tr>
-        <td>{{ msg('end-date') }}:</td>
-        <td>
-            {{ event.end|date_localize }}
-        </td>
-    </tr>
-</table>
+                {{ wikiLinks|list_format|raw }}
+            </li>
+            <li>
+                <strong>{{ msg('metadata-categories-label', [event.numCategories]) }}</strong>
+                {% set catLinks = [] %}
+                {% for cat in event.categories %}
+                    {% set catLinks = catLinks|merge(['<a href="'~cat.url~'" target="_blank">'~cat.title~'</a>']) %}
+                {% else %}
+                    {{ msg('no-categories') }}
+                {% endfor %}
+                {{ catLinks|list_format|raw }}
+            </li>
+        </ul>
+    </div>
+</div>

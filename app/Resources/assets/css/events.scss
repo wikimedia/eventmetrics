@@ -16,11 +16,18 @@
         margin-bottom: 0;
     }
 
-    .event-metadata td {
-        padding-bottom: 3px;
-
-        &:first-child {
-            padding-right: 10px;
+    // Remove the page-header bottom styling, to move the metadata up a bit.
+    .page-header {
+        border-bottom: 0;
+        padding-bottom: 0;
+    }
+    // Event metadata row (shows dates, wikis, and categories).
+    .event-metadata {
+        time {
+            font-weight: bolder;
+        }
+        .wikis-and-categories {
+            list-style-type: none;
         }
     }
 
