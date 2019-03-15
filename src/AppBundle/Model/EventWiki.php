@@ -34,13 +34,15 @@ class EventWiki
     /**
      * Regex pattern of the supported wikis.
      */
-    public const VALID_WIKI_PATTERN = '/\w+\.wikipedia|commons\.wikimedia|www\.wikidata/';
+    public const VALID_WIKI_PATTERN = '/\w+\.(wikipedia|wiktionary|wikivoyage)|commons\.wikimedia|www\.wikidata/';
 
     /**
      * Valid names of wiki families, or singular orphan wikis like commons.
      */
     public const FAMILY_NAMES = [
         'wikipedia',
+        'wiktionary',
+        'wikivoyage',
         'commons',
         'wikidata',
     ];

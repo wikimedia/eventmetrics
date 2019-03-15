@@ -300,7 +300,7 @@ eventmetrics.application.populateValidWikis = function () {
             }
 
             family.site.forEach(function (site) {
-                if (!site.closed && site.url.indexOf('.wikipedia.org') !== -1) {
+                if (!site.closed && site.url.match(/\.(wikipedia|wiktionary|wikivoyage)\.org/)) {
                     validWikis.push(
                         site.url.replace(/\.org$/, '').replace(/^https?:\/\//, '')
                     );
@@ -310,6 +310,8 @@ eventmetrics.application.populateValidWikis = function () {
 
         // 'All Wikipedias' option
         validWikis.push('*.wikipedia');
+        validWikis.push('*.wiktionary');
+        validWikis.push('*.wikivoyage');
 
         // Commons & Wikidata.
         validWikis.push('commons.wikimedia', 'www.wikidata');

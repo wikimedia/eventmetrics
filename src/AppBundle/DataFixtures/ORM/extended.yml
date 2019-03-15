@@ -19,6 +19,11 @@ AppBundle\Model\Event:
         timezone: 'America/New_York'
         start: '2018-06-09T00:00:00Z'
         end: '2018-06-11T23:59:59Z'
+    event3:
+        __construct: ['@program1', 'Wiktionary']
+        timezone: 'America/Los_Angeles'
+        start: '2006-05-01T00:00:00Z'
+        end: '2006-06-30T00:00:00Z'
 AppBundle\Model\EventWiki:
     eventwiki1:
         __construct: ['@event1', 'en.wikipedia']
@@ -30,6 +35,8 @@ AppBundle\Model\EventWiki:
         __construct: ['@event2', 'en.wikipedia']
     event2wiki2:
         __construct: ['@event2', 'commons.wikimedia']
+    event3wiki:
+        __construct: ['@event3', 'en.wiktionary']
 AppBundle\Model\Participant:
     MusikAnimal:
         # See https://en.wikipedia.org/wiki/Special:Contribs/MusikAnimal?namespace=0&start=2018-06-10&end=2018-06-11
@@ -51,6 +58,11 @@ AppBundle\Model\Participant:
         # Old editor, 2 pages created, 2 local uploads.
         __construct: ['@event1']
         userId: 10120606
+    MaxSem:
+        # See https://en.wiktionary.org/wiki/Special:Contributions/MaxSem
+        # 2 edits in May-June 2006
+        __construct: ['@event3']
+        userId: 511
 AppBundle\Model\EventCategory:
     eventCategory1:
         __construct: ['@event2', 'Parks in Brooklyn', 'en.wikipedia']
