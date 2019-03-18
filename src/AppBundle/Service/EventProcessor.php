@@ -385,13 +385,13 @@ class EventProcessor
             $this->createOrUpdateEventStat('pages-using-files', $this->pagesUsingFiles);
         }
 
-        $this->log(">> <info>Edits: {$this->edits}</info>");
-        $this->log(">> <info>Pages created: {$this->pagesCreated}</info>");
-        $this->log(">> <info>Pages improved: {$this->pagesImproved}</info>");
-        $this->log(">> <info>Bytes added: {$this->byteDifference}</info>");
-        $this->log(">> <info>Files uploaded: {$this->filesUploaded}</info>");
-        $this->log(">> <info>Files used: {$this->fileUsage}</info>");
-        $this->log(">> <info>Pages using uploaded files: {$this->pagesUsingFiles}</info>");
+        $this->log("> <info>Total edits: {$this->edits}</info>");
+        $this->log("> <info>Total pages created: {$this->pagesCreated}</info>");
+        $this->log("> <info>Total pages improved: {$this->pagesImproved}</info>");
+        $this->log("> <info>Total bytes added: {$this->byteDifference}</info>");
+        $this->log("> <info>Total files uploaded: {$this->filesUploaded}</info>");
+        $this->log("> <info>Total files used: {$this->fileUsage}</info>");
+        $this->log("> <info>Total pages using uploaded files: {$this->pagesUsingFiles}</info>");
     }
 
     /**
@@ -425,6 +425,8 @@ class EventProcessor
         $logKey = 'bytes_changed';
         $this->logStart(">> Fetching bytes changed...", $logKey);
         $diff = $ewRepo->getBytesChanged($this->event, $dbName, $pageIds, $usernames);
+        $this->logEnd($logKey);
+        $this->log(">>> <info>Bytes changed: {$diff}</info>");
 
         $totalCreated = count($pageIdsCreated);
         $totalEdited = count($pageIdsEdited);
@@ -432,8 +434,6 @@ class EventProcessor
         $this->pagesImproved += $totalEdited;
         $this->edits += $totalEditCount;
         $this->byteDifference += $diff;
-
-        $this->logEnd($logKey);
 
         $this->createOrUpdateEventWikiStat($wiki, 'edits', $totalEditCount);
         $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $totalCreated);
@@ -461,16 +461,20 @@ class EventProcessor
         $wiki->setPagesFiles($pageIds);
         $this->filesUploaded += count($pageIds);
 
-        $ret = $this->eventRepo->getUsedFiles($dbName, $pageIds);
-        $this->createOrUpdateEventWikiStat($wiki, 'file-usage', $ret);
-        $this->fileUsage += $ret;
+        $fileUsage = $this->eventRepo->getUsedFiles($dbName, $pageIds);
+        $this->createOrUpdateEventWikiStat($wiki, 'file-usage', $fileUsage);
+        $this->fileUsage += $fileUsage;
 
         $ret = $this->eventRepo->getPagesUsingFiles($dbName, $pageIds);
-        $this->createOrUpdateEventWikiStat($wiki, 'pages-using-files', count($ret));
-        $this->pagesUsingFiles += count($ret);
+        $pagesUsingFiles = count($ret);
+        $this->createOrUpdateEventWikiStat($wiki, 'pages-using-files', $pagesUsingFiles);
+        $this->pagesUsingFiles += $pagesUsingFiles;
         $this->pageTitlesUsingFiles = array_merge($this->pageTitlesUsingFiles, $ret);
 
         $this->logEnd($logKey);
+        $this->log(">> <info>Files uploaded: ".count($pageIds)."</info>");
+        $this->log(">> <info>File usage: $fileUsage</info>");
+        $this->log(">> <info>Pages using files: $pagesUsingFiles</info>");
     }
 
     /**
