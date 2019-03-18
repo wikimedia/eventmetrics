@@ -401,22 +401,11 @@ class EventRepository extends Repository
 
             $domain = $wiki->getDomain();
             $dbName = $eventWikiRepo->getDbNameFromDomain($domain);
-            $pageIdsSql = implode(',', $wiki->getPages());
+            $pageIdsSql = implode(',', array_merge($wiki->getPages(), $wiki->getPagesFiles()));
 
-            if ('commonswiki_p' === $dbName) {
-                // For files, we query for the initial revision (when it was created).
-                $nsClause = 'AND page_namespace = 6 AND rev_parent_id = 0';
-            } elseif ('' === $pageIdsSql) {
-                // Skip if there are no pages to query (otherwise `rev_page IN` clause will cause SQL error).
+            // Skip if there are no pages to query (otherwise `rev_page IN` clause will cause SQL error).
+            if ('' === $pageIdsSql) {
                 continue;
-            } else {
-                // For other wikis, we query for all revisions to the set of pages known to be edited.
-                // This includes local file uploads.
-                $nsClause = "AND (
-                    rev_page IN ($pageIdsSql) OR (
-                        page_namespace = 6 AND rev_parent_id = '0'
-                    )
-                )";
             }
 
             $sqlClauses[] = "SELECT rev_id AS 'id',
@@ -430,8 +419,7 @@ class EventRepository extends Repository
                 INNER JOIN $dbName.$pageTable ON page_id = rev_page
                 LEFT OUTER JOIN $dbName.comment ON rev_comment_id = comment_id
                 WHERE rev_user_text IN ($usernames)
-                AND page_is_redirect = 0
-                $nsClause
+                AND rev_page IN ($pageIdsSql)
                 AND rev_timestamp BETWEEN :startDate AND :endDate";
         }
 

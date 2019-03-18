@@ -62,9 +62,37 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
 
-        static::assertContains(
-            'MusikAnimal',
-            $this->crawler->filter('.event-revisions')->text()
+        // Exactly 37 edits.
+        static::assertEquals(37, $this->crawler->filter('.event-revision')->count());
+
+        // 22 edits to enwiki.
+        static::assertEquals(
+            22,
+            substr_count($this->response->getContent(), '<td class="text-nowrap">en.wikipedia</td>')
+        );
+
+        // 12 edits should be to [[Domino Park]], and one more with a link to Domino Park in the edit summary.
+        static::assertEquals(
+            13,
+            substr_count($this->response->getContent(), 'https://en.wikipedia.org/wiki/Domino_Park')
+        );
+
+        // 1 Commons file upload.
+        static::assertEquals(
+            1,
+            substr_count($this->response->getContent(), 'commons.wikimedia.org/wiki/File%3A')
+        );
+
+        // 2 enwiki file uploads.
+        static::assertEquals(
+            2,
+            substr_count($this->response->getContent(), 'en.wikipedia.org/wiki/File%3A')
+        );
+
+        // 14 wikidata edits.
+        static::assertEquals(
+            14,
+            substr_count($this->response->getContent(), '<td class="text-nowrap">www.wikidata</td>')
         );
 
         $this->wikitextSpec();
@@ -127,24 +155,24 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         );
         $this->response = $this->client->getResponse();
 
-        // Exactly 29 edits.
-        static::assertEquals(29, $this->crawler->filter('.event-revision')->count());
+        // Exactly 27 edits.
+        static::assertEquals(27, $this->crawler->filter('.event-revision')->count());
 
-        // 14 edits to enwiki.
+        // 12 edits to enwiki.
         static::assertEquals(
-            14,
+            12,
             substr_count($this->response->getContent(), '<td class="text-nowrap">en.wikipedia</td>')
         );
 
-        // 12 are to [[Domino Park]].
+        // All 12 edits should be to [[Domino Park]].
         static::assertEquals(
             12,
             substr_count($this->response->getContent(), 'https://en.wikipedia.org/wiki/Domino_Park')
         );
 
-        // 3 are files.
+        // 1 file upload.
         static::assertEquals(
-            3,
+            1,
             substr_count($this->response->getContent(), '/wiki/File%3A')
         );
     }

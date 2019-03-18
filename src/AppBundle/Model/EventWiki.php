@@ -270,6 +270,7 @@ class EventWiki
 
     /**
      * Get the cached/persisted page IDs of all pages this event touches (both created and improved).
+     * File are handled separately. Use self::getPagesFiles().
      * @return int[]
      */
     public function getPages(): array
@@ -335,8 +336,8 @@ class EventWiki
      */
     protected function getPageIds(string $type): array
     {
-        if (!in_array($type, ['created', 'edited'])) {
-            throw new Exception('$type must be "created" or "edited".');
+        if (!in_array($type, ['created', 'edited', 'files'])) {
+            throw new Exception('$type must be "created", "edited" or "files".');
         }
         $propertyName = 'pages'.ucfirst($type);
         if (null === $this->$propertyName) {
