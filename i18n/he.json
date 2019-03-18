@@ -40,6 +40,8 @@
 	"error-query-timeout": "המידע המבוקש נמשך זמן רב מדי (נכשל לאחר {{PLURAL:$1|שניה|$1 שניות}}). על מנת לחסוך במשאבים, השאילתה הופסקה באופן אוטומטי.",
 	"error-server-message": "השרת השיב: $1",
 	"event": "אירוע",
+	"event-download-csv": "הורדה כקובץ CSV",
+	"event-download-wikitext": "הורדה כטבלת ויקי",
 	"events": "אירועים",
 	"fatal-error": "שגיאה קריטית",
 	"file-usage": "קבצים בשימוש",

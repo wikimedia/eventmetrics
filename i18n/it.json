@@ -34,6 +34,7 @@
 	"event": "Evento",
 	"event-all-edits": "Tutte le modifiche",
 	"event-deleted": "L'evento '$1' è stato cancellato.",
+	"event-download-csv": "Scarica in formato CSV",
 	"event-list": "Elenco degli eventi",
 	"event-no-data": "Le statistiche non sono ancora state generate per questo evento.",
 	"event-settings": "Impostazioni evento",

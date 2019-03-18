@@ -48,6 +48,8 @@
 	"event": "Συμβάν",
 	"event-created": "Το συμβάν '$1' δημιουργήθηκε επιτυχώς.",
 	"event-deleted": "Το συμβάν '$1' διεγράφη.",
+	"event-download-csv": "Κατέβασμα ως CSV",
+	"event-download-wikitext": "Λήψη ως πίνακας βίκι",
 	"event-in-future": "Δεν μπορούν να δημιουργηθούν στατιστικά επειδή αυτό το γεγονός λαμβάνει χώρα στο μέλλον.",
 	"event-metrics": "Event Metrics",
 	"event-metrics-welcome": "Καλωσήρθατε στο Event Metrics",

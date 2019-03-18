@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"StanProg",
-			"Vlad5250"
+			"Vlad5250",
+			"Ted Masters"
 		]
 	},
 	"add-category": "Добавяне на категория",
@@ -43,6 +44,8 @@
 	"event-all-edits": "Всички редакции",
 	"event-created": "Събитие „$1“ е успешно създадено.",
 	"event-deleted": "Събитието „$1“ е изтрито.",
+	"event-download-csv": "Изтегляне като CSV",
+	"event-download-wikitext": "Изтегляне като уикитаблица",
 	"event-list": "Списък на събития",
 	"event-settings": "Настройки за събитие",
 	"event-summary": "Резюме на събитието",
