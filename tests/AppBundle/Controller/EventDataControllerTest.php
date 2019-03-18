@@ -14,6 +14,7 @@ use AppBundle\Model\Job;
 
 /**
  * Integration/functional tests for the EventDataController.
+ * TODO: Find out why we need to manually call $this->killDbConnections() for some test cases.
  */
 class EventDataControllerTest extends DatabaseAwareWebTestCase
 {
@@ -244,6 +245,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
      */
     private function generateStats(Event $event): void
     {
+        $this->killDbConnections();
         // Update the stats, creating a new Job for the Event and flushing to the database.
         $job = new Job($event);
         $this->entityManager->persist($job);
@@ -257,6 +259,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
      */
     public function testEventSummary(): void
     {
+        $this->killDbConnections();
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'Oliver_and_Company']);
@@ -288,6 +291,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
      */
     public function testPagesCreated(): void
     {
+        $this->killDbConnections();
         $event = $this->entityManager
             ->getRepository('Model:Event')
             ->findOneBy(['title' => 'Oliver_and_Company']);
