@@ -23,16 +23,48 @@
     }
 
     // Event metadata (shows dates and wikis).
-    .event-metadata th {
-        padding-right: 10px;
+    .event-metadata {
+        margin-bottom: 1em;
+        th {
+            padding-right: 10px;
+        }
     }
 
     .event-metric-desc {
         cursor: help;
     }
 
-    .event-wiki-stats--empty {
-        margin: 36px 0;
+    .event-errorbox {
+        padding: 20px;
+        margin: 0 0 10px 0;
+        border: 1px solid #eee;
+        border-left-width: 5px;
+        border-radius: 3px;
+        h3 {
+            margin-top: 0 !important;
+        }
+        &.warn {
+            border-left-color: #eea236;
+        }
+        &.warn h3 {
+            color: #eea236;
+        }
+        &.error {
+            border-left-color: #d9534f;
+        }
+        &.error h3 {
+            color: #d9534f;
+        }
+    }
+    .panel-heading .glyphicon {
+        display: inline-block;
+        margin-left: 1em;
+        &.error {
+            color: #d9534f;
+        }
+        &.warn {
+            color: #f0ad4e;
+        }
     }
 
     // Remove space above the 'Statistics' H2, and reduce the margin between it and the following element.

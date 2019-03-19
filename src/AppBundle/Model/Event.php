@@ -621,6 +621,27 @@ class Event
     }
 
     /**
+     * Get all of this event's wikis that do not yet have at least one category defined.
+     * Wikidata is excluded because it can never have categories.
+     * @return Collection Collection of EventWiki objects.
+     */
+    public function getWikisWithoutCategories(): Collection
+    {
+        return $this->wikis->filter(function (EventWiki $eventWiki) {
+            // Wikidata never has categories, so we don't return it in this list.
+            if ('www.wikidata' === $eventWiki->getDomain()) {
+                return false;
+            }
+            foreach ($this->categories as $cat) {
+                if ($cat->getDomain() === $eventWiki->getDomain()) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    }
+
+    /**
      * Get the EventWiki with the given domain that belongs to this Event.
      * @param string $domain
      * @return EventWiki|false False if not found.

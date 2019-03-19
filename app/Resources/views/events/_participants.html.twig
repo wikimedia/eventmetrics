@@ -79,10 +79,13 @@
 {% endset %}
 
 {# Here we use event.participants.count, ensuring it's the number of manually entered participants (and not derived). #}
-{{
-    layout.panel(
-        'participants',
-        event.participants.count ~ ' ' ~ msg('num-participants', [event.participants.count]),
-        content
-    )
-}}
+{% if event.participants.count == 0 and event.wikiByDomain('www.wikidata') %}
+    {% set panel_desc = msg('error-filters-wikidata-panel') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
+{% elseif not filtersMissing and event.participants.count == 0 and wikisWithoutCats.count %}
+    {% set panel_desc = msg('no-participants') ~ ' <span class="warn glyphicon glyphicon-warning-sign"></span>' %}
+{% elseif filtersMissing %}
+    {% set panel_desc = msg('no-participants') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
+{% else %}
+    {% set panel_desc = msg('num-participants', [event.participants.count]) %}
+{% endif %}
+{{ layout.panel('participants-panel-title', panel_desc, content) }}
