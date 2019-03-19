@@ -1,8 +1,8 @@
 {% import 'macros/wiki.html.twig' as wiki %}
 {% for column in ['diff', 'date', 'page', 'wiki', 'username', 'edit-summary'] %}
-{{ msg(column) }}{% if not loop.last %},{% endif %}
+{{ csv(msg(column)) }}{% if not loop.last %},{% endif %}
 {% endfor %}
 
 {% for rev in revisions %}
-"https://{{ rev.wiki }}.org/wiki/Special:Diff/{{ rev.id }}",{{ rev.timestamp|date_format(event.timezone) }},"{{ wiki.pagePath(rev) }}",{{ rev.wiki }},"{{ rev.username }}","{{ rev.summary }}"
+https://{{ rev.wiki }}.org/wiki/Special:Diff/{{ rev.id }},{{ rev.timestamp|date_format(event.timezone) }},{{ csv(wiki.pagePath(rev)|replace({'_': ' '})) }},{{ rev.wiki }},{{ csv(rev.username) }},{{ csv(rev.summary) }}
 {% endfor %}

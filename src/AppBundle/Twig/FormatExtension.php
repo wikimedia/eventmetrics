@@ -46,6 +46,7 @@ class FormatExtension extends Extension
         return [
             new \Twig_SimpleFunction('formatDuration', [$this, 'formatDuration']),
             new \Twig_SimpleFunction('numberFormat', [$this, 'numberFormat']),
+            new \Twig_SimpleFunction('csv', [$this, 'csv'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -247,5 +248,15 @@ class FormatExtension extends Extension
     public function wikify(string $wikitext, string $domain, ?string $pageTitle = null): string
     {
         return EventWikiRepository::wikifyString($wikitext, $domain, $pageTitle);
+    }
+
+    /**
+     * Properly escape the given string using double-quotes so that it is safe to use as a cell in CSV exports.
+     * @param string $content
+     * @return string
+     */
+    public function csv(string $content): string
+    {
+        return '"'.str_replace('"', '""', $content).'"';
     }
 }

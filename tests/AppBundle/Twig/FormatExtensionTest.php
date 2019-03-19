@@ -175,4 +175,12 @@ class FormatExtensionTest extends EventMetricsTestCase
             $this->formatExtension->wikify($wikitext, 'test.example', 'my fun page')
         );
     }
+
+    /**
+     * @covers \AppBundle\Twig\FormatExtension::csv()
+     */
+    public function testCsv(): void
+    {
+        static::assertEquals('"Foo\'s ""Bar"""', $this->formatExtension->csv('Foo\'s "Bar"'));
+    }
 }

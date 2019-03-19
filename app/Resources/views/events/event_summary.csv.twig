@@ -1,14 +1,14 @@
 {% for metric in ['participants', 'pages-created', 'pages-improved', 'edits', 'byte-difference', 'files-uploaded', 'items-created', 'items-improved', 'pages-created-pageviews', 'pages-improved-pageviews-avg', 'pages-using-files', 'file-usage', 'pages-using-files-pageviews-avg', 'new-editors', 'retention'] %}{#
     #}{% set stat = event.getStatistic(metric) %}{#
     #}{% if stat is not empty %}{#
-        #}{{ msg(metric, [stat.offset]) }},{#
+        #}{{ csv(msg(metric, [stat.offset])) }},{#
         #}{% if stat.value is null %} {% else %}{{ stat.value }}{% endif %}
 
 {% endif %}{#
 #}{% endfor %}
 
-{{ msg('event-summary') }}, "{{ event.displayTitle }}"
-{{ msg('timezone') }}, {{ event.displayTimezone }}
-{{ msg('start-date') }}, {{ event.start|date_localize }}
-{{ msg('end-date') }}, {{ event.end|date_localize }}
-{{ msg('last-updated-table') }}, {{ event.updatedUTC|date_localize }}
+{{ msg('event-summary') }},{{ csv(event.displayTitle) }}
+{{ msg('timezone') }},{{ event.displayTimezone }}
+{{ msg('start-date') }},{{ event.start|date_localize }}
+{{ msg('end-date') }},{{ event.end|date_localize }}
+{{ msg('last-updated-table') }},{{ event.updatedUTC|date_localize }}
