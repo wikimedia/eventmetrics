@@ -270,6 +270,7 @@ class EventWiki
 
     /**
      * Get the cached/persisted page IDs of all pages this event touches (both created and improved).
+     * File are handled separately. Use self::getPagesFiles().
      * @return int[]
      */
     public function getPages(): array
