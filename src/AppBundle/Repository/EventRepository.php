@@ -126,7 +126,7 @@ class EventRepository extends Repository
         $rqb = $conn->createQueryBuilder();
 
         if ('commonswiki_p' === $dbName) {
-            $rqb->select(['COUNT(DISTINCT(gil_page)) AS count'])
+            $rqb->select(['COUNT(DISTINCT(gil_to)) AS count'])
                 ->from('commonswiki_p.globalimagelinks')
                 ->join(
                     'commonswiki_p.globalimagelinks',
@@ -135,7 +135,7 @@ class EventRepository extends Repository
                     'gil_to = page_title AND page_namespace = 6'
                 );
         } else {
-            $rqb->select(['COUNT(DISTINCT(il_from)) AS count'])
+            $rqb->select(['COUNT(DISTINCT(il_to)) AS count'])
                 ->from("$dbName.imagelinks")
                 ->join(
                     "$dbName.imagelinks",
@@ -145,7 +145,7 @@ class EventRepository extends Repository
                 );
         }
 
-        $rqb->andWhere('page_id IN (:pageIds)');
+        $rqb->where('page_id IN (:pageIds)');
         $rqb->setParameter('pageIds', $pageIds, Connection::PARAM_STR_ARRAY);
 
         return (int)$this->executeQueryBuilder($rqb)->fetchColumn();
