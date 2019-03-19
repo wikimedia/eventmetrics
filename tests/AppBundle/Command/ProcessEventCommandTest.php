@@ -448,7 +448,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'retention',
             ]);
-        static::assertEquals(1, $eventStat->getValue());
+        static::assertEquals(0, $eventStat->getValue());
 
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
@@ -456,6 +456,6 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'new-editors',
             ]);
-        static::assertEquals(1, $eventStat->getValue());
+        static::assertEquals(0, $eventStat->getValue());
     }
 }

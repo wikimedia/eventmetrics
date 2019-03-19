@@ -445,8 +445,8 @@ class EventWikiRepository extends Repository
             ->andWhere('rev_user <> 0')
             ->andWhere('rev_timestamp BETWEEN :start AND :end')
             ->setParameter('pageIds', $pageIds, Connection::PARAM_INT_ARRAY)
-            ->setParameter('start', $event->getStart()->format('YmdHis'))
-            ->setParameter('end', $event->getEnd()->format('YmdHis'));
+            ->setParameter('start', $event->getStartUTC()->format('YmdHis'))
+            ->setParameter('end', $event->getEndUTC()->format('YmdHis'));
 
         return $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
     }
