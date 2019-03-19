@@ -79,6 +79,9 @@ class EventProcessor
     /** @var Stopwatch used to profile performance. */
     private $stopwatch;
 
+    /** @var string[] Usernames of Participants. */
+    private $participantNames;
+
     /**
      * Constructor for the EventProcessor.
      * @param LoggerInterface $logger
@@ -541,18 +544,17 @@ class EventProcessor
      */
     private function getParticipantNames(): array
     {
-        // Quick cache.
-        static $parUsernames = null;
-        if (null !== $parUsernames) {
-            return $parUsernames;
+        if (isset($this->participantNames)) {
+            return $this->participantNames;
         }
 
         $userIds = $this->event->getParticipantIds();
-        $parUsernames = array_column(
+        $this->participantNames = array_column(
             $this->eventRepo->getUsernamesFromIds($userIds),
             'user_name'
         );
-        return $parUsernames;
+
+        return $this->participantNames;
     }
 
     /**
