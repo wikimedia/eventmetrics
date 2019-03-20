@@ -351,7 +351,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 | [https://en.wikipedia.org/wiki/User%3AMusikAnimal MusikAnimal]
 | en.wikipedia
 | style="text-align:right" | {{FORMATNUM:12}}
-| style="text-align:right" | +{{FORMATNUM:4636}}
+| style="text-align:right" | +{{FORMATNUM:4641}}
 EOD;
         static::assertContains($snippet, $this->response->getContent());
     }
