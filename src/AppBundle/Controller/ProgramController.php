@@ -141,7 +141,7 @@ class ProgramController extends EntityController
             $this->em->persist($program);
             $this->em->flush();
 
-            return $this->redirectToRoute('Programs');
+            return $this->redirectToRoute('Program', ['programId' => $program->getId()]);
         }
 
         return $form;
