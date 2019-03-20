@@ -11,7 +11,12 @@ use AppBundle\Repository\EventWikiRepository;
 use DateTime;
 use DateTimeZone;
 use IntlDateFormatter;
+use Krinkle\Intuition\Intuition;
 use NumberFormatter;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Wikimedia\ToolforgeBundle\Twig\Extension as BundleExtension;
 
 /**
  * The FormatExtension offers various formatters to be used in Twig views.
@@ -24,6 +29,20 @@ class FormatExtension extends Extension
 
     /** @var IntlDateFormatter Instance of IntlDateFormatter class, used in localizing dates. */
     protected $dateFormatter;
+
+    /** @var BundleExtension The Twig extension of the Toolforge Bundle. */
+    protected $bundleExtension;
+
+    public function __construct(
+        ContainerInterface $container,
+        RequestStack $requestStack,
+        SessionInterface $session,
+        Intuition $intuition,
+        BundleExtension $bundleExtension
+    ) {
+        parent::__construct($container, $requestStack, $session, $intuition);
+        $this->bundleExtension = $bundleExtension;
+    }
 
     /**
      * Get the name of this extension.
@@ -45,7 +64,6 @@ class FormatExtension extends Extension
     {
         return [
             new \Twig_SimpleFunction('formatDuration', [$this, 'formatDuration']),
-            new \Twig_SimpleFunction('numberFormat', [$this, 'numberFormat']),
             new \Twig_SimpleFunction('csv', [$this, 'csv'], ['is_safe' => ['html']]),
         ];
     }
@@ -62,45 +80,10 @@ class FormatExtension extends Extension
             new \Twig_SimpleFilter('ucfirst', [$this, 'ucfirst']),
             new \Twig_SimpleFilter('percent_format', [$this, 'percentFormat']),
             new \Twig_SimpleFilter('diff_format', [$this, 'diffFormat'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFilter('num_format', [$this, 'numberFormat']),
-            new \Twig_SimpleFilter('list_format', [$this, 'listFormat']),
             new \Twig_SimpleFilter('date_localize', [$this, 'dateFormat']),
             new \Twig_SimpleFilter('date_format', [$this, 'dateFormatStd']),
             new \Twig_SimpleFilter('wikify', [$this, 'wikify']),
         ];
-    }
-
-    /**
-     * Format a number based on language settings.
-     * @param int|float $number
-     * @param int $decimals Number of decimals to format to.
-     * @return string
-     */
-    public function numberFormat($number, int $decimals = 0): string
-    {
-        if (!isset($this->numFormatter)) {
-            $lang = $this->intuition->getLang();
-            $this->numFormatter = new NumberFormatter($lang, NumberFormatter::DECIMAL);
-        }
-
-        // Get separator symbols.
-        $decimal = $this->numFormatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
-        $thousands = $this->numFormatter->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
-
-        $formatted = number_format((float)$number, $decimals, $decimal, $thousands);
-
-        // Remove trailing .0's (e.g. 40.00 -> 40).
-        return preg_replace("/\\".$decimal."0+$/", '', $formatted);
-    }
-
-    /**
-     * Format a list of values. In English this is a comma-separated list with the last item separated with 'and'.
-     * @param string[] $list The list items.
-     * @return string
-     */
-    public function listFormat(array $list): string
-    {
-        return $this->intuition->listToText($list);
     }
 
     /**
@@ -177,7 +160,7 @@ class FormatExtension extends Extension
             $quotient = ($numerator / $denominator) * 100;
         }
 
-        return $this->numberFormat($quotient, $precision).'%';
+        return $this->bundleExtension->numberFormat($quotient, $precision).'%';
     }
 
     /**
@@ -195,7 +178,7 @@ class FormatExtension extends Extension
             $class = 'diff-zero';
         }
 
-        $size = $this->numberFormat($size);
+        $size = $this->bundleExtension->numberFormat($size);
 
         return "<span class='$class'>$size</span>";
     }
@@ -213,9 +196,9 @@ class FormatExtension extends Extension
         [$val, $key] = $this->getDurationMessageKey($seconds);
 
         if ($translate) {
-            return $this->numberFormat($val).' '.$this->intuition->msg("num-$key", [$val]);
+            return $this->bundleExtension->numberFormat($val).' '.$this->intuition->msg("num-$key", [$val]);
         } else {
-            return [$this->numberFormat($val), "num-$key"];
+            return [$this->bundleExtension->numberFormat($val), "num-$key"];
         }
     }
 

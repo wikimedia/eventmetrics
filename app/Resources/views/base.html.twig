@@ -118,8 +118,8 @@
 
                     {% if 'localhost' in baseUrl or 'eventmetrics-dev' in baseUrl %}
                         Current branch:
-                        <strong>{{ branch() }}</strong>
-                        (<a href="https://github.com/wikimedia/eventmetrics/tree/{{ hash() }}">{{ shortHash() }}</a>)
+                        <strong>{{ git_branch() }}</strong>
+                        (<a href="https://github.com/wikimedia/eventmetrics/tree/{{ git_hash() }}">{{ git_hash_short() }}</a>)
                     {% endif %}
                 </div>
             </div>

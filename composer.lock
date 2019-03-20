@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01c0146dcb7c0ba054c51a48469b3297",
+    "content-hash": "351852b5a0338945930138e295e3cc06",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1732,25 +1732,29 @@
         },
         {
             "name": "mediawiki/oauthclient",
-            "version": "0.1.2",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/mediawiki-oauthclient-php.git",
-                "reference": "5d9c748c6deb83cdc74ea3dc85194b2ae2de416d"
+                "reference": "ab5e5b417d4df8d39032716599642fd4da4979bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/mediawiki-oauthclient-php/zipball/5d9c748c6deb83cdc74ea3dc85194b2ae2de416d",
-                "reference": "5d9c748c6deb83cdc74ea3dc85194b2ae2de416d",
+                "url": "https://api.github.com/repos/wikimedia/mediawiki-oauthclient-php/zipball/ab5e5b417d4df8d39032716599642fd4da4979bd",
+                "reference": "ab5e5b417d4df8d39032716599642fd4da4979bd",
                 "shasum": ""
             },
             "require": {
-                "psr/log": "1.0.*"
+                "ext-json": "*",
+                "php": ">=5.6.99",
+                "psr/log": "^1.0"
             },
             "require-dev": {
-                "jakub-onderka/php-parallel-lint": "~0.9",
-                "mediawiki/mediawiki-codesniffer": "0.5.0",
-                "phpunit/phpunit": "~4.6"
+                "jakub-onderka/php-console-highlighter": "0.4",
+                "jakub-onderka/php-parallel-lint": "1.0.0",
+                "mediawiki/mediawiki-codesniffer": "23.0.0",
+                "mediawiki/minus-x": "0.3.1",
+                "phpunit/phpunit": "^5.7|^6.5"
             },
             "type": "library",
             "autoload": {
@@ -1760,7 +1764,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-3.0+"
+                "GPL-3.0-or-later"
             ],
             "authors": [
                 {
@@ -1778,7 +1782,7 @@
             ],
             "description": "PHP OAuth client for use with Wikipedia and other MediaWiki-based wikis running the OAuth extension",
             "homepage": "https://www.mediawiki.org/wiki/oauthclient-php",
-            "time": "2016-06-03T17:14:22+00:00"
+            "time": "2019-02-02T17:34:20+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3176,21 +3180,21 @@
         },
         {
             "name": "wikimedia/toolforge-bundle",
-            "version": "0.7.0",
+            "version": "0.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/ToolforgeBundle.git",
-                "reference": "51aa306d00e9c6deae152a535ef12ada34fd592b"
+                "reference": "9c7791e247dae68efc2194b8515f609c7b3eaabc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/ToolforgeBundle/zipball/51aa306d00e9c6deae152a535ef12ada34fd592b",
-                "reference": "51aa306d00e9c6deae152a535ef12ada34fd592b",
+                "url": "https://api.github.com/repos/wikimedia/ToolforgeBundle/zipball/9c7791e247dae68efc2194b8515f609c7b3eaabc",
+                "reference": "9c7791e247dae68efc2194b8515f609c7b3eaabc",
                 "shasum": ""
             },
             "require": {
                 "krinkle/intuition": "^1.1",
-                "mediawiki/oauthclient": "^0.1",
+                "mediawiki/oauthclient": "^1.0",
                 "symfony/config": "^4.1",
                 "symfony/http-kernel": "^4.1",
                 "symfony/routing": "^4.1",
@@ -3218,7 +3222,7 @@
             ],
             "description": "Symfony 4 bundle providing useful Toolforge features.",
             "homepage": "https://github.com/wikimedia/toolforgebundle",
-            "time": "2018-10-06T01:32:43+00:00"
+            "time": "2019-03-20T05:12:31+00:00"
         },
         {
             "name": "zendframework/zend-code",

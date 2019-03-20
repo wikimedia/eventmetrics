@@ -27,9 +27,11 @@
             </h1>
             <div class="programs-organizers">
                 {{ msg('organizers') }}:
+                {% set userLinks = [] %}
                 {% for username in program.organizerNames %}
-                    <a target="_blank" href="https://meta.wikimedia.org/wiki/User:{{ username }}">{{ username }}</a>{% if not loop.last %},{% endif %}
+                    {% set userLinks = userLinks|merge(['<a target="_blank" href="https://meta.wikimedia.org/wiki/User:'~username~'">'~username~'</a>']) %}
                 {% endfor %}
+                {{ userLinks|list_format|raw }}
             </div>
         </div>
 
