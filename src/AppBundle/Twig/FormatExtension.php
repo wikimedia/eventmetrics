@@ -63,6 +63,7 @@ class FormatExtension extends Extension
             new \Twig_SimpleFilter('percent_format', [$this, 'percentFormat']),
             new \Twig_SimpleFilter('diff_format', [$this, 'diffFormat'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('num_format', [$this, 'numberFormat']),
+            new \Twig_SimpleFilter('list_format', [$this, 'listFormat']),
             new \Twig_SimpleFilter('date_localize', [$this, 'dateFormat']),
             new \Twig_SimpleFilter('date_format', [$this, 'dateFormatStd']),
             new \Twig_SimpleFilter('wikify', [$this, 'wikify']),
@@ -90,6 +91,16 @@ class FormatExtension extends Extension
 
         // Remove trailing .0's (e.g. 40.00 -> 40).
         return preg_replace("/\\".$decimal."0+$/", '', $formatted);
+    }
+
+    /**
+     * Format a list of values. In English this is a comma-separated list with the last item separated with 'and'.
+     * @param string[] $list The list items.
+     * @return string
+     */
+    public function listFormat(array $list): string
+    {
+        return $this->intuition->listToText($list);
     }
 
     /**
