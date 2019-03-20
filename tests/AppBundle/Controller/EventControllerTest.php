@@ -244,10 +244,13 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         static::assertContains(
             'The Lion King',
-            $this->crawler->filter('.events-list')->text()
+            $this->crawler->filter('.page-subject-title')->text()
         );
 
-        // Should be deletable.
+        // Browse back to the index page.
+        $this->crawler = $this->client->request('GET', $this->getProgramUrl());
+
+        // New event should be deletable.
         static::assertNotContains(
             'disabled',
             $this->crawler->filter('.event-action__delete')->attr('class')

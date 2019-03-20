@@ -53,7 +53,7 @@ class EventController extends EntityController
         }
 
         // Handle the Form for the request, and redirect if they submitted.
-        $form = $this->handleFormSubmission($event, 'Event', 'Program');
+        $form = $this->handleFormSubmission($event, 'Event');
 
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
@@ -82,7 +82,7 @@ class EventController extends EntityController
         }
 
         // Handle the Form for the request, and redirect if they submitted.
-        $form = $this->handleFormSubmission($this->event, 'Event', 'Program');
+        $form = $this->handleFormSubmission($this->event, 'Event');
         if ($form instanceof RedirectResponse) {
             // Flash message will be shown at the top of the page.
             $this->addFlashMessage('success', 'event-updated', [$this->event->getDisplayTitle()]);
