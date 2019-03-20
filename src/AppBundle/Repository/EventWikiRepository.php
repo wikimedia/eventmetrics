@@ -480,6 +480,7 @@ class EventWikiRepository extends Repository
         }
 
         $end = $end->format('YmdHis');
+        $usernamesSql = empty($usernames) ? '' : 'AND rev_user_text IN (:usernames)';
 
         $sql = "SELECT `metric`, `value` FROM (
                     (
@@ -492,12 +493,13 @@ class EventWikiRepository extends Repository
                         FROM $dbName.revision_userindex
                         WHERE rev_page = :pageId
                             AND rev_timestamp <= :end
-                            AND rev_user_text IN (:usernames)
+                            $usernamesSql
                     ) UNION (
                         SELECT 'bytes' AS `metric`, rev_len AS `value`
                         FROM $dbName.revision
                         WHERE rev_page = :pageId
                             AND rev_timestamp <= :end
+                            $usernamesSql
                         ORDER BY rev_timestamp DESC
                         LIMIT 1
                     ) UNION (
