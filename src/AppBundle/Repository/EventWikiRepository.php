@@ -20,6 +20,9 @@ use Exception;
  */
 class EventWikiRepository extends Repository
 {
+    /** Max number of pages to be returned when generating page IDs. */
+    public const MAX_PAGES = 50000;
+
     /**
      * Class name of associated entity.
      * Implements Repository::getEntityClass
@@ -215,10 +218,15 @@ class EventWikiRepository extends Repository
         array $categoryTitles = [],
         string $type = ''
     ): array {
-        if (empty($usernames) && empty($categoryTitles)) {
-            // FIXME: This should throw an Exception or something so we can print an error message.
+        if ((empty($usernames) && empty($categoryTitles)) ||
+            // No local file uploads unless there are participants.
+            ('commonswiki_p' !== $dbName && empty($usernames) && 'files' === $type)
+        ) {
             return [];
         }
+
+        // Categories are ignored for local file uploads (non-Commons).
+        $shouldUseCategories = count($categoryTitles) > 0 && !('files' === $type && 'commonswiki_p' !== $dbName);
 
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
@@ -226,40 +234,38 @@ class EventWikiRepository extends Repository
         $conn = $this->getReplicaConnection();
         $rqb = $conn->createQueryBuilder();
 
-        $revisionTable = $this->getTableName('revision', 0 === count($usernames) ? '' : 'userindex');
+        // Normal `revision` table is faster if you're not filtering by user.
+        $revisionTable = $this->getTableName('revision', empty($usernames) ? '' : 'userindex');
 
         $rqb->select('DISTINCT rev_page')
             ->from("$dbName.$revisionTable")
             ->join("$dbName.$revisionTable", "$dbName.page", 'page_rev', 'page_id = rev_page');
 
-        if (count($categoryTitles) > 0) {
+        if ($shouldUseCategories) {
             $rqb->join("$dbName.$revisionTable", "$dbName.categorylinks", 'category_rev', 'cl_from = rev_page')
-                ->where('cl_to IN (:categoryTitles)');
+                ->where('cl_to IN (:categoryTitles)')
+                ->setParameter('categoryTitles', $categoryTitles, Connection::PARAM_STR_ARRAY);
         }
 
         $nsId = 'files' === $type ? 6 : 0;
         $rqb->andWhere("page_namespace = $nsId")
             ->andWhere('page_is_redirect = 0')
-            ->andWhere('rev_timestamp BETWEEN :start AND :end');
+            ->andWhere('rev_timestamp BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end);
 
         if (count($usernames) > 0) {
             $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
                 ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
         }
 
-        $rqb->setParameter('start', $start)
-            ->setParameter('end', $end);
-
-        if (count($categoryTitles) > 0) {
-            $rqb->setParameter('categoryTitles', $categoryTitles, Connection::PARAM_STR_ARRAY);
-        }
-
         // If only pages created, edited or files are being requested, limit based on the presence of a parent revision.
-        // This matches the check done in EventRepository::getEditStats().
         if (in_array($type, ['created', 'edited', 'files'])) {
             $typeOperator = 'edited' === $type ? '!=' : '=';
             $rqb->andWhere("rev_parent_id $typeOperator 0");
         }
+
+        $rqb->setMaxResults(self::MAX_PAGES);
 
         $result = $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
         return $result ? array_map('intval', $result) : $result;

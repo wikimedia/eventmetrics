@@ -80,6 +80,7 @@ trait EventStatTrait
         $this->stats->clear();
         $this->setUpdated(null);
 
+        /** @var EventWiki $wiki */
         foreach ($this->wikis->getIterator() as $wiki) {
             $wiki->clearStatistics();
         }

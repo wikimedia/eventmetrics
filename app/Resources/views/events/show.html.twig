@@ -42,7 +42,13 @@
                                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"></span>
                                         {% endif %}
                                     </th>
-                                    <td>{{ stat.value|num_format }}</td>
+                                    <td>
+                                        {% if stat.value is null %}
+                                            &ndash;
+                                        {% else %}
+                                            {{ stat.value|num_format }}
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endif %}
                         {% endfor %}
@@ -61,9 +67,8 @@
                 <div class="text-center event-wiki-stats--empty">
                     {% if event.hasJob %}
                         &nbsp;
-                    {% elseif event.numParticipants == 0 %}
-                        {# FIXME: ^ also check for event.numCategories == 0 and add msg('categories') once T194707#4620358 is resolved #}
-                        {{ msg('event-misconfig', [msg('participants')]) }}
+                    {% elseif event.numParticipants == 0 and event.numCategories == 0 %}
+                        {{ msg('event-misconfig', [[msg('participants'), msg('categories')]|join(', ')]) }}
                     {% elseif event.startUTC > date() %}
                         {{ msg('event-in-future') }}
                         (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings')|lower }}</a>)

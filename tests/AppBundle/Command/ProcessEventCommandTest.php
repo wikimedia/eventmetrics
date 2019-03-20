@@ -435,6 +435,9 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         static::assertEquals(1, $eventStat->getValue());
     }
 
+    /**
+     * Event with a category and no participants.
+     */
     public function testEventsWithoutParticipants(): void
     {
         $this->prepareEvent(['title' => 'Event_without_participants']);
@@ -446,9 +449,9 @@ class ProcessEventCommandTest extends EventMetricsTestCase
             ->getRepository('Model:EventStat')
             ->findOneBy([
                 'event' => $this->event,
-                'metric' => 'retention',
+                'metric' => 'participants',
             ]);
-        static::assertEquals(0, $eventStat->getValue());
+        static::assertEquals(6, $eventStat->getValue());
 
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
@@ -456,6 +459,22 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'new-editors',
             ]);
-        static::assertEquals(0, $eventStat->getValue());
+        static::assertEquals(1, $eventStat->getValue());
+
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'pages-improved',
+            ]);
+        static::assertEquals(2, $eventStat->getValue());
+
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'files-uploaded',
+            ]);
+        static::assertEquals(3, $eventStat->getValue());
     }
 }

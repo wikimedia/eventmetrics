@@ -156,12 +156,12 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         );
         $this->response = $this->client->getResponse();
 
-        // Exactly 27 edits.
-        static::assertEquals(27, $this->crawler->filter('.event-revision')->count());
+        // Exactly 29 edits.
+        static::assertEquals(29, $this->crawler->filter('.event-revision')->count());
 
-        // 12 edits to enwiki.
+        // 14 edits to enwiki.
         static::assertEquals(
-            12,
+            14,
             substr_count($this->response->getContent(), '<td class="text-nowrap">en.wikipedia</td>')
         );
 
@@ -171,10 +171,16 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
             substr_count($this->response->getContent(), 'https://en.wikipedia.org/wiki/Domino_Park')
         );
 
-        // 1 file upload.
+        // 1 Commons file upload.
         static::assertEquals(
             1,
-            substr_count($this->response->getContent(), '/wiki/File%3A')
+            substr_count($this->response->getContent(), 'commons.wikimedia.org/wiki/File%3A')
+        );
+
+        // 2 local file uploads.
+        static::assertEquals(
+            2,
+            substr_count($this->response->getContent(), 'en.wikipedia.org/wiki/File%3A')
         );
     }
 
@@ -274,6 +280,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
     private function generateStats(Event $event): void
     {
         $this->killDbConnections();
+
         // Update the stats, creating a new Job for the Event and flushing to the database.
         $job = new Job($event);
         $this->entityManager->persist($job);
@@ -346,6 +353,6 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 | style="text-align:right" | {{FORMATNUM:12}}
 | style="text-align:right" | +{{FORMATNUM:4636}}
 EOD;
-        static::assertcontains($snippet, $this->response->getContent());
+        static::assertContains($snippet, $this->response->getContent());
     }
 }

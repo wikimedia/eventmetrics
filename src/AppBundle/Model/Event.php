@@ -277,9 +277,8 @@ class Event
             null !== $this->end &&
             $this->getStartUTC() < new DateTime() &&
             (
-                $this->participants->count() > 0
-                // FIXME: uncomment once issues at T194707#4620358 are resolved.
-                // $this->categories->count() > 0
+                $this->participants->count() > 0 ||
+                $this->categories->count() > 0
             );
     }
 

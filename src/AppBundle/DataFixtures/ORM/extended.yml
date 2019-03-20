@@ -26,8 +26,10 @@ AppBundle\Model\EventWiki:
         __construct: ['@event1', 'commons.wikimedia']
     eventWiki3:
         __construct: ['@event1', 'www.wikidata']
-    event2wiki:
+    event2wiki1:
         __construct: ['@event2', 'en.wikipedia']
+    event2wiki2:
+        __construct: ['@event2', 'commons.wikimedia']
 AppBundle\Model\Participant:
     MusikAnimal:
         # See https://en.wikipedia.org/wiki/Special:Contribs/MusikAnimal?namespace=0&start=2018-06-10&end=2018-06-11
@@ -52,3 +54,6 @@ AppBundle\Model\Participant:
 AppBundle\Model\EventCategory:
     eventCategory1:
         __construct: ['@event2', 'Parks in Brooklyn', 'en.wikipedia']
+    eventCategory2:
+        # One file upload in period: https://commons.wikimedia.org/wiki/File:DSC00988_YAKIMA,_WASHINGTON_FROM_THE_EAST_AT_3000_FEET_OVERHEAD.jpg
+        __construct: ['@event2', 'Aerial photographs', 'commons.wikimedia']

@@ -395,7 +395,9 @@ class EventRepository extends Repository
 
         foreach ($event->getWikis() as $wiki) {
             // Family wikis are essentially placeholder EventWikis. They are not queryable by themselves.
-            if ($wiki->isFamilyWiki()) {
+            // An EventWiki may be invalid (exempt from stats generation) if there are no categories on it
+            //   and no participants on the Event.
+            if ($wiki->isFamilyWiki() || !$wiki->isValid()) {
                 continue;
             }
 
@@ -408,6 +410,8 @@ class EventRepository extends Repository
                 continue;
             }
 
+            $usernameClause = '' === $usernames ? '' : "AND rev_user_text IN ($usernames)";
+
             $sqlClauses[] = "SELECT rev_id AS 'id',
                     rev_timestamp AS 'timestamp',
                     REPLACE(page_title, '_', ' ') AS 'page',
@@ -418,7 +422,8 @@ class EventRepository extends Repository
                 FROM $dbName.$revisionTable
                 INNER JOIN $dbName.$pageTable ON page_id = rev_page
                 LEFT OUTER JOIN $dbName.comment ON rev_comment_id = comment_id
-                WHERE rev_user_text IN ($usernames)
+                WHERE page_is_redirect = 0
+                $usernameClause
                 AND rev_page IN ($pageIdsSql)
                 AND rev_timestamp BETWEEN :startDate AND :endDate";
         }
