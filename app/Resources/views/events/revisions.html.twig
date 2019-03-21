@@ -15,12 +15,9 @@
 
 {% block body %}
     <div class="container">
-
         {% include 'events/_header.html.twig' with {'event': event, 'pageTitle': 'event-all-edits' } %}
 
         {% include 'events/_metadata.html.twig' with {'event': event} %}
-
-        {% include 'events/_stats_summary.html.twig' with {'event': event} %}
     </div>
 
     <section class="event-revisions container-fluid">

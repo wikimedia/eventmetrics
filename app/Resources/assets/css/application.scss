@@ -167,7 +167,8 @@ body {
 }
 
 .form-group {
-    label:not(.checkbox-label)::after {
+    // TODO: Not safe for i18n.
+    label::after {
         content: ':';
     }
 
@@ -194,7 +195,7 @@ body {
     }
 }
 
-.gm-table {
+.em-table {
     td:not(:first-child),
     th:not(:first-child) {
         text-align: center;

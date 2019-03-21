@@ -13,18 +13,9 @@
 
 {% block body %}
     <div class="container">
-        {% include 'events/_header.html.twig' with {'event': event, 'pageTitle': 'event-summary'} %}
+        {% include 'events/_header.html.twig' with {'pageTitle': 'event-summary'} %}
 
-        {% if event.updated != null %}
-            <div class="btn-group event-export pull-right">
-                <a href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id}) }}" class="btn btn-default event-export-btn">
-                    <span class="glyphicon glyphicon-export"></span>
-                    {{ msg('view-all-edits') }}
-                </a>
-            </div>
-        {% endif %}
-
-        {% include 'events/_metadata.html.twig' with {'event': event} %}
+        {% include 'events/_metadata.html.twig' %}
 
         {% set helpLink %}
             <a href="https://meta.wikimedia.org/wiki/Special:MyLanguage/Event_Metrics#filtering-required"
@@ -96,51 +87,38 @@
             </div>
         {% endif %}
 
-        {### FORMS ###}
-        {% for formType, form in forms %}
-            {% form_theme form 'blocks/forms.html.twig' %}
-            {% include ('events/_' ~ formType|lower ~ '.html.twig') %}
-        {% endfor %}
+        <section class="event-filters clearfix">
+            {% for formType, form in forms %}
+                {% form_theme form 'blocks/forms.html.twig' %}
+                {% include ('events/_' ~ formType|lower ~ '.html.twig') %}
+            {% endfor %}
+        </section>
 
-        <section id="stats">
-            {% if event.updated is not null %}
-                {% if event.wikis|length > 1 %}
-                    <h2>{{ msg('statistics') }}</h2>
-                    {% set commonMetrics = ['participants', 'new-editors', 'retention'] %}
-                    <table class="event-metadata event-metadata--grouped">
-                        {% for metric in event.visibleMetrics if metric in commonMetrics %}
-                            {% set stat = event.statistic(metric) %}
-                            {% if stat is not null %}
-                                <tr>
-                                    <th scope="row">
-                                        {{ msg(metric, [stat.offset]) }}:
-                                        {% if msg_exists(stat.metric ~ '-desc', [stat.offset]) %}
-                                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"></span>
-                                        {% endif %}
-                                    </th>
-                                    <td>
-                                        {% if stat.value is null %}
-                                            &ndash;
-                                        {% else %}
-                                            {{ stat.value|num_format }}
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
+        {% if event.updated is not null %}
+            <section class="event-stats clearfix">
+                {% set allEditsLink %}
+                    &middot;
+                    <a href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id}) }}" class="event-export-btn">
+                        {{ msg('view-all-edits') }}
+                    </a>
+                {% endset %}
+                {{
+                    layout.statsBlock(
+                        event,
+                        'contributions',
+                        ['pages-created', 'pages-improved', 'edits', 'files-uploaded', 'byte-difference', 'items-created', 'items-improved'],
+                        allEditsLink
+                    )
+                }}
 
-                    {% for familyName, wikis in event.wikisByFamily %}
-                        {% if event.wikisByFamily|length > 1 %}
-                            <hr class="event-wiki-stats--grouped-hr" />
-                        {% endif %}
-                        {% include 'events/_wiki_table.html.twig' with {'event': event, 'wikis': wikis, 'availableMetrics': event.availableMetrics(familyName)} %}
-                    {% endfor %}
-                {% else %}
-                    {% include 'events/_stats_summary.html.twig' with {'event': event} %}
-                {% endif %}
+                {{ layout.statsBlock(event, 'impact', ['pages-created-pageviews', 'pages-improved-pageviews-avg', 'pages-using-files-pageviews-avg', 'pages-using-files', 'file-usage']) }}
+
+                {{ layout.statsBlock(event, 'participation', ['participants', 'new-editors', 'retention']) }}
+            </section><!-- #stats -->
+
+            {% if event.wikis|length > 1 %}
+                {% include 'events/_wiki_table.html.twig' %}
             {% endif %}
-        </section><!-- #stats -->
-
+        {% endif %}
     </div>
 {% endblock %}

@@ -30,8 +30,8 @@
         }
     }
 
-    .event-metric-desc {
-        cursor: help;
+    .event-stats-status {
+        margin-top: 8px;
     }
 
     .event-errorbox {
@@ -67,74 +67,118 @@
         }
     }
 
-    // Remove space above the 'Statistics' H2, and reduce the margin between it and the following element.
-    section#stats h2 {
-        margin-top: 30px;
-        & ~ table.event-metadata {
-            margin-top: 0;
-        }
+    .event-filters {
+        margin-top: 20px;
+    }
+
+    .event-stats-block {
+        margin-bottom: 10px;
     }
 
     .event-stats,
     .event-wiki-stats {
-        margin: 36px 0;
+        header {
+            h3 {
+                color: #a2a9b1;
+                font-size: 3rem;
+                font-variant: small-caps;
+                font-weight: 100;
+                margin: 3rem 0 0;
+                text-transform: uppercase;
 
-        .glyphicon {
-            color: #6ea8dc;
-            font-size: 14px;
+                a {
+                    border-bottom: 1px solid;
+                    font-size: 2rem;
+                    font-variant: normal;
+                    text-transform: none;
+
+                    &:hover {
+                        border-bottom: 2px solid;
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+
+        .info-icon {
+            display: inline-block;
+            margin-left: 0.5rem;
+            opacity: 0.3;
+        }
+
+        dl {
+            margin-bottom: 10px;
+
+            dt {
+                color: #777777;
+                font-size: 1.3rem;
+                font-variant: small-caps;
+                height: 50px;
+                text-transform: uppercase;
+
+                // Cheap workaround, flex box won't allow the info icon to inline with the text.
+                display: table-cell;
+                vertical-align: bottom;
+            }
+
+            dd {
+                font-size: 4rem;
+                font-weight: 800;
+                line-height: 1.2;
+            }
+
+            .tooltip {
+                font-variant: normal;
+                text-transform: none;
+            }
+
+            &:hover .info-icon {
+                opacity: 1;
+            }
         }
     }
 
-    .event-metadata--grouped {
-        margin: 25px 0;
+    // Make per-wiki metrics table scrollable so that it is more mobile-friendly.
+    .event-wiki-stats {
+        overflow-y: auto;
 
-        th {
-            padding-right: 20px;
+        header {
+            margin-bottom: 10px;
         }
     }
 
-    .event-wiki-stats--grouped {
-        margin: 0;
+    .event-wiki-stats--table {
+        thead th {
+            border-bottom: 1px solid #72777d;
+            color: #777777;
+            font-size: 1.3rem;
+            font-variant: small-caps;
+            font-weight: 600;
+            height: 50px;
+            padding: 7px 15px 7px;
+            text-transform: uppercase;
 
-        th,
+            &:first-child {
+                background-color: #eaf3ff;
+            }
+        }
+
+        tbody tr td:first-child {
+            background-color: #eaf3ff;
+            border-right: 1px solid #72777d;
+        }
+
         td {
-            border: 0;
+            border-bottom: 1px solid #eaecf0;
+            height: 45px;
+            line-height: 45px;
+            padding: 0 15px;
         }
 
-        &:last-of-type {
-            margin-bottom: 30px;
+        .sort-entry--pages-improved,
+        .sort-entry--edits {
+            border-left: 1px solid #72777d;
         }
-    }
-
-    .event-wiki-stats--grouped-hr {
-        margin: 5px;
-    }
-
-    .event-stats {
-        display: flex;
-    }
-
-    .event-stats--tile {
-        flex: auto;
-        margin: 0 5px;
-    }
-
-    .event-wiki-stats .glyphicon {
-        vertical-align: -1px;
-    }
-
-    .event-export {
-        margin-left: 10px;
-
-        .glyphicon {
-            margin-right: 3px;
-            position: relative;
-            top: 2px;
-        }
-    }
-
-    .event-stats-status {
-        margin-top: 8px;
     }
 
     .save-participants-form {
@@ -165,6 +209,7 @@
 
     .event-revisions {
         font-size: 13.5px;
+        margin-top: 20px;
     }
 
     .pagination {
@@ -173,14 +218,6 @@
 
     .add-wiki--all-wikipedias {
         display: inline;
-    }
-
-    .checkbox-label {
-        padding-left: 17px;
-
-        input {
-            margin-left: -17px;
-        }
     }
 
     &.disabled-state {

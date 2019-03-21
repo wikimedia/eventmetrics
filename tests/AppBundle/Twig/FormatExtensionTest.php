@@ -79,6 +79,26 @@ class FormatExtensionTest extends EventMetricsTestCase
     }
 
     /**
+     * Abbreviating numbers to the thousands, millions or billions.
+     */
+    public function testNumberAbbrev(): void
+    {
+        // Tests don't have access to translations, so we're testing against the i18n key.
+        static::assertEquals(
+            '1.5[num-abbrev-billion]',
+            $this->formatExtension->numberAbbrev(1459000000)
+        );
+        static::assertEquals(
+            '1[num-abbrev-million]',
+            $this->formatExtension->numberAbbrev(1000000)
+        );
+        static::assertEquals(
+            '999',
+            $this->formatExtension->numberAbbrev(999)
+        );
+    }
+
+    /**
      * Format a time duration as humanized string.
      */
     public function testFormatDuration(): void

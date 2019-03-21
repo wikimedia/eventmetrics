@@ -4,8 +4,6 @@ $(function () {
         return;
     }
 
-    $('.event-metric-desc').tooltip();
-
     eventmetrics.eventshow.setupCalculateStats();
     eventmetrics.eventshow.setupReportModal();
 });
