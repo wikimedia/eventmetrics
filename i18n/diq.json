@@ -63,6 +63,8 @@
 	"my-programs": "Programê mı",
 	"new-editors": "Editoro newe",
 	"no-results": "Peyniye nêvêniyaya",
+	"metadata-categories-label": "{{PLURAL:$1|Kategoriye|Kategoriyi}}",
+	"metadata-wikis-label": "{{PLURAL:$1|Wiki|Wikiyi}}",
 	"num-categories": "{{PLURAL:$1|Kategoriye|Kategoriyi}}",
 	"num-days": "{{PLURAL: $1|roce|roci}}",
 	"num-hours": "($1 {{PLURAL:$1|saete|saeti}})",
