@@ -68,7 +68,7 @@
                     {% if event.hasJob %}
                         &nbsp;
                     {% elseif event.numParticipants == 0 and event.numCategories == 0 %}
-                        {{ msg('event-misconfig', [[msg('participants'), msg('categories')]|join(', ')]) }}
+                        {{ msg('event-misconfig', [[msg('participants'), msg('categories')]|list_format]) }}
                     {% elseif event.startUTC > date() %}
                         {{ msg('event-in-future') }}
                         (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings')|lower }}</a>)

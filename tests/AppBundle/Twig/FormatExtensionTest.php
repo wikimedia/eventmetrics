@@ -13,6 +13,7 @@ use Krinkle\Intuition\Intuition;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Tests\AppBundle\EventMetricsTestCase;
+use Wikimedia\ToolforgeBundle\Twig\Extension;
 
 /**
  * Tests for the FormatExtension class.
@@ -37,7 +38,14 @@ class FormatExtensionTest extends EventMetricsTestCase
         $stack = new RequestStack();
         $session = new Session();
         $this->intuition = new Intuition();
-        $this->formatExtension = new FormatExtension(static::$container, $stack, $session, $this->intuition);
+        $bundleExtension = new Extension($this->intuition, $session, 'eventmetrics');
+        $this->formatExtension = new FormatExtension(
+            static::$container,
+            $stack,
+            $session,
+            $this->intuition,
+            $bundleExtension
+        );
     }
 
     /**
@@ -95,16 +103,6 @@ class FormatExtensionTest extends EventMetricsTestCase
             [10, 'num-days'],
             $this->formatExtension->formatDuration(864000, false)
         );
-    }
-
-    /**
-     * Format a number.
-     */
-    public function testNumberFormat(): void
-    {
-        static::assertEquals('1,234', $this->formatExtension->numberFormat(1234));
-        static::assertEquals('1,234.32', $this->formatExtension->numberFormat(1234.316, 2));
-        static::assertEquals('50', $this->formatExtension->numberFormat(50.0000, 4));
     }
 
     /**
