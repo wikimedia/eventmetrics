@@ -21,14 +21,10 @@
         border-bottom: 0;
         padding-bottom: 0;
     }
-    // Event metadata row (shows dates, wikis, and categories).
-    .event-metadata {
-        time {
-            font-weight: bolder;
-        }
-        .wikis-and-categories {
-            list-style-type: none;
-        }
+
+    // Event metadata (shows dates and wikis).
+    .event-metadata th {
+        padding-right: 10px;
     }
 
     .event-metric-desc {
