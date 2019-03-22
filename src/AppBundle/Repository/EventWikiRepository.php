@@ -208,6 +208,7 @@ class EventWikiRepository extends Repository
      * @param string[] $usernames
      * @param string[] $categoryTitles
      * @param string $type Whether only pages 'created' or 'edited' should be returned. Default is to return both.
+     *   To get pages improved, first get edited then use array_diff against created.
      * @return int[]
      */
     public function getPageIds(
