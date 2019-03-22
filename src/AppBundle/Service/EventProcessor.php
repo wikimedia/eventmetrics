@@ -25,6 +25,11 @@ use Symfony\Component\Stopwatch\Stopwatch;
  */
 class EventProcessor
 {
+    /**
+     * Wikis from these families won't get pageviews statistics as they don't mean much there
+     */
+    private const PAGEVIEWS_BLACKLIST = [ 'commons', 'wikidata' ];
+
     /** @var ContainerInterface The application's container interface. */
     private $container;
 
@@ -266,8 +271,7 @@ class EventProcessor
         $avgPageviewsImprovedTotal = 0;
 
         foreach ($this->event->getWikis() as $wiki) {
-            // No pageviews for anything other than Wikipedias.
-            if ($wiki->isFamilyWiki() || 'wikipedia' !== $wiki->getFamilyName()) {
+            if ($wiki->isFamilyWiki() || in_array($wiki->getFamilyName(), self::PAGEVIEWS_BLACKLIST)) {
                 continue;
             }
 
@@ -360,17 +364,17 @@ class EventProcessor
 
             // Different stats based on wiki family.
             switch ($wiki->getFamilyName()) {
-                case 'wikipedia':
-                    $this->setContributionsWikipedias($wiki, $ewRepo);
-                    $this->setFilesUploaded($wiki, $ewRepo);
-                    $saveEventStats = true;
-                    break;
                 case 'commons':
                     $this->setFilesUploaded($wiki, $ewRepo);
                     $saveEventStats = true;
                     break;
                 case 'wikidata':
                     $this->setItemsCreatedOrImprovedOnWikidata($wiki, $ewRepo);
+                    break;
+                default:
+                    $this->setContributionsTextWikis($wiki, $ewRepo);
+                    $this->setFilesUploaded($wiki, $ewRepo);
+                    $saveEventStats = true;
                     break;
             }
 
@@ -398,11 +402,11 @@ class EventProcessor
     }
 
     /**
-     * Set pages created/improved for the given Wikipedia.
+     * Set pages created/improved for the given wiki
      * @param EventWiki $wiki
      * @param EventWikiRepository $ewRepo
      */
-    private function setContributionsWikipedias(EventWiki $wiki, EventWikiRepository $ewRepo): void
+    private function setContributionsTextWikis(EventWiki $wiki, EventWikiRepository $ewRepo): void
     {
         $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());

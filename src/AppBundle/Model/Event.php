@@ -60,22 +60,26 @@ class Event
         'items-improved' => null,
     ];
 
+    private const NORMAL_WIKI_METRICS = [
+        'pages-created',
+        'pages-improved',
+        'byte-difference',
+        'pages-created-pageviews',
+        'pages-improved-pageviews-avg',
+        'files-uploaded',
+        'file-usage',
+        'pages-using-files',
+        'pages-using-files-pageviews-avg',
+    ];
+
     /**
      * This defines what metrics are available to what wiki families. '*' means all wikis are applicable.
      */
     public const WIKI_FAMILY_METRIC_MAP = [
         '*' => ['edits', 'participants', 'new-editors', 'retention'],
-        'wikipedia' => [
-            'pages-created',
-            'pages-improved',
-            'byte-difference',
-            'pages-created-pageviews',
-            'pages-improved-pageviews-avg',
-            'files-uploaded',
-            'file-usage',
-            'pages-using-files',
-            'pages-using-files-pageviews-avg',
-        ],
+        'wikipedia' => self::NORMAL_WIKI_METRICS,
+        'wiktionary' => self::NORMAL_WIKI_METRICS,
+        'wikivoyage' => self::NORMAL_WIKI_METRICS,
         'commons' => [
             'files-uploaded',
             'file-usage',

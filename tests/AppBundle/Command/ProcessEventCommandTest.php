@@ -477,4 +477,23 @@ class ProcessEventCommandTest extends EventMetricsTestCase
             ]);
         static::assertEquals(3, $eventStat->getValue());
     }
+
+    /**
+     * Event on Wiktionary
+     */
+    public function testWiktionaryEvent(): void
+    {
+        $this->prepareEvent(['title' => 'Wiktionary']);
+        $this->persistJob();
+        $this->commandTester->execute(['eventId' => $this->event->getId()]);
+        static::assertEquals(0, $this->commandTester->getStatusCode());
+
+        $eventStat = $this->entityManager
+            ->getRepository('Model:EventStat')
+            ->findOneBy([
+                'event' => $this->event,
+                'metric' => 'edits',
+            ]);
+        static::assertEquals(2, $eventStat->getValue());
+    }
 }
