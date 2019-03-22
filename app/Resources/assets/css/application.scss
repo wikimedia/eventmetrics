@@ -26,7 +26,7 @@ body {
     &::after {
         content: '';
         display: block;
-        min-height: 148px;
+        min-height: 75px;
     }
 }
 
@@ -245,6 +245,11 @@ a.disabled {
 }
 
 @media (max-width: $bootstrap-sm) {
+    .page-subject-title {
+        clear: both;
+        padding-top: 20px;
+    }
+
     .footer-links {
         display: block;
 
@@ -252,6 +257,11 @@ a.disabled {
             display: block !important;
             text-align: left;
         }
+    }
+
+    /* add spacing for sticky footer */
+    body::after {
+        min-height: 275px;
     }
 }
 
