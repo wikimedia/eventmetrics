@@ -196,6 +196,7 @@ class EventController extends EntityController
             $forms[$formType] = $form->createView();
         }
 
+        $filtersMissing = !$this->event->getNumParticipants() && !$this->event->getNumCategories(true);
         return $this->render('events/show.html.twig', [
             'gmTitle' => $this->event->getDisplayTitle(),
             'forms' => $forms,
@@ -203,6 +204,8 @@ class EventController extends EntityController
             'event' => $this->event,
             'isOrganizer' => $this->authUserIsOrganizer($this->program),
             'job' => $this->event->getJob(),
+            'filtersMissing' => $filtersMissing,
+            'wikisWithoutCats' => $this->event->getWikisWithoutCategories(),
         ]);
     }
 

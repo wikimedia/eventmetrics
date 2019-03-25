@@ -390,4 +390,31 @@ class EventTest extends EventMetricsTestCase
             'wikipedia' => [$testwiki],
         ], $event->getWikisByFamily());
     }
+
+    /**
+     * @covers \AppBundle\Model\Event::getWikisWithoutCategories()
+     */
+    public function testGetWikisWithoutCategories(): void
+    {
+        $event = new Event($this->program);
+
+        // Initially has no wikis.
+        static::assertCount(0, $event->getWikisWithoutCategories());
+
+        // Add a non-Wikidata wiki.
+        $event->addWiki(new EventWiki($event, 'fr.wikipedia'));
+        static::assertCount(1, $event->getWikisWithoutCategories());
+
+        // Add Wikidata, and the count shouldn't change.
+        $event->addWiki(new EventWiki($event, 'www.wikidata'));
+        static::assertCount(1, $event->getWikisWithoutCategories());
+
+        // Add another non-Wikidata wiki, and the count should increase.
+        $event->addWiki(new EventWiki($event, 'commons.wikimedia'));
+        $wikisWithoutCategories = $event->getWikisWithoutCategories();
+        static::assertCount(2, $wikisWithoutCategories);
+        // Also check the specific wikis included.
+        static::assertEquals('fr.wikipedia', $wikisWithoutCategories->get(0)->getDomain());
+        static::assertEquals('commons.wikimedia', $wikisWithoutCategories->get(2)->getDomain());
+    }
 }

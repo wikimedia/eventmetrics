@@ -26,6 +26,72 @@
 
         {% include 'events/_metadata.html.twig' with {'event': event} %}
 
+        {% if filtersMissing %}
+            <section class="event-errorbox error">
+                <h3>{{ msg('error-filters-header') }}</h3>
+                <p>
+                    {{ msg('error-filters-desc') }}
+                    <a href="https://meta.wikimedia.org/wiki/Special:MyLanguage/Event_Metrics#adding-participants"
+                       title="{{ msg('error-filters-desc-tooltip') }}">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </a>
+                </p>
+                <ul>
+                    <li>{{ msg('error-filters-participants-or-categories') }}</li>
+                    <li>{{ msg('error-filters-every-wiki') }}</li>
+                    <li>{{ msg('error-filters-participants-desc') }}</li>
+                    <li>{{ msg('error-filters-categories-desc') }}</li>
+                    <li>{{ msg('error-filters-combination') }}</li>
+                </ul>
+            </section>
+
+        {% elseif event.participants.count == 0 and wikisWithoutCats.count %}
+            <section class="event-errorbox warn">
+                <h3>{{ msg('category-warning-header') }}</h3>
+                <p>
+                    {{ msg('category-warning-desc', ['<a href="#" class="event-process-link">'~msg('update-data')~'</a>'])|raw }}
+                    <a href="https://meta.wikimedia.org/wiki/Special:MyLanguage/Event_Metrics#adding-categories"
+                       title="{{ msg('category-warning-desc-tooltip') }}">
+                        <span class="glyphicon glyphicon glyphicon-question-sign"></span>
+                    </a>
+                </p>
+                <ul>
+                    <li>
+                        {{ msg('error-filters-categories-missing') }}
+                        <strong>
+                            {% for noCatWiki in wikisWithoutCats %}
+                                {{ noCatWiki.domain }}{% if not loop.last %},{% endif %}
+                            {% endfor %}
+                        </strong>
+                    </li>
+                    <li>{{ msg('error-filters-every-wiki') }}</li>
+                    {% if event.wikiByDomain('www.wikidata') %}
+                        <li>{{ msg('error-filters-wikidata') }}</li>
+                    {% endif %}
+                    <li>{{ msg('error-filters-participants-desc') }}</li>
+                    <li>{{ msg('error-filters-categories-desc') }}</li>
+                    <li>{{ msg('error-filters-combination') }}</li>
+                </ul>
+            </section>
+
+        {% elseif not event.updated and not event.hasJob %}
+            <div class="alert alert-success event-wiki-stats--empty">
+                {% if event.startUTC > date() %}
+                    {{ msg('event-in-future') }}
+                    (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings')|lower }}</a>)
+                {% else %}
+                    {{ msg('event-no-data') }}
+                    <a href="#" class="event-process-link">{{ msg('calculate-totals') }}</a>.
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {### FORMS ###}
+        {% for formType, form in forms %}
+            {% form_theme form 'blocks/forms.html.twig' %}
+            {% include ('events/_' ~ formType|lower ~ '.html.twig') %}
+        {% endfor %}
+
         <section id="stats">
             {% if event.updated is not null %}
                 {% if event.wikis|length > 1 %}
@@ -63,28 +129,8 @@
                 {% else %}
                     {% include 'events/_stats_summary.html.twig' with {'event': event} %}
                 {% endif %}
-            {% else %}
-                <div class="text-center event-wiki-stats--empty">
-                    {% if event.hasJob %}
-                        &nbsp;
-                    {% elseif event.numParticipants == 0 and event.numCategories == 0 %}
-                        {{ msg('event-misconfig', [[msg('participants'), msg('categories')]|list_format]) }}
-                    {% elseif event.startUTC > date() %}
-                        {{ msg('event-in-future') }}
-                        (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings')|lower }}</a>)
-                    {% else %}
-                        {{ msg('event-no-data') }}
-                        <a href="#" class="event-process-link">{{ msg('calculate-totals') }}</a>.
-                    {% endif %}
-                </div>
             {% endif %}
         </section><!-- #stats -->
 
-        {### FORMS ###}
-
-        {% for formType, form in forms %}
-            {% form_theme form 'blocks/forms.html.twig' %}
-            {% include ('events/_' ~ formType|lower ~ '.html.twig') with {'form': form, 'event': event, 'isOrganizer': isOrganizer} %}
-        {% endfor %}
     </div>
 {% endblock %}
