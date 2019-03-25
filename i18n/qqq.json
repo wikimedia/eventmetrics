@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"MusikAnimal",
-			"Samwilson"
+			"Samwilson",
+			"Robby"
 		]
 	},
 	"add-category": "Link to add a new category to an event.",
@@ -122,7 +123,7 @@
 	"no-programs": "Message shown when the user has not created any programs yet.",
 	"no-results": "Notice telling the user that no results were found",
 	"metadata-categories-label": "Label preceding a list of categories. $1 is the number of items in the list.",
-	"metadata-end-date": "Label for the 'end date' field of event metadata.",
+	"metadata-end-date": "Label for the 'end date' field of event metadata.\n{{Identical|End date}}",
 	"metadata-start-date": "Label for the 'start date' field of event metadata.",
 	"metadata-wikis-label": "Label preceding a list of wikis. $1 is the number of items in the list.",
 	"not-all-wikis-have-cats": "Description shown in categories' form panel header when some wikis are missing categories.",

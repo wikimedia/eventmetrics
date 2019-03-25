@@ -45,7 +45,7 @@
 	"event-created": "Събитие „$1“ е успешно създадено.",
 	"event-deleted": "Събитието „$1“ е изтрито.",
 	"event-download-csv": "Изтегляне като CSV",
-	"event-download-wikitext": "Изтегляне като уикитаблица",
+	"event-download-wikitext": "Изтегляне като Уикитекст",
 	"event-list": "Списък на събития",
 	"event-settings": "Настройки за събитие",
 	"event-summary": "Резюме на събитието",

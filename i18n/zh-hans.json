@@ -61,7 +61,6 @@
 	"event-in-future": "无法生成统计信息，因为此活动还未开始。",
 	"event-list": "事件表",
 	"event-metrics-welcome": "欢迎来到Event Metrics",
-	"event-misconfig": "此活动尚未被完全配置。若要生成统计信息，您必须添加以下内容之一：$1",
 	"event-no-data": "尚未为此活动生成统计信息。",
 	"event-settings": "事件设置",
 	"event-summary": "事件摘要",

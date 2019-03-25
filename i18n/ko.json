@@ -59,7 +59,6 @@
 	"event-download-wikitext": "위키텍스트 가져오기",
 	"event-in-future": "이 이벤트가 미래에 발생하지 않으므로 통계를 생성할 수 없습니다.",
 	"event-list": "이벤트 목록",
-	"event-misconfig": "이 이벤트는 완전히 구성되지 않았습니다. 통계를 생성하기 위해서는 다음 중 하나를 추가해야 합니다: $1",
 	"event-no-data": "이 이벤트에 대해 통계가 아직 생성되지 않았습니다.",
 	"event-settings": "이벤트 설정",
 	"event-summary": "이벤트 요약",
