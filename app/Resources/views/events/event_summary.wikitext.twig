@@ -3,7 +3,7 @@
 &bull; [https://meta.wikimedia.org/wiki/Event_Metrics/Definitions_of_metrics {{ msg('metrics-about-link') }}]</small>
 
 {| class="wikitable"{#-
--#}{% for metric in ['participants', 'pages-created', 'pages-improved', 'byte-difference', 'files-uploaded', 'items-created', 'items-improved', 'pages-created-pageviews', 'pages-improved-pageviews-avg', 'pages-using-files', 'pages-using-files-pageviews-avg'] %}
+-#}{% for metric in ['participants', 'byte-difference', 'pages-created', 'pages-created-pageviews', 'pages-improved', 'pages-improved-pageviews-avg', 'files-uploaded', 'pages-using-files', 'pages-using-files-pageviews-avg', 'items-created', 'items-improved'] %}
 {% set stat = event.getStatistic(metric) %}
 {% if stat is not empty %}
 
