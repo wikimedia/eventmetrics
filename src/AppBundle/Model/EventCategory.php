@@ -189,12 +189,21 @@ class EventCategory
      */
     public function validateWiki(ExecutionContext $context): void
     {
-        $regex = $this->event->getAvailableWikiPattern();
+        $validWikiForApp = 1 === preg_match(EventWiki::getValidPattern(), $this->domain);
+        $validWikiForEvent = 1 === preg_match($this->event->getAvailableWikiPattern(), $this->domain);
 
-        // If it is an invalid WMF wiki (unrelated to the Event), the domain will be blanked and hence
-        // a validation will be added from the @Assert\NotBlank on self::domain. Here we only check if it's a valid
-        // wiki for the Event, so that we don't include redundant error messages.
-        if (1 === preg_match(EventWiki::getValidPattern(), $this->domain) && 1 !== preg_match($regex, $this->domain)) {
+        // Check if the wiki is supported by Event Metrics. We use a blank error message because
+        // our views show a top-level, consolidated message for all errors.
+        if (!$validWikiForApp || '*.' === substr($this->domain, 0, 2)) {
+            $context->buildViolation('')
+                ->setParameter(0, $this->domain)
+                ->atPath('domain')
+                ->addViolation();
+            return;
+        }
+
+        // Check if it's a wiki configured for the Event.
+        if (!$validWikiForEvent) {
             $context->buildViolation('error-unconfigured-wiki')
                 ->setParameter(0, $this->domain)
                 ->atPath('domain')

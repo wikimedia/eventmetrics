@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * An EventWiki belongs to an Event, and also connects an EventStat to a specific wiki and event.
@@ -34,7 +35,7 @@ class EventWiki
     /**
      * Regex pattern of the supported wikis.
      */
-    public const VALID_WIKI_PATTERN = '/\w+\.(wikipedia|wiktionary|wikivoyage)|commons\.wikimedia|www\.wikidata/';
+    public const VALID_WIKI_PATTERN = '/(\w+|\*)\.(wikipedia|wiktionary|wikivoyage)|commons\.wikimedia|www\.wikidata/';
 
     /**
      * Valid names of wiki families, or singular orphan wikis like commons.
@@ -406,5 +407,22 @@ class EventWiki
             return (int)$id;
         });
         $this->$propertyName = bzcompress(implode(',', $filteredIds));
+    }
+
+    /**
+     * Validate the wiki is supported by Event Metrics.
+     * @Assert\Callback
+     * @param ExecutionContextInterface $context
+     */
+    public function validateWiki(ExecutionContextInterface $context): void
+    {
+        if (1 !== preg_match(self::VALID_WIKI_PATTERN, (string)$this->domain)) {
+            // Violation message is intentionally left blank. In our case Symfony Forms
+            // is configured to show a consolidated error message for all invalid wikis.
+            $context->buildViolation('')
+                ->setParameter(0, $this->domain)
+                ->atPath('domain')
+                ->addViolation();
+        }
     }
 }
