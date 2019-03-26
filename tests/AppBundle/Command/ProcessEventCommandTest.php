@@ -242,7 +242,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(7, $eventStat->getValue());
+        static::assertEquals(6, $eventStat->getValue());
 
         $eventWikiStat = $this->entityManager
             ->getRepository('Model:EventWikiStat')
@@ -250,7 +250,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(7, $eventWikiStat->getValue());
+        static::assertEquals(6, $eventWikiStat->getValue());
     }
 
     /**
@@ -347,13 +347,13 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         $ewItemsCreatedStat = $eventWikiStat->findOneBy(['wiki' => $wikidata, 'metric' => 'items-created']);
         static::assertEquals(2, $ewItemsCreatedStat->getValue());
         $ewItemsImprovedStat = $eventWikiStat->findOneBy(['wiki' => $wikidata, 'metric' => 'items-improved']);
-        static::assertEquals(4, $ewItemsImprovedStat->getValue());
+        static::assertEquals(2, $ewItemsImprovedStat->getValue());
 
         // Event stats.
         $eItemsCreatedStat = $eventStat->findOneBy(['event' => $this->event, 'metric' => 'items-created']);
         static::assertEquals(2, $eItemsCreatedStat->getValue());
         $eItemsImprovedStat = $eventStat->findOneBy(['event' => $this->event, 'metric' => 'items-improved']);
-        static::assertEquals(4, $eItemsImprovedStat->getValue());
+        static::assertEquals(2, $eItemsImprovedStat->getValue());
     }
 
     /**
@@ -418,7 +418,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
         $this->persistJob();
         $this->commandTester->execute(['eventId' => $this->event->getId()]);
 
-        // Should be only 1 page created and improved, ([[Domino Park]]).
+        // Should be only 1 page created, ([[Domino Park]]).
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findOneBy([
@@ -426,13 +426,15 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'metric' => 'pages-created',
             ]);
         static::assertEquals(1, $eventStat->getValue());
+
+        // We don't count edits to created pages as 'improved'.
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findOneBy([
                 'event' => $this->event,
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(1, $eventStat->getValue());
+        static::assertEquals(0, $eventStat->getValue());
     }
 
     /**
@@ -467,7 +469,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'pages-improved',
             ]);
-        static::assertEquals(2, $eventStat->getValue());
+        static::assertEquals(1, $eventStat->getValue());
 
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')

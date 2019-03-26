@@ -30,25 +30,22 @@ class EventWikiRepositoryTest extends EventMetricsTestCase
     }
 
     /**
+     * Further coverage in ProcessEventCommandTest.
      * @covers \AppBundle\Repository\EventWikiRepository::getPageIds()
      */
-    public function testGetPageIds():void
+    public function testGetPageIds(): void
     {
         $dbName = $this->repo->getDbNameFromDomain('en.wikipedia');
-        $from = new DateTime('2003-11-16 13:15');
-        $to = new DateTime('2003-11-16 15:19');
-        $users = ['Someone else'];
-        $allPagesExpected     = [2112961, 368673];
-        $pagesCreatedExpected = [         368673];
-        $pagesEditedExpected  = [2112961        ];
+        $from = new DateTime('2018-06-09 04:00');
+        $to = new DateTime('2018-06-12 03:59');
+        $users = ['MusikAnimal', 'Jon Kolbert'];
+        $allPagesExpected     = [57645508, 55751986]; // [[Domino Park]], [[Spring Creek Park]]
+        $pagesCreatedExpected = [57645508          ]; // [[Domino Park]]
         // All pages.
-        $allPagesActual = $this->repo->getPageIds($dbName, $from, $to, $users, []);
+        $allPagesActual = $this->repo->getPageIds($dbName, $from, $to, $users, ['Parks_in_Brooklyn']);
         static::assertEquals($allPagesExpected, $allPagesActual);
         // Pages created.
-        $pagesCreatedActual = $this->repo->getPageIds($dbName, $from, $to, $users, [], 'created');
+        $pagesCreatedActual = $this->repo->getPageIds($dbName, $from, $to, $users, ['Parks_in_Brooklyn'], 'created');
         static::assertEquals($pagesCreatedExpected, $pagesCreatedActual);
-        // Pages edited.
-        $pagesEditedActual = $this->repo->getPageIds($dbName, $from, $to, $users, [], 'edited');
-        static::assertEquals($pagesEditedExpected, $pagesEditedActual);
     }
 }

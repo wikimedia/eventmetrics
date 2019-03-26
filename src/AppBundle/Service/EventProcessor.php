@@ -60,7 +60,7 @@ class EventProcessor
     /** @var int Number of edits made during the event. */
     private $edits = 0;
 
-    /** @var int Number of pages edited during the event. */
+    /** @var int Number of pages improved during the event (excluding page creations). */
     private $pagesImproved = 0;
 
     /** @var int Number of pages created. */
@@ -188,7 +188,7 @@ class EventProcessor
     }
 
     /**
-     * After we've created the EventWikiStats from $this->setPagesEdited(), we want to remove any with zero values
+     * After we've created the EventWikiStats from $this->setPagesImproved(), we want to remove any with zero values
      * that are associated to a family EventWiki. This is because on the event page, we don't want to show zero values
      * for *every* language that is part of a wiki family.
      */
@@ -284,7 +284,7 @@ class EventProcessor
                 $dbName,
                 $wiki->getDomain(),
                 $start,
-                $wiki->getPagesEdited(),
+                $wiki->getPagesImproved(),
                 true
             );
 
@@ -303,7 +303,7 @@ class EventProcessor
         $this->createOrUpdateEventStat('pages-improved-pageviews-avg', $avgPageviewsImprovedTotal);
         $this->createOrUpdateEventStat('pages-using-files-pageviews-avg', $avgPageviewsPagesUsingFiles);
         $this->log(">> <info>Pageviews of pages created: $pageviewsCreatedTotal</info>");
-        $this->log(">> <info>Average daily pageviews of pages edited: $avgPageviewsImprovedTotal</info>");
+        $this->log(">> <info>Average daily pageviews of pages improved: $avgPageviewsImprovedTotal</info>");
         $this->log(">> <info>Average daily pageviews to pages using files: $avgPageviewsPagesUsingFiles</info>");
     }
 
@@ -413,18 +413,13 @@ class EventProcessor
         $start = $this->event->getStartUTC();
         $end = $this->event->getEndUTC();
         $usernames = $this->getParticipantNames();
-        $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
 
         $logKey = 'page_ids'.$wiki->getDomain();
         $this->logStart(">> Fetching page IDs...", $logKey);
-        $pageIdsCreated = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'created');
-        $pageIdsEdited = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'edited');
 
-        // Set on the EventWiki, so this will get persisted to the database.
-        $wiki->setPagesCreated($pageIdsCreated);
-        $wiki->setPagesEdited($pageIdsEdited);
+        [$pageIdsCreated, $pageIdsImproved] = $this->getAndSetPageIds($wiki, $ewRepo, $dbName);
 
-        $pageIds = array_merge($pageIdsCreated, $pageIdsEdited);
+        $pageIds = array_merge($pageIdsCreated, $pageIdsImproved);
         $totalEditCount = $this->eventRepo->getTotalEditCount($dbName, $pageIds, $start, $end, $usernames);
 
         $this->logEnd($logKey);
@@ -436,15 +431,15 @@ class EventProcessor
         $this->log(">>> <info>Bytes changed: {$diff}</info>");
 
         $totalCreated = count($pageIdsCreated);
-        $totalEdited = count($pageIdsEdited);
+        $totalImproved = count($pageIdsImproved);
         $this->pagesCreated += $totalCreated;
-        $this->pagesImproved += $totalEdited;
+        $this->pagesImproved += $totalImproved;
         $this->edits += $totalEditCount;
         $this->byteDifference += $diff;
 
         $this->createOrUpdateEventWikiStat($wiki, 'edits', $totalEditCount);
         $this->createOrUpdateEventWikiStat($wiki, 'pages-created', $totalCreated);
-        $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $totalEdited);
+        $this->createOrUpdateEventWikiStat($wiki, 'pages-improved', $totalImproved);
         $this->createOrUpdateEventWikiStat($wiki, 'byte-difference', $diff);
     }
 
@@ -500,29 +495,43 @@ class EventProcessor
         $logKey = 'wikidata_items';
         $this->logStart("> Fetching items created or improved on Wikidata...", $logKey);
 
-        $dbName = 'wikidatawiki_p';
+        [$pageIdsCreated, $pageIdsImproved] = $this->getAndSetPageIds($wiki, $ewRepo, 'wikidatawiki_p');
+
+        $this->logEnd($logKey);
+
+        // Report the counts, and record them both for this wiki and the event (there's only ever one Wikidata wiki).
+        $totalCreated = count($pageIdsCreated);
+        $totalImproved = count($pageIdsImproved);
+        $this->log(">> <info>Items created: $totalCreated</info>");
+        $this->log(">> <info>Items improved: $totalImproved</info>");
+        $this->createOrUpdateEventWikiStat($wiki, 'items-created', $totalCreated);
+        $this->createOrUpdateEventWikiStat($wiki, 'items-improved', $totalImproved);
+        $this->createOrUpdateEventStat('items-created', $totalCreated);
+        $this->createOrUpdateEventStat('items-improved', $totalImproved);
+    }
+
+    /**
+     * Set and get pages created and improved IDs on the given $wiki.
+     * @param EventWiki $wiki
+     * @param EventWikiRepository $ewRepo
+     * @param string $dbName
+     * @return int[][]
+     */
+    private function getAndSetPageIds(EventWiki &$wiki, EventWikiRepository $ewRepo, string $dbName): array
+    {
         $start = $this->event->getStartUTC();
         $end = $this->event->getEndUTC();
         $usernames = $this->getParticipantNames();
         $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
         $pageIdsCreated = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'created');
         $pageIdsEdited = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'edited');
+        $pageIdsImproved = array_diff($pageIdsEdited, $pageIdsCreated);
 
         // Set on the EventWiki, so this will get persisted to the database.
         $wiki->setPagesCreated($pageIdsCreated);
-        $wiki->setPagesEdited($pageIdsEdited);
+        $wiki->setPagesImproved($pageIdsImproved);
 
-        $this->logEnd($logKey);
-
-        // Report the counts, and record them both for this wiki and the event (there's only ever one Wikidata wiki).
-        $totalCreated = count($pageIdsCreated);
-        $totalEdited = count($pageIdsEdited);
-        $this->log(">> <info>Items created: $totalCreated</info>");
-        $this->log(">> <info>Items improved: $totalEdited</info>");
-        $this->createOrUpdateEventWikiStat($wiki, 'items-created', $totalCreated);
-        $this->createOrUpdateEventWikiStat($wiki, 'items-improved', $totalEdited);
-        $this->createOrUpdateEventStat('items-created', $totalCreated);
-        $this->createOrUpdateEventStat('items-improved', $totalEdited);
+        return [$pageIdsCreated, $pageIdsImproved];
     }
 
     /**

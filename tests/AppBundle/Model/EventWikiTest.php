@@ -146,8 +146,8 @@ class EventWikiTest extends EventMetricsTestCase
         // Basic setter/getter.
         $wiki->setPagesCreated([1, 2, 3]);
         static::assertEquals([1, 2, 3], $wiki->getPagesCreated());
-        $wiki->setPagesEdited([4, 5, 6]);
-        static::assertEquals([4, 5, 6], $wiki->getPagesEdited());
+        $wiki->setPagesImproved([4, 5, 6]);
+        static::assertEquals([4, 5, 6], $wiki->getPagesImproved());
         static::assertEquals([1, 2, 3, 4, 5, 6], $wiki->getPages());
 
         // Make sure that empty strings are removed, and strings are cast to integers.

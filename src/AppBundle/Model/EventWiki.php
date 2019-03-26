@@ -89,10 +89,10 @@ class EventWiki
 
     /**
      * A bzcompressed string of all the IDs of pages improved. See note above in $pagesCreated docblock about storage.
-     * @ORM\Column(name="ew_pages_edited", type="blob", nullable=true)
+     * @ORM\Column(name="ew_pages_improved", type="blob", nullable=true)
      * @var string|resource
      */
-    protected $pagesEdited;
+    protected $pagesImproved;
 
     /**
      * A bzcompressed string of all the IDs of the pages for files uploaded.
@@ -290,7 +290,7 @@ class EventWiki
 
         // It's safe to assume page IDs should also be cleared.
         $this->pagesCreated = null;
-        $this->pagesEdited = null;
+        $this->pagesImproved = null;
         $this->pagesFiles = null;
     }
 
@@ -304,7 +304,7 @@ class EventWiki
      */
     public function getPages(): array
     {
-        return array_unique(array_merge($this->getPagesCreated(), $this->getPagesEdited(), $this->getPagesFiles()));
+        return array_unique(array_merge($this->getPagesCreated(), $this->getPagesImproved(), $this->getPagesFiles()));
     }
 
     /**
@@ -325,20 +325,20 @@ class EventWiki
     }
 
     /**
-     * Get the cached/persisted page IDs of all pages edited during this event (they may also have been created).
+     * Get the cached/persisted page IDs of all pages improved during this event (does not include pages created).
      * @return int[]
      */
-    public function getPagesEdited(): array
+    public function getPagesImproved(): array
     {
-        return $this->getPageIds('edited');
+        return $this->getPageIds('improved');
     }
 
     /**
      * @param int[]|null $ids
      */
-    public function setPagesEdited(?array $ids): void
+    public function setPagesImproved(?array $ids): void
     {
-        $this->setPageIds('edited', $ids);
+        $this->setPageIds('improved', $ids);
     }
 
     /**
@@ -365,8 +365,8 @@ class EventWiki
      */
     protected function getPageIds(string $type): array
     {
-        if (!in_array($type, ['created', 'edited', 'files'])) {
-            throw new Exception('$type must be "created", "edited" or "files".');
+        if (!in_array($type, ['created', 'improved', 'files'])) {
+            throw new Exception('$type must be "created", "improved" or "files".');
         }
         $propertyName = 'pages'.ucfirst($type);
         if (null === $this->$propertyName) {
@@ -384,14 +384,14 @@ class EventWiki
     /**
      * Set the $this->pages property from the IDs, as bzcompressed and base64-encoded string.
      * @see https://secure.php.net/manual/en/function.bzcompress.php
-     * @param string $type Which type of page IDs to store: 'created' or 'edited'.
+     * @param string $type Which type of page IDs to store: 'created', 'improved' or 'files'.
      * @param int[]|null $ids
      * @throws Exception With invalid type.
      */
     protected function setPageIds(string $type, ?array $ids):void
     {
-        if (!in_array($type, ['created', 'edited', 'files'])) {
-            throw new Exception('$type must be "created", "edited" or "files".');
+        if (!in_array($type, ['created', 'improved', 'files'])) {
+            throw new Exception('$type must be "created", "improved" or "files".');
         }
         $propertyName = 'pages'.ucfirst($type);
         if (null === $ids) {
