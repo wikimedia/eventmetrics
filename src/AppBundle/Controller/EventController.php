@@ -197,6 +197,7 @@ class EventController extends EntityController
         }
 
         $filtersMissing = !$this->event->getNumParticipants() && !$this->event->getNumCategories(true);
+        $isOnlyWikidata = 1 === $this->event->getWikis()->count() && $this->event->getWikiByDomain('www.wikidata');
         return $this->render('events/show.html.twig', [
             'gmTitle' => $this->event->getDisplayTitle(),
             'forms' => $forms,
@@ -206,6 +207,7 @@ class EventController extends EntityController
             'job' => $this->event->getJob(),
             'filtersMissing' => $filtersMissing,
             'wikisWithoutCats' => $this->event->getWikisWithoutCategories(),
+            'isOnlyWikidata' => $isOnlyWikidata,
         ]);
     }
 

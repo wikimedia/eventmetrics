@@ -73,11 +73,20 @@
     {{ form_end(form, {'render_rest': false}) }}
 {% endset %}
 
-{% if filtersMissing %}
+{% set collapsed = event.updated != null %}
+{% set panelDesc = '' %}
+{% if isOnlyWikidata %}
+    {% set panelDesc = msg('wikidata-not-applicable') ~ ' <span class="glyphicon glyphicon-info-sign"></span>' %}
+    {% set collapsed = true %}
+{% elseif filtersMissing %}
     {% set panelDesc = msg('no-categories') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
-{% elseif event.numParticipants == 0 and wikisWithoutCats.count %}
+{% elseif event.participants.count == 0 and wikisWithoutCats.count %}
     {% set panelDesc = msg('not-all-wikis-have-cats') ~ ' <span class="warn glyphicon glyphicon-warning-sign"></span>' %}
 {% else %}
-    {% set panelDesc = msg('num-categories', [event.numCategories(true)]) %}
+    {% if event.numCategories(true) > 0 %}
+        {# Only show participants count on valid events if there are participants. #}
+        {% set panelDesc = msg('num-categories', [event.numCategories(true)]) %}
+    {% endif %}
+    {% set collapsed = true %}
 {% endif %}
-{{ layout.panel('categories-panel-title', panelDesc, content) }}
+{{ layout.panel('categories-panel-title', panelDesc, content, collapsed) }}

@@ -26,44 +26,54 @@
 
         {% include 'events/_metadata.html.twig' with {'event': event} %}
 
+        {% set helpLink %}
+            <a href="https://meta.wikimedia.org/wiki/Special:MyLanguage/Event_Metrics#filtering-required"
+               title="{{ msg('error-filters-desc-tooltip') }}">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </a>
+        {% endset %}
+
         {% if filtersMissing %}
             <section class="event-errorbox error">
                 <h3>{{ msg('error-filters-header') }}</h3>
                 <p>
                     {{ msg('error-filters-desc') }}
-                    <a href="https://meta.wikimedia.org/wiki/Special:MyLanguage/Event_Metrics#adding-participants"
-                       title="{{ msg('error-filters-desc-tooltip') }}">
-                        <span class="glyphicon glyphicon-question-sign"></span>
-                    </a>
+                    {{ helpLink }}
                 </p>
                 <ul>
-                    <li>{{ msg('error-filters-participants-or-categories') }}</li>
-                    <li>{{ msg('error-filters-every-wiki') }}</li>
-                    <li>{{ msg('error-filters-participants-desc') }}</li>
-                    <li>{{ msg('error-filters-categories-desc') }}</li>
-                    <li>{{ msg('error-filters-combination') }}</li>
+                    {% if isOnlyWikidata %}
+                        <li>{{ msg('error-filters-wikidata-only') }}</li>
+                    {% endif %}
+                    {% if event.wikiByDomain('www.wikidata') %}
+                        <li>{{ msg('error-filters-wikidata') }}</li>
+                    {% else %}
+                        <li>{{ msg('error-filters-participants-or-categories') }}</li>
+                        <li>{{ msg('error-filters-every-wiki') }}</li>
+                        <li>{{ msg('error-filters-participants-desc') }}</li>
+                        <li>{{ msg('error-filters-categories-desc') }}</li>
+                        <li>{{ msg('error-filters-combination') }}</li>
+                    {% endif %}
                 </ul>
             </section>
 
-        {% elseif event.participants.count == 0 and wikisWithoutCats.count %}
+        {% elseif event.participants.count == 0 and ( wikisWithoutCats.count or event.wikiByDomain('www.wikidata') ) %}
             <section class="event-errorbox warn">
                 <h3>{{ msg('category-warning-header') }}</h3>
                 <p>
                     {{ msg('category-warning-desc', ['<a href="#" class="event-process-link">'~msg('update-data')~'</a>'])|raw }}
-                    <a href="https://meta.wikimedia.org/wiki/Special:MyLanguage/Event_Metrics#adding-categories"
-                       title="{{ msg('category-warning-desc-tooltip') }}">
-                        <span class="glyphicon glyphicon glyphicon-question-sign"></span>
-                    </a>
+                    {{ helpLink }}
                 </p>
                 <ul>
+                    {% if wikisWithoutCats.count %}
                     <li>
                         {{ msg('error-filters-categories-missing') }}
-                        <strong>
-                            {% for noCatWiki in wikisWithoutCats %}
-                                {{ noCatWiki.domain }}{% if not loop.last %},{% endif %}
-                            {% endfor %}
-                        </strong>
+                        {% set cats = [] %}
+                        {% for noCatWiki in wikisWithoutCats %}
+                            {% set cats = cats|merge(['<strong>'~noCatWiki.domain~'</strong>']) %}
+                        {% endfor %}
+                        {{ cats|list_format|raw }}
                     </li>
+                    {% endif %}
                     <li>{{ msg('error-filters-every-wiki') }}</li>
                     {% if event.wikiByDomain('www.wikidata') %}
                         <li>{{ msg('error-filters-wikidata') }}</li>
