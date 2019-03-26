@@ -347,7 +347,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $domains = array_map(function (EventWiki $eventWiki) {
             return $eventWiki->getDomain();
         }, $eventWikis);
-        static::assertEquals(['*.wikipedia', 'commons.wikimedia'], $domains);
+        static::assertEqualsCanonicalizing(['*.wikipedia', 'commons.wikimedia'], $domains);
     }
 
     /**
