@@ -4,13 +4,14 @@
  # @param string title       - i18n message that is the title of the content block, shown in a header. Also used as the basis for element IDs.
  # @param string description - shown on the right in grayed text.
  # @param string content     - raw content to show in the panel body.
+ # @param bool collapsed     - whether to show the panel as collapsed or expanded. Default expanded.
  #}
-{% macro panel(title, description, content) %}
+{% macro panel(title, description, content, collapsed = false) %}
     <section class="panel panel-default">
         <div class="panel-heading" role="tab" id="panelHeading{{ title|ucfirst }}">
             <h3 class="panel-title">
                 <a role="button" data-toggle="collapse" href="#panelBody{{ title|ucfirst }}"
-                   aria-expanded="false" aria-controls="panelBody{{ title|ucfirst }}">
+                   aria-expanded="false" aria-controls="panelBody{{ title|ucfirst }}" {% if collapsed %}class="collapsed"{% endif %}>
                     {{ msg(title) }}
                 </a>
             </h3>
@@ -18,7 +19,7 @@
                 {{ description|raw }}
             </div>
         </div>
-        <div id="panelBody{{ title|ucfirst }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="panelHeading{{ title|ucfirst }}">
+        <div id="panelBody{{ title|ucfirst }}" class="panel-collapse collapse {% if not collapsed %}in{% endif %}" role="tabpanel" aria-labelledby="panelHeading{{ title|ucfirst }}">
             <div class="panel-body">
                 {{ content }}
             </div>

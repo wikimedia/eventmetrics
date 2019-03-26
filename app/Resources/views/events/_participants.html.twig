@@ -78,14 +78,20 @@
     {% endif %}
 {% endset %}
 
+{% set collapsed = event.updated != null %}
+{% set panelDesc = '' %}
 {# Here we use event.participants.count, ensuring it's the number of manually entered participants (and not derived). #}
 {% if event.participants.count == 0 and event.wikiByDomain('www.wikidata') %}
-    {% set panel_desc = msg('error-filters-wikidata-panel') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
+    {% set panelDesc = msg('error-filters-wikidata-panel') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
 {% elseif not filtersMissing and event.participants.count == 0 and wikisWithoutCats.count %}
-    {% set panel_desc = msg('no-participants') ~ ' <span class="warn glyphicon glyphicon-warning-sign"></span>' %}
+    {% set panelDesc = msg('no-participants') ~ ' <span class="warn glyphicon glyphicon-warning-sign"></span>' %}
 {% elseif filtersMissing %}
-    {% set panel_desc = msg('no-participants') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
+    {% set panelDesc = msg('no-participants') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
 {% else %}
-    {% set panel_desc = msg('num-participants', [event.participants.count]) %}
+    {% if event.participants.count > 0 %}
+        {# Only show participants count on valid events if there are participants. #}
+        {% set panelDesc = msg('num-participants', [event.participants.count]) %}
+    {% endif %}
+    {% set collapsed = true %}
 {% endif %}
-{{ layout.panel('participants-panel-title', panel_desc, content) }}
+{{ layout.panel('participants-panel-title', panelDesc, content, collapsed) }}

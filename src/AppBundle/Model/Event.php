@@ -282,7 +282,7 @@ class Event
             $this->getStartUTC() < new DateTime() &&
             (
                 $this->participants->count() > 0 ||
-                $this->categories->count() > 0
+                $this->getNumCategories(true) > 0
             );
     }
 
