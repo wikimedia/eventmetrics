@@ -65,10 +65,9 @@ class EventWikiRepository extends Repository
         // Extract and return just the domain name without '.org' suffix.
         $matches = [];
         preg_match('/^https?\:\/\/(.*)\.org$/', $ret['url'], $matches);
-        if (isset($matches[1]) && preg_match(EventWiki::getValidPattern(), $matches[1])) {
+        if (isset($matches[1])) {
             return $matches[1];
         } else {
-            // Entity will be considered invalid and won't be saved.
             return null;
         }
     }
@@ -93,8 +92,7 @@ class EventWikiRepository extends Repository
     /**
      * Get the database name of the given (partial) domain name.
      * @param string $domain The domain name, without trailing '.org'.
-     * @return string
-     * @throws Exception If the database name could not be determined.
+     * @return string Null if not found.
      */
     public function getDbNameFromDomain(string $domain): string
     {
