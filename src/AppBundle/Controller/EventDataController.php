@@ -104,7 +104,29 @@ class EventDataController extends EntityController
 
         return $this->getFormattedResponse($format, 'pages_created', [
             'event' => $this->event,
-            'pagesCreated' => $eventRepo->getPagesCreatedData($this->event, $usernames),
+            'pagesCreated' => $eventRepo->getPagesData($this->event, $usernames, EventRepository::PAGES_CREATED),
+        ]);
+    }
+
+    /**
+     * Pages improved report.
+     * @Route("/programs/{programId}/events/{eventId}/pages-improved", name="EventPagesImproved")
+     * @param EventRepository $eventRepo
+     * @return Response
+     */
+    public function pagesImprovedReportAction(EventRepository $eventRepo): Response
+    {
+        $format = 'csv' === $this->request->query->get('format') ? 'csv' : 'wikitext';
+
+        $userIds = $this->event->getParticipantIds();
+        $usernames = array_column(
+            $eventRepo->getUsernamesFromIds($userIds),
+            'user_name'
+        );
+
+        return $this->getFormattedResponse($format, 'pages_improved', [
+            'event' => $this->event,
+            'pagesImproved' => $eventRepo->getPagesData($this->event, $usernames, EventRepository::PAGES_IMPROVED),
         ]);
     }
 

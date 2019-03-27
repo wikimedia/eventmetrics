@@ -157,6 +157,7 @@
 	"pages-improved-desc": "Description for the {{msg-wm|pages-improved}} metric.",
 	"pages-improved-pageviews-avg": "Label for the metric that indicates the average daily pageviews there were to the pages improved during an event.",
 	"pages-improved-pageviews-avg-desc": "Description for the {{msg-wm|pages-improved-pageviews-avg}} metric.",
+	"pages-improved-report": "Title for the dialog box for downloading the 'pages improved' report.",
 	"pages-using-files": "Label for the metric indicating how many unique content pages use the files that were uploaded during the event.",
 	"pages-using-files-desc": "Description for the {{msg-wm|pages-using-files}} metric.",
 	"pages-using-files-pageviews-avg": "Label for the metric indicating the average pageviews to content pages that use the files that were uploading during the event.",

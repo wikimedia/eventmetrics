@@ -21,6 +21,9 @@ class EventRepository extends Repository
     /** @var string Cache of inner revisions SQL, which is called multiple times. */
     private $revisionsInnerSql;
 
+    public const PAGES_CREATED = 'created';
+    public const PAGES_IMPROVED = 'improved';
+
     /**
      * Class name of associated entity.
      * Implements Repository::getEntityClass
@@ -476,9 +479,10 @@ class EventRepository extends Repository
      * Get the data needed for the Pages Created report.
      * @param Event $event
      * @param string[] $usernames
+     * @param string $type One of PAGES_* constants
      * @return mixed[]
      */
-    public function getPagesCreatedData(Event $event, array $usernames): array
+    public function getPagesData(Event $event, array $usernames, string $type): array
     {
         $data = [];
 
@@ -487,7 +491,12 @@ class EventRepository extends Repository
         $ewRepo->setContainer($this->container);
 
         foreach ($event->getWikis()->getIterator() as $wiki) {
-            $data = array_merge($data, $ewRepo->getPagesCreatedData($wiki, $usernames));
+            if (self::PAGES_CREATED === $type) {
+                $wikiPages = $ewRepo->getPagesCreatedData($wiki, $usernames);
+            } else {
+                $wikiPages = $ewRepo->getPagesImprovedData($wiki, $usernames);
+            }
+            $data = array_merge($data, $wikiPages);
         }
 
         // Sort by avg. pageviews.
