@@ -197,7 +197,7 @@ class EventWikiRepository extends Repository
         return $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
-   /**
+    /**
      * Get all unique page IDs edited/created within the Event for the given wiki. If you need to do this for pages
      * within specific categories, without participants, use EventCategoryRepository::getPagesInCategories().
      * @param string $dbName
@@ -565,6 +565,145 @@ class EventWikiRepository extends Repository
                 (int)$page['page_id'],
                 $page['page_title'],
                 $usernames,
+                $end
+            );
+
+            $data[] = array_merge($pageInfo, [
+                'pageTitle' => $page['page_title'],
+                'wiki' => $wiki->getDomain(),
+                'pageviews' => (int)$pageviews,
+                'avgPageviews' => (int)$avgPageviews,
+            ]);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get data for a single page, to be included in the Pages Improved report.
+     * @param string $dbName
+     * @param int $pageId
+     * @param string $pageTitle
+     * @param string[] $usernames
+     * @param DateTime $start
+     * @param DateTime $end
+     * @return string[]
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function getSingePageImprovedData(
+        string $dbName,
+        int $pageId,
+        string $pageTitle,
+        array $usernames,
+        DateTime $start,
+        DateTime $end
+    ): array {
+        // Use cache if it exists.
+        $cacheKey = $this->getCacheKey(func_get_args(), 'pages_improved_info');
+        if ($this->cache->hasItem($cacheKey)) {
+            return $this->cache->getItem($cacheKey)->get();
+        }
+
+        $start = $start->format('YmdHis');
+        $end = $end->format('YmdHis');
+        $usernamesSql = empty($usernames) ? '' : 'AND rev.rev_user_text IN (:usernames)';
+
+        $sql = "SELECT `metric`, `value` FROM (
+                    (
+                        SELECT 'edits' AS `metric`, COUNT(*) AS `value`
+                        FROM $dbName.revision_userindex rev
+                        WHERE rev_page = :pageId
+                            AND rev_timestamp BETWEEN :start AND :end
+                            $usernamesSql
+                    ) UNION (
+                        SELECT 'start_bytes' AS `metric`, COALESCE(prev.rev_len, 0) AS `value`
+                            FROM $dbName.revision_userindex rev
+                                LEFT JOIN $dbName.revision_userindex prev ON rev.rev_parent_id=prev.rev_id
+                            WHERE rev.rev_page=:pageId
+                              AND rev.rev_timestamp BETWEEN :start AND :end
+                              {$usernamesSql}
+                            ORDER BY rev.rev_timestamp ASC
+                            LIMIT 1
+                    ) UNION (
+                        SELECT 'end_bytes' AS `metric`, COALESCE(rev_len, 0) AS `value`
+                            FROM $dbName.revision_userindex rev
+                            WHERE rev_page=:pageId
+                              AND rev_timestamp BETWEEN :start AND :end
+                              {$usernamesSql}
+                            ORDER BY rev_timestamp DESC
+                            LIMIT 1
+                    ) UNION (
+                        SELECT 'links' AS `metric`, COUNT(*) AS `value`
+                        FROM $dbName.pagelinks
+                        JOIN $dbName.page ON page_id = pl_from
+                        WHERE pl_from_namespace = 0
+                            AND pl_namespace = 0
+                            AND pl_title = :pageTitle
+                            AND page_is_redirect = 0
+                    )
+                ) t1";
+
+        $rows = $this->executeReplicaQueryWithTypes(
+            $sql,
+            [
+                'pageId' => $pageId,
+                'pageTitle' => $pageTitle,
+                'usernames' => $usernames,
+                'start' => $start,
+                'end' => $end,
+            ],
+            [
+                'usernames' => Connection::PARAM_STR_ARRAY,
+            ]
+        )->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        $ret = [
+            'edits' => $rows['edits'],
+            'links' => $rows['links'],
+            'bytes' => $rows['end_bytes'] - $rows['start_bytes'],
+        ];
+
+        // Cache for 10 minutes.
+        return $this->setCache($cacheKey, $ret, 'PT10M');
+    }
+
+    /**
+     * Get the data needed for the Pages Created report, for a single EventWiki.
+     * @param EventWiki $wiki
+     * @param string[] $usernames
+     * @return mixed[]
+     */
+    public function getPagesImprovedData(EventWiki $wiki, array $usernames): array
+    {
+        if ($wiki->isFamilyWiki()) {
+            return [];
+        }
+
+        $dbName = $this->getDbNameFromDomain($wiki->getDomain());
+        $pageviewsRepo = new PageviewsRepository();
+        $avgPageviewsOffset = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
+        $pages = $this->getPageTitles($dbName, $wiki->getPagesImproved(), true, true);
+        $start = $wiki->getEvent()->getStartUTC();
+        $end = $wiki->getEvent()->getEndUTC();
+        $now = new DateTime('yesterday midnight');
+        $data = [];
+
+        while ($page = $pages->fetch()) {
+            // FIXME: async?
+            [$pageviews, $avgPageviews] = $pageviewsRepo->getPageviewsPerArticle(
+                $wiki->getDomain(),
+                $page['page_title'],
+                $start,
+                $now,
+                $avgPageviewsOffset
+            );
+
+            $pageInfo = $this->getSingePageImprovedData(
+                $dbName,
+                (int)$page['page_id'],
+                $page['page_title'],
+                $usernames,
+                $start,
                 $end
             );
 

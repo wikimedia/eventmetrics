@@ -153,6 +153,7 @@
 	"pages-created-pageviews": "Views to pages created",
 	"pages-created-pageviews-desc": "Cumulative pageviews to all mainspace pages created during the event (compiled daily).",
 	"pages-created-report": "'Pages created' report",
+	"pages-improved-report": "'Pages improved' report",
 	"pages-improved": "Pages improved",
 	"pages-improved-desc": "A count of mainspace pages edited during the event.",
 	"pages-improved-pageviews-avg": "Avg. daily views to pages improved",

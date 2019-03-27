@@ -1,0 +1,10 @@
+{{ csv(msg('title')) }},{{ csv(msg('url')) }},{{ csv(msg('wiki')) }},{{ csv(msg('edits-during-event')) }},{{ csv(msg('byte-difference-during-event')) }},{{ csv(msg('pageviews-average')) }},{{ csv(msg('incoming-links')) }},{{ csv(msg('more-page-metrics')) }}
+{% for page in pagesImproved %}
+    {{ csv(page.pageTitle|replace({'_': ' '})) }},"https://{{ page.wiki }}.org/wiki/{{ page.pageTitle|e('url') }}",{{ page.wiki }},{{ page.edits }},{{ page.bytes }},{{ page.avgPageviews }},{{ page.links }},"https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle|e('url') }}"
+{% endfor %}
+
+{{ msg('pages-improved') }},{{ csv(event.displayTitle) }}
+{{ msg('timezone') }},{{ event.displayTimezone }}
+{{ msg('start-date') }},{{ event.start|date_localize }}
+{{ msg('end-date') }},{{ event.end|date_localize }}
+{{ msg('last-updated-table') }},{{ event.updatedUTC|date_localize }}

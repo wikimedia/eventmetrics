@@ -355,4 +355,33 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 EOD;
         static::assertContains($snippet, $this->response->getContent());
     }
+
+    /**
+     * Pages Improved report.
+     */
+    public function testPagesImproved(): void
+    {
+        $this->killDbConnections();
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Oliver_and_Company']);
+
+        // Make a request to process the event.
+        $this->crawler = $this->client->request(
+            'POST',
+            '/events/process/'.$event->getId(),
+            [],
+            [],
+            ['HTTP_X-Requested-With' => 'XMLHttpRequest']
+        );
+
+        $this->client->request(
+            'GET',
+            "/programs/{$event->getProgram()->getId()}/events/{$event->getId()}/pages-improved?format=csv"
+        );
+        $this->response = $this->client->getResponse();
+
+        $snippet = '"Title","URL","Wiki","Edits during event","Bytes changed during event","Avg. daily pageviews"';
+        static::assertContains($snippet, $this->response->getContent());
+    }
 }
