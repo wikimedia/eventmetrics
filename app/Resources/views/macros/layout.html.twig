@@ -7,24 +7,24 @@
  # @param bool collapsed     - whether to show the panel as collapsed or expanded. Default expanded.
  #}
 {% macro panel(title, description, content, collapsed = false) %}
-    <section class="panel panel-default">
-        <div class="panel-heading" role="tab" id="panelHeading{{ title|ucfirst }}">
+    <article class="panel panel-default">
+        <header class="panel-heading" role="tab" id="panelHeading{{ title|ucfirst }}">
             <h3 class="panel-title">
                 <a role="button" data-toggle="collapse" href="#panelBody{{ title|ucfirst }}"
-                   aria-expanded="false" aria-controls="panelBody{{ title|ucfirst }}" {% if collapsed %}class="collapsed"{% endif %}>
+                   aria-expanded="{% if collapsed %}false{% else %}true{% endif %}" aria-controls="panelBody{{ title|ucfirst }}" {% if collapsed %}class="collapsed"{% endif %}>
                     {{ msg(title) }}
                 </a>
             </h3>
             <div class="panel-description text-right">
                 {{ description|raw }}
             </div>
-        </div>
+        </header>
         <div id="panelBody{{ title|ucfirst }}" class="panel-collapse collapse {% if not collapsed %}in{% endif %}" role="tabpanel" aria-labelledby="panelHeading{{ title|ucfirst }}">
             <div class="panel-body">
                 {{ content }}
             </div>
         </div>
-    </section>
+    </article>
 {% endmacro %}
 
 {% macro actionButtons(model, object, params, deletable = true) %}
@@ -44,4 +44,38 @@
        title="{{ msg('delete') }}">{#-
         -#}<span class="glyphicon glyphicon-trash"></span>{#-
     -#}</a>
+{% endmacro %}
+
+{% macro statsBlock(event, title, metrics, extraTitle) %}
+    <article class="event-stats-block event-stats--{{ title }} clearfix">
+        <header class="col-sm-12">
+            <h3>
+                {{ msg(title) }}
+                {% if extraTitle is defined %}
+                    {{ extraTitle }}
+                {% endif %}
+            </h3>
+        </header>
+
+        {% for metric in metrics %}
+            {% set stat = event.statistic(metric) %}
+            {% if stat is not null %}
+                <dl class="col-sm-2">
+                    <dt>
+                        {{ msg(metric, [stat.offset]) }}
+                        {% if msg_exists(stat.metric ~ '-desc', [stat.offset]) %}
+                            <span class="font-awesome info-icon"
+                                  data-toggle="tooltip"
+                                  data-placement="top"
+                                  title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"
+                            >&#xf05a;</span>
+                        {% endif %}
+                    </dt>
+                    <dd>
+                        <span title="{{ stat.value|num_format }}">{{ stat.value|num_abbrev }}</span>
+                    </dd>
+                </dl>
+            {% endif %}
+        {% endfor %}
+    </article>
 {% endmacro %}

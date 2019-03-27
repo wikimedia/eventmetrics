@@ -1,56 +1,42 @@
-{% set metricOrder = [] %}
-<table class="table table-hover gm-table event-wiki-stats event-wiki-stats--grouped">
-    <thead>
+{% import 'macros/wiki.html.twig' as wikiHelper %}
+<section class="event-wiki-stats clearfix">
+    <header class="col-sm-12">
+        <h3>{{ msg('per-wiki-metrics') }}</h3>
+    </header>
+
+    <table class="table table-hover event-wiki-stats--table">
+        <thead>
         <tr>
-            <th class="col-lg-3"></th>
-            {% set sortableMetrics = ['pages-created', 'pages-improved'] %}
-            {% set columnCount = 1 %}
-            {% for metric in event.visibleMetrics if metric in availableMetrics|keys %}
-                {% if metric not in commonMetrics and event.statistic(metric) is not empty %}
-                    {% set columnCount = columnCount + 1 %}
-                    {% set stat = event.statistic(metric) %}
-                    {% set metricOrder = metricOrder|merge([stat.metric]) %}
-                    {% set hasDesc = msg_exists(stat.metric ~ '-desc', [stat.offset]) %}
-                    <th class="col-lg-3">
-                        <div class="{% if stat.metric in sortableMetrics %} sort-link sort-link--{{ stat.metric }}{% endif %}{% if hasDesc %} event-metric-desc{% endif %}" {% if hasDesc %} data-toggle="tooltip" data-placement="top" title="{{ msg(stat.metric ~ '-desc', [stat.offset]) }}"{% endif %} data-column="{{ stat.metric }}">
-                            {{ msg(stat.metric, [stat.offset]) }}
-                        </div>
-                    </th>
-                {% endif %}
-            {% endfor %}
-            {% for i in columnCount..3 %}
-                <th class="col-lg-3"></th>
-            {% endfor %}
+            <th class="col-sm-3">{{ msg('wiki') }}</th>
+            <th class="col-sm-2">{{ msg('pages-created') }}</th>
+            <th class="col-sm-1">{{ msg('views') }}</th>
+            <th class="col-sm-2">{{ msg('pages-improved') }}</th>
+            <th class="col-sm-1">{{ msg('avg-views') }}</th>
+            <th class="col-sm-2">{{ msg('edits') }}</th>
+            <th class="col-sm-1">{{ msg('byte-difference') }}</th>
+            <th class="col-sm-1">{{ msg('uploads') }}</th>
         </tr>
-        {% if wikis|length > 1 %}
-            <tr>
-                <th>{{ msg('totals') }}</th>
-                {% for metric in metricOrder %}
-                    <th>{{ event.statistic(metric).value|num_format }}</th>
-                {% endfor %}
-            </tr>
-        {% endif %}
-    </thead>
-    <tbody>
-        {% for wiki in wikis %}
-            <tr>
-                <td class="sort-entry--domain" data-value="{{ wiki.domain }}">
-                    {{ wiki.domain }}
-                </td>
-                {% for metric in metricOrder %}
-                    {% set stat = wiki.statistic(metric) %}
-                    <td class="sort-entry--{{ metric }}" data-value="{{ stat != null ? stat.value : -1 }}">
-                        {% if stat != null %}
-                            {{ stat.value|num_format }}
-                        {% else %}
-                            &mdash;
-                        {% endif %}
+        </thead>
+        <tbody>
+        {% for familyName, wikis in event.wikisByFamily %}
+            {% for wiki in wikis if wiki.domain != 'www.wikidata' %}
+                <tr>
+                    <td class="sort-entry--domain" data-value="{{ wiki.domain }}">
+                        {{ wikiHelper.extLink('https://' ~ wiki.domain ~ '.org', wiki.domain) }}
                     </td>
-                {% endfor %}
-                {% for i in columnCount..3 %}
-                    <td class="col-lg-3"></td>
-                {% endfor %}
-            </tr>
+                    {% for metric in ['pages-created', 'pages-created-pageviews', 'pages-improved', 'pages-improved-pageviews-avg', 'edits', 'byte-difference', 'files-uploaded'] %}
+                        {% set stat = wiki.statistic(metric) %}
+                        <td class="sort-entry--{{ metric }}" data-value="{{ stat != null ? stat.value : -1 }}">
+                            {% if stat is not null %}
+                                {{ stat.value|num_format }}
+                            {% else %}
+                                &mdash;
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
         {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</section>

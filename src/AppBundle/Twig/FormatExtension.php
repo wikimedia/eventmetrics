@@ -80,6 +80,7 @@ class FormatExtension extends Extension
             new \Twig_SimpleFilter('ucfirst', [$this, 'ucfirst']),
             new \Twig_SimpleFilter('percent_format', [$this, 'percentFormat']),
             new \Twig_SimpleFilter('diff_format', [$this, 'diffFormat'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('num_abbrev', [$this, 'numberAbbrev']),
             new \Twig_SimpleFilter('date_localize', [$this, 'dateFormat']),
             new \Twig_SimpleFilter('date_format', [$this, 'dateFormatStd']),
             new \Twig_SimpleFilter('wikify', [$this, 'wikify']),
@@ -181,6 +182,27 @@ class FormatExtension extends Extension
         $size = $this->bundleExtension->numberFormat($size);
 
         return "<span class='$class'>$size</span>";
+    }
+
+    /**
+     * Abbreviates the given number to the millions or thousands.
+     * @param int $number
+     * @return string
+     */
+    public function numberAbbrev(int $number): string
+    {
+        if ($number >= 1000000000) {
+            return $this->bundleExtension->numberFormat($number / 1000000000, 1)
+                .$this->intuition->msg('num-abbrev-billion');
+        } elseif ($number >= 1000000) {
+            return $this->bundleExtension->numberFormat($number / 1000000, 1)
+                .$this->intuition->msg('num-abbrev-million');
+        } elseif ($number >= 1000) {
+            return $this->bundleExtension->numberFormat($number / 1000, 1)
+                .$this->intuition->msg('num-abbrev-thousand');
+        }
+
+        return $this->bundleExtension->numberFormat($number);
     }
 
     /**
