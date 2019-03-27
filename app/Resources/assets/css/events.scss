@@ -1,3 +1,5 @@
+@import 'mixins';
+
 .event,
 .eventdata {
     .wiki-row {
@@ -42,6 +44,12 @@
         border-radius: 3px;
         h3 {
             margin-top: 0 !important;
+        }
+        &.success {
+            border-left-color: $bootstrap-success-text;
+        }
+        &.success h3 {
+            color: $bootstrap-success-text;
         }
         &.warn {
             border-left-color: #eea236;

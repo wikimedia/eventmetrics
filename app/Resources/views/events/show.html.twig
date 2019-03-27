@@ -85,15 +85,17 @@
             </section>
 
         {% elseif not event.updated and not event.hasJob %}
-            <div class="alert alert-success event-wiki-stats--empty">
-                {% if event.startUTC > date() %}
+            {% if event.startUTC > date() %}
+                <section class="event-errorbox warn">
                     {{ msg('event-in-future') }}
                     (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings')|lower }}</a>)
-                {% else %}
+                </section>
+            {% else %}
+                <section class="event-errorbox success event-wiki-stats--empty">
                     {{ msg('event-no-data') }}
                     <a href="#" class="event-process-link">{{ msg('calculate-totals') }}</a>.
-                {% endif %}
-            </div>
+                </section>
+            {% endif %}
         {% endif %}
 
         {### FORMS ###}
