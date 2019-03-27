@@ -29,8 +29,17 @@
     </div>
 
     {{ form_start(form, {'method': 'post', 'name': 'categoryForm', 'attr': {'class': 'save-categories-form', 'autocomplete': 'off'}}) }}
-    <p class="save-categories-form__description">{{ msg('categories-description') }}</p>
-    <p>{{ msg('categories-commons-explanation') }}</p>
+    <p class="save-categories-form__description">
+        {{ msg('categories-description') }}
+        <a href="https://meta.wikimedia.org/wiki/Special:MyLanguage/Event_Metrics#category-filtering"
+           title="{{ msg('categories-description-tooltip') }}" class="help-link" target="_blank">
+            <span class="glyphicon glyphicon-question-sign"></span>
+        </a>
+    </p>
+    <ul>
+        <li>{{ msg('categories-explanation') }}</li>
+        <li>{{ msg('categories-commons-explanation') }}</li>
+    </ul>
 
     <div class="event__categories">
         {% for category in form.categories %}
