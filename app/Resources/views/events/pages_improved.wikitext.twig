@@ -1,0 +1,26 @@
+{% import 'macros/wiki.html.twig' as wikiHelper %}
+=== {{ msg('pages-improved') }} &bull; {{ event.displayTitle }} ===
+<small>''{{ msg('last-updated', [event.updatedUTC|date_localize]) }} ({{ event.displayTimezone }})''
+&bull; [https://meta.wikimedia.org/wiki/Event_Metrics/Definitions_of_metrics {{ msg('metrics-about-link') }}]</small>
+
+{| class="wikitable sortable"
+|-
+! {{ msg('title') }}
+! {{ msg('wiki') }}
+! {{ msg('edits-during-event') }}
+! {{ msg('byte-difference-during-event') }}
+! {{ msg('pageviews-average') }}
+! {{ msg('incoming-links') }}
+! {{ msg('more-page-metrics') }}
+{% for page in pagesImproved %}
+    |-
+    | {{ wikiHelper.pageLink(page.pageTitle, page.wiki, null, true) }}
+    | {{ page.wiki }}
+    | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.edits }}}}
+    | style="text-align:right" | {% if page.bytes > 0 %}+{% endif %}{% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.bytes }}}}
+    | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.avgPageviews }}}}
+    | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.links }}}}
+    | [https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle|e('url') }} XTools]
+    |-
+{% endfor %}
+|}

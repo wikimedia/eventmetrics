@@ -20,7 +20,7 @@
 | {{ wikiHelper.pageLink('User:' ~ page.creator, page.wiki, page.creator, true) }}
 | {{ page.wiki }}
 | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.edits }}}}
-| style="text-align:right" | +{% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.bytes }}}}
+| style="text-align:right" | {% if page.bytes > 0 %}+{% endif %}{% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.bytes }}}}
 | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.pageviews }}}}
 | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.avgPageviews }}}}
 | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.links }}}}
