@@ -1,19 +1,19 @@
 <table class="event-metadata">
     <tr>
-        <th>{{ msg('metadata-start-date') }}</th>
+        <th class="text-nowrap">{{ msg('metadata-start-date') }}</th>
         <td>
             {{ event.start|date_localize }}
             ({{ event.displayTimezone }})
         </td>
     </tr>
     <tr>
-        <th>{{ msg('metadata-end-date') }}</th>
+        <th class="text-nowrap">{{ msg('metadata-end-date') }}</th>
         <td>
             {{ event.end|date_localize }}
         </td>
     </tr>
     <tr>
-        <th>
+        <th class="text-nowrap">
             {% set wikiCount = event.orphanWikisAndFamilies|length %}
             {% if event.familyWikis %}
                 {# If the event includes any families (e.g. *.wikipedia) then set the count arbitrarily higher. #}
