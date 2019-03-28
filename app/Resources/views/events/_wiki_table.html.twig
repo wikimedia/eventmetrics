@@ -19,7 +19,7 @@
         </thead>
         <tbody>
         {% for familyName, wikis in event.wikisByFamily %}
-            {% for wiki in wikis if wiki.domain != 'www.wikidata' %}
+            {% for wiki in wikis %}
                 <tr>
                     <td class="sort-entry--domain" data-value="{{ wiki.domain }}">
                         {{ wikiHelper.extLink('https://' ~ wiki.domain ~ '.org', wiki.domain) }}
