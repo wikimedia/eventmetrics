@@ -66,6 +66,7 @@
 	"metadata-categories-label": "{{PLURAL:$1|Kategoriye|Kategoriyi}}",
 	"metadata-start-date": "Tarixê destpêkerdışi:",
 	"metadata-wikis-label": "{{PLURAL:$1|Wiki|Wikiyi}}",
+	"num-abbrev-million": "M",
 	"num-categories": "{{PLURAL:$1|Kategoriye|Kategoriyi}}",
 	"num-days": "{{PLURAL: $1|roce|roci}}",
 	"num-hours": "($1 {{PLURAL:$1|saete|saeti}})",
@@ -104,6 +105,7 @@
 	"username": "Nameyê karberi",
 	"view-all-edits": "Vurnayışan pêro bıvêne",
 	"view-source": "Çımey bıvêne",
+	"views": "Asayışi",
 	"wiki": "Wiki",
 	"wikis": "Wikiyi"
 }
