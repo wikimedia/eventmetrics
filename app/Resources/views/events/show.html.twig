@@ -24,6 +24,12 @@
             </a>
         {% endset %}
 
+        {% set eventProcessLink %}
+            <a href="#" class="event-process-link">
+                {% if event.updated %}{{ msg('update-data') }}{% else %}{{ msg('calculate-totals') }}{% endif %}
+            </a>
+        {% endset %}
+
         {% if filtersMissing %}
             <section class="event-errorbox error">
                 <h3>{{ msg('error-filters-header') }}</h3>
@@ -51,7 +57,7 @@
             <section class="event-errorbox warn">
                 <h3>{{ msg('category-warning-header') }}</h3>
                 <p>
-                    {{ msg('category-warning-desc', ['<a href="#" class="event-process-link">'~msg('update-data')~'</a>'])|raw }}
+                    {{ msg('category-warning-desc', [eventProcessLink])|raw }}
                     {{ helpLink }}
                 </p>
                 <ul>
@@ -81,8 +87,7 @@
                     {{ msg('event-in-future') }}
                     (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings')|lower }}</a>)
                 {% else %}
-                    {{ msg('event-no-data') }}
-                    <a href="#" class="event-process-link">{{ msg('calculate-totals') }}</a>.
+                    {{ msg('event-no-data', [eventProcessLink])|raw }}
                 {% endif %}
             </div>
         {% endif %}
