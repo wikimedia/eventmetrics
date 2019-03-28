@@ -357,7 +357,7 @@ class EventTest extends EventMetricsTestCase
         static::assertEquals(
             [
                 'participants' => null,
-                'new-editors' => 15,
+                'new-editors' => 14,
                 'retention' => 7,
                 'edits' => null,
                 'byte-difference' => null,
