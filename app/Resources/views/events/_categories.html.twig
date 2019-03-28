@@ -98,4 +98,7 @@
     {% endif %}
     {% set collapsed = true %}
 {% endif %}
+{% if not form.vars.valid %}
+    {% set collapsed = false %}
+{% endif %}
 {{ layout.panel('categories-panel-title', panelDesc, content, collapsed) }}
