@@ -113,7 +113,7 @@ class EventProcessor
 
         $this->output = &$output;
 
-        $this->log('Processing event '.$event->getId());
+        $this->log("Processing event {$event->getId()}\n");
 
         // Generate and persist each type of EventStat/EventWikiStat.
 
@@ -260,8 +260,6 @@ class EventProcessor
      */
     protected function setPageviewsStats(): void
     {
-        $this->log("\nFetching pageviews...");
-
         /** @var EventWikiRepository $ewRepo */
         $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
@@ -292,6 +290,8 @@ class EventProcessor
             $avgPageviewsImprovedTotal += $avgPageviewsImproved;
 
             $this->logEnd($logKey);
+            $this->log(">> <info>Pageviews of pages created: $pageviewsCreatedTotal</info>");
+            $this->log(">> <info>Average daily pageviews of pages improved: $avgPageviewsImprovedTotal</info>");
 
             $this->createOrUpdateEventWikiStat($wiki, 'pages-created-pageviews', $pageviewsCreated);
             $this->createOrUpdateEventWikiStat($wiki, 'pages-improved-pageviews-avg', $avgPageviewsImproved);
@@ -302,9 +302,6 @@ class EventProcessor
         $this->createOrUpdateEventStat('pages-created-pageviews', $pageviewsCreatedTotal);
         $this->createOrUpdateEventStat('pages-improved-pageviews-avg', $avgPageviewsImprovedTotal);
         $this->createOrUpdateEventStat('pages-using-files-pageviews-avg', $avgPageviewsPagesUsingFiles);
-        $this->log(">> <info>Pageviews of pages created: $pageviewsCreatedTotal</info>");
-        $this->log(">> <info>Average daily pageviews of pages improved: $avgPageviewsImprovedTotal</info>");
-        $this->log(">> <info>Average daily pageviews to pages using files: $avgPageviewsPagesUsingFiles</info>");
     }
 
     /**
@@ -337,6 +334,7 @@ class EventProcessor
         }
 
         $this->logEnd($logKey);
+        $this->log(">> <info>Average daily pageviews to pages using files: $avgPageviewsPagesUsingFiles</info>");
 
         return $avgPageviewsPagesUsingFiles;
     }
@@ -347,8 +345,6 @@ class EventProcessor
      */
     private function setContributionStats(): void
     {
-        $this->log("\nFetching number of pages created or improved...");
-
         /** @var EventWikiRepository $ewRepo */
         $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
@@ -357,6 +353,7 @@ class EventProcessor
         $saveEventStats = false;
 
         foreach ($this->event->getWikis() as $wiki) {
+            $this->log("==== Processing {$wiki->getDomain()} ====");
             // No stats for EventWikis that represent a family.
             if ($wiki->isFamilyWiki()) {
                 continue;
@@ -379,6 +376,7 @@ class EventProcessor
             }
 
             $this->setUserCounts($wiki, $ewRepo);
+            $this->log(''); // Creates a newline.
         }
 
         // Only save some metrics as EventStats if they were also saved as EventWikiStats.
@@ -392,13 +390,13 @@ class EventProcessor
             $this->createOrUpdateEventStat('pages-using-files', $this->pagesUsingFiles);
         }
 
-        $this->log("> <info>Total edits: {$this->edits}</info>");
-        $this->log("> <info>Total pages created: {$this->pagesCreated}</info>");
-        $this->log("> <info>Total pages improved: {$this->pagesImproved}</info>");
-        $this->log("> <info>Total bytes added: {$this->byteDifference}</info>");
-        $this->log("> <info>Total files uploaded: {$this->filesUploaded}</info>");
-        $this->log("> <info>Total files used: {$this->fileUsage}</info>");
-        $this->log("> <info>Total pages using uploaded files: {$this->pagesUsingFiles}</info>");
+        $this->log("<info>Total edits: {$this->edits}</info>");
+        $this->log("<info>Total pages created: {$this->pagesCreated}</info>");
+        $this->log("<info>Total pages improved: {$this->pagesImproved}</info>");
+        $this->log("<info>Total bytes added: {$this->byteDifference}</info>");
+        $this->log("<info>Total files uploaded: {$this->filesUploaded}</info>");
+        $this->log("<info>Total files used: {$this->fileUsage}</info>");
+        $this->log("<info>Total pages using uploaded files: {$this->pagesUsingFiles}</info>\n");
     }
 
     /**
@@ -408,33 +406,21 @@ class EventProcessor
      */
     private function setContributionsTextWikis(EventWiki $wiki, EventWikiRepository $ewRepo): void
     {
-        $this->log("> Fetching pages created or improved on {$wiki->getDomain()}...");
         $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
-        $start = $this->event->getStartUTC();
-        $end = $this->event->getEndUTC();
-        $usernames = $this->getParticipantNames();
 
-        $logKey = 'page_ids'.$wiki->getDomain();
-        $this->logStart(">> Fetching page IDs...", $logKey);
-
-        [$pageIdsCreated, $pageIdsImproved] = $this->getAndSetPageIds($wiki, $ewRepo, $dbName);
-
+        [$pageIdsCreated, $pageIdsImproved, $totalEditCount] = $this->getAndSetPageIdsEdits($wiki, $ewRepo, $dbName);
         $pageIds = array_merge($pageIdsCreated, $pageIdsImproved);
-        $totalEditCount = $this->eventRepo->getTotalEditCount($dbName, $pageIds, $start, $end, $usernames);
-
-        $this->logEnd($logKey);
 
         $logKey = 'bytes_changed';
-        $this->logStart(">> Fetching bytes changed...", $logKey);
-        $diff = $ewRepo->getBytesChanged($this->event, $dbName, $pageIds, $usernames);
+        $this->logStart("> Fetching bytes changed...", $logKey);
+        $diff = $ewRepo->getBytesChanged($this->event, $dbName, $pageIds, $this->getParticipantNames());
         $this->logEnd($logKey);
-        $this->log(">>> <info>Bytes changed: {$diff}</info>");
+        $this->log(">> <info>Bytes changed: {$diff}</info>");
 
         $totalCreated = count($pageIdsCreated);
         $totalImproved = count($pageIdsImproved);
         $this->pagesCreated += $totalCreated;
         $this->pagesImproved += $totalImproved;
-        $this->edits += $totalEditCount;
         $this->byteDifference += $diff;
 
         $this->createOrUpdateEventWikiStat($wiki, 'edits', $totalEditCount);
@@ -452,7 +438,7 @@ class EventProcessor
     {
         $categories = $this->event->getCategoryTitlesForWiki($wiki);
         $logKey = 'files_uploaded_'.$wiki->getDomain();
-        $this->logStart("> Fetching files uploaded on {$wiki->getDomain()} and global file usage...", $logKey);
+        $this->logStart("> Fetching files uploaded and global file usage...", $logKey);
 
         if (false === $wiki->canHaveFilesUploaded()) {
             $this->logEnd($logKey);
@@ -492,33 +478,34 @@ class EventProcessor
      */
     private function setItemsCreatedOrImprovedOnWikidata(EventWiki $wiki, EventWikiRepository $ewRepo): void
     {
-        $logKey = 'wikidata_items';
-        $this->logStart("> Fetching items created or improved on Wikidata...", $logKey);
+        [$pageIdsCreated, $pageIdsImproved, $totalEditCount] = $this->getAndSetPageIdsEdits(
+            $wiki,
+            $ewRepo,
+            'wikidatawiki_p'
+        );
 
-        [$pageIdsCreated, $pageIdsImproved] = $this->getAndSetPageIds($wiki, $ewRepo, 'wikidatawiki_p');
-
-        $this->logEnd($logKey);
-
-        // Report the counts, and record them both for this wiki and the event (there's only ever one Wikidata wiki).
+        // Record the counts for this wiki and the event (there's only ever one Wikidata wiki).
         $totalCreated = count($pageIdsCreated);
         $totalImproved = count($pageIdsImproved);
-        $this->log(">> <info>Items created: $totalCreated</info>");
-        $this->log(">> <info>Items improved: $totalImproved</info>");
         $this->createOrUpdateEventWikiStat($wiki, 'items-created', $totalCreated);
         $this->createOrUpdateEventWikiStat($wiki, 'items-improved', $totalImproved);
+        $this->createOrUpdateEventWikiStat($wiki, 'edits', $totalEditCount);
         $this->createOrUpdateEventStat('items-created', $totalCreated);
         $this->createOrUpdateEventStat('items-improved', $totalImproved);
     }
 
     /**
-     * Set and get pages created and improved IDs on the given $wiki.
+     * Set and get pages created and improved IDs on the given $wiki, and the total number of edits made.
      * @param EventWiki $wiki
      * @param EventWikiRepository $ewRepo
      * @param string $dbName
      * @return int[][]
      */
-    private function getAndSetPageIds(EventWiki &$wiki, EventWikiRepository $ewRepo, string $dbName): array
+    private function getAndSetPageIdsEdits(EventWiki &$wiki, EventWikiRepository $ewRepo, string $dbName): array
     {
+        $logKey = 'page_ids_edits'.$wiki->getDomain();
+        $this->logStart("> Fetching page IDs and edit counts...", $logKey);
+
         $start = $this->event->getStartUTC();
         $end = $this->event->getEndUTC();
         $usernames = $this->getParticipantNames();
@@ -527,11 +514,25 @@ class EventProcessor
         $pageIdsEdited = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'edited');
         $pageIdsImproved = array_diff($pageIdsEdited, $pageIdsCreated);
 
+        $totalEditCount = $this->eventRepo->getTotalEditCount(
+            $dbName,
+            array_merge($pageIdsCreated, $pageIdsEdited),
+            $start,
+            $end,
+            $usernames
+        );
+        $this->edits += $totalEditCount;
+
         // Set on the EventWiki, so this will get persisted to the database.
         $wiki->setPagesCreated($pageIdsCreated);
         $wiki->setPagesImproved($pageIdsImproved);
 
-        return [$pageIdsCreated, $pageIdsImproved];
+        $this->logEnd($logKey);
+        $this->log('>> <info>Pages created: '.count($pageIdsCreated).'</info>');
+        $this->log('>> <info>Pages improved: '.count($pageIdsImproved).'</info>');
+        $this->log(">> <info>Edits: $totalEditCount</info>");
+
+        return [$pageIdsCreated, $pageIdsImproved, $totalEditCount];
     }
 
     /**
@@ -555,6 +556,7 @@ class EventProcessor
         }
 
         $this->logEnd($logKey);
+        $this->log('>> <info>Participants: '.count($usernames).'</info>');
     }
 
     /**

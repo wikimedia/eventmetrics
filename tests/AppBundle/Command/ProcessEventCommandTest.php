@@ -175,13 +175,29 @@ class ProcessEventCommandTest extends EventMetricsTestCase
      */
     private function editCountSpec(): void
     {
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikiByDomain('en.wikipedia'),
+                'metric' => 'edits',
+            ]);
+        static::assertEquals(20, $eventWikiStat->getValue());
+
+        $eventWikiStat = $this->entityManager
+            ->getRepository('Model:EventWikiStat')
+            ->findOneBy([
+                'wiki' => $this->event->getWikiByDomain('www.wikidata'),
+                'metric' => 'edits',
+            ]);
+        static::assertEquals(14, $eventWikiStat->getValue());
+
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
             ->findOneBy([
                 'event' => $this->event,
                 'metric' => 'edits',
             ]);
-        static::assertEquals(20, $eventStat->getValue());
+        static::assertEquals(34, $eventStat->getValue());
     }
 
     /**
