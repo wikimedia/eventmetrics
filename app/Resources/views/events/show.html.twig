@@ -89,14 +89,21 @@
             </section>
 
         {% elseif not event.updated and not event.hasJob and not hasFormErrors %}
-            <div class="alert alert-success event-wiki-stats--empty">
-                {% if event.startUTC > date() %}
-                    {{ msg('event-in-future') }}
-                    (<a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings')|lower }}</a>)
-                {% else %}
+            {% if event.startUTC > date() %}
+                <section class="event-errorbox warn">
+                    <h3>{{ msg('event-in-future') }}</h3>
+                    <ul>
+                        {% set settingsLink %}
+                            <a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings') }}</a>
+                        {% endset %}
+                        <li>{{ msg('event-in-future-details', [settingsLink|trim])|raw }}</li>
+                    </ul>
+                </section>
+            {% else %}
+                <div class="alert alert-success event-wiki-stats--empty">
                     {{ msg('event-no-data', [eventProcessLink])|raw }}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         {% endif %}
 
         <section class="event-filters clearfix">
