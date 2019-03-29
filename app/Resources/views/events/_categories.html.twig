@@ -92,9 +92,9 @@
 {% elseif event.participants.count == 0 and wikisWithoutCats.count %}
     {% set panelDesc = msg('not-all-wikis-have-cats') ~ ' <span class="warn glyphicon glyphicon-warning-sign"></span>' %}
 {% else %}
-    {% if event.numCategories(true) > 0 %}
+    {% if event.numCategories(true) > 0 and form.vars.valid %}
         {# Only show participants count on valid events if there are participants. #}
-        {% set panelDesc = msg('num-categories', [event.numCategories(true)]) %}
+        {% set panelDesc = msg('num-categories', [event.numCategories(true)]) ~ ' <span class="success glyphicon glyphicon-ok"></span>' %}
     {% endif %}
     {% set collapsed = true %}
 {% endif %}
