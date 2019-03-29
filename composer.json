@@ -26,6 +26,7 @@
         "ext-apcu": "*",
         "ext-bz2": "*",
         "ext-json": "*",
+        "ext-intl": "*",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.5",
