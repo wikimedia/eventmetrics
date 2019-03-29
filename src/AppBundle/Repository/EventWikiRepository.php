@@ -9,7 +9,6 @@ namespace AppBundle\Repository;
 
 use AppBundle\Model\Event;
 use AppBundle\Model\EventWiki;
-use DateInterval;
 use DateTime;
 use Doctrine\DBAL\Connection;
 use Exception;
@@ -293,13 +292,9 @@ class EventWikiRepository extends Repository
 
         $pageviewsRepo = new PageviewsRepository();
         $recentDayCount = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
-
-        // The offset date is the start of the period over which pageviews should be averaged per day, up to today.
-        $offsetDate = (new DateTime('yesterday midnight'))->sub(new DateInterval('P'.$recentDayCount.'D'));
-        $start = $getDailyAverage && $start < $offsetDate ? $offsetDate : $start;
         $end = new DateTime('yesterday midnight');
-
         $pageviews = 0;
+
         $stmt = $this->getPageTitles($dbName, $pageIds, true);
 
         // FIXME: make async requests for pageviews, 200 pages at a time.
@@ -691,16 +686,13 @@ class EventWikiRepository extends Repository
         $pages = $this->getPageTitles($dbName, $wiki->getPagesImproved(), true, true);
         $start = $wiki->getEvent()->getStartUTC();
         $end = $wiki->getEvent()->getEndUTC();
-        $now = new DateTime('yesterday midnight');
         $data = [];
 
         while ($page = $pages->fetch()) {
             // FIXME: async?
-            [$pageviews, $avgPageviews] = $pageviewsRepo->getPageviewsPerArticle(
+            $avgPageviews = $pageviewsRepo->getAvgPageviewsPerArticle(
                 $wiki->getDomain(),
                 $page['page_title'],
-                $start,
-                $now,
                 $avgPageviewsOffset
             );
 
@@ -716,7 +708,6 @@ class EventWikiRepository extends Repository
             $data[] = array_merge($pageInfo, [
                 'pageTitle' => $page['page_title'],
                 'wiki' => $wiki->getDomain(),
-                'pageviews' => (int)$pageviews,
                 'avgPageviews' => (int)$avgPageviews,
             ]);
         }
