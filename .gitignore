@@ -31,6 +31,8 @@ deploy.sh
 phpDocumentor.phar*
 /bin/phpdoc*
 
+.phpunit.result.cache
+
 build/ci/travis.tar
 cc-test-reporter
 
