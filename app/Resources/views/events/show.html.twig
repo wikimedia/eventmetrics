@@ -24,6 +24,13 @@
             </a>
         {% endset %}
 
+        {% set hasFormErrors = false %}
+        {% for formType, form in forms %}
+            {% if not form.vars.valid %}
+                {% set hasFormErrors = true %}
+            {% endif %}
+        {% endfor %}
+
         {% set eventProcessLink %}
             <a href="#" class="event-process-link">
                 {% if event.updated %}{{ msg('update-data') }}{% else %}{{ msg('calculate-totals') }}{% endif %}
@@ -81,7 +88,7 @@
                 </ul>
             </section>
 
-        {% elseif not event.updated and not event.hasJob %}
+        {% elseif not event.updated and not event.hasJob and not hasFormErrors %}
             <div class="alert alert-success event-wiki-stats--empty">
                 {% if event.startUTC > date() %}
                     {{ msg('event-in-future') }}
