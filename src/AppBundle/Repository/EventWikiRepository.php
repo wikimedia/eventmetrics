@@ -465,7 +465,7 @@ class EventWikiRepository extends Repository
      * @param DateTime $end
      * @return string[]
      */
-    public function getSingePageCreatedData(
+    public function getSinglePageCreatedData(
         string $dbName,
         int $pageId,
         string $pageTitle,
@@ -481,6 +481,9 @@ class EventWikiRepository extends Repository
         $end = $end->format('YmdHis');
         $usernamesSql = empty($usernames) ? '' : 'AND rev_user_text IN (:usernames)';
 
+        // Only use revision_userindex when filtering by user.
+        $userRevisionTable = empty($usernames) ? 'revision' : 'revision_userindex';
+
         $sql = "SELECT `metric`, `value` FROM (
                     (
                         SELECT 'creator' AS `metric`, rev_user_text AS `value`
@@ -489,13 +492,13 @@ class EventWikiRepository extends Repository
                         LIMIT 1
                     ) UNION (
                         SELECT 'edits' AS `metric`, COUNT(*) AS `value`
-                        FROM $dbName.revision_userindex
+                        FROM $dbName.$userRevisionTable
                         WHERE rev_page = :pageId
                             AND rev_timestamp <= :end
                             $usernamesSql
                     ) UNION (
                         SELECT 'bytes' AS `metric`, rev_len AS `value`
-                        FROM $dbName.revision
+                        FROM $dbName.$userRevisionTable
                         WHERE rev_page = :pageId
                             AND rev_timestamp <= :end
                             $usernamesSql
@@ -560,7 +563,7 @@ class EventWikiRepository extends Repository
                 $avgPageviewsOffset
             );
 
-            $pageInfo = $this->getSingePageCreatedData(
+            $pageInfo = $this->getSinglePageCreatedData(
                 $dbName,
                 (int)$page['page_id'],
                 $page['page_title'],
@@ -590,7 +593,7 @@ class EventWikiRepository extends Repository
      * @return string[]
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getSingePageImprovedData(
+    public function getSinglePageImprovedData(
         string $dbName,
         int $pageId,
         string $pageTitle,
@@ -608,17 +611,20 @@ class EventWikiRepository extends Repository
         $end = $end->format('YmdHis');
         $usernamesSql = empty($usernames) ? '' : 'AND rev.rev_user_text IN (:usernames)';
 
+        // Only use revision_userindex when filtering by user.
+        $userRevisionTable = empty($usernames) ? 'revision' : 'revision_userindex';
+
         $sql = "SELECT `metric`, `value` FROM (
                     (
                         SELECT 'edits' AS `metric`, COUNT(*) AS `value`
-                        FROM $dbName.revision_userindex rev
+                        FROM $dbName.$userRevisionTable rev
                         WHERE rev_page = :pageId
                             AND rev_timestamp BETWEEN :start AND :end
                             $usernamesSql
                     ) UNION (
                         SELECT 'start_bytes' AS `metric`, COALESCE(prev.rev_len, 0) AS `value`
-                            FROM $dbName.revision_userindex rev
-                                LEFT JOIN $dbName.revision_userindex prev ON rev.rev_parent_id=prev.rev_id
+                            FROM $dbName.$userRevisionTable rev
+                                LEFT JOIN $dbName.$userRevisionTable prev ON rev.rev_parent_id=prev.rev_id
                             WHERE rev.rev_page=:pageId
                               AND rev.rev_timestamp BETWEEN :start AND :end
                               {$usernamesSql}
@@ -626,7 +632,7 @@ class EventWikiRepository extends Repository
                             LIMIT 1
                     ) UNION (
                         SELECT 'end_bytes' AS `metric`, COALESCE(rev_len, 0) AS `value`
-                            FROM $dbName.revision_userindex rev
+                            FROM $dbName.$userRevisionTable rev
                             WHERE rev_page=:pageId
                               AND rev_timestamp BETWEEN :start AND :end
                               {$usernamesSql}
@@ -698,7 +704,7 @@ class EventWikiRepository extends Repository
                 $avgPageviewsOffset
             );
 
-            $pageInfo = $this->getSingePageImprovedData(
+            $pageInfo = $this->getSinglePageImprovedData(
                 $dbName,
                 (int)$page['page_id'],
                 $page['page_title'],
