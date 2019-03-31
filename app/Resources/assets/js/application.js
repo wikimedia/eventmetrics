@@ -15,6 +15,59 @@ $(function () {
 
     // Activate Bootstrap tooltips.
     $('[data-toggle="tooltip"]').tooltip();
+
+    // For pages with forms, check if there are any "dirty"
+    // inputs and use that to notify the user before navigating away
+    if ($('form').length > 0) {
+        var isDirtyState = !!$('.has-error').length,
+            isSubmitting = false;
+
+        // Save initial form data
+        $('form').each(function () {
+            $(this).data('initialState', $(this).serialize());
+
+            // If we submit the form, we want the warning to not appear
+            // even though our state is "dirty" and/or even if there were
+            // previous errors
+            $(this).submit(function () {
+                isSubmitting = true;
+            });
+        });
+
+        // Capture the event of navigating away or
+        // refreshing the page
+        window.addEventListener('beforeunload', function (e) {
+            if (isSubmitting) {
+                // Skip if we're submitting the form
+                return;
+            }
+
+            // Check if any of the forms are "dirty"
+            $('form').each(function () {
+                if (
+                    // Skip if we're already in dirty state
+                    !isDirtyState &&
+                    // Check if the current state doesn't match initial state
+                    $(this).data('initialState') !== $(this).serialize()
+                ) {
+                    isDirtyState = true;
+                }
+            });
+
+            // If there are any invalid parameters in a form, warn before
+            // navigating away. Modern browsers do not allow us to
+            // set our own message, but we can warn the user in general
+            if (isDirtyState) {
+                e.preventDefault();
+                // Chrome requires a return value
+                e.returnValue = '';
+
+                // Reset state
+                isSubmitting = false;
+                isDirtyState = !!$('.has-error').length;
+            }
+        });
+    }
 });
 
 /**
