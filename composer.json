@@ -23,7 +23,6 @@
     "require": {
         "php": "^7.2",
         "ext-PDO": "*",
-        "ext-apcu": "*",
         "ext-bz2": "*",
         "ext-json": "*",
         "ext-intl": "*",
