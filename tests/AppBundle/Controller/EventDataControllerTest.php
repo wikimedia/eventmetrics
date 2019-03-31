@@ -111,7 +111,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         );
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
-        static::assertContains('text/plain', $this->response->headers->get('content-type'));
+        static::assertStringContainsString('text/plain', $this->response->headers->get('content-type'));
         static::assertRegExp(
             '/en\.wikipedia.*www\.wikidata.*Samwilson.*MusikAnimal/s',
             $this->response->getContent()
@@ -129,7 +129,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         );
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
-        static::assertContains('text/csv', $this->response->headers->get('content-type'));
+        static::assertStringContainsString('text/csv', $this->response->headers->get('content-type'));
         static::assertRegExp(
             '/en\.wikipedia.*MusikAnimal.*wikidata\.org.*Samwilson/s',
             $this->response->getContent()
@@ -315,7 +315,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
 
         // Basic assertion to ensure data is being outputed.
-        static::assertContains(
+        static::assertStringContainsString(
             "Pages created\n| style=\"text-align:right\" | 3",
             $this->response->getContent()
         );
@@ -353,7 +353,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 | style="text-align:right" | {{FORMATNUM:12}}
 | style="text-align:right" | +{{FORMATNUM:4641}}
 EOD;
-        static::assertContains($snippet, $this->response->getContent());
+        static::assertStringContainsString($snippet, $this->response->getContent());
     }
 
     /**
@@ -382,6 +382,6 @@ EOD;
         $this->response = $this->client->getResponse();
 
         $snippet = '"Title","URL","Wiki","Edits during event","Bytes changed during event","Avg. daily pageviews"';
-        static::assertContains($snippet, $this->response->getContent());
+        static::assertStringContainsString($snippet, $this->response->getContent());
     }
 }

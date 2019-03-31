@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Tests\AppBundle\Controller;
 
+use DMS\PHPUnitExtensions\ArraySubset\Assert;
+
 /**
  * The DefaultControllerTest tests the home page and related actions.
  */
@@ -20,7 +22,10 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', '/');
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
-        static::assertContains('Welcome to Event Metrics', $this->crawler->filter('.splash-dialog')->text());
+        static::assertStringContainsString(
+            'Welcome to Event Metrics',
+            $this->crawler->filter('.splash-dialog')->text()
+        );
     }
 
     /**
@@ -69,7 +74,8 @@ class DefaultControllerTest extends DatabaseAwareWebTestCase
         $this->client->request('GET', '/api/wikis');
         $this->response = $this->client->getResponse();
 
-        static::assertArraySubset(
+        // @see https://github.com/sebastianbergmann/phpunit/issues/3494
+        Assert::assertArraySubset(
             [
                 'de.wikipedia' => 'dewiki_p',
                 'www.wikidata' => 'wikidatawiki_p',
