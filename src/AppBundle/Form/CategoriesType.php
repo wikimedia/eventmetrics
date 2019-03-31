@@ -124,13 +124,26 @@ class CategoriesType extends AbstractType
     {
         return new CallbackTransformer(
             // Transform to the form.
-            function (Collection $categories) {
+            function (Collection $categories): Collection {
                 // No transformation needed.
                 return $categories;
             },
             // Transform from the form.
-            function (Collection $categories) {
+            function (Collection $categories): Collection {
+                // Loop thorugh each of the submitted categories.
                 return $categories->map(function (EventCategory $category) {
+                    // Find the existing category with the same domain and title.
+                    $oldCategory = $this->ecRepo->findOneBy([
+                        'event' => $category->getEvent(),
+                        'title' => $category->getTitle(true),
+                        'domain' => $category->getDomain(),
+                    ]);
+
+                    // Use the existing Category if found.
+                    if ($oldCategory) {
+                        return $oldCategory;
+                    }
+
                     // Fetch and set the category ID, which may be null (category does not exist).
                     $catId = $this->ecRepo->getCategoryId($category->getDomain(), $category->getTitle());
                     $category->setCategoryId($catId);
