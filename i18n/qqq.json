@@ -36,7 +36,7 @@
 	"category-name": "Placeholder for input to enter the name of a category.",
 	"close": "Button text to close a modal.\n{{Identical|Close}}",
 	"confirm-deletion": "Popup message confirming the user wants to delete the program or event. $1 is the name of the program or event.",
-	"contributions": "Label for section on the event page that includes all the different contribution statistics (edits, pages improved, etc.).",
+	"contributions": "Label for section on the event page that includes all the different contribution statistics (edits, pages improved, etc.).\n{{Identical|Contribution}}",
 	"copy": "Text for link to copy a program or event.\n{{Identical|Copy}}",
 	"create-new-event": "Heading for page to create a new event. This is also used as button text shown on the Program page.",
 	"create-new-program": "Heading for page to create a new program. This is also used as button text shown on the 'My Programs' page.",
