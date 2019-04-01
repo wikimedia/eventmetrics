@@ -1,4 +1,5 @@
-var Encore = require('@symfony/webpack-encore');
+var Encore = require('@symfony/webpack-encore'),
+    CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 
 Encore
 
@@ -7,6 +8,11 @@ Encore
 
     // Public URL path used by the web server to access the output path.
     .setPublicPath('/assets/')
+
+    // Copy i18n files for use by jquery.i18n.
+    .addPlugin( new CopyWebpackPlugin( [
+        { from: './node_modules/jquery.uls/i18n/', to: 'jquery.uls.18n/' },
+    ] ) )
 
     /*
      * ENTRY CONFIG
@@ -35,6 +41,17 @@ Encore
         './vendor/wikimedia/toolforge-bundle/Resources/assets/toolforge.js',
         './public/images/logo.svg',
         './public/favicon.ico',
+
+        // Universal Language Selector.
+        './node_modules/jquery.uls/src/jquery.uls.data.js',
+        './node_modules/jquery.uls/src/jquery.uls.data.utils.js',
+        './node_modules/jquery.uls/src/jquery.uls.lcd.js',
+        './node_modules/jquery.uls/src/jquery.uls.languagefilter.js',
+        './node_modules/jquery.uls/src/jquery.uls.core.js',
+        './node_modules/jquery.uls/css/jquery.uls.css',
+        './node_modules/jquery.uls/css/jquery.uls.grid.css',
+        './node_modules/jquery.uls/css/jquery.uls.lcd.css',
+
     ])
 
     // Other options.

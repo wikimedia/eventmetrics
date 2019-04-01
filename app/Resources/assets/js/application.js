@@ -12,6 +12,7 @@ $(function () {
     eventmetrics.application.setupPanelTooltips();
     eventmetrics.application.preventHighUtf8Strings();
     eventmetrics.application.preventDoubleSubmission();
+    eventmetrics.application.setupTranslation();
 
     // Activate Bootstrap tooltips.
     $('[data-toggle="tooltip"]').tooltip();
@@ -70,6 +71,31 @@ $(function () {
     }
 });
 
+/**
+ * Set up the ULS trigger and response, and prefill ULS-specific translations
+ */
+eventmetrics.application.setupTranslation = function () {
+    var lang = $( 'html' ).attr( 'lang' ) || 'en',
+        messagesToLoadUls = {},
+        messagesToLoadApp = {};
+
+    // Load ULS message translations
+    messagesToLoadUls[ lang ] = assetsPath + '/jquery.uls.18n/' + lang + '.json';
+    if ( lang !== 'en' ) {
+        // Also load English files for fallback.
+        messagesToLoadUls.en = assetsPath + '/jquery.uls.18n/en.json';
+    }
+    $.i18n().locale = lang;
+    $.i18n().load( messagesToLoadUls )
+
+    // Set up ULS
+    $( '#langchange').uls( {
+        onSelect: function( lang ) {
+            // Reload the page with uselang=chosenLang
+            window.location.href = '?uselang=' + lang;
+        }
+    } );
+};
 /**
  * Add tooltips to panel toggle links.
  * See also views/macros/layout.html.twig and assets/css/application.scss

@@ -2,6 +2,8 @@
   "dependencies": {
     "@symfony/webpack-encore": "^0.23.0",
     "node-sass": "^4.11.0",
+    "jquery.uls": "0.1",
+    "copy-webpack-plugin": "4.6",
     "sass-loader": "^7.1.0"
   }
 }
