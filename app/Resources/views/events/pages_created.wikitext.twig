@@ -24,7 +24,7 @@
 | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.pageviews }}}}
 | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.avgPageviews }}}}
 | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.links }}}}
-| [https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle|e('url') }} XTools]
+| [https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle|wiki_encode }} XTools]
 |-
 {% endfor %}
 |}

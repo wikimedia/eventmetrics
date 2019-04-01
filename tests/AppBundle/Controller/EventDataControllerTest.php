@@ -81,13 +81,13 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         // 1 Commons file upload.
         static::assertEquals(
             1,
-            substr_count($this->response->getContent(), 'commons.wikimedia.org/wiki/File%3A')
+            substr_count($this->response->getContent(), 'commons.wikimedia.org/wiki/File:')
         );
 
         // 2 enwiki file uploads.
         static::assertEquals(
             2,
-            substr_count($this->response->getContent(), 'en.wikipedia.org/wiki/File%3A')
+            substr_count($this->response->getContent(), 'en.wikipedia.org/wiki/File:')
         );
 
         // 14 wikidata edits.
@@ -174,13 +174,13 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
         // 1 Commons file upload.
         static::assertEquals(
             1,
-            substr_count($this->response->getContent(), 'commons.wikimedia.org/wiki/File%3A')
+            substr_count($this->response->getContent(), 'commons.wikimedia.org/wiki/File:')
         );
 
         // 2 local file uploads.
         static::assertEquals(
             2,
-            substr_count($this->response->getContent(), 'en.wikipedia.org/wiki/File%3A')
+            substr_count($this->response->getContent(), 'en.wikipedia.org/wiki/File:')
         );
     }
 
@@ -348,7 +348,7 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
 
         $snippet = <<<EOD
 | [https://en.wikipedia.org/wiki/Domino_Park Domino Park]
-| [https://en.wikipedia.org/wiki/User%3AMusikAnimal MusikAnimal]
+| [https://en.wikipedia.org/wiki/User:MusikAnimal MusikAnimal]
 | en.wikipedia
 | style="text-align:right" | {{FORMATNUM:12}}
 | style="text-align:right" | +{{FORMATNUM:4641}}

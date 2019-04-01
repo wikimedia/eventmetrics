@@ -1,6 +1,6 @@
 {{ csv(msg('title')) }},{{ csv(msg('url')) }},{{ csv(msg('creator')) }},{{ csv(msg('wiki')) }},{{ csv(msg('edits-during-event')) }},{{ csv(msg('byte-difference-during-event')) }},{{ csv(msg('pageviews-cumulative')) }},{{ csv(msg('pageviews-average')) }},{{ csv(msg('incoming-links')) }},{{ csv(msg('more-page-metrics')) }}
 {% for page in pagesCreated %}
-{{ csv(page.pageTitle|replace({'_': ' '})) }},"https://{{ page.wiki }}.org/wiki/{{ page.pageTitle|e('url') }}",{{ csv(page.creator) }},{{ page.wiki }},{{ page.edits }},{{ page.bytes }},{{ page.pageviews }},{{ page.avgPageviews }},{{ page.links }},"https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle|e('url') }}"
+{{ csv(page.pageTitle|replace({'_': ' '})) }},"https://{{ page.wiki }}.org/wiki/{{ page.pageTitle|wiki_encode }}",{{ csv(page.creator) }},{{ page.wiki }},{{ page.edits }},{{ page.bytes }},{{ page.pageviews }},{{ page.avgPageviews }},{{ page.links }},"https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle|wiki_encode }}"
 {% endfor %}
 
 {{ msg('pages-created') }},{{ csv(event.displayTitle) }}

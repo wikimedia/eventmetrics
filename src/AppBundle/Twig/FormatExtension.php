@@ -84,6 +84,7 @@ class FormatExtension extends Extension
             new \Twig_SimpleFilter('date_localize', [$this, 'dateFormat']),
             new \Twig_SimpleFilter('date_format', [$this, 'dateFormatStd']),
             new \Twig_SimpleFilter('wikify', [$this, 'wikify']),
+            new \Twig_SimpleFilter('wiki_encode', [$this, 'wikiEncode']),
         ];
     }
 
@@ -274,5 +275,23 @@ class FormatExtension extends Extension
     public function csv(string $content): string
     {
         return '"'.str_replace('"', '""', $content).'"';
+    }
+
+    /**
+     * Urlencode a title according to MediaWiki's rules. Ported from wfUrlencode().
+     *
+     * @param string $title
+     * @return string
+     */
+    public function wikiEncode(string $title): string
+    {
+        $title = urlencode($title);
+        $title = str_ireplace(
+            [ '+', '%3B', '%40', '%24', '%21', '%2A', '%28', '%29', '%2C', '%2F', '%7E', '%3A' ],
+            [ '_', ';', '@', '$', '!', '*', '(', ')', ',', '/', '~', ':' ],
+            $title
+        );
+
+        return $title;
     }
 }

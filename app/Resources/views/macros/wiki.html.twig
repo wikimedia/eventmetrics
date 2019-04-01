@@ -12,9 +12,9 @@
         {% if label is empty %}
             {% set label = pageTitle %}
         {% endif %}
-        [{{ 'https://' ~ domain ~ '.org/wiki/' ~ pageTitle|replace({' ': '_'})|e('url') }} {{ label|replace({'_': ' '}) }}]
+        [{{ 'https://' ~ domain ~ '.org/wiki/' ~ pageTitle|wiki_encode }} {{ label|replace({'_': ' '}) }}]
     {% else %}
-        {{ extLink('https://' ~ domain ~ '.org/wiki/' ~ pageTitle|e('url'), pageTitle|replace({'_': ' '}), label) }}
+        {{ extLink('https://' ~ domain ~ '.org/wiki/' ~ pageTitle|wiki_encode, pageTitle|replace({'_': ' '}), label) }}
     {% endif %}
 {% endspaceless %}{% endmacro %}
 
