@@ -130,7 +130,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         static::assertTrue($this->response->isRedirect());
 
         $this->crawler = $this->client->followRedirect();
-        static::assertContains(
+        static::assertStringContainsString(
             'Please login to continue',
             $this->crawler->filter('.splash-dialog')->text()
         );
@@ -191,7 +191,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
     {
         $this->crawler = $this->client->request('GET', $this->getProgramUrl().'/events/new');
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
-        static::assertContains(
+        static::assertStringContainsString(
             'Create a new event',
             $this->crawler->filter('.page-header')->text()
         );
@@ -242,7 +242,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
 
         $this->crawler = $this->client->followRedirect();
 
-        static::assertContains(
+        static::assertStringContainsString(
             'The Lion King',
             $this->crawler->filter('.page-subject-title')->text()
         );
@@ -251,7 +251,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', $this->getProgramUrl());
 
         // New event should be deletable.
-        static::assertNotContains(
+        static::assertStringNotContainsString(
             'disabled',
             $this->crawler->filter('.event-action__delete')->attr('class')
         );
@@ -362,7 +362,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $form['event[wikis][0]'] = 'invalid_wiki';
         $this->crawler = $this->client->submit($form);
 
-        static::assertContains(
+        static::assertStringContainsString(
             '1 wiki is invalid.',
             $this->crawler->filter('.alert-danger')->text()
         );
@@ -378,13 +378,13 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
 
-        static::assertContains(
+        static::assertStringContainsString(
             'Pinocchio',
             $this->crawler->filter('.page-header')->text()
         );
 
         // Should see the 'Settings' button, since we are logged in and are one of the organizers.
-        static::assertContains(
+        static::assertStringContainsString(
             'Settings',
             $this->crawler->filter('.page-header')->text()
         );
@@ -403,7 +403,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
             "  MusikAnimal\nmusikAnimal \r\nUser_does_not_exist_1234\ninvalid|username";
         $this->crawler = $this->client->submit($form);
 
-        static::assertContains(
+        static::assertStringContainsString(
             '2 usernames are invalid',
             $this->crawler->filter('.alert-danger')->text()
         );
@@ -451,11 +451,11 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         // Start with an invalid category title.
         $form['categoryForm[categories][0][title]'] = 'Invalid category 12345';
         $this->crawler = $this->client->submit($form);
-        static::assertContains(
+        static::assertStringContainsString(
             '1 category is invalid',
             $this->crawler->filter('.alert-danger')->text()
         );
-        static::assertContains(
+        static::assertStringContainsString(
             'has-error',
             $this->crawler->filter('#categoryForm_categories_0_title')->parents()->attr('class')
         );
@@ -464,7 +464,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $form['categoryForm[categories][0][title]'] = 'Parks in Brooklyn';
         $form['categoryForm[categories][0][domain]'] = 'invalid.wikipedia.org';
         $this->crawler = $this->client->submit($form);
-        static::assertContains(
+        static::assertStringContainsString(
             '1 category is invalid',
             $this->crawler->filter('.alert-danger')->text()
         );

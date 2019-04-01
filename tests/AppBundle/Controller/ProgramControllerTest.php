@@ -41,7 +41,7 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->updateSpec();
 
         $this->crawler = $this->client->request('GET', '/programs');
-        static::assertContains(
+        static::assertStringContainsString(
             'The Lion King',
             $this->crawler->filter('.programs-list')->text()
         );
@@ -95,11 +95,11 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', '/programs/new');
 
         static::assertEquals(200, $this->client->getResponse()->getStatusCode());
-        static::assertContains(
+        static::assertStringContainsString(
             'Create a new program',
             $this->crawler->filter('.page-header')->text()
         );
-        static::assertContains(
+        static::assertEquals(
             'MusikAnimal',
             $this->crawler->filter('#program_organizers_0')->attr('value')
         );
@@ -151,17 +151,17 @@ class ProgramControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->request('GET', '/programs/'.$this->programId);
         $this->response = $this->client->getResponse();
         static::assertEquals(200, $this->response->getStatusCode());
-        static::assertContains(
+        static::assertStringContainsString(
             'The Lion King',
             $this->crawler->filter('.page-header')->text()
         );
-        static::assertContains(
+        static::assertStringContainsString(
             'MusikAnimal',
             $this->crawler->filter('.programs-organizers')->text()
         );
 
         // Should see the 'Settings' button, since we are logged in and are one of the organizers.
-        static::assertContains(
+        static::assertStringContainsString(
             'Settings',
             $this->crawler->filter('.page-header')->text()
         );

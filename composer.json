@@ -44,6 +44,7 @@
         "wikimedia/toolforge-bundle": "^0.13"
     },
     "require-dev": {
+        "dms/phpunit-arraysubset-asserts": "^0.1.0",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "johnkary/phpunit-speedtrap": "^3.0",
         "mediawiki/minus-x": "^0.3.2",

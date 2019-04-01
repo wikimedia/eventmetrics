@@ -126,7 +126,7 @@ class SpawnJobsCommandTest extends EventMetricsTestCase
         static::assertEquals(0, $this->commandTester->getStatusCode());
 
         $output = $this->commandTester->getDisplay();
-        static::assertContains('No jobs found in the queue', $output);
+        static::assertStringContainsString('No jobs found in the queue', $output);
     }
 
     /**
@@ -154,7 +154,7 @@ class SpawnJobsCommandTest extends EventMetricsTestCase
         $this->commandTester->execute([]);
         static::assertTrue($job->isBusy());
         $output = $this->commandTester->getDisplay();
-        static::assertContains('Event statistics successfully saved', $output);
+        static::assertStringContainsString('Event statistics successfully saved', $output);
         static::assertEquals(0, $this->commandTester->getStatusCode());
     }
 
@@ -167,13 +167,13 @@ class SpawnJobsCommandTest extends EventMetricsTestCase
         // First try bogus job ID.
         $this->commandTester->execute(['--id' => 12345]);
         $output = $this->commandTester->getDisplay();
-        static::assertContains('No job found', $output);
+        static::assertStringContainsString('No job found', $output);
         static::assertEquals(1, $this->commandTester->getStatusCode());
 
         $this->commandTester->execute(['--id' => $job->getId()]);
         static::assertTrue($job->isBusy());
         $output = $this->commandTester->getDisplay();
-        static::assertContains('Event statistics successfully saved', $output);
+        static::assertStringContainsString('Event statistics successfully saved', $output);
         static::assertEquals(0, $this->commandTester->getStatusCode());
     }
 }
