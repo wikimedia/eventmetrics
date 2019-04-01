@@ -89,9 +89,9 @@
 {% elseif filtersMissing %}
     {% set panelDesc = msg('no-participants') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
 {% else %}
-    {% if event.participants.count > 0 %}
+    {% if event.participants.count > 0 and form.vars.valid %}
         {# Only show participants count on valid events if there are participants. #}
-        {% set panelDesc = msg('num-participants', [event.participants.count]) %}
+        {% set panelDesc = msg('num-participants', [event.participants.count]) ~ ' <span class="success glyphicon glyphicon-ok"></span>' %}
     {% endif %}
     {% set collapsed = true %}
 {% endif %}
