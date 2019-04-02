@@ -1,9 +1,9 @@
 {% import 'macros/wiki.html.twig' as wikiHelper %}
 == {{ event.displayTitle }} ==
 
-* '''{{ msg('wikis') }}''': {% set wikiListItems = [] %}
-{% for wiki in event.wikis %}{% set wikiListItems = wikiListItems|merge([wiki.domain]) %}{% endfor %}
-{{ wikiListItems|list_format }}
+* '''{{ msg('wikis') }}''': {% set wiki_list_items = [] %}
+{% for wiki in event.wikis %}{% set wiki_list_items = wiki_list_items|merge([wiki.domain]) %}{% endfor %}
+{{ wiki_list_items|list_format }}
 * '''{{ msg('start-date') }}''': {% verbatim %}{{#dateformat:{% endverbatim %}{{ event.start|date('Y-m-d H:i') }}}} ({{ event.displayTimezone }})
 * '''{{ msg('end-date') }}''': {% verbatim %}{{#dateformat:{% endverbatim %}{{ event.end|date('Y-m-d H:i') }}}}
 

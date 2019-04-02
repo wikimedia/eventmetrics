@@ -22,7 +22,7 @@
 <fieldset class="program__organizers">
     {# The organizer currently viewing the program cannot remove or rename themself. #}
     {% for organizer in form.organizers %}
-        {% set isViewingOrganizer = organizer.vars.value == logged_in_user().username %}
+        {% set is_viewing_organizer = organizer.vars.value == logged_in_user().username %}
 
         <div class="form-group organizer-row">
             {% if loop.index == 1 %}
@@ -31,10 +31,10 @@
                 <div class="col-sm-2"></div>
             {% endif %}
             <div class="col-sm-8{% if form_errors(organizer) %} has-error{% endif %}">
-                {{ form_widget(organizer, {'attr': {'class': 'user-input', 'readonly': isViewingOrganizer}}) }}
+                {{ form_widget(organizer, {'attr': {'class': 'user-input', 'readonly': is_viewing_organizer}}) }}
             </div>
             <div class="col-sm-2">
-                <button type="button" class="btn btn-default remove-organizer"{% if isViewingOrganizer %} disabled="disabled"{% endif %}>
+                <button type="button" class="btn btn-default remove-organizer"{% if is_viewing_organizer %} disabled="disabled"{% endif %}>
                     {{ msg('remove') }}
                 </button>
             </div>

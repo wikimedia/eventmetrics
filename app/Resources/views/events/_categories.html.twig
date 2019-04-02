@@ -5,9 +5,9 @@
 
     {# If there's only one wiki configured on the Event, we want to prefill the domain and disable the input. #}
     {% if event.wikis|length == 1 and event.wikis.first.isFamilyWiki == false %}
-        {% set defaultWiki = event.wikis.first.domain %}
+        {% set default_wiki = event.wikis.first.domain %}
     {% else %}
-        {% set defaultWiki = '' %}
+        {% set default_wiki = '' %}
     {% endif %}
 
     {# This is what gets copied when they add a new category row. The index values of the names and IDs will be overriden. #}
@@ -15,7 +15,7 @@
         <div class="col-sm-2">
             <input type="text" id="categoryForm_categories_999_domain" name="categoryForm[categories][999][domain]"
                    class="wiki-input form-control" placeholder="en.wikipedia"
-                   value="{{ defaultWiki }}"{% if defaultWiki is not empty %} readonly="readonly"{% endif %}>
+                   value="{{ default_wiki }}"{% if default_wiki is not empty %} readonly="readonly"{% endif %}>
         </div>
         <div class="col-sm-4">
             <input type="text" id="categoryForm_categories_999_title" name="categoryForm[categories][999][title]"
@@ -43,11 +43,11 @@
 
     <div class="event__categories">
         {% for category in form.categories %}
-            {% set categoryRow %}
+            {% set category_row %}
                 <div class="row category-row form-group">
                     <div class="col-sm-2{{ form_errors(category.domain) ? ' has-error' }}">
                         {% set attrs = {'class': 'wiki-input', 'placeholder': 'en.wikipedia', 'autocomplete': 'off'} %}
-                        {% if defaultWiki is not empty %}
+                        {% if default_wiki is not empty %}
                             {% set attrs = attrs|merge({'readonly': 'readonly'}) %}
                         {% endif %}
                         {{ form_widget(category.domain, {'attr': attrs}) }}
@@ -63,7 +63,7 @@
                 </div>
             {% endset %}
 
-            {{ categoryRow }}
+            {{ category_row }}
         {% endfor %}
     </div>
 
@@ -83,22 +83,22 @@
 {% endset %}
 
 {% set collapsed = event.updated != null %}
-{% set panelDesc = '' %}
+{% set panel_desc = '' %}
 {% if isOnlyWikidata %}
-    {% set panelDesc = msg('wikidata-not-applicable') ~ ' <span class="glyphicon glyphicon-info-sign"></span>' %}
+    {% set panel_desc = msg('wikidata-not-applicable') ~ ' <span class="glyphicon glyphicon-info-sign"></span>' %}
     {% set collapsed = true %}
 {% elseif filtersMissing %}
-    {% set panelDesc = msg('no-categories') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
+    {% set panel_desc = msg('no-categories') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
 {% elseif event.participants.count == 0 and wikisWithoutCats.count %}
-    {% set panelDesc = msg('not-all-wikis-have-cats') ~ ' <span class="warn glyphicon glyphicon-warning-sign"></span>' %}
+    {% set panel_desc = msg('not-all-wikis-have-cats') ~ ' <span class="warn glyphicon glyphicon-warning-sign"></span>' %}
 {% else %}
     {% if event.numCategories(true) > 0 and form.vars.valid %}
         {# Only show participants count on valid events if there are participants. #}
-        {% set panelDesc = msg('num-categories', [event.numCategories(true)]) ~ ' <span class="success glyphicon glyphicon-ok"></span>' %}
+        {% set panel_desc = msg('num-categories', [event.numCategories(true)]) ~ ' <span class="success glyphicon glyphicon-ok"></span>' %}
     {% endif %}
     {% set collapsed = true %}
 {% endif %}
 {% if not form.vars.valid %}
     {% set collapsed = false %}
 {% endif %}
-{{ layout.panel('categories-panel-title', panelDesc, content, collapsed) }}
+{{ layout.panel('categories-panel-title', panel_desc, content, collapsed) }}

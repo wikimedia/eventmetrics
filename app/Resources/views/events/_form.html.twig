@@ -11,8 +11,8 @@
         <div class="form-group wiki-row{{ loop.index == 1 ? ' wiki-row__template' }}">
             <div class="col-sm-2 text-right label-group">
                 {{ form_label(wiki, msg('wikis'),
-                    {'attr': {'class': form_errors(form.wikis) ? ' text-danger'}})
-                }}
+                    {'attr': {'class': form_errors(form.wikis) ? ' text-danger'}}
+                ) }}
             </div>
             <div class="col-sm-8{{ form_errors(wiki) ? ' has-error' }}">
                 {{ form_widget(wiki, {'attr': {'class': 'event-wiki-input', 'autocomplete': 'off'}}) }}

@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-{% import 'macros/layout.html.twig' as layout %}
 {% import 'macros/wiki.html.twig' as wiki %}
 
 {% block breadcrumb %}
@@ -51,41 +50,41 @@
         </table>
 
         {##### PAGINATION #####}
-        {% set numPages = (numRevisions / numResultsPerPage)|round(0, 'ceil') %}
-        {% if numPages > 1 %}
-            {% set hasPrev = offset - 1 >= 1 %}
-            {% set hasNext = offset + 1 < numPages + 1 %}
-            {% set pathVars = {'programId': program.id, 'eventId': event.id} %}
+        {% set num_pages = (numRevisions / numResultsPerPage)|round(0, 'ceil') %}
+        {% if num_pages > 1 %}
+            {% set has_prev = offset - 1 >= 1 %}
+            {% set has_next = offset + 1 < num_pages + 1 %}
+            {% set path_vars = {'programId': program.id, 'eventId': event.id} %}
 
             <nav aria-label="..." class="text-center">
                 <ul class="pagination">
-                    <li{% if not(hasPrev) %} class="disabled"{% endif %}>
-                        {% if hasPrev %}
-                            <a href="{{ path('Revisions', pathVars|merge(offset == 2 ? {} : {'offset': offset - 1})) }}" aria-label="Previous">
+                    <li{% if not (has_prev) %} class="disabled"{% endif %}>
+                        {% if has_prev %}
+                            <a href="{{ path('Revisions', path_vars|merge(offset == 2 ? {} : {'offset': offset - 1})) }}" aria-label="Previous">
                         {% endif %}
                         <span aria-hidden="true">
                             <span class="glyphicon glyphicon-arrow-left"></span>
                             {{ msg('pager-older-n', [numResultsPerPage]) }}
                         </span>
-                        {% if hasPrev %}</a>{% endif %}
+                        {% if has_prev %}</a>{% endif %}
                     </li>
-                    {% for page in 1..numPages %}
+                    {% for page in 1..num_pages %}
                         {% set active = offset == loop.index %}
                         <li{% if active %} class="active"{% endif %}>
-                            <a href="{{ path('Revisions', pathVars|merge(loop.index == 1 ? {} : {'offset': loop.index})) }}">
+                            <a href="{{ path('Revisions', path_vars|merge(loop.index == 1 ? {} : {'offset': loop.index})) }}">
                                 {{ page }} {% if active %}<span class="sr-only">(current)</span>{% endif %}
                             </a>
                         </li>
                     {% endfor %}
-                    <li{% if not(hasNext) %} class="disabled"{% endif %}>
-                        {% if hasNext %}
-                            <a href="{{ path('Revisions', pathVars|merge({'offset': offset + 1})) }}" aria-label="Next">
+                    <li{% if not (has_next) %} class="disabled"{% endif %}>
+                        {% if has_next %}
+                            <a href="{{ path('Revisions', path_vars|merge({'offset': offset + 1})) }}" aria-label="Next">
                         {% endif %}
                         <span aria-hidden="true">
                             {{ msg('pager-newer-n', [numResultsPerPage]) }}
                             <span class="glyphicon glyphicon-arrow-right"></span>
                         </span>
-                        {% if hasNext %}</a>{% endif %}
+                        {% if has_next %}</a>{% endif %}
                     </li>
                 </ul>
             </nav>
