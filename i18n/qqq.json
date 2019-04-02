@@ -69,7 +69,7 @@
 	"error-filters-participants-desc": "Bullet-point help sentence about the participants filter.",
 	"error-filters-participants-none": "Description shown in the participants form panel.",
 	"error-filters-participants-or-categories": "Bullet-list help sentence about requiring at least one filter type.",
-	"error-filters-wikidata": "Bullet-point help sentence describing the requirement of Participants if Wikidata is an event wiki. The word 'Wikidata' should be strongly emphasised with HTML.",
+	"error-filters-wikidata": "Bullet-point help sentence describing the requirement of Participants if Wikidata is an event wiki.",
 	"error-filters-wikidata-only": "Bullet-point help sentence telling the user that they've only selected Wikidata. The word 'Wikidata' should be strongly emphasised with HTML.",
 	"error-filters-wikidata-panel": "Description shown in the participants' form panel.",
 	"error-invalid": "Generic error message shown next to a field, indicating that it is invalid.",

@@ -68,7 +68,7 @@
 	"error-filters-participants-desc": "Participants filtering applies to all wikis and satisfies all filtering requirements.",
 	"error-filters-participants-none": "No participants supplied",
 	"error-filters-participants-or-categories": "You can filter by Participants or Categories—or combine the two.",
-	"error-filters-wikidata": "To get metrics about <strong>Wikidata</strong>, you must supply Participants. (Categories don't exist on Wikidata.)",
+	"error-filters-wikidata": "To get metrics about Wikidata, you must supply Participants. (Categories don't exist on Wikidata.)",
 	"error-filters-wikidata-only": "You have specified only one wiki for this event: <strong>Wikidata</strong>",
 	"error-filters-wikidata-panel": "Required for Wikidata",
 	"error-invalid": "This value is not valid.",
