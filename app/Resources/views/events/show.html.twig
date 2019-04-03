@@ -68,14 +68,14 @@
                     {{ help_link }}
                 </p>
                 <ul>
-                    {% if wikisWithoutCats.count %}
+                    {% if wikis_without_filters.count %}
                     <li>
                         {{ msg('error-filters-categories-missing') }}
-                        {% set cats = [] %}
-                        {% for noCatWiki in wikisWithoutCats %}
-                            {% set cats = cats|merge(['<strong>' ~ noCatWiki.domain ~ '</strong>']) %}
+                        {% set unfiltered_wikis = [] %}
+                        {% for unfiltered_wiki in wikis_without_filters %}
+                            {% set unfiltered_wikis = unfiltered_wikis|merge(['<strong>' ~ unfiltered_wiki.domain ~ '</strong>']) %}
                         {% endfor %}
-                        {{ cats|list_format|raw }}
+                        {{ unfiltered_wikis|list_format|raw }}
                     </li>
                     {% endif %}
                     <li>{{ msg('error-filters-every-wiki') }}</li>

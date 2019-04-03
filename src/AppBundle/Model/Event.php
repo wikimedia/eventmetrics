@@ -621,6 +621,22 @@ class Event
     }
 
     /**
+     * Get all of this event's wikis that do not yet have at least one category or (in the case of Wikidata) participant
+     * defined.
+     *
+     * @return Collection
+     */
+    public function getWikisWithoutFilters(): Collection
+    {
+        $wikis = $this->getWikisWithoutCategories();
+        $wikidata = $this->getWikiByDomain('www.wikidata');
+        if ($wikidata && 0 === $this->participants->count()) {
+            $wikis->add($wikidata);
+        }
+        return $wikis;
+    }
+
+    /**
      * Get all of this event's wikis that do not yet have at least one category defined.
      * Wikidata is excluded because it can never have categories.
      * @return Collection Collection of EventWiki objects.

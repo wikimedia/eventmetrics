@@ -199,6 +199,7 @@ class EventController extends EntityController
             'isOrganizer' => $this->authUserIsOrganizer($this->program),
             'job' => $this->event->getJob(),
             'filtersMissing' => $filtersMissing,
+            'wikis_without_filters' => $this->event->getWikisWithoutFilters(),
             'wikisWithoutCats' => $this->event->getWikisWithoutCategories(),
             'isOnlyWikidata' => $isOnlyWikidata,
         ]);
