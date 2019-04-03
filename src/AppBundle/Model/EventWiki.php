@@ -117,6 +117,15 @@ class EventWiki
     }
 
     /**
+     * Get the ID of the EventWiki.
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
      * Get the Event this EventWiki belongs to.
      * @return Event
      */

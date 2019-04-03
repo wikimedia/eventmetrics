@@ -10,11 +10,15 @@ namespace AppBundle\Controller;
 use AppBundle\Model\Job;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
+use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * The EventDataController handles the event data page, export options, and statistics generation.
@@ -267,4 +271,77 @@ class EventDataController extends EntityController
     {
         return trim(preg_replace('/[-\/\\:;*?|<>%#"]+/', '-', $this->event->getTitle()));
     }
+
+    /*****************
+     * IMPORT/EXPORT *
+     *****************/
+
+    /**
+     * Get the settings of the event as JSON.
+     * @Route("/events/export/{eventId}", name="EventExport")
+     * @return JsonResponse
+     */
+    public function exportEventAction(): JsonResponse
+    {
+        $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
+        $data = $serializer->serialize($this->event, 'json', [
+            // Prevent circular reference of Event -> Program -> Event...
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            },
+            // We only want the settings.
+            'attributes' => [
+                'title',
+                'wikis' => ['domain'],
+                'start' => ['timestamp'],
+                'end' => ['timestamp'],
+                'timezone',
+                'participants' => ['userId'],
+                'categories' => [
+                    'title',
+                    'categoryId',
+                    'domain',
+                ],
+            ],
+        ]);
+
+        return new JsonResponse(json_decode($data));
+    }
+
+    // /**
+    //  * Import an Event, given the settings.
+    //  * @Route("/events/import", name="EventImport")
+    //  * @return Response
+    //  */
+    // public function importEventAction(): Response
+    // {
+    //     if ('dev' !== $this->get('kernel')->getEnvironment()) {
+    //         return new Response(
+    //             'This can only be used',
+    //             Response::HTTP_FORBIDDEN
+    //         );
+    //     }
+
+    //     $url = $this->request->query->get('url');
+
+    //     if (null === $url) {
+    //         return new JsonResponse(
+    //             ['error' => "'url' query parameter must be specified"],
+    //             Response::HTTP_BAD_REQUEST
+    //         );
+    //     }
+
+    //     if (1 !== preg_match('/^(https:\/\/eventmetrics(\-dev)\.wmflabs\.org|http:\/\/localhost(:\d+)?)\/events\/export\/\d+/', $url)) {
+    //         return new JsonResponse(
+    //             [
+    //                 'error' => "'url' must be the full URL to the /events/export/{eventId} endpoint on localhost, ".
+    //                     'eventmetrics.wmflabs.org, or eventmetrics-dev.wmflabs.org'
+    //             ],
+    //             Response::HTTP_BAD_REQUEST
+    //         );
+    //     }
+
+    //     $response = (new Client())->get($url);
+    //     var_dump($response);
+    // }
 }
