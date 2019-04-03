@@ -25,9 +25,21 @@ class EventRepositoryTest extends EventMetricsTestCase
         parent::setUp();
     }
 
-    public function testGetPagesUsingFile():void
+    /**
+     * @covers \AppBundle\Repository\EventRepository::getPagesUsingFile()
+     */
+    public function testGetPagesUsingFile(): void
     {
         static::assertGreaterThan(0, $this->repo->getPagesUsingFile('commonswiki_p', 'Ultrasonic_humidifier.jpg'));
         static::assertGreaterThan(0, $this->repo->getPagesUsingFile('enwiki_p', '2-cube.png'));
+    }
+
+    /**
+     * @covers \AppBundle\Repository\EventRepository::getUsedFiles()
+     */
+    public function testGetUsedFiles(): void
+    {
+        // 74025845 = [[File:XTools service overloaded error page.png]] (should never be in mainspace).
+        static::assertEquals(0, $this->repo->getUsedFiles('commonswiki_p', [74025845]));
     }
 }
