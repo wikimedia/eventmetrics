@@ -13,14 +13,14 @@
                 <div class="modal-body">
                     {% if exception is not defined and getControllerName() == 'default' %}
                         <p>
-                            {% set commonsLink %}
+                            {% set commons_link %}
                                 <a target="_blank" id="background_commons_link" href="#"></a>.
                             {% endset %}
-                            {{ msg('attribution-background', [commonsLink]) }}
+                            {{ msg('attribution-background', [commons_link]) }}
                         </p>
                     {% endif %}
                     <p>
-                        {% set openSans %}
+                        {% set open_sans %}
                             <a target="_blank" href="https://fonts.google.com/specimen/Open+Sans">Roboto</a>
                         {% endset %}
                         {% set apache %}
@@ -29,19 +29,19 @@
                         {% set steve %}
                             <a target="_blank" href="https://twitter.com/SteveMatteson1">Christian Robertson</a>.
                         {% endset %}
-                        {{ msg('attribution-font', [openSans, apache, steve]) }}
+                        {{ msg('attribution-font', [open_sans, apache, steve]) }}
                     </p>
                     <p>
-                        {% set fontAwesome %}
+                        {% set font_awesome %}
                             <a target="_blank" href="http://fontawesome.io/">Font Awesome</a>
                         {% endset %}
-                        {% set openFont %}
+                        {% set open_font %}
                             <a target="_blank" href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL">Open Font License</a>
                         {% endset %}
                         {% set dave %}
                             <a target="_blank" href="https://twitter.com/davegandy">Dave Gandy</a>.
                         {% endset %}
-                        {{ msg('attribution-font-awesome', [fontAwesome, openFont, dave]) }}
+                        {{ msg('attribution-font-awesome', [font_awesome, open_font, dave]) }}
                     </p>
                 </div>
                 <div class="modal-footer">

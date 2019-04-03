@@ -146,7 +146,7 @@
         {{ include('_footer.html.twig') }}
         {% include('_attribution.html.twig') %}
 
-        {% if 'prod' == app.environment and logged_in_user() and not(isAdmin()) %}
+        {% if 'prod' == app.environment and logged_in_user() and not (isAdmin()) %}
             {# Matomo usage tracking #}
             <script type="text/javascript">
                 var _paq = _paq || [];

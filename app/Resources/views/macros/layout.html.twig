@@ -39,7 +39,7 @@
         -#}</a>
     {% endif %}
     <a href="{% if deletable or isAdmin() %}{{ path('Delete' ~ model, params) }}{% endif %}"
-       class="{{ model|lower }}-action {{ model|lower }}-action__delete{% if not(deletable) and not(isAdmin()) %} disabled{% endif %} text-danger"
+       class="{{ model|lower }}-action {{ model|lower }}-action__delete{% if not (deletable) and not (isAdmin()) %} disabled{% endif %} text-danger"
        data-title="{{ object.displayTitle }}" data-model="{{ model|lower }}"
        title="{{ msg('delete') }}">{#-
         -#}<span class="glyphicon glyphicon-trash"></span>{#-

@@ -5,7 +5,7 @@
         {{ form_errors(form) }}
 
         {# Valid participants should be shown below invalid ones. #}
-        {% set validParticipants = [] %}
+        {% set valid_participants = [] %}
 
         {{ form_start(form, {'method': 'post', 'attr': {'class': 'save-participants-form', 'autocomplete': 'off'}}) }}
         <p class="new-participants-label">
@@ -29,16 +29,16 @@
 
         <div class="event__participants">
             {% for participant in form.participants %}
-                {% set invalidParticipant = false %}
-                {% if not(participant.vars.valid) %}
-                    {% set invalidParticipant = true %}
+                {% set invalid_participant = false %}
+                {% if not (participant.vars.valid) %}
+                    {% set invalid_participant = true %}
                 {% endif %}
 
-                {% set participantRow %}
+                {% set participant_row %}
                     <div class="row participant-row">
-                        <div class="col-sm-4 form-group{% if invalidParticipant %} has-error{% endif %}">
+                        <div class="col-sm-4 form-group{% if invalid_participant %} has-error{% endif %}">
                             {{ form_widget(participant, {'attr': {'class': 'user-input'}}) }}
-                            {% if not(invalidParticipant) %}
+                            {% if not (invalid_participant) %}
                                 <span class="font-awesome valid-input">&#xf05d;</span>
                             {% endif %}
                         </div>
@@ -54,15 +54,15 @@
                  # If invalid, show immediately, otherwise merge into valid ones that
                  # will show below the invalid ones.
                  #}
-                {% if invalidParticipant %}
-                    {{ participantRow }}
+                {% if invalid_participant %}
+                    {{ participant_row }}
                 {% else %}
-                    {% set validParticipants = validParticipants|merge([participantRow]) %}
+                    {% set valid_participants = valid_participants|merge([participant_row]) %}
                 {% endif %}
             {% endfor %}
 
             {# Render valid participants. #}
-            {% for row in validParticipants %}
+            {% for row in valid_participants %}
                 {{ row }}
             {% endfor %}
         </div>{# .event__participants #}
@@ -80,22 +80,22 @@
 {% endset %}
 
 {% set collapsed = event.updated != null %}
-{% set panelDesc = '' %}
+{% set panel_desc = '' %}
 {# Here we use event.participants.count, ensuring it's the number of manually entered participants (and not derived). #}
 {% if event.participants.count == 0 and isOnlyWikidata %}
-    {% set panelDesc = msg('error-filters-wikidata-panel') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
+    {% set panel_desc = msg('error-filters-wikidata-panel') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
 {% elseif not filtersMissing and event.participants.count == 0 and wikisWithoutCats.count %}
-    {% set panelDesc = msg('no-participants') ~ ' <span class="warn glyphicon glyphicon-warning-sign"></span>' %}
+    {% set panel_desc = msg('no-participants') ~ ' <span class="warn glyphicon glyphicon-warning-sign"></span>' %}
 {% elseif filtersMissing %}
-    {% set panelDesc = msg('no-participants') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
+    {% set panel_desc = msg('no-participants') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}
 {% else %}
     {% if event.participants.count > 0 and form.vars.valid %}
         {# Only show participants count on valid events if there are participants. #}
-        {% set panelDesc = msg('num-participants', [event.participants.count]) ~ ' <span class="success glyphicon glyphicon-ok"></span>' %}
+        {% set panel_desc = msg('num-participants', [event.participants.count]) ~ ' <span class="success glyphicon glyphicon-ok"></span>' %}
     {% endif %}
     {% set collapsed = true %}
 {% endif %}
 {% if not form.vars.valid %}
     {% set collapsed = false %}
 {% endif %}
-{{ layout.panel('participants-panel-title', panelDesc, content, collapsed) }}
+{{ layout.panel('participants-panel-title', panel_desc, content, collapsed) }}

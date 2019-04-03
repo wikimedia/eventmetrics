@@ -8,20 +8,20 @@
                  # Check the job status and set messages and CSS classes accordingly.
                  #}
                 {% if event.updated == null %}
-                    {% set statsBtnText = msg('calculate-totals') %}
-                    {% set statsDesc = '' %}
+                    {% set stats_btn_text = msg('calculate-totals') %}
+                    {% set stats_desc = '' %}
                 {% else %}
-                    {% set statsBtnText = msg('update-data') %}
-                    {% set statsDesc = msg('last-updated', [event.updatedUTC|date_localize]) ~ ' (' ~ event.displayTimezone ~ ')' %}
+                    {% set stats_btn_text = msg('update-data') %}
+                    {% set stats_desc = msg('last-updated', [event.updatedUTC|date_localize]) ~ ' (' ~ event.displayTimezone ~ ')' %}
                 {% endif %}
                 {% if job != false and (job.status == constant('STATUS_STARTED', job) or job.status == constant('STATUS_QUEUED', job)) %}
-                    {% set statsBtnText = msg('updating') %}
-                    {% set statsDesc = msg('updating-desc') %}
+                    {% set stats_btn_text = msg('updating') %}
+                    {% set stats_desc = msg('updating-desc') %}
                 {% endif %}
 
                 {% if isOrganizer %}
                     <button type="button" class="btn btn-default event-process-btn" data-event-id="{{ event.id }}">
-                        <span class="event-state--initial">{{ statsBtnText }}</span>
+                        <span class="event-state--initial">{{ stats_btn_text }}</span>
                         <span class="event-state--started event-state--queued">
                             <span class="inner">
                                 {{ msg('updating') }}
@@ -32,7 +32,7 @@
                                 </span>
                             </span>
                         </span>
-                        <span class="event-state--failed-timeout event-state--failed-unknown">{{ statsBtnText }}</span>
+                        <span class="event-state--failed-timeout event-state--failed-unknown">{{ stats_btn_text }}</span>
                     </button>
                 {% endif %}
                 <div class="btn-group">
@@ -67,9 +67,9 @@
 
         {% if event.isValid %}
             <div class="event-stats-status">
-                <span class="event-state--initial">{{ statsDesc|raw }}</span>
+                <span class="event-state--initial">{{ stats_desc|raw }}</span>
                 <span class="event-state--started event-state--queued">{{ msg('updating-desc') }}</span>
-                <span class="event-state--failed-timeout event-state--failed-unknown">{{ statsDesc|raw }}</span>
+                <span class="event-state--failed-timeout event-state--failed-unknown">{{ stats_desc|raw }}</span>
             </div>
         {% endif %}
     </div>
@@ -122,8 +122,8 @@
                      # Currently we're only showing a modal for when something went wrong, and it uses the same message.
                      # If you add more state-specific messages, wrap each in their respective CSS class (e.g. event-state--queued).
                      #}
-                    {% set feedbackLink = "<a target='_blank' href='https://meta.wikimedia.org/wiki/Talk:Event_Metrics'>" ~ msg('error-event-retry-link') ~ "</a>" %}
-                    {{ msg('error-event-retry', [feedbackLink]) }}
+                    {% set feedback_link = "<a target='_blank' href='https://meta.wikimedia.org/wiki/Talk:Event_Metrics'>" ~ msg('error-event-retry-link') ~ "</a>" %}
+                    {{ msg('error-event-retry', [feedback_link]) }}
                 </p>
             </div>
         </div>

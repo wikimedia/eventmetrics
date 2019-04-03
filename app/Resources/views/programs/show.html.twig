@@ -27,16 +27,16 @@
             </h1>
             <div class="programs-organizers">
                 {{ msg('organizers') }}:
-                {% set userLinks = [] %}
+                {% set user_links = [] %}
                 {% for username in program.organizerNames %}
-                    {% set userLinks = userLinks|merge(['<a target="_blank" href="https://meta.wikimedia.org/wiki/User:'~username~'">'~username~'</a>']) %}
+                    {% set user_links = user_links|merge(['<a target="_blank" href="https://meta.wikimedia.org/wiki/User:' ~ username ~ '">' ~ username ~ '</a>']) %}
                 {% endfor %}
-                {{ userLinks|list_format|raw }}
+                {{ user_links|list_format|raw }}
             </div>
         </div>
 
         {% if program.events|length < 1 %}
-            <div class="text-center">{{  msg('no-events') }}</div>
+            <div class="text-center">{{ msg('no-events') }}</div>
         {% else %}
             <table class="table em-table events-list">
                 <thead>
@@ -64,10 +64,10 @@
                             <td class="sort-entry--event" data-value="{{ event.title }}">
                                 <a href="{{ path('Event', {'programId': program.id, 'eventId': event.id}) }}">{{ bdi(event.displayTitle) }}</a>
                             </td>
-                            {% set numParticipants = event.numParticipants %}
+                            {% set num_participants = event.numParticipants %}
                             {% if isOrganizer %}
                                 <td class="text-nowrap">
-                                    {{ layout.actionButtons('Event', event, {'programId': program.id, 'eventId': event.id}, numParticipants == 0) }}
+                                    {{ layout.actionButtons('Event', event, {'programId': program.id, 'eventId': event.id}, num_participants == 0) }}
                                 </td>
                             {% endif %}
                             {% for metric in visibleMetrics if metrics[metric] is defined %}

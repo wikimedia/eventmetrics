@@ -44,6 +44,7 @@
         "wikimedia/toolforge-bundle": "^0.13"
     },
     "require-dev": {
+        "allocine/twigcs": "^3.1",
         "dms/phpunit-arraysubset-asserts": "^0.1.0",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "johnkary/phpunit-speedtrap": "^3.0",
@@ -77,6 +78,7 @@
             "./bin/console lint:yaml ./app/config",
             "./bin/console lint:yaml .travis.yml",
             "./vendor/bin/phpcs -s .",
+            "./vendor/bin/twigcs app/Resources/views/",
             "./vendor/bin/minus-x check ."
         ],
         "docs": [

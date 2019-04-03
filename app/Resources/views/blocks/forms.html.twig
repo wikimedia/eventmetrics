@@ -6,25 +6,25 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <ul class="list-unstyled">
-                    {% set errorParams = error.messageParameters %}
+                    {% set error_params = error.messageParameters %}
                     {##
                      # Merge the 'payload' variables into the messageParameters.
                      # This is how variables are passed from the models,
                      # using the message= and payload= options within the annotation.
                      #}
                     {% if error.cause.constraint.payload is defined and error.cause.constraint.payload|length > 0 %}
-                        {% set errorParams = errorParams|merge(error.cause.constraint.payload) %}
+                        {% set error_params = error_params|merge(error.cause.constraint.payload) %}
                     {% endif %}
-                    {% if error.messageTemplate == 'error-invalid' and errorParams[0] is defined %}
+                    {% if error.messageTemplate == 'error-invalid' and error_params[0] is defined %}
                         {##
                          # Special handling for generic 'error-invalid' message.
                          # Here the 0 index of the messageParameters should be the
                          # i18n message used in the <label> for the field label.
                          #}
-                        <strong>{{ msg_if_exists(errorParams[0]) }}</strong>:
+                        <strong>{{ msg_if_exists(error_params[0]) }}</strong>:
                         {{ msg_if_exists(error.messageTemplate) }}
                     {% else %}
-                        {{ msg_if_exists(error.messageTemplate, errorParams) }}
+                        {{ msg_if_exists(error.messageTemplate, error_params) }}
                     {% endif %}
                 </ul>
             </div>

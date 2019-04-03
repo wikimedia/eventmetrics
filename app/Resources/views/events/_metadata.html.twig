@@ -14,25 +14,25 @@
     </tr>
     <tr>
         <th class="text-nowrap">
-            {% set wikiCount = event.orphanWikisAndFamilies|length %}
+            {% set wiki_count = event.orphanWikisAndFamilies|length %}
             {% if event.familyWikis %}
                 {# If the event includes any families (e.g. *.wikipedia) then set the count arbitrarily higher. #}
-                {% set wikiCount = 10 %}
+                {% set wiki_count = 10 %}
             {% endif %}
-            {{ msg('metadata-wikis-label', [wikiCount]) }}</th>
+            {{ msg('metadata-wikis-label', [wiki_count]) }}</th>
         <td>
-            {% set wikiLinks = [] %}
+            {% set wiki_links = [] %}
             {% for eventWiki in event.orphanWikisAndFamilies %}
                 {% if eventWiki.isFamilyWiki %}
-                    {% set wikiLink = eventWiki.domain %}
+                    {% set wiki_link = eventWiki.domain %}
                 {% else %}
-                    {% set wikiLink = '<a href="https://'~eventWiki.domain~'.org/" target="_blank">'~eventWiki.domain~'</a>' %}
+                    {% set wiki_link = '<a href="https://' ~ eventWiki.domain ~ '.org/" target="_blank">' ~ eventWiki.domain ~ '</a>' %}
                 {% endif %}
-                {% set wikiLinks = wikiLinks|merge([wikiLink]) %}
+                {% set wiki_links = wiki_links|merge([wiki_link]) %}
             {% else %}
                 {{ msg('all') }}
             {% endfor %}
-            {{ wikiLinks|list_format|raw }}
+            {{ wiki_links|list_format|raw }}
         </td>
     </tr>
 </table>

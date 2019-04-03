@@ -17,21 +17,22 @@
 
         {% include 'events/_metadata.html.twig' %}
 
-        {% set helpLink %}
+        {% set help_link %}
             <a href="https://meta.wikimedia.org/wiki/Special:MyLanguage/Event_Metrics#filtering-required"
                title="{{ msg('error-filters-desc-tooltip') }}">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </a>
         {% endset %}
 
-        {% set hasFormErrors = false %}
+        {% set has_form_errors = false %}
         {% for formType, form in forms %}
             {% if not form.vars.valid %}
-                {% set hasFormErrors = true %}
+                {# twigcs use-var has_form_errors #}
+                {% set has_form_errors = true %}
             {% endif %}
         {% endfor %}
 
-        {% set eventProcessLink %}
+        {% set event_process_link %}
             <a href="#" class="event-process-link">
                 {% if event.updated %}{{ msg('update-data') }}{% else %}{{ msg('calculate-totals') }}{% endif %}
             </a>
@@ -42,7 +43,7 @@
                 <h3>{{ msg('error-filters-header') }}</h3>
                 <p>
                     {{ msg('error-filters-desc') }}
-                    {{ helpLink }}
+                    {{ help_link }}
                 </p>
                 <ul>
                     {% if isOnlyWikidata %}
@@ -59,12 +60,12 @@
                 </ul>
             </section>
 
-        {% elseif event.participants.count == 0 and ( wikisWithoutCats.count or event.wikiByDomain('www.wikidata') ) %}
+        {% elseif event.participants.count == 0 and (wikisWithoutCats.count or event.wikiByDomain('www.wikidata')) %}
             <section class="event-errorbox warn">
                 <h3>{{ msg('category-warning-header') }}</h3>
                 <p>
-                    {{ msg('category-warning-desc', [eventProcessLink])|raw }}
-                    {{ helpLink }}
+                    {{ msg('category-warning-desc', [event_process_link])|raw }}
+                    {{ help_link }}
                 </p>
                 <ul>
                     {% if wikisWithoutCats.count %}
@@ -72,7 +73,7 @@
                         {{ msg('error-filters-categories-missing') }}
                         {% set cats = [] %}
                         {% for noCatWiki in wikisWithoutCats %}
-                            {% set cats = cats|merge(['<strong>'~noCatWiki.domain~'</strong>']) %}
+                            {% set cats = cats|merge(['<strong>' ~ noCatWiki.domain ~ '</strong>']) %}
                         {% endfor %}
                         {{ cats|list_format|raw }}
                     </li>
@@ -87,20 +88,21 @@
                 </ul>
             </section>
 
-        {% elseif not event.updated and not event.hasJob and not hasFormErrors %}
+        {# twigcs use-var has_form_errors #}
+        {% elseif not event.updated and not event.hasJob and not has_form_errors %}
             {% if event.startUTC > date() %}
                 <section class="event-errorbox warn">
                     <h3>{{ msg('event-in-future') }}</h3>
                     <ul>
-                        {% set settingsLink %}
+                        {% set settings_link %}
                             <a href="{{ path('EditEvent', {'programId': program.id, 'eventId': event.id}) }}">{{ msg('settings') }}</a>
                         {% endset %}
-                        <li>{{ msg('event-in-future-details', [settingsLink|trim])|raw }}</li>
+                        <li>{{ msg('event-in-future-details', [settings_link|trim])|raw }}</li>
                     </ul>
                 </section>
             {% else %}
                 <div class="alert alert-success event-wiki-stats--empty">
-                    {{ msg('event-no-data', [eventProcessLink])|raw }}
+                    {{ msg('event-no-data', [event_process_link])|raw }}
                 </div>
             {% endif %}
         {% endif %}
@@ -108,26 +110,24 @@
         <section class="event-filters clearfix">
             {% for formType, form in forms %}
                 {% form_theme form 'blocks/forms.html.twig' %}
-                {% include ('events/_' ~ formType|lower ~ '.html.twig') %}
+                {% include 'events/_' ~ formType|lower ~ '.html.twig' %}
             {% endfor %}
         </section>
 
         {% if event.updated is not null %}
             <section class="event-stats clearfix">
-                {% set allEditsLink %}
+                {% set all_edits_link %}
                     &middot;
                     <a href="{{ path('Revisions', {'programId': program.id, 'eventId': event.id}) }}" class="event-export-btn">
                         {{ msg('view-all-edits') }}
                     </a>
                 {% endset %}
-                {{
-                    layout.statsBlock(
-                        event,
-                        'contributions',
-                        ['pages-created', 'pages-improved', 'edits', 'files-uploaded', 'byte-difference', 'items-created', 'items-improved'],
-                        allEditsLink
-                    )
-                }}
+                {{ layout.statsBlock(
+                    event,
+                    'contributions',
+                    ['pages-created', 'pages-improved', 'edits', 'files-uploaded', 'byte-difference', 'items-created', 'items-improved'],
+                    all_edits_link
+                ) }}
 
                 {{ layout.statsBlock(event, 'impact', ['pages-created-pageviews', 'pages-improved-pageviews-avg', 'pages-using-files-pageviews-avg', 'pages-using-files', 'file-usage']) }}
 
