@@ -48,15 +48,14 @@
                 <ul>
                     {% if isOnlyWikidata %}
                         <li>{{ msg('error-filters-wikidata-only') }}</li>
-                    {% endif %}
-                    {% if event.wikiByDomain('www.wikidata') %}
                         <li>{{ msg('error-filters-wikidata') }}</li>
+                    {% else %}
+                        <li>{{ msg('error-filters-participants-or-categories') }}</li>
+                        <li>{{ msg('error-filters-every-wiki') }}</li>
+                        <li>{{ msg('error-filters-participants-desc') }}</li>
+                        <li>{{ msg('error-filters-categories-desc') }}</li>
+                        <li>{{ msg('error-filters-combination') }}</li>
                     {% endif %}
-                    <li>{{ msg('error-filters-participants-or-categories') }}</li>
-                    <li>{{ msg('error-filters-every-wiki') }}</li>
-                    <li>{{ msg('error-filters-participants-desc') }}</li>
-                    <li>{{ msg('error-filters-categories-desc') }}</li>
-                    <li>{{ msg('error-filters-combination') }}</li>
                 </ul>
             </section>
 

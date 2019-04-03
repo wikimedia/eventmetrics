@@ -85,7 +85,7 @@
 {% set collapsed = event.updated != null %}
 {% set panel_desc = '' %}
 {% if isOnlyWikidata %}
-    {% set panel_desc = msg('wikidata-not-applicable') ~ ' <span class="glyphicon glyphicon-info-sign"></span>' %}
+    {% set panel_desc = msg('wikidata-not-applicable') ~ ' <span class="primary glyphicon glyphicon-info-sign"></span>' %}
     {% set collapsed = true %}
 {% elseif filtersMissing %}
     {% set panel_desc = msg('no-categories') ~ ' <span class="error glyphicon glyphicon-asterisk"></span>' %}

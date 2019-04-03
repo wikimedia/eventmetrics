@@ -76,6 +76,9 @@
         &.success {
             color: $bootstrap-success-text;
         }
+        &.primary {
+            color: $bootstrap-primary;
+        }
     }
 
     .event-filters {
