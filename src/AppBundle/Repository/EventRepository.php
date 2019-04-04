@@ -135,7 +135,7 @@ class EventRepository extends Repository
                     'commonswiki_p.globalimagelinks',
                     'commonswiki_p.page',
                     null,
-                    'gil_to = page_title AND page_namespace = 6'
+                    'gil_to = page_title AND page_namespace = 6 AND gil_page_namespace_id = 0'
                 );
         } else {
             $rqb->select(['COUNT(DISTINCT(il_to)) AS count'])
@@ -144,7 +144,7 @@ class EventRepository extends Repository
                     "$dbName.imagelinks",
                     "$dbName.page",
                     null,
-                    'il_to = page_title AND page_namespace = 6'
+                    'il_to = page_title AND page_namespace = 6 AND il_from_namespace = 0'
                 );
         }
 
