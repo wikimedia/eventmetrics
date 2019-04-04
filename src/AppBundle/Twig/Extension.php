@@ -12,13 +12,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Twig_Extension;
+use Twig\Extension\AbstractExtension;
 
 /**
  * The parent class for all of the Twig extensions, in order to centralize the i18n set-up.
  * Some code courtesy of the XTools team, released under GPL-3.0: https://github.com/x-tools/xtools
  */
-abstract class Extension extends Twig_Extension
+abstract class Extension extends AbstractExtension
 {
     /** @var ContainerInterface The DI container. */
     protected $container;

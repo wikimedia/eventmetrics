@@ -11,7 +11,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\Templating\EngineInterface;
-use Twig_Error_Runtime;
 
 /**
  * A ExceptionSubscriber ensures Twig exceptions are properly
@@ -55,7 +54,7 @@ class ExceptionSubscriber
         // not the one Twig put on top of it.
         $prevException = $exception->getPrevious();
 
-        if (!($exception instanceof Twig_Error_Runtime && null !== $prevException)) {
+        if (!($exception instanceof \Twig\Error\RuntimeError && null !== $prevException)) {
             return;
         }
 

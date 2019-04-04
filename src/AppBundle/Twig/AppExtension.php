@@ -9,6 +9,7 @@ namespace AppBundle\Twig;
 
 use IntlDateFormatter;
 use NumberFormatter;
+use Twig\TwigFunction;
 
 /**
  * Various Twig functions and filters.
@@ -39,12 +40,12 @@ class AppExtension extends Extension
 
     /**
      * Get all functions that this class provides.
-     * @return \Twig_SimpleFunction[]
+     * @return TwigFunction[]
      */
     public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction('isAdmin', [$this, 'isAdmin']),
+            new TwigFunction('isAdmin', [$this, 'isAdmin']),
         ];
     }
 
