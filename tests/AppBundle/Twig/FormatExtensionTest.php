@@ -96,6 +96,10 @@ class FormatExtensionTest extends EventMetricsTestCase
             '999',
             $this->formatExtension->numberAbbrev(999)
         );
+        static::assertEquals(
+            '-4.1[num-abbrev-thousand]',
+            $this->formatExtension->numberAbbrev(-4056)
+        );
     }
 
     /**
