@@ -192,13 +192,13 @@ class FormatExtension extends Extension
      */
     public function numberAbbrev(int $number): string
     {
-        if ($number >= 1000000000) {
+        if (abs($number) >= 1000000000) {
             return $this->bundleExtension->numberFormat($number / 1000000000, 1)
                 .$this->intuition->msg('num-abbrev-billion');
-        } elseif ($number >= 1000000) {
+        } elseif (abs($number) >= 1000000) {
             return $this->bundleExtension->numberFormat($number / 1000000, 1)
                 .$this->intuition->msg('num-abbrev-million');
-        } elseif ($number >= 1000) {
+        } elseif (abs($number) >= 1000) {
             return $this->bundleExtension->numberFormat($number / 1000, 1)
                 .$this->intuition->msg('num-abbrev-thousand');
         }
