@@ -201,4 +201,15 @@ class FormatExtensionTest extends EventMetricsTestCase
     {
         static::assertEquals('"Foo\'s ""Bar"""', $this->formatExtension->csv('Foo\'s "Bar"'));
     }
+
+    /**
+     * @covers \AppBundle\Twig\FormatExtension::wikiEncode()
+     */
+    public function testWikiEncode(): void
+    {
+        static::assertEquals(
+            '(foo/bar%3F_baz_%D1%82%D0%B5%D1%81%D1%82)',
+            $this->formatExtension->wikiEncode('(foo/bar? baz тест)')
+        );
+    }
 }
