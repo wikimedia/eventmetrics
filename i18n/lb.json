@@ -23,6 +23,7 @@
 	"edits": "Ännerungen",
 	"end-date": "Schlussdatum",
 	"error-event-retry-link": "dëse Problem mellen",
+	"error-filters-header": "obligatoresch Filteren",
 	"error-filters-wikidata-panel": "Obligatoresch fir Wikidata",
 	"error-invalid": "Dëse Wäert ass net valabel.",
 	"error-server-message": "Äntwert vum Server: $1",
@@ -83,6 +84,7 @@
 	"username": "Benotzernumm",
 	"view-all-edits": "All Ännerunge weisen",
 	"view-source": "Quellcode weisen",
+	"views": "Säitenofruffer",
 	"wiki": "Wiki",
 	"wikis": "Wikien"
 }
