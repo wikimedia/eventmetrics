@@ -263,6 +263,7 @@ class EventProcessor
         /** @var EventWikiRepository $ewRepo */
         $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
+        $ewRepo->setLogger($this->logger);
 
         $start = $this->event->getStartUTC();
         $pageviewsCreatedTotal = 0;
@@ -348,6 +349,7 @@ class EventProcessor
         /** @var EventWikiRepository $ewRepo */
         $ewRepo = $this->entityManager->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
+        $ewRepo->setLogger($this->logger);
 
         /** @var bool $saveEventStats Whether or not EventWikiStats are being saved. */
         $saveEventStats = false;

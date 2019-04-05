@@ -7,6 +7,10 @@ use DateInterval;
 use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
 /**
  * A PageviewsRepository is used to fetch data from the pageviews API.
@@ -14,6 +18,7 @@ use GuzzleHttp\Exception\ClientException;
  */
 class PageviewsRepository
 {
+    use LoggerAwareTrait;
 
     public const GRANULARITY_HOURLY = 'hourly';
 
@@ -24,8 +29,19 @@ class PageviewsRepository
     /** @var string YYYY-MM-DD format of the earliest data available in the Pageviews API. */
     public const MINIMUM_START_DATE = '2015-07-01';
 
+    private const REQUEST_TIMEOUT = 3;
+
+    private const CONNECT_TIMEOUT = 1.5;
+
+    private const RETRIES = 3;
+
     /** @var string Base URL for the REST endpoint. */
     protected $endpointUrl = 'https://wikimedia.org/api/rest_v1/metrics/pageviews';
+
+    public function __construct()
+    {
+        $this->logger = new NullLogger();
+    }
 
     /**
      * Given a Mediawiki article and a date range, returns a daily timeseries of its pageview counts.
@@ -156,9 +172,47 @@ class PageviewsRepository
      */
     protected function fetch(string $url) : array
     {
+        $handlerStack = HandlerStack::create();
+        $handlerStack->push(Middleware::retry(function ($retry, $request, $value, $reason) use ($url) {
+            if (null !== $value) {
+                // Request succeeded
+                return false;
+            }
+
+            if ($retry < self::RETRIES) {
+                $this->logger->notice(
+                    'Attempt {retry}/{max} to fetch {url} failed: {reason}',
+                    [
+                        'retry' => $retry,
+                        'max' => self::RETRIES,
+                        'url' => $url,
+                        'reason' => $reason,
+                    ]
+                );
+                return true;
+            }
+
+            $this->logger->error(
+                'Fetching {url} failed after {retry} retries: {reason}',
+                [
+                    'retry' => $retry,
+                    'url' => $url,
+                    'reason' => $reason,
+                ]
+            );
+            return false;
+        }));
+
         $client = new Client();
         try {
-            $response = $client->get($url);
+            $response = $client->get(
+                $url,
+                [
+                    'timeout' => self::REQUEST_TIMEOUT,
+                    'connect_timeout' => self::CONNECT_TIMEOUT,
+                    'handler' => $handlerStack,
+                ]
+            );
         } catch (ClientException $exception) {
             return [];
         }
