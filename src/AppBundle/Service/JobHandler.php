@@ -9,6 +9,7 @@ namespace AppBundle\Service;
 
 use AppBundle\Model\Event;
 use AppBundle\Model\Job;
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -119,7 +120,8 @@ class JobHandler
     }
 
     /**
-     * Check for old jobs that never started or are mysteriously running for a very long time, and lay them to rest.
+     * Check for old jobs that never started or are mysteriously running for a very long time, and mark them as timed
+     * out. Later, kill such jobs unless evenshow.js haven't done it for us upon showing an error message.
      * This does NOT kill the process associated with the job, if there is one. Called in EventController::showAction.
      * @param Event $event
      */
@@ -131,9 +133,15 @@ class JobHandler
             return;
         }
 
+        $dayAgo = new DateTime('-1 day');
         /** @var Job $job */
         foreach ($staleJobs->getIterator() as $job) {
-            $event->removeJob($job);
+            if ($job->isBusy()) {
+                $job->setStatus(Job::STATUS_FAILED_TIMEOUT);
+            }
+            if ($job->getSubmitted() >= $dayAgo) {
+                $event->removeJob($job);
+            }
         }
 
         // This needs to be flushed immediately because this method is called in EventController::showAction,
