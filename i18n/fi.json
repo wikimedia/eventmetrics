@@ -35,7 +35,7 @@
 	"event": "Tapahtuma",
 	"event-created": "Tapahtuma '$1' luotiin onnistuneesti.",
 	"event-deleted": "Tapahtuma '$1' poistettiin.",
-	"event-download-csv": "Lataa CSV-tiedostona",
+	"event-download-csv": "Lataa CSV",
 	"events": "Tapahtumat",
 	"fatal-error": "Vakava virhe",
 	"feedback": "Palaute",
@@ -49,7 +49,10 @@
 	"new-editors": "Uudet muokkaajat",
 	"no-programs": "Et ole luonut ohjelmia.",
 	"no-results": "Tuloksia ei löytynyt",
-	"num-categories": "{{PLURAL:$1|luokka|luokkaa}}",
+	"metadata-categories-label": "{{PLURAL:$1|luokka|luokkaa}}:",
+	"metadata-start-date": "Aloituspäivämäärä:",
+	"metadata-wikis-label": "{{PLURAL:$1|wiki|wikiä}}:",
+	"num-categories": "$1 {{PLURAL:$1|luokka|luokkaa}}",
 	"num-days": "{{PLURAL:$1|päivä|päivää}}",
 	"num-hours": "{{PLURAL:$1|tunti|tuntia}}",
 	"num-minutes": "{{PLURAL:$1|minuutti|minuuttia}}",
@@ -85,5 +88,6 @@
 	"username": "Käyttäjänimi",
 	"view-source": "Näytä lähdekoodi",
 	"wiki": "Wiki",
+	"wikidata-not-applicable": "Ei toimi Wikidatan kanssa",
 	"wikis": "Wikit"
 }

@@ -7,7 +7,8 @@
 			"Shaleych",
 			"Stjn",
 			"Facenapalm",
-			"Romanko Mikhail"
+			"Romanko Mikhail",
+			"Kareyac"
 		]
 	},
 	"add-category": "Добавить категорию",
@@ -104,6 +105,7 @@
 	"pages-created-pageviews": "Просмотры созданных страниц",
 	"pages-improved": "Улучшенные страницы",
 	"participants": "Участники",
+	"participation": "Участие",
 	"please-login": "Пожалуйста, представьтесь системе для продолжения.",
 	"program": "Программа",
 	"program-created": "Программа «$1» была успешно создана.",

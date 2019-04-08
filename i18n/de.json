@@ -162,7 +162,7 @@
 	"pages-improved-pageviews-avg": "Durchschnittliche tägliche Aufrufe an verbesserten Seiten",
 	"pages-improved-pageviews-avg-desc": "Ein 31-Tage-Durchschnitt von täglichen Seitenaufrufen auf allen während des Ereignisses verbesserten Seiten (einmal pro Tag kompiliert). Falls weniger als 31 Tage verfügbar sind, wird der Durchschnitt für die verfügbaren Tage berechnet.",
 	"pages-using-files": "Eindeutige Seiten mit hochgeladenen Dateien",
-	"pages-using-files-desc": "Eine Anzahl aller Nicht-Duplikat-Seiten auf allen Wikis, auf denen hochgeladene Dateien platziert wurden.",
+	"pages-using-files-desc": "Eine Anzahl aller Nicht-Duplikat-Seiten im Hauptnamensraum auf allen Wikis, auf denen hochgeladene Dateien platziert wurden.",
 	"pages-using-files-pageviews-avg": "Durchschnittliche tägliche Aufrufe an hochgeladenen Dateien",
 	"pages-using-files-pageviews-avg-desc": "Ein 31-Tage-Durchschnitt täglicher Seitenaufrufe auf allen Seiten des Hauptnamensraums auf allen Wikis, auf denen hochgeladene Dateien platziert wurden (einmal pro Tag kompiliert). Falls weniger als 31 Tage verfügbar sind, wird der Durchschnitt für die verfügbaren Tage berechnet.",
 	"pageviews-average": "Durchschnittliche tägliche Seitenaufrufe",

@@ -163,7 +163,7 @@
 	"pages-improved-pageviews-avg": "Nombre moyen quotidien de vues des pages améliorées",
 	"pages-improved-pageviews-avg-desc": "Un nombre moyen sur 31 jours, des pages vues quotidiennement sur toutes les pages améliorées pendant l’événement (compilé quotidiennement). Si moins de 31 jours sont disponibles, la moyenne est calculée sur ce nombre de jours.",
 	"pages-using-files": "Pages uniques avec des fichiers téléversés",
-	"pages-using-files-desc": "Un nombre de toutes les pages non dupliquées, de tous les wikis, sur lequels des fichiers téléversés ont été placés.",
+	"pages-using-files-desc": "Un nombre de toutes les pages non dupliquées, de l'espace de noms principal de tous les wikis, sur lequels les fichiers téléversés ont été placés.",
 	"pages-using-files-pageviews-avg": "Nombre moyen quotidien de fichiers téléversés",
 	"pages-using-files-pageviews-avg-desc": "Une moyenne sur 31 jours des pages vues quotidiennement sur toutes les pages de tous les espaces de noms principaux sur lesquels les fichiers téléversés ont été placés (compilé quotidiennement). Si le nombre de jours connus est inférieur à 31, la moyenne est calculée sur ce nombre.",
 	"pageviews-average": "Moyenne quotidienne de nombre des pages vues",

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kly"
+			"Kly",
+			"A2093064"
 		]
 	},
 	"add-category": "添加分類",
@@ -67,7 +68,7 @@
 	"error-filters-participants-desc": "參與者篩選適用於所有 wiki 並合乎所有篩選需求。",
 	"error-filters-participants-none": "沒有提供參與者",
 	"error-filters-participants-or-categories": "您可以透過參與者或分類來篩選 — 或是結合兩項利用。",
-	"error-filters-wikidata": "要取得關於<strong>維基數據</strong>的計量，您必須提供參與者。（分類不存在於維基數據。）",
+	"error-filters-wikidata": "要取得關於維基數據的計量，您必須提供參與者。（分類不存在於維基數據。）",
 	"error-filters-wikidata-only": "您為此事項指定了一個 wiki：<strong>維基數據</strong>",
 	"error-filters-wikidata-panel": "維基數據所需",
 	"error-invalid": "此值無效。",
@@ -105,7 +106,7 @@
 	"fatal-error": "嚴重錯誤",
 	"feedback": "意見回饋",
 	"file-usage": "使用的已上傳檔案",
-	"file-usage-desc": "上傳檔案至少有被任何一個 wiki 頁面使用到的數目。",
+	"file-usage-desc": "上傳檔案至少有被任何一個 wiki 的主命名空間使用到的數目。",
 	"files-uploaded": "已上傳檔案",
 	"files-uploaded-desc": "在事項期間上傳至指定 wiki 的所有類型檔案數量（不限於維基共享資源）。",
 	"help": "求助",
@@ -164,7 +165,7 @@
 	"pages-using-files": "帶有上傳檔案的各唯一頁面",
 	"pages-using-files-desc": "上傳檔案使用在所有 wiki 裡所有不重複頁面的數目。",
 	"pages-using-files-pageviews-avg": "上傳檔案平均每日檢視次數",
-	"pages-using-files-pageviews-avg-desc": "在事項期間，所上傳檔案在全部 wiki 裡被使用到的所有頁面 31 天平均每日頁面檢視數（每天計算一次）。若可用天數少於 31 天，會以可用天數來計算平均。",
+	"pages-using-files-pageviews-avg-desc": "在事項期間，所上傳檔案在全部 wiki 裡被使用到的所有主命名空間頁面 31 天平均每日頁面檢視數（每天計算一次）。若可用天數少於 31 天，會以可用天數來計算平均。",
 	"pageviews-average": "每日平均頁面瀏覽數",
 	"pageviews-cumulative": "累積的頁面瀏覽數",
 	"participants": "參與者",
