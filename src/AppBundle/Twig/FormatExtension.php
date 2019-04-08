@@ -16,6 +16,8 @@ use NumberFormatter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 use Wikimedia\ToolforgeBundle\Twig\Extension as BundleExtension;
 
 /**
@@ -58,13 +60,13 @@ class FormatExtension extends Extension
 
     /**
      * Get all functions that this class provides.
-     * @return \Twig_SimpleFunction[]
+     * @return TwigFunction[]
      */
     public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction('formatDuration', [$this, 'formatDuration']),
-            new \Twig_SimpleFunction('csv', [$this, 'csv'], ['is_safe' => ['html']]),
+            new TwigFunction('formatDuration', [$this, 'formatDuration']),
+            new TwigFunction('csv', [$this, 'csv'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -72,19 +74,19 @@ class FormatExtension extends Extension
 
     /**
      * Get all filters for this extension.
-     * @return \Twig_SimpleFilter[]
+     * @return TwigFilter[]
      */
     public function getFilters(): array
     {
         return [
-            new \Twig_SimpleFilter('ucfirst', [$this, 'ucfirst']),
-            new \Twig_SimpleFilter('percent_format', [$this, 'percentFormat']),
-            new \Twig_SimpleFilter('diff_format', [$this, 'diffFormat'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFilter('num_abbrev', [$this, 'numberAbbrev']),
-            new \Twig_SimpleFilter('date_localize', [$this, 'dateFormat']),
-            new \Twig_SimpleFilter('date_format', [$this, 'dateFormatStd']),
-            new \Twig_SimpleFilter('wikify', [$this, 'wikify']),
-            new \Twig_SimpleFilter('wiki_encode', [$this, 'wikiEncode']),
+            new TwigFilter('ucfirst', [$this, 'ucfirst']),
+            new TwigFilter('percent_format', [$this, 'percentFormat']),
+            new TwigFilter('diff_format', [$this, 'diffFormat'], ['is_safe' => ['html']]),
+            new TwigFilter('num_abbrev', [$this, 'numberAbbrev']),
+            new TwigFilter('date_localize', [$this, 'dateFormat']),
+            new TwigFilter('date_format', [$this, 'dateFormatStd']),
+            new TwigFilter('wikify', [$this, 'wikify']),
+            new TwigFilter('wiki_encode', [$this, 'wikiEncode']),
         ];
     }
 

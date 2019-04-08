@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace AppBundle\Twig;
 
 use Symfony\Component\HttpFoundation\RequestStack;
-use Twig_Extension;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Twig extension that provides convient methods to get the names
  * of the current controller and action.
  */
-class ControllerActionExtension extends Twig_Extension
+class ControllerActionExtension extends AbstractExtension
 {
     /** @var RequestStack The request stack. */
     protected $requestStack;
@@ -40,13 +41,13 @@ class ControllerActionExtension extends Twig_Extension
 
     /**
      * Get all functions that this class provides.
-     * @return \Twig_SimpleFunction[]
+     * @return TwigFunction[]
      */
     public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction('getControllerName', [$this, 'getControllerName']),
-            new \Twig_SimpleFunction('getActionName', [$this, 'getActionName']),
+            new TwigFunction('getControllerName', [$this, 'getControllerName']),
+            new TwigFunction('getActionName', [$this, 'getActionName']),
         ];
     }
 
