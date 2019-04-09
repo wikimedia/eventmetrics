@@ -199,4 +199,22 @@ abstract class DatabaseAwareWebTestCase extends EventMetricsTestCase
         }
         return $this->fixtureLoader;
     }
+
+    /**
+     * Check that each given route returns a the given response code.
+     * @param string[] $routes
+     * @param int $expectedResponse
+     */
+    public function assertRoutesResponses(array $routes, int $expectedResponse): void
+    {
+        foreach ($routes as $route) {
+            $this->client->request('GET', $route);
+            $actualResponse = $this->client->getResponse()->getStatusCode();
+            static::assertEquals(
+                $actualResponse,
+                $expectedResponse,
+                "Failed: $route expected $expectedResponse response but got $actualResponse"
+            );
+        }
+    }
 }

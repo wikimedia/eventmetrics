@@ -53,8 +53,11 @@ class EventDataSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // Redirect to event page if statistics have not yet been generated.
-        if (null === $controller->getEvent()->getUpdated()) {
+        /** @var Event $event */
+        $emEvent = $controller->getEvent();
+
+        // Redirect to event page if statistics have not yet been generated, or if a job is currently running.
+        if (null === $emEvent->getUpdated() || ($emEvent->hasJob() && $emEvent->getJob()->isBusy())) {
             $redirectUrl = $this->router->generate('Event', [
                 'programId' => $controller->getProgram()->getId(),
                 'eventId' => $controller->getEvent()->getId(),
