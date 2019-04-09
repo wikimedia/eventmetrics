@@ -34,6 +34,36 @@ class EventDataControllerTest extends DatabaseAwareWebTestCase
     }
 
     /**
+     * Assert response codes are correct when a job is currently running.
+     */
+    public function testResponses(): void
+    {
+        /** @var Event $event */
+        $event = $this->entityManager
+            ->getRepository('Model:Event')
+            ->findOneBy(['title' => 'Oliver_and_Company']);
+
+        // Pretend the Event has been updated.
+        $event->setUpdated(new \DateTime());
+
+        // Create Job and set it to the started state.
+        $job = new Job($event);
+        $job->setStatus(Job::STATUS_STARTED);
+        $this->entityManager->persist($job);
+        $this->entityManager->flush();
+
+        $eventId = $event->getId();
+        $programId = $event->getProgram()->getId();
+
+        $this->assertRoutesResponses([
+            "/programs/$programId/events/$eventId/revisions",
+            "/programs/$programId/events/$eventId/summary",
+            "/programs/$programId/events/$eventId/pages-improved",
+            "/programs/$programId/events/$eventId/pages-created",
+        ], 302);
+    }
+
+    /**
      * Revisions page.
      */
     public function testRevisions(): void
