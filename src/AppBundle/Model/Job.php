@@ -35,6 +35,9 @@ class Job
     public const STATUS_FAILED_TIMEOUT = 2;
     public const STATUS_FAILED_UNKNOWN = 3;
 
+    // Job execution time limit: 1 hour
+    public const TIME_LIMIT = 3600;
+
     /**
      * @ORM\Id
      * @ORM\Column(name="job_id", type="integer")
