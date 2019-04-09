@@ -330,6 +330,12 @@ class EventProcessor
 
         foreach ($pageIdsByDbName as $dbName => $pageIds) {
             $domain = $ewRepo->getDomainFromEventWikiInput($dbName);
+
+            // Unsupported wiki (doesn't exist on the replicas).
+            if (null === $domain) {
+                continue;
+            }
+
             $avgPageviewsPagesUsingFiles += $ewRepo->getPageviews($dbName, $domain, $start, $pageIds, true);
         }
 
