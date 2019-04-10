@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9eb2c3cc40d225157c3633f86d991cf",
+    "content-hash": "ccec54bcb706377923395e9c465c4058",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3311,16 +3311,16 @@
         },
         {
             "name": "wikimedia/toolforge-bundle",
-            "version": "0.13.1",
+            "version": "0.14.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/ToolforgeBundle.git",
-                "reference": "72c1d9d94a037e0a86a8c4e2172b99bfd68b1898"
+                "reference": "c0c048c65a0daeefaac4375f63ed86ccb6971e10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/ToolforgeBundle/zipball/72c1d9d94a037e0a86a8c4e2172b99bfd68b1898",
-                "reference": "72c1d9d94a037e0a86a8c4e2172b99bfd68b1898",
+                "url": "https://api.github.com/repos/wikimedia/ToolforgeBundle/zipball/c0c048c65a0daeefaac4375f63ed86ccb6971e10",
+                "reference": "c0c048c65a0daeefaac4375f63ed86ccb6971e10",
                 "shasum": ""
             },
             "require": {
@@ -3354,7 +3354,7 @@
             ],
             "description": "Symfony 4 bundle providing useful Toolforge features.",
             "homepage": "https://github.com/wikimedia/toolforgebundle",
-            "time": "2019-03-26T03:44:09+00:00"
+            "time": "2019-04-05T23:40:30+00:00"
         },
         {
             "name": "zendframework/zend-code",
