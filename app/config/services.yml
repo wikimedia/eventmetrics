@@ -55,9 +55,6 @@ services:
     AppBundle\EventSubscriber\EventDataSubscriber:
         arguments: ['@router']
 
-    AppBundle\Logger\WebRequestProcessor:
-        tags: { name: monolog.processor }
-
     AppBundle\Repository\:
         resource: '../../src/AppBundle/Repository/*'
         arguments: ['@doctrine.orm.entity_manager']
