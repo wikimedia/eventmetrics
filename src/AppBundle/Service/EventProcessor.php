@@ -14,6 +14,8 @@ use AppBundle\Model\EventWikiStat;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Repository\EventWikiRepository;
 use DateTime;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -126,6 +128,10 @@ class EventProcessor
 
         // This must be called after setContributionStats, because that method sets the page IDs.
         $this->setPageviewsStats();
+
+        // Retrieving pageviews for a ton of pages could take quite some time, during which database connections
+        // will be unused and might time out.
+        $this->reconnectDatabases();
 
         // Remove EventWikis that are part of a family where there are no statistics.
         $this->removeEventWikisWithNoStats();
@@ -810,5 +816,21 @@ class EventProcessor
         $message = $message ?? 'Done';
         $duration = round($this->stopwatch->getEvent($key)->getDuration());
         $this->log(" <comment>$message ($duration ms)</comment>");
+    }
+
+    /**
+     * Checks every database connection to see if it still works, and reconnects them if needed.
+     */
+    private function reconnectDatabases(): void
+    {
+        /** @var Registry $registry */
+        $registry = $this->container->get('doctrine');
+        /** @var Connection $connection */
+        foreach ($registry->getConnections() as $connection) {
+            if (!$connection->ping()) {
+                $connection->close();
+                $connection->connect();
+            }
+        }
     }
 }
