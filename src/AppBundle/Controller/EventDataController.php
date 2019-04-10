@@ -197,6 +197,9 @@ class EventDataController extends EntityController
             // JavaScript will poll for job status and update the view accordingly.
             $this->session->save();
 
+            // To process the job in this web request, bump execution time limit to 60 minutes.
+            set_time_limit(Job::TIME_LIMIT);
+
             // Attempt to start the job immediately (if there's quota).
             $jobHandler->spawn($job);
         }
