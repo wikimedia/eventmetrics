@@ -163,7 +163,7 @@
 	"pages-improved-pageviews-avg": "Avg. daily views to pages improved",
 	"pages-improved-pageviews-avg-desc": "A 31-day average of daily pageviews to all Pages Improved during the event (compiled once per day). If fewer than 31 days are available, the average is calculated for the available days.",
 	"pages-using-files": "Unique pages with uploaded files",
-	"pages-using-files-desc": "A count of all non-duplicate main namespace pages, on all wikis, on which Files Uploaded have been placed.",
+	"pages-using-files-desc": "A count of all non-duplicate main namespace pages, on all wikis, on which Uploaded Files have been placed.",
 	"pages-using-files-pageviews-avg": "Avg. daily views to uploaded files",
 	"pages-using-files-pageviews-avg-desc": "A 31-day average of daily pageviews to all main namespace pages on all wikis on which Uploaded Files have been placed (compiled once per day). If fewer than 31 days are available, the average is calculated for the available days.",
 	"pageviews-average": "Avg. daily pageviews",
