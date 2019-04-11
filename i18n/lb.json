@@ -10,6 +10,7 @@
 	"apply": "Uwenden",
 	"cancel": "Ofbriechen",
 	"categories": "Kategorien",
+	"categories-panel-title": "Filter fir Kategorien",
 	"category-name": "Numm vun der Kategorie",
 	"close": "Zoumaachen",
 	"contributions": "Kontributiounen",
@@ -49,6 +50,7 @@
 	"metadata-categories-label": "{{PLURAL:$1|Kategorie|Kategorien}}:",
 	"metadata-end-date": "Schlussdatum",
 	"metadata-start-date": "Ufanksdatum:",
+	"metadata-wikis-label": "{{PLURAL:$1|Wiki|Wikien}}:",
 	"num-abbrev-million": "M",
 	"num-categories": "{{PLURAL:$1|Eng Kategorie|$1 Kategorien}}",
 	"num-days": "{{PLURAL: $1|Dag|Deeg}}",
@@ -87,5 +89,6 @@
 	"view-source": "Quellcode weisen",
 	"views": "Säitenofruffer",
 	"wiki": "Wiki",
+	"wikidata-not-applicable": "Funktionéiert net mat Wikidata",
 	"wikis": "Wikien"
 }

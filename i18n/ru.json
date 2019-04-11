@@ -89,6 +89,8 @@
 	"no-events": "В этой программе ещё нет событий!",
 	"no-programs": "У вас нет созданных программ.",
 	"no-results": "Ничего не найдено",
+	"metadata-categories-label": "{{PLURAL:$1|Категория|Категории}}:",
+	"metadata-wikis-label": "{{PLURAL:$1|Вики}}",
 	"num-categories": "$1 {{PLURAL:$1|категория|категории|категорий}}",
 	"num-days": "{{PLURAL: $1|день|дней|дня}}",
 	"num-hours": "{{PLURAL: $1|час|часа|часов}}",
