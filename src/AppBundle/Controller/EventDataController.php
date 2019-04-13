@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
+use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use AppBundle\Repository\EventRepository;
 use AppBundle\Service\JobHandler;
@@ -200,8 +201,10 @@ class EventDataController extends EntityController
             // To process the job in this web request, bump execution time limit to 60 minutes.
             set_time_limit(Job::TIME_LIMIT);
 
-            // Attempt to start the job immediately (if there's quota).
-            $jobHandler->spawn($job);
+            // Attempt to start the job immediately (if there's quota and it's not too heavy).
+            if (!$this->isHeavyEvent($this->event)) {
+                $jobHandler->spawn($job);
+            }
         }
 
         // Return empty response. The client will never see it anyway since the session was closed.
@@ -269,5 +272,21 @@ class EventDataController extends EntityController
     private function getFilenameFriendlyEventName(): string
     {
         return trim(preg_replace('/[-\/\\:;*?|<>%#"]+/', '-', $this->event->getTitle()));
+    }
+
+
+    /**
+     * Determines whether the given event is likely to be heavy enough to warrant to be processed via a cronjob.
+     *
+     * @param Event $event
+     * @return bool
+     */
+    private function isHeavyEvent(Event $event): bool
+    {
+        $diff = $event->getStart()->diff($event->getEnd());
+        $hours = $diff->days * 24 + $diff->h + $diff->i / 60;
+
+        return $event->getCategories()->count() * $hours > 1 ||
+            $event->getNumParticipants() * $hours > 60 * 24;
     }
 }
