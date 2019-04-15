@@ -290,7 +290,7 @@ class EventWikiRepository extends Repository
             return 0;
         }
 
-        $pageviewsRepo = new PageviewsRepository();
+        $pageviewsRepo = $this->getPageviewsRepository();
         $recentDayCount = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
         $end = new DateTime('yesterday midnight');
         $pageviews = 0;
@@ -540,7 +540,7 @@ class EventWikiRepository extends Repository
         }
 
         $dbName = $this->getDbNameFromDomain($wiki->getDomain());
-        $pageviewsRepo = new PageviewsRepository();
+        $pageviewsRepo = $this->getPageviewsRepository();
         $avgPageviewsOffset = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
         $pages = $this->getPageTitles($dbName, $wiki->getPagesCreated(), true, true);
         $start = $wiki->getEvent()->getStartUTC();
@@ -681,7 +681,7 @@ class EventWikiRepository extends Repository
         }
 
         $dbName = $this->getDbNameFromDomain($wiki->getDomain());
-        $pageviewsRepo = new PageviewsRepository();
+        $pageviewsRepo = $this->getPageviewsRepository();
         $avgPageviewsOffset = Event::AVAILABLE_METRICS['pages-improved-pageviews-avg'];
         $pages = $this->getPageTitles($dbName, $wiki->getPagesImproved(), true, true);
         $start = $wiki->getEvent()->getStartUTC();
@@ -713,5 +713,16 @@ class EventWikiRepository extends Repository
         }
 
         return $data;
+    }
+
+    /**
+     * Creates and initializes a pageviews repository
+     * @return PageviewsRepository
+     */
+    private function getPageviewsRepository(): PageviewsRepository
+    {
+        $repo = new PageviewsRepository();
+        $repo->setLogger($this->log);
+        return $repo;
     }
 }
