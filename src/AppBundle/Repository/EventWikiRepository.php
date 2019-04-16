@@ -296,15 +296,22 @@ class EventWikiRepository extends Repository
         $pageviews = 0;
 
         $stmt = $this->getPageTitles($dbName, $pageIds, true);
+        $pageTitles = [];
+        $totalProcessed = 0;
 
-        // FIXME: make async requests for pageviews, 200 pages at a time.
+        // PageviewsRepository will fetch pageviews asynchronously, so we get the page titles in chunks
+        // and call the appropriate method. We also don't want to put too many titles in memory at one time.
         while ($result = $stmt->fetch()) {
-            $pageTitle = $result['page_title'];
+            $totalProcessed++;
+            $pageTitles[] = $result['page_title'];
 
-            if ($getDailyAverage) {
-                $pageviews += $pageviewsRepo->getAvgPageviewsPerArticle($domain, $pageTitle, $recentDayCount);
-            } else {
-                $pageviews += $pageviewsRepo->getPageviewsPerArticle($domain, $pageTitle, $start, $end);
+            if (100 === count($pageTitles) || $totalProcessed === count($pageIds)) {
+                if ($getDailyAverage) {
+                    $pageviews += $pageviewsRepo->getAvgPageviews($domain, $pageTitles, $recentDayCount);
+                } else {
+                    $pageviews += $pageviewsRepo->getPageviews($domain, $pageTitles, $start, $end);
+                }
+                $pageTitles = [];
             }
         }
 
@@ -550,9 +557,9 @@ class EventWikiRepository extends Repository
 
         while ($page = $pages->fetch()) {
             // FIXME: async?
-            [$pageviews, $avgPageviews] = $pageviewsRepo->getPageviewsPerArticle(
+            [$pageviews, $avgPageviews] = $pageviewsRepo->getPageviews(
                 $wiki->getDomain(),
-                $page['page_title'],
+                [$page['page_title']],
                 $start,
                 $now,
                 $avgPageviewsOffset
@@ -690,9 +697,9 @@ class EventWikiRepository extends Repository
 
         while ($page = $pages->fetch()) {
             // FIXME: async?
-            $avgPageviews = $pageviewsRepo->getAvgPageviewsPerArticle(
+            $avgPageviews = $pageviewsRepo->getAvgPageviews(
                 $wiki->getDomain(),
-                $page['page_title'],
+                [$page['page_title']],
                 $avgPageviewsOffset
             );
 

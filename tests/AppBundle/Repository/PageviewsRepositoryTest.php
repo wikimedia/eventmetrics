@@ -21,39 +21,7 @@ class PageviewsRepositoryTest extends EventMetricsTestCase
     }
 
     /**
-     * @covers \AppBundle\Repository\PageviewsRepository::getPerArticle()
-     */
-    public function testPerArticle():void
-    {
-        $pageviews = $this->repo->getPerArticle(
-            'zh.wikipedia',
-            '一期一會',
-            PageviewsRepository::GRANULARITY_DAILY,
-            new \DateTime('2019-01-01'),
-            new \DateTime('2019-01-02')
-        );
-
-        static::assertEquals(['items' => [[
-            'project' => 'zh.wikipedia',
-            'article' => '一期一會',
-            'granularity' => 'daily',
-            'timestamp' => '2019010100',
-            'access' => 'all-access',
-            'agent' => 'user',
-            'views' => 281,
-        ], [
-            'project' => 'zh.wikipedia',
-            'article' => '一期一會',
-            'granularity' => 'daily',
-            'timestamp' => '2019010200',
-            'access' => 'all-access',
-            'agent' => 'user',
-            'views' => 255,
-        ]]], $pageviews);
-    }
-
-    /**
-     * @covers \AppBundle\Repository\PageviewsRepository::getPageviewsPerArticle()
+     * @covers \AppBundle\Repository\PageviewsRepository::getPageviews()
      */
     public function testPageviews(): void
     {
@@ -63,15 +31,22 @@ class PageviewsRepositoryTest extends EventMetricsTestCase
         // Raw total pageviews.
         static::assertEquals(
             361,
-            $this->repo->getPageviewsPerArticle('en.wikipedia', 'Domino_Park', $start, $end)
+            $this->repo->getPageviews('en.wikipedia', ['Domino_Park'], $start, $end)
         );
 
-        [$total, $avg] = $this->repo->getPageviewsPerArticle(
+        // Multiple pages.
+        static::assertEquals(
+            93059,
+            $this->repo->getPageviews('en.wikipedia', ['Cat', 'Dog'], $start, $end)
+        );
+
+        // With average.
+        [$total, $avg] = $this->repo->getPageviews(
             'en.wikipedia',
-            'Domino_Park',
+            ['Domino_Park'],
             $start,
             $end,
-            30
+            31
         );
 
         // First element should be the same as total pageviews.
@@ -84,12 +59,12 @@ class PageviewsRepositoryTest extends EventMetricsTestCase
         $end = new DateTime('2019-02-15');
 
         // This particular endpoint has gaps in the time series.
-        // getPageviewsPerArticle() should fill these in with zeros and give you the correct average.
+        // getPageviews() should fill these in with zeros and give you the correct average.
         // @see https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/wikidata/all-access/user/Q61506256/daily/20190201/20190215
         // @see https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews#Gotchas
         static::assertEquals(
             [12, 1], // 12 total pageviews, divided by 15 days = round(0.8) = 1 average pageview a day.
-            $this->repo->getPageviewsPerArticle('www.wikidata', 'Q61506256', $start, $end, 30)
+            $this->repo->getPageviews('www.wikidata', ['Q61506256'], $start, $end, 31)
         );
     }
 }
