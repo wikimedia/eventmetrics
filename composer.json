@@ -74,11 +74,11 @@
         ],
         "lint": [
             "composer validate",
-            "./bin/console lint:twig ./app/Resources/views",
+            "./bin/console lint:twig ./templates",
             "./bin/console lint:yaml ./app/config",
             "./bin/console lint:yaml .travis.yml",
             "./vendor/bin/phpcs -s .",
-            "./vendor/bin/twigcs app/Resources/views/",
+            "./vendor/bin/twigcs templates/",
             "./vendor/bin/minus-x check ."
         ],
         "docs": [

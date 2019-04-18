@@ -72,7 +72,7 @@ $(function () {
 
 /**
  * Add tooltips to panel toggle links.
- * See also views/macros/layout.html.twig and assets/css/application.scss
+ * See also templates/macros/layout.html.twig and assets/css/application.scss
  */
 eventmetrics.application.setupPanelTooltips = function () {
     // Panels default to expanded, so we add the collapse message.

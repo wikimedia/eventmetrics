@@ -14,7 +14,7 @@
     {% else %}
         {% set message = 'unknown' %}
     {% endif %}
-    {% set knownError = msg_exists(message) %}
+    {% set known_error = msg_exists(message) %}
 
     <div class="container">
         <div class="page-header">
@@ -23,7 +23,7 @@
             </h1>
         </div>
         <p>
-            {% if knownError %}
+            {% if known_error %}
                 {{ msg(message) }}
             {% else %}
                 <p>
