@@ -14,7 +14,7 @@ framework:
     #translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
-        resource: '%kernel.project_dir%/app/config/routing.yml'
+        resource: '%kernel.project_dir%/config/routing.yml'
         strict_requirements: ~
     form: ~
     csrf_protection: ~
@@ -108,7 +108,7 @@ doctrine:
                 naming_strategy: doctrine.orm.naming_strategy.underscore
 
 doctrine_migrations:
-    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    dir_name: "%kernel.root_dir%/../src/DoctrineMigrations"
     namespace: Application\Migrations
     table_name: migration_versions
     name: Application Migrations

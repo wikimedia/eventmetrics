@@ -17,7 +17,8 @@ build:
 filter:
     excluded_paths:
         - 'var/*'
-        - 'app/*'
+        - 'src/App*'
+        - 'src/DoctrineMigrations'
         - 'tests/*'
         - 'bin/*'
         - '*.min.js'

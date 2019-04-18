@@ -9,9 +9,9 @@
     <exclude-pattern>build/api-cache</exclude-pattern>
     <exclude-pattern>phpdoc-install.php</exclude-pattern>
     <exclude-pattern>*.min.js</exclude-pattern>
-    <exclude-pattern>app/DoctrineMigrations/</exclude-pattern>
-    <exclude-pattern>app/AppCache.php</exclude-pattern>
-    <exclude-pattern>app/AppKernel.php</exclude-pattern>
+    <exclude-pattern>src/DoctrineMigrations/</exclude-pattern>
+    <exclude-pattern>src/AppCache.php</exclude-pattern>
+    <exclude-pattern>src/AppKernel.php</exclude-pattern>
 
     <!-- Slevomat standards; see https://github.com/slevomat/coding-standard -->
     <config name="installed_paths" value="../../slevomat/coding-standard"/><!-- relative path from PHPCS source location -->
@@ -90,11 +90,11 @@
     </rule>
     <rule ref="Squiz.NamingConventions.ValidVariableName.StringNotCamelCaps"/>
     <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
-        <exclude-pattern>app/AppKernel.php</exclude-pattern>
+        <exclude-pattern>src/AppKernel.php</exclude-pattern>
     </rule>
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
-        <exclude-pattern>app/AppKernel.php</exclude-pattern>
-        <exclude-pattern>app/AppCache.php</exclude-pattern>
+        <exclude-pattern>src/AppKernel.php</exclude-pattern>
+        <exclude-pattern>src/AppCache.php</exclude-pattern>
     </rule>
     <rule ref="Squiz.Strings.ConcatenationSpacing">
         <properties>

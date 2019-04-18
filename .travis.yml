@@ -26,7 +26,7 @@ before_install:
   - npm -g install npm # Upgrade npm so we can use the ci install command.
 
 install:
-  - cp app/config/parameters-travis.yml.dist app/config/parameters.yml
+  - cp config/parameters-travis.yml.dist config/parameters.yml
   - composer install
   - npm ci
   - php bin/console doctrine:database:create --env=test --no-interaction --quiet

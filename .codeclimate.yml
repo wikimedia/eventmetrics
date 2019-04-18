@@ -32,7 +32,7 @@ checks:
             threshold: # language-specific defaults. an override will affect all languages.
 exclude_patterns:
     - "var/"
-    - "app/DoctrineMigrations/"
+    - "src/DoctrineMigrations/"
     - "tests/"
-    - "app/Resources/assets/vendor/"
+    - "assets/vendor/"
     - "src/AppBundle/AppBundle.php"
