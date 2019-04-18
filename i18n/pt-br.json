@@ -162,7 +162,7 @@
 	"pages-improved-pageviews-avg": "Média de visualizações diárias para páginas melhoradas",
 	"pages-improved-pageviews-avg-desc": "Uma média de 31 dias de visualizações de página diárias para todas as páginas Melhoradas durante o evento (compiladas uma vez por dia). Se menos de 31 dias estiverem disponíveis, a média será calculada para os dias disponíveis.",
 	"pages-using-files": "Páginas exclusivas com arquivos enviados",
-	"pages-using-files-desc": "Uma contagem de todas as páginas de espaço de nome principal não duplicadas, em todas as wikis, nas quais os arquivos enviados foram colocados.",
+	"pages-using-files-desc": "Uma contagem de todas as páginas do namespace principal não duplicadas, em todos os wikis, nos quais os Arquivos Carregados foram colocados.",
 	"pages-using-files-pageviews-avg": "Média de visualizações diárias para arquivos enviados",
 	"pages-using-files-pageviews-avg-desc": "Uma média de 31 dias de visualizações diárias para todas as páginas  de espaço de nome em todos os wikis nos quais os arquivos enviados foram colocados (compilados uma vez por dia). Se menos de 31 dias estiverem disponíveis, a média será calculada para os dias disponíveis.",
 	"pageviews-average": "Média de  visualizações de página diários",
