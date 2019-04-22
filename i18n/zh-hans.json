@@ -4,7 +4,8 @@
 			"Liuxinyu970226",
 			"Deathkon",
 			"A Chinese Wikipedian",
-			"Angrydog001"
+			"Angrydog001",
+			"佛壁灯"
 		]
 	},
 	"add-category": "添加分类",
@@ -103,6 +104,7 @@
 	"pages-created-desc": "内容页面是主名字空间或文件名字空间中的页面。",
 	"pages-improved": "已改进页面",
 	"pages-improved-desc": "内容页面是主名字空间或文件名字空间中的页面。",
+	"pages-using-files-desc": "在上传文件所在的所有维基上的所有独立主名字空间页面的计数。",
 	"participants": "参与者",
 	"please-login": "请登录以继续。",
 	"program": "计划",
