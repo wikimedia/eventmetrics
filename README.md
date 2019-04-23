@@ -53,7 +53,7 @@ Repositories should automatically be assigned to the models, and can be injected
 Assets are managed with [Webpack Encore](https://github.com/symfony/webpack-encore).
 Local CSS and JavaScript live in [app/Resources/assets](https://github.com/wikimedia/eventmetrics/tree/master/app/Resources/assets).
 Fonts and vendor assets must be defined in [webpack.config.js](https://github.com/wikimedia/eventmetrics/blob/master/webpack.config.js),
-and if needed, sourced in the `<head>` of [base.html.twig](https://github.com/wikimedia/eventmetrics/blob/master/app/Resources/views/base.html.twig).
+and if needed, sourced in the `<head>` of [base.html.twig](https://github.com/wikimedia/eventmetrics/blob/master/templates/base.html.twig).
 
 On compilation, all assets are copied to the `public/assets/` directory (publicly accessible).
 This happens by running `./node_modules/.bin/encore production` (or `dev` if you don't want the files to be minified and versioned).
