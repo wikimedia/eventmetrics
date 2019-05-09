@@ -1,11 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Chrumps"
+			"Chrumps",
+			"Woytecr"
 		]
 	},
 	"add-category": "Dodaj kategorię",
-	"add-more-participants": "Dodaj więcej uczestników, po jednym na linię",
+	"add-more-participants": "Wprowadź poniżej nazwy użytkowników, po jednym na linię, aby ograniczyć pomiary do konkretnych uczestników.",
 	"add-organizer": "Dodaj organizatora",
 	"add-wiki": "Dodaj wiki",
 	"all": "Wszystkie",
@@ -37,15 +38,15 @@
 	"event": "Wydarzenie",
 	"event-created": "Wydarzenie '$1' zostało pomyślnie utworzone.",
 	"event-deleted": "Wydarzenie '$1' zostało usunięte.",
-	"event-download-csv": "Pobierz jako CSV",
-	"event-in-future": "Statystyki nie mogą zostać wygenerowane, ponieważ zdarzenie to ma miejsce w przyszłości.",
+	"event-download-csv": "Pobierz CSV",
+	"event-in-future": "To wydarzenie odbędzie się w przyszłości",
 	"event-metrics-welcome": "Witamy w Event Metrics",
 	"event-no-data": "Statystyki nie zostały jeszcze wygenerowane dla tego wydarzenia.",
 	"event-updated": "Wydarzenie '$1' zostało pomyślnie zaktualizowane. Statystyki mogą wymagać regeneracji.",
 	"events": "Wydarzenia",
 	"fatal-error": "Błąd krytyczny",
 	"feedback": "Opinie",
-	"file-usage": "Pliki w użyciu",
+	"file-usage": "Przesłane pliki w użyciu",
 	"file-usage-desc": "Liczba plików przesłanych jako część zdarzenia, które są obecnie używane w co najmniej jednym artykule.",
 	"files-uploaded": "Przesłane pliki",
 	"help": "Pomoc",
