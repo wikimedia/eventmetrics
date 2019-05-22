@@ -319,41 +319,6 @@ class EventWikiRepository extends Repository
     }
 
     /**
-     * Get page IDs of deleted pages.
-     * @param string $dbName
-     * @param DateTime $start
-     * @param DateTime $end
-     * @param string[] $usernames
-     * @return int[]
-     */
-    public function getDeletedPageIds(string $dbName, DateTime $start, DateTime $end, array $usernames = []): array
-    {
-        $start = $start->format('YmdHis');
-        $end = $end->format('YmdHis');
-
-        $rqb = $this->getReplicaConnection()->createQueryBuilder();
-
-        // Don't use userindex unless we're given usernames.
-        $archiveTable = $this->getTableName('archive', 0 === count($usernames) ? '' : 'userindex');
-
-        $rqb->select('DISTINCT ar_page')
-            ->from("$dbName.$archiveTable")
-            ->where('ar_namespace = 0')
-            ->andWhere('ar_timestamp BETWEEN :start AND :end');
-
-        if (count($usernames) > 0) {
-            $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
-                ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
-        }
-
-        $rqb->setParameter('start', $start)
-            ->setParameter('end', $end);
-
-        $result = $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
-        return $result ? array_map('intval', $result) : $result;
-    }
-
-    /**
      * Get the page titles of the pages with the given IDs.
      * @param string $dbName
      * @param int[] $pageIds
