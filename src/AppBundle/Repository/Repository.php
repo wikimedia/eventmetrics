@@ -15,6 +15,7 @@ use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use PDO;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -316,6 +317,25 @@ abstract class Repository extends EntityRepository
     {
         $ret = $this->getUsernamesFromIds([$userId]);
         return $ret[0]['user_name'] ?? null;
+    }
+
+    /**
+     * Get actor IDs for the given usernames.
+     * @param string $dbName
+     * @param string[] $usernames
+     * @return int[]
+     */
+    public function getActorIdsFromUsernames(string $dbName, array $usernames): array
+    {
+        $conn = $this->getReplicaConnection();
+        $rqb = $conn->createQueryBuilder();
+
+        $rqb->select('actor_id')
+            ->from("$dbName.actor")
+            ->where('actor_name IN (:usernames)')
+            ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+
+        return $this->executeQueryBuilder($rqb)->fetchAll(PDO::FETCH_FUNC, 'intval');
     }
 
     /*****************
