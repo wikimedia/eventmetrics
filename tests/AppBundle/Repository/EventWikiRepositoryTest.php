@@ -39,13 +39,14 @@ class EventWikiRepositoryTest extends EventMetricsTestCase
         $from = new DateTime('2018-06-09 04:00');
         $to = new DateTime('2018-06-12 03:59');
         $users = ['MusikAnimal', 'Jon Kolbert'];
+        $actors = $this->repo->getActorIdsFromUsernames($dbName, $users);
         $allPagesExpected     = [57645508, 55751986]; // [[Domino Park]], [[Spring Creek Park]]
         $pagesCreatedExpected = [57645508          ]; // [[Domino Park]]
         // All pages.
-        $allPagesActual = $this->repo->getPageIds($dbName, $from, $to, $users, ['Parks_in_Brooklyn']);
+        $allPagesActual = $this->repo->getPageIds($dbName, $from, $to, $actors, ['Parks_in_Brooklyn']);
         static::assertEquals($allPagesExpected, $allPagesActual);
         // Pages created.
-        $pagesCreatedActual = $this->repo->getPageIds($dbName, $from, $to, $users, ['Parks_in_Brooklyn'], 'created');
+        $pagesCreatedActual = $this->repo->getPageIds($dbName, $from, $to, $actors, ['Parks_in_Brooklyn'], 'created');
         static::assertEquals($pagesCreatedExpected, $pagesCreatedActual);
     }
 }

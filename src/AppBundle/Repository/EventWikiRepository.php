@@ -202,7 +202,7 @@ class EventWikiRepository extends Repository
      * @param string $dbName
      * @param DateTime $start
      * @param DateTime $end
-     * @param string[] $usernames
+     * @param int[] $actors
      * @param string[] $categoryTitles
      * @param string $type Whether only pages 'created' or 'edited' should be returned. Default is to return both.
      *   To get pages improved, first get edited then use array_diff against created.
@@ -212,13 +212,13 @@ class EventWikiRepository extends Repository
         string $dbName,
         DateTime $start,
         DateTime $end,
-        array $usernames = [],
+        array $actors = [],
         array $categoryTitles = [],
         string $type = ''
     ): array {
-        if ((empty($usernames) && empty($categoryTitles)) ||
+        if ((empty($actors) && empty($categoryTitles)) ||
             // No local file uploads unless there are participants.
-            ('commonswiki_p' !== $dbName && empty($usernames) && 'files' === $type)
+            ('commonswiki_p' !== $dbName && empty($actors) && 'files' === $type)
         ) {
             return [];
         }
@@ -233,7 +233,7 @@ class EventWikiRepository extends Repository
         $rqb = $conn->createQueryBuilder();
 
         // Normal `revision` table is faster if you're not filtering by user.
-        $revisionTable = $this->getTableName('revision', empty($usernames) ? '' : 'userindex');
+        $revisionTable = $this->getTableName('revision', empty($actors) ? '' : 'userindex');
 
         $rqb->select('DISTINCT rev_page')
             ->from("$dbName.$revisionTable")
@@ -252,9 +252,9 @@ class EventWikiRepository extends Repository
             ->setParameter('start', $start)
             ->setParameter('end', $end);
 
-        if (count($usernames) > 0) {
-            $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
-                ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+        if (count($actors) > 0) {
+            $rqb->andWhere($rqb->expr()->in('rev_actor', ':actors'))
+                ->setParameter('actors', $actors, Connection::PARAM_INT_ARRAY);
         }
 
         // If only pages created, edited or files are being requested, limit based on the presence of a parent revision.
@@ -319,41 +319,6 @@ class EventWikiRepository extends Repository
     }
 
     /**
-     * Get page IDs of deleted pages.
-     * @param string $dbName
-     * @param DateTime $start
-     * @param DateTime $end
-     * @param string[] $usernames
-     * @return int[]
-     */
-    public function getDeletedPageIds(string $dbName, DateTime $start, DateTime $end, array $usernames = []): array
-    {
-        $start = $start->format('YmdHis');
-        $end = $end->format('YmdHis');
-
-        $rqb = $this->getReplicaConnection()->createQueryBuilder();
-
-        // Don't use userindex unless we're given usernames.
-        $archiveTable = $this->getTableName('archive', 0 === count($usernames) ? '' : 'userindex');
-
-        $rqb->select('DISTINCT ar_page')
-            ->from("$dbName.$archiveTable")
-            ->where('ar_namespace = 0')
-            ->andWhere('ar_timestamp BETWEEN :start AND :end');
-
-        if (count($usernames) > 0) {
-            $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
-                ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
-        }
-
-        $rqb->setParameter('start', $start)
-            ->setParameter('end', $end);
-
-        $result = $this->executeQueryBuilder($rqb)->fetchAll(\PDO::FETCH_COLUMN);
-        return $result ? array_map('intval', $result) : $result;
-    }
-
-    /**
      * Get the page titles of the pages with the given IDs.
      * @param string $dbName
      * @param int[] $pageIds
@@ -380,24 +345,24 @@ class EventWikiRepository extends Repository
      * @param Event $event
      * @param string $dbName
      * @param int[] $pageIds
-     * @param string[] $usernames
+     * @param int[] $actors
      * @return int
      */
-    public function getBytesChanged(Event $event, string $dbName, array $pageIds, array $usernames): int
+    public function getBytesChanged(Event $event, string $dbName, array $pageIds, array $actors): int
     {
         $revisionTable = $this->getTableName('revision');
         $pageTable = $this->getTableName('page');
-        if ($usernames) {
-            $usernamesCond = 'AND cur.rev_user_text IN (:usernames)';
+        if ($actors) {
+            $actorCond = 'AND cur.rev_actor IN (:actors)';
         } else {
-            $usernamesCond = '';
+            $actorCond = '';
         }
 
         $after = "SELECT COALESCE(rev_len, 0)
             FROM $dbName.$revisionTable cur
             WHERE rev_page=page_id
               AND rev_timestamp BETWEEN :start AND :end
-              {$usernamesCond}
+              {$actorCond}
             ORDER BY rev_timestamp DESC
             LIMIT 1";
 
@@ -406,7 +371,7 @@ class EventWikiRepository extends Repository
                 LEFT JOIN $dbName.$revisionTable prev ON cur.rev_parent_id=prev.rev_id
             WHERE cur.rev_page=page_id
               AND cur.rev_timestamp BETWEEN :start AND :end
-              {$usernamesCond}
+              {$actorCond}
             ORDER BY cur.rev_timestamp ASC
             LIMIT 1";
 
@@ -423,11 +388,11 @@ class EventWikiRepository extends Repository
                 'start' => $event->getStartUTC()->format('YmdHis'),
                 'end' => $event->getEndUTC()->format('YmdHis'),
                 'pageIds' => $pageIds,
-                'usernames' => $usernames,
+                'actors' => $actors,
             ],
             [
                 'pageIds' => Connection::PARAM_INT_ARRAY,
-                'usernames' => Connection::PARAM_STR_ARRAY,
+                'actors' => Connection::PARAM_INT_ARRAY,
             ]
         );
 
@@ -446,10 +411,11 @@ class EventWikiRepository extends Repository
     {
         $revisionTable = $this->getTableName('revision');
         $rqb = $this->getReplicaConnection()->createQueryBuilder();
-        $rqb->select('DISTINCT(rev_user_text)')
-            ->from("$dbName.$revisionTable")
+        $rqb->select('DISTINCT(actor_name)')
+            ->from("$dbName.$revisionTable", 'r')
+            ->join('r', "$dbName.actor", 'a', 'a.actor_id = r.rev_actor')
             ->where('rev_page IN (:pageIds)')
-            ->andWhere('rev_user <> 0')
+            ->andWhere('actor_user IS NOT NULL')
             ->andWhere('rev_timestamp BETWEEN :start AND :end')
             ->setParameter('pageIds', $pageIds, Connection::PARAM_INT_ARRAY)
             ->setParameter('start', $event->getStartUTC()->format('YmdHis'))

@@ -32,6 +32,9 @@ class EventProcessor
      */
     private const PAGEVIEWS_BLACKLIST = [ 'commons', 'wikidata' ];
 
+    /** Store actors for no more than this number of wikis at once. */
+    private const ACTOR_CACHE_SIZE = 3;
+
     /** @var ContainerInterface The application's container interface. */
     private $container;
 
@@ -88,6 +91,9 @@ class EventProcessor
 
     /** @var string[] Usernames of Participants. */
     private $participantNames;
+
+    /** @var int[][] Per-wiki actor IDs cache. */
+    private $actorCache = [];
 
     /**
      * Constructor for the EventProcessor.
@@ -427,7 +433,7 @@ class EventProcessor
 
         $logKey = 'bytes_changed';
         $this->logStart("> Fetching bytes changed...", $logKey);
-        $diff = $ewRepo->getBytesChanged($this->event, $dbName, $pageIds, $this->getParticipantNames());
+        $diff = $ewRepo->getBytesChanged($this->event, $dbName, $pageIds, $this->getActorIds($dbName));
         $this->logEnd($logKey);
         $this->log(">> <info>Bytes changed: {$diff}</info>");
 
@@ -464,7 +470,7 @@ class EventProcessor
         $start = $this->event->getStartUTC();
         $end = $this->event->getEndUTC();
 
-        $pageIds = $ewRepo->getPageIds($dbName, $start, $end, $this->getParticipantNames(), $categories, 'files');
+        $pageIds = $ewRepo->getPageIds($dbName, $start, $end, $this->getActorIds($dbName), $categories, 'files');
         $this->createOrUpdateEventWikiStat($wiki, 'files-uploaded', count($pageIds));
         $wiki->setPagesFiles($pageIds);
         $this->filesUploaded += count($pageIds);
@@ -523,9 +529,10 @@ class EventProcessor
         $start = $this->event->getStartUTC();
         $end = $this->event->getEndUTC();
         $usernames = $this->getParticipantNames();
+        $actors = $this->getActorIds($dbName);
         $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
-        $pageIdsCreated = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'created');
-        $pageIdsEdited = $ewRepo->getPageIds($dbName, $start, $end, $usernames, $categoryTitles, 'edited');
+        $pageIdsCreated = $ewRepo->getPageIds($dbName, $start, $end, $actors, $categoryTitles, 'created');
+        $pageIdsEdited = $ewRepo->getPageIds($dbName, $start, $end, $actors, $categoryTitles, 'edited');
         $pageIdsImproved = array_diff($pageIdsEdited, $pageIdsCreated);
 
         $totalEditCount = $this->eventRepo->getTotalEditCount(
@@ -590,6 +597,24 @@ class EventProcessor
         );
 
         return $this->participantNames;
+    }
+
+    /**
+     * Returns actor IDs for the given wiki. Users absent locally are omitted.
+     * @param string $dbName
+     * @return int[]
+     */
+    private function getActorIds(string $dbName): array
+    {
+        if (!isset($this->actorCache[$dbName])) {
+            if (self::ACTOR_CACHE_SIZE === count($this->actorCache)) {
+                array_shift($this->actorCache);
+            }
+            $usernames = $this->getParticipantNames();
+            $this->actorCache[$dbName] = $this->eventRepo->getActorIdsFromUsernames($dbName, $usernames);
+        }
+
+        return $this->actorCache[$dbName];
     }
 
     /**
