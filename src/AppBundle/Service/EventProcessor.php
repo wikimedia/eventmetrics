@@ -528,7 +528,6 @@ class EventProcessor
 
         $start = $this->event->getStartUTC();
         $end = $this->event->getEndUTC();
-        $usernames = $this->getParticipantNames();
         $actors = $this->getActorIds($dbName);
         $categoryTitles = $this->event->getCategoryTitlesForWiki($wiki);
         $pageIdsCreated = $ewRepo->getPageIds($dbName, $start, $end, $actors, $categoryTitles, 'created');
@@ -540,7 +539,7 @@ class EventProcessor
             array_merge($pageIdsCreated, $pageIdsEdited),
             $start,
             $end,
-            $usernames
+            $actors
         );
         $this->edits += $totalEditCount;
 
@@ -705,7 +704,8 @@ class EventProcessor
                 $progress->advance();
             }
 
-            $ret = $this->eventRepo->getUsersRetained($dbName, $end, $usernames);
+            $actors = $this->eventRepo->getActorIdsFromUsernames($dbName, $usernames);
+            $ret = $this->eventRepo->getUsersRetained($dbName, $end, $actors);
             $usersRetained = array_unique(array_merge($ret, $usersRetained));
 
             // Short-circuit if we've confirmed that all users have met the retention threshold.

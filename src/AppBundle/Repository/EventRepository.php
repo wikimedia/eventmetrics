@@ -79,7 +79,7 @@ class EventRepository extends Repository
      * @param int[] $pageIds
      * @param DateTime $start
      * @param DateTime $end
-     * @param string[] $usernames
+     * @param int[] $actors
      * @return int
      */
     public function getTotalEditCount(
@@ -87,7 +87,7 @@ class EventRepository extends Repository
         array $pageIds,
         DateTime $start,
         DateTime $end,
-        array $usernames = []
+        array $actors = []
     ): int {
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
@@ -102,9 +102,9 @@ class EventRepository extends Repository
             ->where($rqb->expr()->in('rev_page', ':pageIds'))
             ->andWhere('rev_timestamp BETWEEN :start AND :end');
 
-        if (count($usernames) > 0) {
-            $rqb->andWhere($rqb->expr()->in('rev_user_text', ':usernames'))
-                ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+        if ($actors) {
+            $rqb->andWhere($rqb->expr()->in('rev_actor', ':actors'))
+                ->setParameter('actors', $actors, Connection::PARAM_INT_ARRAY);
         }
 
         $rqb->setParameter('pageIds', $pageIds, Connection::PARAM_INT_ARRAY)
@@ -266,10 +266,10 @@ class EventRepository extends Repository
      * for the given wiki.
      * @param string $dbName Database name.
      * @param DateTime $start Search only from this time moving forward.
-     * @param string[] $usernames
+     * @param int[] $actors
      * @return string[]
      */
-    public function getUsersRetained(string $dbName, DateTime $start, array $usernames): array
+    public function getUsersRetained(string $dbName, DateTime $start, array $actors): array
     {
         $start = $start->format('YmdHis');
         $conn = $this->getReplicaConnection();
@@ -277,12 +277,13 @@ class EventRepository extends Repository
 
         $revisionTable = $this->getTableName('revision');
 
-        $rqb->select('DISTINCT(rev_user_text) AS username')
-            ->from("$dbName.$revisionTable")
+        $rqb->select('DISTINCT(actor_name) AS username')
+            ->from("$dbName.$revisionTable", 'r')
+            ->join('r', "$dbName.actor", 'a', 'rev_actor = actor_id')
             ->where('rev_timestamp > :start')
-            ->andWhere('rev_user_text IN (:usernames)')
+            ->andWhere('rev_actor IN (:actors)')
             ->setParameter('start', $start)
-            ->setParameter('usernames', $usernames, Connection::PARAM_STR_ARRAY);
+            ->setParameter('actors', $actors, Connection::PARAM_INT_ARRAY);
         $ret = $this->executeQueryBuilder($rqb)->fetchAll();
 
         return array_column($ret, 'username');
