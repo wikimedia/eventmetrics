@@ -429,7 +429,7 @@ class EventWikiRepository extends Repository
      * @param string $dbName
      * @param int $pageId
      * @param string $pageTitle
-     * @param string[] $usernames
+     * @param int[] $actors
      * @param DateTime $end
      * @return string[]
      */
@@ -437,7 +437,7 @@ class EventWikiRepository extends Repository
         string $dbName,
         int $pageId,
         string $pageTitle,
-        array $usernames,
+        array $actors,
         DateTime $end
     ): array {
         // Use cache if it exists.
@@ -447,16 +447,16 @@ class EventWikiRepository extends Repository
         }
 
         $end = $end->format('YmdHis');
-        $usernamesSql = empty($usernames) ? '' : 'AND rev_user_text IN (:usernames)';
+        $usernamesSql = empty($actors) ? '' : 'AND rev_actor IN (:actors)';
 
         // Only use revision_userindex when filtering by user.
-        $userRevisionTable = empty($usernames) ? 'revision' : 'revision_userindex';
+        $userRevisionTable = $actors ? 'revision' : 'revision_userindex';
 
         $sql = "SELECT `metric`, `value` FROM (
                     (
-                        SELECT 'creator' AS `metric`, rev_user_text AS `value`
-                        FROM $dbName.revision
-                        WHERE rev_page = :pageId
+                        SELECT 'creator' AS `metric`, actor_name AS `value`
+                        FROM $dbName.revision, $dbName.actor
+                        WHERE rev_page = :pageId AND rev_actor = actor_id
                         LIMIT 1
                     ) UNION (
                         SELECT 'edits' AS `metric`, COUNT(*) AS `value`
@@ -488,11 +488,11 @@ class EventWikiRepository extends Repository
             [
                 'pageId' => $pageId,
                 'pageTitle' => $pageTitle,
-                'usernames' => $usernames,
+                'actors' => $actors,
                 'end' => $end,
             ],
             [
-                'usernames' => Connection::PARAM_STR_ARRAY,
+                'actors' => Connection::PARAM_INT_ARRAY,
             ]
         )->fetchAll(\PDO::FETCH_KEY_PAIR);
 
@@ -503,10 +503,10 @@ class EventWikiRepository extends Repository
     /**
      * Get the data needed for the Pages Created report, for a single EventWiki.
      * @param EventWiki $wiki
-     * @param string[] $usernames
+     * @param int[] $actors
      * @return mixed[]
      */
-    public function getPagesCreatedData(EventWiki $wiki, array $usernames): array
+    public function getPagesCreatedData(EventWiki $wiki, array $actors): array
     {
         if ($wiki->isFamilyWiki()) {
             return [];
@@ -535,7 +535,7 @@ class EventWikiRepository extends Repository
                 $dbName,
                 (int)$page['page_id'],
                 $page['page_title'],
-                $usernames,
+                $actors,
                 $end
             );
 
@@ -555,7 +555,7 @@ class EventWikiRepository extends Repository
      * @param string $dbName
      * @param int $pageId
      * @param string $pageTitle
-     * @param string[] $usernames
+     * @param int[] $actors
      * @param DateTime $start
      * @param DateTime $end
      * @return string[]
@@ -565,7 +565,7 @@ class EventWikiRepository extends Repository
         string $dbName,
         int $pageId,
         string $pageTitle,
-        array $usernames,
+        array $actors,
         DateTime $start,
         DateTime $end
     ): array {
@@ -577,10 +577,10 @@ class EventWikiRepository extends Repository
 
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
-        $usernamesSql = empty($usernames) ? '' : 'AND rev.rev_user_text IN (:usernames)';
+        $actorsSql = $actors ? '' : 'AND rev.rev_actor IN (:actors)';
 
         // Only use revision_userindex when filtering by user.
-        $userRevisionTable = empty($usernames) ? 'revision' : 'revision_userindex';
+        $userRevisionTable = $actors ? 'revision' : 'revision_userindex';
 
         $sql = "SELECT `metric`, `value` FROM (
                     (
@@ -588,14 +588,14 @@ class EventWikiRepository extends Repository
                         FROM $dbName.$userRevisionTable rev
                         WHERE rev_page = :pageId
                             AND rev_timestamp BETWEEN :start AND :end
-                            $usernamesSql
+                            $actorsSql
                     ) UNION (
                         SELECT 'start_bytes' AS `metric`, COALESCE(prev.rev_len, 0) AS `value`
                             FROM $dbName.$userRevisionTable rev
                                 LEFT JOIN $dbName.$userRevisionTable prev ON rev.rev_parent_id=prev.rev_id
                             WHERE rev.rev_page=:pageId
                               AND rev.rev_timestamp BETWEEN :start AND :end
-                              {$usernamesSql}
+                              {$actorsSql}
                             ORDER BY rev.rev_timestamp ASC
                             LIMIT 1
                     ) UNION (
@@ -603,7 +603,7 @@ class EventWikiRepository extends Repository
                             FROM $dbName.$userRevisionTable rev
                             WHERE rev_page=:pageId
                               AND rev_timestamp BETWEEN :start AND :end
-                              {$usernamesSql}
+                              {$actorsSql}
                             ORDER BY rev_timestamp DESC
                             LIMIT 1
                     ) UNION (
@@ -622,12 +622,12 @@ class EventWikiRepository extends Repository
             [
                 'pageId' => $pageId,
                 'pageTitle' => $pageTitle,
-                'usernames' => $usernames,
+                'actors' => $actors,
                 'start' => $start,
                 'end' => $end,
             ],
             [
-                'usernames' => Connection::PARAM_STR_ARRAY,
+                'actors' => Connection::PARAM_INT_ARRAY,
             ]
         )->fetchAll(\PDO::FETCH_KEY_PAIR);
 
@@ -644,10 +644,10 @@ class EventWikiRepository extends Repository
     /**
      * Get the data needed for the Pages Created report, for a single EventWiki.
      * @param EventWiki $wiki
-     * @param string[] $usernames
+     * @param int[] $actors
      * @return mixed[]
      */
-    public function getPagesImprovedData(EventWiki $wiki, array $usernames): array
+    public function getPagesImprovedData(EventWiki $wiki, array $actors): array
     {
         if ($wiki->isFamilyWiki()) {
             return [];
@@ -673,7 +673,7 @@ class EventWikiRepository extends Repository
                 $dbName,
                 (int)$page['page_id'],
                 $page['page_title'],
-                $usernames,
+                $actors,
                 $start,
                 $end
             );
