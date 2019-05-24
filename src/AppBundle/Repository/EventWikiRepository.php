@@ -22,6 +22,12 @@ class EventWikiRepository extends Repository
     /** Max number of pages to be returned when generating page IDs. */
     public const MAX_PAGES = 50000;
 
+    /** @var string[]|null[] */
+    private $domainsFromWiki = [];
+
+    /** @var string[]|null[] */
+    private $dbNamesFromDomain = [];
+
     /**
      * Class name of associated entity.
      * Implements Repository::getEntityClass
@@ -39,6 +45,10 @@ class EventWikiRepository extends Repository
      */
     public function getDomainFromEventWikiInput(string $value): ?string
     {
+        if (array_key_exists($value, $this->domainsFromWiki)) {
+            return $this->domainsFromWiki[$value];
+        }
+
         if ('*.' === substr($value, 0, 2)) {
             $ret = $this->getWikiFamilyName(substr($value, 2));
             return null !== $ret ? '*.'.$ret : null;
@@ -58,17 +68,15 @@ class EventWikiRepository extends Repository
 
         // No matches found.
         if (!$ret) {
+            $this->domainsFromWiki[$value] = null;
             return null;
         }
 
         // Extract and return just the domain name without '.org' suffix.
         $matches = [];
         preg_match('/^https?\:\/\/(.*)\.org$/', $ret['url'], $matches);
-        if (isset($matches[1])) {
-            return $matches[1];
-        } else {
-            return null;
-        }
+        $this->domainsFromWiki[$value] = $matches[1] ?? null;
+        return $this->domainsFromWiki[$value];
     }
 
     /**
@@ -91,10 +99,14 @@ class EventWikiRepository extends Repository
     /**
      * Get the database name of the given (partial) domain name.
      * @param string $domain The domain name, without trailing '.org'.
-     * @return string Null if not found.
+     * @return string
+     * @throws Exception
      */
     public function getDbNameFromDomain(string $domain): string
     {
+        if (isset($this->dbNamesFromDomain[$domain])) {
+            return $this->dbNamesFromDomain[$domain];
+        }
         $projectUrl = "https://$domain.org";
 
         $conn = $this->getMetaConnection();
@@ -108,7 +120,9 @@ class EventWikiRepository extends Repository
         if (!isset($row['dbname'])) {
             throw new Exception("Unable to determine database name for domain '$domain'.");
         }
-        return $row['dbname'];
+        $this->dbNamesFromDomain[$domain] = $row['dbname'];
+
+        return $this->dbNamesFromDomain[$domain];
     }
 
     /**
