@@ -2,9 +2,11 @@
 	"@metadata": {
 		"authors": [
 			"Mooeypoo",
-			"YaronSh"
+			"YaronSh",
+			"Steeve815"
 		]
 	},
+	"add-category": "הוספת קטגוריה",
 	"add-more-participants": "הוספת משתתפים, אחד לשורה. ניתן להעתיק ולהדביק מרשימה קיימת בויקי.",
 	"add-more-participants-tooltip": "לקריאה נוספת על הוספת שמות משתמש למשתתפים",
 	"add-organizer": "הוספת מארגן",
@@ -17,11 +19,16 @@
 	"byte-difference": "בתים השתנו",
 	"calculate-totals": "חישוב סכומים",
 	"cancel": "ביטול",
+	"categories": "קטגוריות",
+	"categories-panel-title": "מסנן קטגוריות",
+	"category-name": "שם הקטגוריה",
 	"close": "סגירה",
 	"confirm-deletion": "האם אתם בטוחים שברצונכם למחוק את '$1'?",
+	"contributions": "תרומות",
 	"copy": "העתקה",
 	"create-new-event": "יצירת ארוע חדש",
 	"create-new-program": "יצירת תוכנית חדשה",
+	"creator": "יוצר",
 	"date": "תאריך",
 	"delete": "מחיקה",
 	"developed-by": "פותח על ידי צוות Community Tech",
@@ -29,6 +36,7 @@
 	"documentation": "תיעוד",
 	"edit-program": "עריכת תכנית",
 	"edit-summary": "הערה",
+	"edits": "עריכות",
 	"enable-event-times": "הפעלת תאריכי התחלה וסיום עבור האירוע",
 	"end-date": "תאריך סיום",
 	"end-time": "זמן סיום",
