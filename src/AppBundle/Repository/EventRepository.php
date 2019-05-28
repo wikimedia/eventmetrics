@@ -395,7 +395,9 @@ class EventRepository extends Repository
 
         $revisionTable = $this->getTableName('revision');
         $pageTable = $this->getTableName('page');
-        $usernames = $this->getUsernamesSql($event);
+
+        $userIds = $event->getParticipantIds();
+        $usernames = array_column($this->getUsernamesFromIds($userIds), 'user_name');
 
         foreach ($event->getWikis() as $wiki) {
             // Family wikis are essentially placeholder EventWikis. They are not queryable by themselves.
@@ -409,51 +411,36 @@ class EventRepository extends Repository
             $dbName = $eventWikiRepo->getDbNameFromDomain($domain);
             $pageIdsSql = implode(',', array_merge($wiki->getPages(), $wiki->getPagesFiles()));
 
+            $actors = $this->getActorIdsFromUsernames($dbName, $usernames);
+            // The above function guarantees it returns only ints
+            $actorList = ltrim(implode(',', $actors), ',');
+
             // Skip if there are no pages to query (otherwise `rev_page IN` clause will cause SQL error).
             if ('' === $pageIdsSql) {
                 continue;
             }
 
-            $usernameClause = '' === $usernames ? '' : "AND rev_user_text IN ($usernames)";
+            $actorClause = '' === $actorList ? '' : "AND rev_actor IN ($actorList)";
 
             $sqlClauses[] = "SELECT rev_id AS 'id',
                     rev_timestamp AS 'timestamp',
                     REPLACE(page_title, '_', ' ') AS 'page',
                     page_namespace AS namespace,
-                    rev_user_text AS 'username',
+                    actor_name AS 'username',
                     IFNULL(comment_text, '') AS 'summary',
                     '$domain' AS 'wiki'
                 FROM $dbName.$revisionTable
-                INNER JOIN $dbName.$pageTable ON page_id = rev_page
-                LEFT OUTER JOIN $dbName.comment ON rev_comment_id = comment_id
+                    INNER JOIN $dbName.$pageTable ON page_id = rev_page
+                    LEFT OUTER JOIN $dbName.comment ON rev_comment_id = comment_id
+                    JOIN $dbName.actor ON rev_actor = actor_id
                 WHERE page_is_redirect = 0
-                $usernameClause
+                $actorClause
                 AND rev_page IN ($pageIdsSql)
                 AND rev_timestamp BETWEEN :startDate AND :endDate";
         }
 
         $this->revisionsInnerSql = implode(' UNION ', $sqlClauses);
         return $this->revisionsInnerSql;
-    }
-
-    /**
-     * Get usernames as need for an IN clause in the SQL. Have to do this hackiness
-     * because you can't bind PARAM_STR_ARRAY in Doctrine. The usernames are fetched
-     * from CentralAuth, so they are safe from SQL injection.
-     * @param Event $event
-     * @return string
-     */
-    private function getUsernamesSql(Event $event): string
-    {
-        $userIds = $event->getParticipantIds();
-        $usernames = array_column($this->getUsernamesFromIds($userIds), 'user_name');
-
-        // Quote for raw SQL string.
-        $usernames = array_map(function ($username) {
-            return $this->getReplicaConnection()->quote($username, \PDO::PARAM_STR);
-        }, $usernames);
-
-        return ltrim(implode(',', $usernames), ',');
     }
 
     /**
