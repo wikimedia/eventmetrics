@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace AppBundle\Repository;
 
 use AppBundle\Model\Event;
+use AppBundle\Model\EventWiki;
 use DateInterval;
 use DateTime;
 use Doctrine\DBAL\Connection;
@@ -478,11 +479,14 @@ class EventRepository extends Repository
         $ewRepo = $this->em->getRepository('Model:EventWiki');
         $ewRepo->setContainer($this->container);
 
+        /** @var EventWiki $wiki */
         foreach ($event->getWikis()->getIterator() as $wiki) {
+            $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
+            $actors = $this->getActorIdsFromUsernames($dbName, $usernames);
             if (self::PAGES_CREATED === $type) {
-                $wikiPages = $ewRepo->getPagesCreatedData($wiki, $usernames);
+                $wikiPages = $ewRepo->getPagesCreatedData($wiki, $actors);
             } else {
-                $wikiPages = $ewRepo->getPagesImprovedData($wiki, $usernames);
+                $wikiPages = $ewRepo->getPagesImprovedData($wiki, $actors);
             }
             $data = array_merge($data, $wikiPages);
         }
