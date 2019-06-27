@@ -3,7 +3,8 @@
 		"authors": [
 			"Mooeypoo",
 			"YaronSh",
-			"Steeve815"
+			"Steeve815",
+			"Strayblues"
 		]
 	},
 	"add-category": "הוספת קטגוריה",
@@ -45,7 +46,7 @@
 	"enable-event-times": "הפעלת תאריכי התחלה וסיום עבור האירוע",
 	"end-date": "תאריך סיום",
 	"end-time": "זמן סיום",
-	"error-event-retry-link": "לדווח את הבעיה",
+	"error-event-retry-link": "לדווח על הבעיה",
 	"error-event-timeout": "התהליך נמשך זמן רב מדי ולכן הוא נעצר.",
 	"error-event-undeletable": "לא ניתן למחוק את האירוע בגלל שיש בו משתתפים",
 	"error-invalid": "ערך זה אינו חוקי.",
@@ -56,7 +57,7 @@
 	"error-server-message": "השרת השיב: $1",
 	"event": "אירוע",
 	"event-download-csv": "הורדת CSV",
-	"event-download-reports": "הורדת דיווחים",
+	"event-download-reports": "הורדת דו״חות",
 	"event-download-wikitext": "הורדה כטבלת ויקי",
 	"event-list": "רשימת אירועים",
 	"events": "אירועים",
