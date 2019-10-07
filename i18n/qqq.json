@@ -3,7 +3,8 @@
 		"authors": [
 			"MusikAnimal",
 			"Samwilson",
-			"Robby"
+			"Robby",
+			"Verdy p"
 		]
 	},
 	"add-category": "Link to add a new category to an event.",
@@ -137,9 +138,9 @@
 	"metadata-start-date": "Label for the 'start date' field of event metadata.",
 	"metadata-wikis-label": "Label preceding a list of wikis. $1 is the number of items in the list.",
 	"not-all-wikis-have-cats": "Description shown in categories' form panel header when some wikis are missing categories.",
-	"num-abbrev-billion": "Abbreviation for 'billion'. This is used to simplify display of numerical statistics. This message should be one or two characters long.\n{{Optional}}",
-	"num-abbrev-million": "Abbreviation for 'million'. This is used to simplify display of numerical statistics. This message should be one or two characters long.\n{{Optional}}",
-	"num-abbrev-thousand": "Abbreviation for 'thousand'. This is used to simplify display of numerical statistics. This message should be one or two characters long.\n{{Optional}}",
+	"num-abbrev-billion": "Abbreviation for 'billion' (× 1 000 000 000). This is used to simplify display of numerical statistics. This message should be one or two characters long.\n{{Optional}}",
+	"num-abbrev-million": "Abbreviation for 'million' (× 1 000 000). This is used to simplify display of numerical statistics. This message should be one or two characters long.\n{{Optional}}",
+	"num-abbrev-thousand": "Abbreviation for 'thousand' (× 1 000). This is used to simplify display of numerical statistics. This message should be one or two characters long.\n{{Optional}}",
 	"num-categories": "Description text for the header of the categories' filter panel.\n$1 is the number of categories.",
 	"num-days": "Conditional PLURAL form of 'day'. $1 is the number.\n{{Identical|Day}}",
 	"num-hours": "Conditional PLURAL form of 'hour'. $1 is the number.\n{{Identical|Hour}}",
