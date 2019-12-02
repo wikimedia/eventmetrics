@@ -96,7 +96,7 @@
 	"event-list": "Lista de eventos",
 	"event-metrics": "Event Metrics",
 	"event-metrics-welcome": "Bem-vindo(a) à aplicativo Event Metrics",
-	"event-no-data": "Configurações de eventos salvas com sucesso. Clique em $1 para obter métricas.",
+	"event-no-data": "Configurações de eventos salvas. Clique em $1 para obter métricas.",
 	"event-settings": "Configurações do evento",
 	"event-summary": "Resumo do evento",
 	"event-summary-report": "Relatório de \"Resumo do evento\"",
