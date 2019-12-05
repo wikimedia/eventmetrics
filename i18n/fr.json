@@ -103,7 +103,7 @@
 	"event-settings": "Paramètres de l’événement",
 	"event-summary": "Résumé de l’événement",
 	"event-summary-report": "Rapport « Résumé d’événement »",
-	"event-updated": "L’événement « $1 » a été mis à jour. Les statistiques peuvent avoir besoin d’être régénérées.",
+	"event-updated": "L’événement « $1 » a été mis à jour. Il peut être nécessaire de régénérer les statistiques.",
 	"events": "Événements",
 	"fatal-error": "Erreur fatale",
 	"feedback": "Avis",
