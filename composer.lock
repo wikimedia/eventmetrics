@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c9582690db217f46a08b6a96441f1e2",
+    "content-hash": "9d64583dc1a945cd85c713ff90e30af3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3367,16 +3367,16 @@
         },
         {
             "name": "wikimedia/toolforge-bundle",
-            "version": "0.14.4",
+            "version": "0.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/ToolforgeBundle.git",
-                "reference": "1f3695ee47cbbb6fbf0556e9006f4d41e87da796"
+                "reference": "1ebfeb47c64ad5c317125511cafad7293ae45c6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/ToolforgeBundle/zipball/1f3695ee47cbbb6fbf0556e9006f4d41e87da796",
-                "reference": "1f3695ee47cbbb6fbf0556e9006f4d41e87da796",
+                "url": "https://api.github.com/repos/wikimedia/ToolforgeBundle/zipball/1ebfeb47c64ad5c317125511cafad7293ae45c6a",
+                "reference": "1ebfeb47c64ad5c317125511cafad7293ae45c6a",
                 "shasum": ""
             },
             "require": {
@@ -3410,7 +3410,7 @@
             ],
             "description": "Symfony 4 bundle providing useful Toolforge features.",
             "homepage": "https://github.com/wikimedia/toolforgebundle",
-            "time": "2019-05-17T15:55:37+00:00"
+            "time": "2019-12-07T01:23:53+00:00"
         },
         {
             "name": "zendframework/zend-code",
@@ -4628,16 +4628,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "8.4.3",
+            "version": "8.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "67f9e35bffc0dd52d55d565ddbe4230454fd6a4e"
+                "reference": "3ee1c1fd6fc264480c25b6fb8285edefe1702dab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/67f9e35bffc0dd52d55d565ddbe4230454fd6a4e",
-                "reference": "67f9e35bffc0dd52d55d565ddbe4230454fd6a4e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3ee1c1fd6fc264480c25b6fb8285edefe1702dab",
+                "reference": "3ee1c1fd6fc264480c25b6fb8285edefe1702dab",
                 "shasum": ""
             },
             "require": {
@@ -4681,7 +4681,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.4-dev"
+                    "dev-master": "8.5-dev"
                 }
             },
             "autoload": {
@@ -4707,7 +4707,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-11-06T09:42:23+00:00"
+            "time": "2019-12-06T05:41:38+00:00"
         },
         {
             "name": "pimple/pimple",

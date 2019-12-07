@@ -42,7 +42,7 @@
         "symfony/symfony": "~4.2.12",
         "symfony/webpack-encore-pack": "^1.0",
         "twig/twig": "^2.0",
-        "wikimedia/toolforge-bundle": "^0.14"
+        "wikimedia/toolforge-bundle": "^0.18"
     },
     "require-dev": {
         "allocine/twigcs": "^3.1",
