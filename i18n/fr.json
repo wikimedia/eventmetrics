@@ -81,7 +81,7 @@
 	"error-query-timeout": "Désolé, l’information demandée a pris trop de temps pour être traitée (délai de $1 {{PLURAL:$1|seconde|secondes}}). Afin d’économiser les ressources, la requête a été automatiquement arrêtée.",
 	"error-server-message": "Le serveur a répondu : $1",
 	"error-service-overload": "Event Metrics est actuellement surchargé par d’autres requêtes. Veuillez réessayer dans quelques minutes.",
-	"error-title-invalid-chars": "Les titres ne peuvent pas contenir les caractères : $1.",
+	"error-title-invalid-chars": "Les titres ne peuvent contenir aucun des caractères : $1.",
 	"error-title-numeric": "Le titre ne peut pas être un chiffre.",
 	"error-unconfigured-wiki": "$1 n’est pas configuré pour cet événement. Veuillez d’abord ajouter le wiki à l’événement.",
 	"error-unknown": "Quelque chose s’est mal passé",
