@@ -81,7 +81,7 @@
 	"error-title-numeric": "O título não pode ser um número.",
 	"error-unconfigured-wiki": "$1 não está configurada para este evento. Primeiro adicione a wiki ao evento, por favor.",
 	"error-unknown": "Ocorreu um problema",
-	"error-usernames": "$1 {{PLURAL:$1|nome de utilizador é inválido. Edite ou remova-o|nomes de utilizador são inválidos. Edite ou remova-os}} e volte a enviar para gravar. Verifique se existem erros ortográficos, uso incorreto de maiúsculas e formatação extra, por favor.",
+	"error-usernames": "$1 {{PLURAL:$1|nome de utilizador é inválido. Edite-o ou remova-o|nomes de utilizador são inválidos. Edite ou remova-os}} e volte a enviar para gravar. Verifique se existem erros ortográficos, uso incorreto de maiúsculas e formatação extra, por favor.",
 	"error-wikis": "$1 {{PLURAL:$1|wiki é inválida|wikis são inválidas}}. Verifique a existência de erros ortográficos.",
 	"event": "Evento",
 	"event-all-edits": "Todas as edições",
