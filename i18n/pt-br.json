@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Eduardo Addad de Oliveira"
+			"Eduardo Addad de Oliveira",
+			"Dr03ramos"
 		]
 	},
 	"add-category": "Adicionar categoria",
@@ -52,7 +53,7 @@
 	"enable-event-times": "Ativar datas de início e fim para este evento",
 	"end-date": "Data de término",
 	"end-time": "Hora de término",
-	"error-categories": "$1 {{PLURAL:$1|categoria|categorias}} {{PLURAL:$1|é|são}} {{PLURAL:$1|inválida|inválidas}}. Por favor, edite ou remova-os e, em seguida, envie novamente para salvar. Verifique se há ortografia incorreta e verifique se o wiki é válido.",
+	"error-categories": "$1 {{PLURAL:$1|categoria|categorias}} {{PLURAL:$1|é|são}} {{PLURAL:$1|inválida|inválidas}}. Por favor, edite ou remova-as e, em seguida, envie novamente para salvar. Verifique se há ortografia incorreta e tenha certeza de que o wiki é válido.",
 	"error-event-retry": "Tente novamente ou $1 (lembre-se de incluir uma link para o seu evento).",
 	"error-event-retry-link": "reporte este problema",
 	"error-event-timeout": "Este processo demorou muito e foi interrompido.",
@@ -81,7 +82,7 @@
 	"error-title-numeric": "O título não pode ser um número.",
 	"error-unconfigured-wiki": "$1 não está configurado para este evento. Por favor, adicione o wiki ao evento primeiro.",
 	"error-unknown": "Algo deu errado",
-	"error-usernames": "$1 {{PLURAL:$1|nome de usuário é inválido. Edite ou remova-o|nomes de usuário são inválidos. Edite ou remova-os}} e volte a enviar para gravar. Verifique se existem erros ortográficos, uso incorreto de maiúsculas e formatação extra.",
+	"error-usernames": "$1 {{PLURAL:$1|nome de usuário é inválido. Edite ou remova-o|nomes de usuário são inválidos. Edite ou remova-os}} e volte a enviar para salvar. Verifique se existem erros ortográficos, uso incorreto de maiúsculas e formatação extra.",
 	"error-wikis": "$1 {{PLURAL:$1|wiki é inválida|wikis são inválidas}}. Verifique a existência de erros ortográficos.",
 	"event": "Evento",
 	"event-all-edits": "Todas as edições",
