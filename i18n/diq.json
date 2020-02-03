@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Mirzali",
-			"Orbot707"
+			"Orbot707",
+			"1917 Ekim Devrimi"
 		]
 	},
 	"add-category": "Kategoriye cı ke",
@@ -42,9 +43,14 @@
 	"error-unknown": "Tayê çi ğelet şi",
 	"event": "Weqa",
 	"event-all-edits": "Vurnayışi pêro",
-	"event-download-csv": "Zey CSVyi rone",
+	"event-all-edits-report": "Raporê 'vurnayışa pêro'",
+	"event-created": "Weqay '$1' vıraziyê",
+	"event-deleted": "Weqay $1 esteriyê",
+	"event-download-csv": "CSV rone",
 	"event-download-reports": "Raporê ronayışi",
-	"event-download-wikitext": "Zey tabloyê Wikiyi rone",
+	"event-download-wikitext": "Ravêr Wikimetin",
+	"event-in-future": "Nq weqa do zemano amayen de bıbo",
+	"event-list": "Lista weqayi",
 	"event-metrics": "Event Metrics",
 	"event-metrics-welcome": "Şıma xeyr ameyê Event Metrics",
 	"events": "Weqeyi",
