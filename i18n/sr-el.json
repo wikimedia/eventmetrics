@@ -1,5 +1,7 @@
 {
-	"@metadata": [],
+	"@metadata": {
+		"authors": []
+	},
 	"add-category": "Dodaj kategoriju",
 	"add-more-participants": "Dodajte još učesnika, jedan po redu. Možete da direktno kopirate/nalepite iz liste na vikiju.",
 	"add-more-participants-tooltip": "Pročitajte više o tome kako da unosite korisnička imena učesnika",

@@ -1,9 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
+			"1917 Ekim Devrimi",
 			"Mirzali",
-			"Orbot707",
-			"1917 Ekim Devrimi"
+			"Orbot707"
 		]
 	},
 	"add-category": "Kategoriye cı ke",
@@ -62,8 +62,11 @@
 	"error-filters-wikidata-panel": "Seba Wikidata lazımo",
 	"error-invalid": "No erc ravêrde niyo.",
 	"error-server-message": "Serveri vat ke: $1",
+	"error-title-invalid-chars": "Serek, karakteran ra yewi wa ihtiwa nêkero: $1.",
 	"error-title-numeric": "Sername yew amar nêbeno",
+	"error-unconfigured-wiki": "$1 seba na event kanfigure nêkerda. Veror eventi wiki miyan kerê.",
 	"error-unknown": "Tayê çi ğelet şi",
+	"error-wikis": "$1 nêraverdi {{PLURAL:$1|viki|vikiy}}. Kontrolê imlay bıkerê.",
 	"event": "Weqa",
 	"event-all-edits": "Vurnayışi pêro",
 	"event-all-edits-report": "Raporê 'vurnayışa pêro'",
@@ -73,12 +76,15 @@
 	"event-download-reports": "Raporê ronayışi",
 	"event-download-wikitext": "Wikimetın bıgê",
 	"event-in-future": "Nq weqa do zemano amayen de bıbo",
+	"event-in-future-details": "İstatistiki enewke nêvırazênê. Qayılê terixê bıvurnê se, şırê $1",
 	"event-list": "Lista weqayi",
 	"event-metrics": "Event Metrics",
 	"event-metrics-welcome": "Şıma xeyr ameyê Event Metrics",
+	"event-no-data": "Eyarê eventi qeyd biyê. Metrika gırotışi rê $1 bıploğnê .",
 	"event-settings": "Eyarê serameyan",
 	"event-summary": "Xulasay serameyi",
 	"event-summary-report": "Raporê 'xulasay serameyi'",
+	"event-updated": "Eventa '$1' rocaneyaya. Istatistiki gani anewe bıbê .",
 	"events": "Weqeyi",
 	"fatal-error": "Xetaya mıhime",
 	"feedback": "Peyderıştış",
