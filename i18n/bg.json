@@ -42,7 +42,7 @@
 	"error-unknown": "Нещо се обърка",
 	"event": "Събитие",
 	"event-all-edits": "Всички редакции",
-	"event-created": "Събитие „$1“ е успешно създадено.",
+	"event-created": "Събитие „$1“ е създадено.",
 	"event-deleted": "Събитието „$1“ е изтрито.",
 	"event-download-csv": "Изтегляне на CSV",
 	"event-download-wikitext": "Изтегляне като Уикитекст",
