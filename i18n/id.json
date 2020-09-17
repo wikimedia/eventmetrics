@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"RXerself",
 			"RaymondSutanto94",
 			"Veracious"
 		]
@@ -63,9 +64,9 @@
 	"help-translate": "Bantu terjemahkan",
 	"hide-section": "Sembunyikan bagian ini",
 	"impact": "Dampak",
-	"items-created": "Item Wikidata dibuat",
+	"items-created": "Butir Wikidata dibuat",
 	"items-created-desc": "Jumlah semua item Wikidata yang dibuat selama acara.",
-	"items-improved": "Item Wikidata diperbaiki",
+	"items-improved": "Butir Wikidata diperbaiki",
 	"items-improved-desc": "Jumlah semua item Wikidata yang disunting selama acara (tidak termasuk item Wikidata yang dibuat)",
 	"last-updated-table": "Terakhir diperbarui",
 	"login-with-oauth": "Masuk log dengan OAuth",
