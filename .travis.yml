@@ -16,9 +16,9 @@ before_install:
   - mv travis.pub ~/.ssh/id_rsa.pub
   - chmod 600 ~/.ssh/id_rsa.pub
   - chmod 600 ~/.ssh/id_rsa
-  - echo "Host *.wmflabs" > ~/.ssh/config
+  - echo "Host *.toolforge.org" > ~/.ssh/config
   - echo "  User communitytech" > ~/.ssh/config
-  - ssh-keyscan -t rsa tools-dev.wmflabs.org >> ~/.ssh/known_hosts
+  - ssh-keyscan -t rsa dev.toolforge.org >> ~/.ssh/known_hosts
   - sudo apt-get install expect
   - ./build/ci/ssh-tunnel.sh
   #- ./build/phpdoc-install.php # Disabled until we need PhpDocumentor, see below.
@@ -46,7 +46,7 @@ script:
   - ./vendor/bin/phpunit --coverage-clover ./clover.xml tests
 
 after_script:
-  - ps -ef | grep communitytech@tools-dev.wmflabs.org | awk 'NR==1{print $3}' | xargs kill -9
+  - ps -ef | grep communitytech@dev.toolforge.org | awk 'NR==1{print $3}' | xargs kill -9
   - ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT
 
 branches:
