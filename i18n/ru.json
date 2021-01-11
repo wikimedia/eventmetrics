@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ailbeve",
 			"Facenapalm",
 			"Kareyac",
 			"Movses",
@@ -59,7 +60,7 @@
 	"error-unconfigured-wiki": "$1 не сконфигурирован для этого события. Сначала добавьте событие в вики.",
 	"error-unknown": "Что-то пошло не так",
 	"event": "Событие",
-	"event-created": "Событие «$1» было успешно создано.",
+	"event-created": "Событие «$1» создано.",
 	"event-deleted": "Событие «$1» было удалено.",
 	"event-download-csv": "Скачать CSV",
 	"event-download-reports": "Скачать отчёт",
@@ -111,10 +112,10 @@
 	"participation": "Участие",
 	"please-login": "Пожалуйста, представьтесь системе для продолжения.",
 	"program": "Программа",
-	"program-created": "Программа «$1» была успешно создана.",
+	"program-created": "Программа «$1» создана.",
 	"program-deleted": "Программа «$1» была успешно удалена.",
 	"program-settings": "Настройки программы",
-	"program-updated": "Программа «$1» была успешно обновлена.",
+	"program-updated": "Программа «$1» обновлена.",
 	"queued": "В очереди",
 	"queued-desc": "Ожидается генерация статистики…",
 	"remove": "Удалить",
