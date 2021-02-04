@@ -1,4 +1,11 @@
 {
+	"@metadata": {
+		"authors": [
+			"Korytaacheck",
+			"Martin Urbanec",
+			"Michaelbrabec"
+		]
+	},
 	"all": "Vše",
 	"apply": "Použít",
 	"cancel": "Zrušit",
@@ -8,6 +15,9 @@
 	"error-query-timeout": "Omlouváme se, ale požadovek příliš dlouho neodpovídal (jeho načtení trvalo více než $1 {{PLURAL:$1|sekundu|sekundy|sekund}}). V zájmu zachování zdrojů byl požadavek automaticky zrušen.",
 	"error-server-message": "Odpověď serveru: $1",
 	"error-service-overload": "Event Metrics je momentálně příliš zatížen mnoha jinými požadavky. Počkejte prosím několik minut a poté zkuste znovu.",
+	"error-title-numeric": "Titulek nemůže být číslo",
+	"event-download-csv": "Stáhnout CSV",
+	"event-download-wikitext": "Získat Wikitext",
 	"fatal-error": "Kritická chyba",
 	"feedback": "Zpětná vazba",
 	"help": "Nápověda",
@@ -25,6 +35,7 @@
 	"report-issue": "Nahlásit problém",
 	"save": "Uložit",
 	"settings": "Nastavení",
+	"statistics": "Statistiky",
 	"submit": "Odeslat",
 	"totals": "Součty",
 	"unknown": "Neznámý",

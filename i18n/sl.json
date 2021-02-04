@@ -1,4 +1,9 @@
 {
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
 	"all": "Vse",
 	"apply": "Uporabi",
 	"cancel": "Prekliči",
@@ -12,5 +17,6 @@
 	"pager-older-n": "{{PLURAL:$1|starejši|starejša|starejši|starejših}} $1",
 	"save": "Shrani",
 	"settings": "Nastavitve",
+	"statistics": "Statistika",
 	"view-source": "Izvorno besedilo"
 }

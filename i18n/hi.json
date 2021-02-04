@@ -1,6 +1,12 @@
 {
+	"@metadata": {
+		"authors": [
+			"Prong$31"
+		]
+	},
 	"all": "सभी",
 	"apply": "लागू करें",
+	"byte-difference": "जोड़े गये बाइट्स",
 	"cancel": "रद्द करें",
 	"close": "बंद करें",
 	"date": "दिनांक",

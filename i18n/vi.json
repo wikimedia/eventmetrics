@@ -1,7 +1,30 @@
 {
+	"@metadata": {
+		"authors": [
+			"Tuanminh01"
+		]
+	},
+	"add-category": "Thêm thể loại",
+	"add-more-participants": "Thêm tên người dùng wiki bên dưới, mỗi tên một dòng, để giới hạn số liệu cho những người tham gia cụ thể.",
+	"add-more-participants-tooltip": "Tìm hiểu về cách lọc người tham gia",
+	"add-more-participants-note": "Bạn có thể sao chép / dán trực tiếp từ danh sách trên wiki.",
+	"add-organizer": "Thêm người tổ chức",
+	"add-wiki": "Thêm wiki",
 	"all": "Tất cả",
+	"all-wikipedias": "Tất cả các Wikipedia",
 	"apply": "Áp dụng",
+	"attribution": "Ghi công",
+	"attribution-background": "Hình nền có sẵn trên Commons với tại $1",
+	"attribution-font": "Font $1 có sẵn với giấy phép $2, nhờ có $3",
+	"attribution-font-awesome": "Biểu tượng $1 được phát hành dưới $2 nhờ có $3",
+	"avg-views": "Lượng xem trung bình",
+	"byte-difference": "Số bytes thay đổi",
+	"byte-difference-desc": "Các bytes được thêm và xóa trong các trang không gian tên chính. Không bao gồm hình ảnh hoặc các tệp khác nhưng không tính mã hóa wikitext. Thay đổi trang trên Commons và Wikidata không được tính.",
+	"byte-difference-during-event": "Byte thay đổi trong sự kiện",
+	"calculate-totals": "Tính toán tổng hợp",
 	"cancel": "Hủy bỏ",
+	"categories": "Thể loại",
+	"categories-panel-title": "Lọc thể loại",
 	"date": "Ngày tháng",
 	"documentation": "Tài liệu",
 	"edit-summary": "Miêu tả",

@@ -1,7 +1,37 @@
 {
+	"@metadata": {
+		"authors": [
+			"Saraiki"
+		]
+	},
+	"add-category": "ونکی شامل کرو",
+	"all": "یکے",
+	"all-wikipedias": "سارے وکی پیڈیا",
+	"cancel": "منسوخ",
+	"categories": "ونکیاں",
+	"category-name": "ونکی دا ناں",
+	"close": "بند کرو",
+	"copy": "نقل کرو",
+	"date": "تریخ",
+	"delete": "مٹاؤ",
+	"diff": "فرق",
+	"documentation": "دستاویز",
 	"fatal-error": "مہلک غلطی",
+	"feedback": "تہاڈی رائے",
 	"help": "مدد",
+	"help-translate": "ترجمے دی مدد",
+	"logout": "لاگ آؤٹ",
+	"page": "ورقہ",
+	"remove": "ہٹاؤ",
 	"save": "بچاؤ",
+	"save-categories": "ونکیاں محفوظ کرو",
 	"settings": "ترتیباں",
-	"unknown": "اݨ سونہاں"
+	"start-date": "شروع کرݨ دی تریخ",
+	"statistics": "شماريات",
+	"time": "ویلا",
+	"title": "عنوان",
+	"unknown": "اݨ سونہاں",
+	"username": "ورتݨ آلا ناں",
+	"wiki": "وکی",
+	"wikis": "وکیاں"
 }

@@ -4,6 +4,7 @@
 			"Papuass"
 		]
 	},
+	"add-organizer": "Pievienot organizatoru",
 	"all": "Visas",
 	"apply": "Pielietot",
 	"cancel": "Atcelt",
@@ -25,6 +26,8 @@
 	"help": "Palīdzība",
 	"help-translate": "Palīdzi iztulkot",
 	"login-with-oauth": "Pieslēgties ar OAuth",
+	"metadata-end-date": "Beigu datums:",
+	"metadata-start-date": "Sākuma datums:",
 	"num-days": "{{PLURAL:$1|dienas|diena|dienas}}",
 	"num-hours": "{{PLURAL:$1|stundas|stunda|stundas}}",
 	"organizers": "Organizatori",

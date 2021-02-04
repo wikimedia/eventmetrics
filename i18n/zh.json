@@ -1,4 +1,7 @@
 {
+	"@metadata": {
+		"authors": []
+	},
 	"edit-summary": "注释",
 	"logout": "注销",
 	"num-days": "{{PLURAL: $1|日}}",

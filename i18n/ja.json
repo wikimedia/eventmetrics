@@ -1,5 +1,17 @@
 {
+	"@metadata": {
+		"authors": [
+			"Omotecho",
+			"Suyama"
+		]
+	},
+	"add-category": "カテゴリを追加",
+	"add-more-participants": "参加者は1行に1人ずつ追加します。オンウィキのリストから直接、コピーペーストできます。",
+	"add-more-participants-tooltip": "参加する利用者名を記入する方法",
+	"add-organizer": "主催者を追加",
+	"add-wiki": "ウィキを追加",
 	"all": "すべて",
+	"all-wikipedias": "すべてのウィキペディア",
 	"apply": "適用",
 	"cancel": "キャンセル",
 	"close": "閉じる",
@@ -9,6 +21,7 @@
 	"edit-summary": "編集の要約",
 	"feedback": "フィードバック",
 	"help": "ヘルプ",
+	"hide-section": "この節を隠す",
 	"logout": "ログアウト",
 	"no-results": "該当するものはありません",
 	"num-days": "{{PLURAL: $1|日}}",
@@ -21,6 +34,8 @@
 	"report-issue": "問題の報告",
 	"save": "保存",
 	"settings": "設定",
+	"show-section": "この節を表示",
+	"statistics": "統計",
 	"submit": "送信",
 	"totals": "合計",
 	"unknown": "不明",

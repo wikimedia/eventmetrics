@@ -1,4 +1,9 @@
 {
+	"@metadata": {
+		"authors": [
+			"Bugoslav"
+		]
+	},
 	"all": "Sve",
 	"apply": "Primijeni",
 	"cancel": "Otkaži",
@@ -13,6 +18,7 @@
 	"page": "Stranica",
 	"pager-newer-n": "{{PLURAL:$1|novija $1|novije $1|novijih $1}}",
 	"pager-older-n": "{{PLURAL:$1|starija $1|starije $1|starijih $1}}",
+	"please-login": "Molimo Vas, prijavite se da biste mogli nastaviti.",
 	"report-issue": "Prijavi poteškoću",
 	"save": "Spremi",
 	"settings": "Postavke",

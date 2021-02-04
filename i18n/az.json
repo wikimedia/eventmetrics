@@ -1,6 +1,14 @@
 {
+	"@metadata": {
+		"authors": [
+			"Hüseynzadə",
+			"Toghrul Rahimli"
+		]
+	},
 	"error-server-message": "Server deyib: $1",
 	"fatal-error": "Ölümcül xəta",
 	"help": "Kömək",
+	"metadata-end-date": "Bitmə tarixi:",
+	"metadata-start-date": "Başlanğıc tarixi:",
 	"save": "Yadda saxla"
 }

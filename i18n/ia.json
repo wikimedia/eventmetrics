@@ -1,14 +1,34 @@
 {
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"add-category": "Adder categoria",
 	"all": "Totes",
 	"apply": "Applicar",
 	"cancel": "Cancellar",
+	"categories": "Categorias",
+	"category-name": "Nomine de categoria",
+	"error-categories": "$1 {{PLURAL:$1|categoria|categorias}} es invalide. Per favor, modifica o remove los e postea re-submitte le formulario. Verifica le orthographia e assecura te que le wiki es valide.",
+	"error-unconfigured-wiki": "$1 non es configurate pro iste evento. Per favor, adde le wiki al evento primo.",
 	"help-translate": "Adjutar a traducer",
+	"items-created": "Entratas Wikidata create",
+	"items-created-desc": "Numero de nove entratas Wikidata crate.",
+	"items-improved": "Entratas Wikidata meliorate",
+	"items-improved-desc": "Numero de modificationes apportate a entratas Wikidata existente.",
 	"no-results": "Nulle resultato trovate",
+	"metadata-categories-label": "{{PLURAL:$1|Categoria|Categorias}}:",
+	"metadata-wikis-label": "{{PLURAL:$1|Wiki|Wikis}}:",
+	"num-categories": "{{PLURAL:$1|categoria|categorias}}",
 	"page": "Pagina",
 	"pager-newer-n": "{{PLURAL:$1|1 plus recente|$1 plus recente}}",
 	"pager-older-n": "{{PLURAL:$1|1 minus recente|$1 minus recente}}",
+	"pages-created-desc": "Un pagina de contento es un pagina in le spatio de nomines principal o File.",
+	"pages-improved-desc": "Un pagina de contento es un pagina in le spatio de nomines principal o File.",
 	"report-issue": "Reportar un problema",
 	"save": "Salveguardar",
+	"save-categories": "Salveguardar categorias",
 	"settings": "Configuration",
 	"totals": "Totales",
 	"view-source": "Vider codice fonte"

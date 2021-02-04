@@ -1,4 +1,7 @@
 {
+	"@metadata": {
+		"authors": []
+	},
 	"edit-summary": "Коментар",
 	"logout": "Одјави ме",
 	"num-days": "{{PLURAL: $1|дан|дана}}",

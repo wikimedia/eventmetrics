@@ -1,4 +1,20 @@
 {
+	"@metadata": {
+		"authors": [
+			"Samwilson"
+		]
+	},
+	"add-organizer": "Add organiser",
 	"close": "Close",
-	"feedback": "Feedback"
+	"create-new-program": "Create a new programme",
+	"edit-program": "Edit programme",
+	"error-non-organizer": "You are not authorised to view this programme because you are not an organiser.",
+	"error-not-found": "The requested programme or event was not found. It may have been deleted or renamed.",
+	"error-program-undeletable": "This programme cannot be deleted because it contains one or more events.",
+	"error-usernames": "$1 {{PLURAL:$1|username|usernames}} {{PLURAL:$1|is|are}} invalid. Please edit or remove and then re-submit to save. Check for incorrect spelling, capitalisation and extra formatting.",
+	"feedback": "Feedback",
+	"my-programs": "My programmes",
+	"no-events": "No events in this programme yet!",
+	"no-programs": "You have not created any programmes.",
+	"organizers": "Organisers"
 }

@@ -1,15 +1,29 @@
 {
+	"@metadata": {
+		"authors": [
+			"Rance"
+		]
+	},
 	"all": "yoyote",
 	"apply": "Tumia",
 	"cancel": "Futa",
+	"error-service-overload": "Vipimo vya matukio vimepakia kupita kiasi kwa sasa kuhudumia maombi mengine. Tafadhali jaribu tena ndani ya dakika chache zijazo.",
+	"event-metrics": "Vipimo vya Matukio",
+	"event-metrics-welcome": "Karibu katika Vipimo vya matukio",
 	"help-translate": "Saidia tafsiri",
+	"hide-section": "Ficha sehemu hii",
 	"no-results": "Hakuna matokeo",
 	"page": "Ukurasa",
 	"pager-newer-n": "{{PLURAL:$1|1 ya karibu zaidi|$1 ya karibu zaidi}}",
 	"pager-older-n": "{{PLURAL:$1|$1 ya zamani zaidi}}",
+	"remove": "Ondosha",
 	"report-issue": "Toa taarifa juu ya matatizo",
 	"save": "Hifadhi",
 	"settings": "Mpangizo",
+	"show-section": "Onyesha sehemu hii",
+	"start-time": "Muda wa kuanza",
 	"totals": "Idadi ya kuangaliwa kwa kurasa, jumla",
+	"update-data": "Sasisha taarifa",
+	"updating-desc": "Tafadhali subiri, inachakata nambari kwa sasa",
 	"view-source": "Angalia chanzo"
 }

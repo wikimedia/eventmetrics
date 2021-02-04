@@ -1,4 +1,9 @@
 {
+	"@metadata": {
+		"authors": [
+			"FarsiNevis"
+		]
+	},
 	"all": "همه",
 	"apply": "اِعمال",
 	"cancel": "لغو",
@@ -28,6 +33,8 @@
 	"submit": "ثبت",
 	"totals": "مجموع",
 	"unknown": "ناشناس",
+	"update-data": "روزآمدسازی داده‌ها",
+	"updating": "در حال روزآمدسازی",
 	"username": "نام کاربری",
 	"view-source": "نمایش مبدأ"
 }

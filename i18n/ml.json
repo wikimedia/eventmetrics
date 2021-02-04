@@ -1,5 +1,11 @@
 {
+	"@metadata": {
+		"authors": [
+			"Santhosh.thottingal"
+		]
+	},
 	"edit-summary": "അഭിപ്രായം",
+	"error-unknown": "എന്തോ പ്രശ്നമുണ്ടായി",
 	"logout": "ലോഗൗട്ട്",
 	"num-days": "{{PLURAL:$1| ദിവസം}}",
 	"num-hours": "({{PLURAL:$1| മണിക്കൂർ}})",

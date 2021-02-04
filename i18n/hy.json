@@ -1,17 +1,30 @@
 {
+	"@metadata": {
+		"authors": [
+			"Kareyac"
+		]
+	},
+	"add-category": "Ավելացնել կատեգորիա",
+	"add-wiki": "Ավելացնել վիքի",
 	"all": "Բոլորը",
 	"apply": "Կիրառել",
 	"cancel": "Չեղարկել",
+	"categories": "Կատեգորիաներ",
 	"close": "Փակել",
 	"date": "Ամսաթիվ",
 	"documentation": "Ձեռնարկ",
 	"edit-summary": "Մեկնաբանություն",
+	"edits": "Խմբագրումներ",
+	"error-unknown": "Ինչ-որ սխալ է տեղի ունեցել",
 	"help": "Օգնություն",
 	"logout": "Դուրս գալ",
 	"no-results": "Ոչինչ չի գտնվել",
+	"metadata-categories-label": "{{PLURAL:$1|Կատեգորիա|Կատեգորիաներ}}",
+	"metadata-wikis-label": "{{PLURAL:$1|Վիքի|Վիքիներ}}:",
 	"num-days": "{{PLURAL:$1|օր}}",
 	"num-hours": "{{PLURAL:$1|ժամ}}",
 	"num-minutes": "{{PLURAL:$1|րոպե}}",
+	"num-participants": "$1 {{PLURAL:$1|մասնակից|մասնակիցներ}}",
 	"num-revisions": "{{PLURAL:$1|տարբերակ}}",
 	"num-seconds": "{{PLURAL:$1|վայրկյան}}",
 	"page": "Էջ",

@@ -1,4 +1,7 @@
 {
+	"@metadata": {
+		"authors": []
+	},
 	"edit-summary": "Пікір",
 	"logout": "Шығу",
 	"num-days": "{{PLURAL:$1|күн|күн}}",

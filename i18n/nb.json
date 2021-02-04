@@ -1,12 +1,19 @@
 {
+	"@metadata": {
+		"authors": [
+			"Kingu"
+		]
+	},
 	"all": "Alle",
 	"apply": "Bruk",
+	"byte-difference": "Endrede byte",
 	"cancel": "Avbryt",
 	"diff": "Diff",
 	"edit-summary": "Kommentar",
 	"error-server-message": "Tjeneren sa: $1",
 	"feedback": "Tilbakemelding",
 	"help-translate": "Hjelp til med oversetting",
+	"last-updated-table": "Sist oppdatert",
 	"logout": "Logg ut",
 	"no-results": "Ingen resultater funnet",
 	"num-days": "{{PLURAL: $1|dag|dager}}",
@@ -20,9 +27,11 @@
 	"report-issue": "Rapporter et problem",
 	"save": "Lagre",
 	"settings": "innstillinger",
+	"statistics": "Statistikk",
 	"submit": "Send",
 	"totals": "Totalt",
 	"unknown": "Ukjent",
+	"url": "Nettadresse",
 	"username": "Brukernavn",
 	"view-source": "Vis kode"
 }

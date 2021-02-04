@@ -1,9 +1,20 @@
 {
+	"@metadata": {
+		"authors": [
+			"Indus Asia",
+			"Mehtab ahmed"
+		]
+	},
+	"contributions": "ڀاڱيداريون",
 	"diff": "فرق",
-	"edit-summary": "ترميمي تتُ",
+	"edit-summary": "سنوار جو تتُ",
+	"edits": "سنوارون",
+	"event-all-edits": "سڀ سنوارون",
 	"feedback": "اوهان جي راءِ",
 	"help-translate": "ترجمي ۾ مدد ڪيو",
+	"page": "صفحو",
 	"save": "سانڍيو",
+	"statistics": "انگ-اکر",
 	"submit": "اماڻيو",
-	"username": "واپرائيندڙ-نانءُ"
+	"username": "يوزر نيم"
 }

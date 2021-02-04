@@ -1,4 +1,9 @@
 {
+	"@metadata": {
+		"authors": [
+			"Умар"
+		]
+	},
 	"edit-summary": "Къамел",
 	"logout": "Болх дӀаберзор",
 	"num-days": "{{PLURAL: $1|де}}",
@@ -10,5 +15,6 @@
 	"pager-older-n": "{{PLURAL:$1|алсамо шира 1|алсамо ширниш $1}}",
 	"submit": "ДӀадахьийта",
 	"unknown": "Хууш дац",
-	"username": "Декъашхочун цӀе"
+	"username": "Декъашхочун цӀе",
+	"view-source": "Код хьажар"
 }

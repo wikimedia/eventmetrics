@@ -1,4 +1,7 @@
 {
+	"@metadata": {
+		"authors": []
+	},
 	"error-server-message": "विदागार म्हणाले:$1",
 	"unknown": "अज्ञात"
 }

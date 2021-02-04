@@ -1,15 +1,24 @@
 {
+	"@metadata": {
+		"authors": [
+			"K Messaoudi"
+		]
+	},
 	"close": "Mdel",
+	"contributions": "Ittekkiyen",
 	"date": "Azemz",
 	"diff": "Amgired",
 	"edit-summary": "Ẓreg agzul",
 	"feedback": "Tikti",
 	"help": "Tallalt",
+	"num-abbrev-billion": "G",
+	"num-abbrev-thousand": "k",
 	"page": "Asebter",
 	"pager-newer-n": "{{PLURAL:$1|1 n umaynut| $1 n imaynuten}}",
 	"pager-older-n": "{{PLURAL:$1|1 n ubuṛ|$1 n iqbuṛen}}",
 	"save": "Sekles",
 	"settings": "Iɣewwaṛen",
 	"submit": "Azen",
-	"unknown": "Arussin"
+	"unknown": "Arussin",
+	"views": "Timeẓriyin"
 }

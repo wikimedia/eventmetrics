@@ -1,4 +1,9 @@
 {
+	"@metadata": {
+		"authors": [
+			"Babu"
+		]
+	},
 	"all": "Toate",
 	"apply": "Aplică",
 	"cancel": "Anulare",
@@ -23,6 +28,7 @@
 	"report-issue": "Raportează o problemă",
 	"save": "Salvare",
 	"settings": "Setări",
+	"statistics": "Statistici",
 	"submit": "Trimite",
 	"totals": "Totaluri",
 	"unknown": "Necunoscut",

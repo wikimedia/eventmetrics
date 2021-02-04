@@ -1,4 +1,7 @@
 {
+	"@metadata": {
+		"authors": []
+	},
 	"edit-summary": "Comment",
 	"logout": "Log oot",
 	"num-days": "{{PLURAL: $1|day|days}}",
