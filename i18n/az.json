@@ -2,9 +2,21 @@
 	"@metadata": {
 		"authors": [
 			"Hüseynzadə",
+			"IBAnk",
 			"Toghrul Rahimli"
 		]
 	},
+	"add-category": "Kateqoriya əlavə et",
+	"all-wikipedias": "Bütün Vikipediyalar",
+	"apply": "Tətbiq et",
+	"categories": "Kateqoriyalar",
+	"contributions": "Töhfələr",
+	"date": "Tarix",
+	"delete": "Sil",
+	"documentation": "Sənədləşdirmə",
+	"edit-program": "Proqramı redaktə et",
+	"end-date": "Bitmə tarixi",
+	"end-time": "Bitmə vaxtı",
 	"error-server-message": "Server deyib: $1",
 	"fatal-error": "Ölümcül xəta",
 	"help": "Kömək",

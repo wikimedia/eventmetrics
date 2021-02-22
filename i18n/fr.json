@@ -85,7 +85,7 @@
 	"error-title-numeric": "Le titre ne peut pas être un chiffre.",
 	"error-unconfigured-wiki": "$1 n’est pas configuré pour cet événement. Veuillez d’abord ajouter le wiki à l’événement.",
 	"error-unknown": "Quelque chose s’est mal passé",
-	"error-usernames": "$1 {{PLURAL:$1|nom d’utilisateur n’est pas valide|noms d’utilisateurs ne sont pas valides}}. Veuillez les corriger ou les enlever puis soumettre à nouveau pour enregistrement. Vérifiez et corrigez l’orthographe, la capitalisation et les mises en forme supplémentaires.",
+	"error-usernames": "$1 {{PLURAL:$1|nom d’utilisateur est incorrect|noms d’utilisateurs sont incorrects}}. Veuillez les corriger ou les retirer puis soumettre à nouveau pour enregistrement. Vérifiez et corrigez l’orthographe, la capitalisation et les mises en forme supplémentaires.",
 	"error-wikis": "$1 {{PLURAL:$1|wiki n’est pas valide|wikis ne sont pas valides}}. Vérifiez l’orthographe.",
 	"event": "Événement",
 	"event-all-edits": "Toutes les modifications",
