@@ -21,7 +21,7 @@
         ]
     },
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-PDO": "*",
         "ext-bz2": "*",
         "ext-intl": "*",
@@ -34,12 +34,12 @@
         "leafo/scssphp": "^0.7.1",
         "monolog/monolog": "^1.0",
         "sensio/framework-extra-bundle": "^5.2",
-        "symfony/cache": "^4.1",
+        "symfony/cache": "4.4.*",
         "symfony/monolog-bundle": "^3.3",
         "symfony/polyfill-apcu": "^1.0",
-        "symfony/stopwatch": "^4.2",
+        "symfony/stopwatch": "4.4.*",
         "symfony/swiftmailer-bundle": "^3.0",
-        "symfony/symfony": "~4.2.12",
+        "symfony/symfony": "4.4.*",
         "symfony/webpack-encore-pack": "^1.0",
         "twig/twig": "^2.0",
         "wikimedia/toolforge-bundle": "^0.18"
@@ -103,7 +103,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "7.2"
+            "php": "7.3"
         }
     },
     "extra": {
@@ -118,7 +118,7 @@
         "branch-alias": null,
         "symfony": {
             "allow-contrib": false,
-            "require": "4.1.*"
+            "require": "4.4.*"
         }
     }
 }

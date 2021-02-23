@@ -1,7 +1,9 @@
 language: php
 
+services: mysql
+
 php:
-  - '7.2'
+  - '7.3'
 
 env:
   global:

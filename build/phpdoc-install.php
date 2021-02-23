@@ -8,10 +8,10 @@
 $phpdocBin = dirname(__DIR__).'/bin/phpdoc';
 if (!file_exists($phpdocBin)) {
     echo "Downloading phpdoc to bin/phpdoc\n";
-    $release = 'v3.0.0-alpha.2-nightly-g46e6b49';
+    $release = 'v3.0.0';
     $releaseUrl = "https://github.com/phpDocumentor/phpDocumentor2/releases/download/$release/phpDocumentor.phar";
     copy($releaseUrl, $phpdocBin);
-    copy($releaseUrl.'.pubkey', $phpdocBin.'.pubkey');
+    copy($releaseUrl.'.asc', $phpdocBin.'.asc');
 }
 if (!is_executable($phpdocBin)) {
     chmod($phpdocBin, 0700);

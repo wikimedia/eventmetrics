@@ -168,6 +168,7 @@ class EventProcessor
     private function loadEvent(Event $event): void
     {
         $this->event = $event;
+        /** @var EventRepository $eventRepo */
         $this->eventRepo = $this->entityManager->getRepository('Model:Event');
         $this->eventRepo->setContainer($this->container);
     }

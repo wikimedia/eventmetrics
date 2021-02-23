@@ -13,6 +13,7 @@ use AppBundle\Repository\EventWikiRepository;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -188,6 +189,12 @@ class EventType extends AbstractType
     {
         return array_map(function ($wiki) use ($event) {
             $domain = $this->ewRepo->getDomainFromEventWikiInput($wiki);
+            if (!$domain) {
+                $msg = 'Invalid wiki name: '.$wiki;
+                $ex = new TransformationFailedException($msg);
+                $ex->setInvalidMessage($msg);
+                throw $ex;
+            }
 
             $eventWiki = $this->ewRepo->findOneBy([
                 'event' => $event,
