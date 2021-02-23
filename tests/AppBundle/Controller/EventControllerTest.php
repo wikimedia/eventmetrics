@@ -363,7 +363,7 @@ class EventControllerTest extends DatabaseAwareWebTestCase
         $this->crawler = $this->client->submit($form);
 
         static::assertStringContainsString(
-            '1 wiki is invalid.',
+            'Invalid wiki name: invalid_wiki',
             $this->crawler->filter('.alert-danger')->text()
         );
     }

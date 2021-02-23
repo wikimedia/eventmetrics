@@ -469,7 +469,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'participants',
             ]);
-        static::assertEquals(6, $eventStat->getValue());
+        static::assertEquals(4, $eventStat->getValue());
 
         $eventStat = $this->entityManager
             ->getRepository('Model:EventStat')
@@ -493,7 +493,7 @@ class ProcessEventCommandTest extends EventMetricsTestCase
                 'event' => $this->event,
                 'metric' => 'files-uploaded',
             ]);
-        static::assertEquals(3, $eventStat->getValue());
+        static::assertEquals(1, $eventStat->getValue());
     }
 
     /**

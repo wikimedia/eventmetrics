@@ -45,7 +45,7 @@ class EventWikiRepository extends Repository
      */
     public function getDomainFromEventWikiInput(string $value): ?string
     {
-        if (array_key_exists($value, $this->domainsFromWiki)) {
+        if (isset($this->domainsFromWiki[$value])) {
             return $this->domainsFromWiki[$value];
         }
 
