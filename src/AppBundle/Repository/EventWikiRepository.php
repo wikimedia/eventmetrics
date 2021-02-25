@@ -243,7 +243,7 @@ class EventWikiRepository extends Repository
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
 
-        $conn = $this->getReplicaConnection();
+        $conn = $this->getReplicaConnection($dbName);
         $rqb = $conn->createQueryBuilder();
 
         // Normal `revision` table is faster if you're not filtering by user.
@@ -342,7 +342,7 @@ class EventWikiRepository extends Repository
      */
     public function getPageTitles(string $dbName, array $pageIds, bool $stmt = false, bool $includePageIds = false)
     {
-        $rqb = $this->getReplicaConnection()->createQueryBuilder();
+        $rqb = $this->getReplicaConnection($dbName)->createQueryBuilder();
         $select = $includePageIds ? ['page_id', 'page_title'] : 'page_title';
         $rqb->select($select)
             ->from("$dbName.page")
@@ -397,6 +397,7 @@ class EventWikiRepository extends Repository
                 ) t1";
 
         $res = $this->executeReplicaQueryWithTypes(
+            $dbName,
             $outerSql,
             [
                 'start' => $event->getStartUTC()->format('YmdHis'),
@@ -424,7 +425,7 @@ class EventWikiRepository extends Repository
     public function getUsersFromPageIDs(string $dbName, array $pageIds, Event $event): array
     {
         $revisionTable = $this->getTableName('revision');
-        $rqb = $this->getReplicaConnection()->createQueryBuilder();
+        $rqb = $this->getReplicaConnection($dbName)->createQueryBuilder();
         $rqb->select('DISTINCT(actor_name)')
             ->from("$dbName.$revisionTable", 'r')
             ->join('r', "$dbName.actor", 'a', 'a.actor_id = r.rev_actor')
@@ -498,6 +499,7 @@ class EventWikiRepository extends Repository
                 ) t1";
 
         $ret = $this->executeReplicaQueryWithTypes(
+            $dbName,
             $sql,
             [
                 'pageId' => $pageId,
@@ -632,6 +634,7 @@ class EventWikiRepository extends Repository
                 ) t1";
 
         $rows = $this->executeReplicaQueryWithTypes(
+            $dbName,
             $sql,
             [
                 'pageId' => $pageId,

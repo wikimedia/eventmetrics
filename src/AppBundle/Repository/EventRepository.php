@@ -19,7 +19,7 @@ use Doctrine\DBAL\Connection;
  */
 class EventRepository extends Repository
 {
-    /** @var string Cache of inner revisions SQL, which is called multiple times. */
+    /** @var string[] Per-database cache of inner revisions SQL, which is called multiple times. */
     private $revisionsInnerSql;
 
     public const PAGES_CREATED = 'created';
@@ -93,7 +93,7 @@ class EventRepository extends Repository
         $start = $start->format('YmdHis');
         $end = $end->format('YmdHis');
 
-        $conn = $this->getReplicaConnection();
+        $conn = $this->getReplicaConnection($dbName);
         $rqb = $conn->createQueryBuilder();
 
         $revisionTable = $this->getTableName('revision');
@@ -126,7 +126,7 @@ class EventRepository extends Repository
         string $dbName,
         array $pageIds
     ): int {
-        $conn = $this->getReplicaConnection();
+        $conn = $this->getReplicaConnection($dbName);
         $rqb = $conn->createQueryBuilder();
 
         if ('commonswiki_p' === $dbName) {
@@ -163,7 +163,7 @@ class EventRepository extends Repository
      */
     public function getPagesUsingFile(string $dbName, string $filename): int
     {
-        $conn = $this->getReplicaConnection();
+        $conn = $this->getReplicaConnection($dbName);
         $rqb = $conn->createQueryBuilder();
 
         if ('commonswiki_p' === $dbName) {
@@ -194,7 +194,7 @@ class EventRepository extends Repository
         string $dbName,
         array $pageIds
     ): array {
-        $conn = $this->getReplicaConnection();
+        $conn = $this->getReplicaConnection($dbName);
         $rqb = $conn->createQueryBuilder();
 
         if ('commonswiki_p' === $dbName) {
@@ -273,7 +273,7 @@ class EventRepository extends Repository
     public function getUsersRetained(string $dbName, DateTime $start, array $actors): array
     {
         $start = $start->format('YmdHis');
-        $conn = $this->getReplicaConnection();
+        $conn = $this->getReplicaConnection($dbName);
         $rqb = $conn->createQueryBuilder();
 
         $revisionTable = $this->getTableName('revision');
@@ -335,35 +335,51 @@ class EventRepository extends Repository
      */
     private function getRevisionsData(Event $event, ?int $offset, ?int $limit, bool $count)
     {
-        $innerSql = $this->getRevisionsInnerSql($event);
+        $revisionsData = ($count ? 0 : []);
+        foreach ($event->getWikis() as $wiki) {
+            // Family wikis are essentially placeholder EventWikis. They are not queryable by themselves.
+            // An EventWiki may be invalid (exempt from stats generation) if there are no categories on it
+            //   and no participants on the Event.
+            if ($wiki->isFamilyWiki() || !$wiki->isValid()) {
+                continue;
+            }
 
-        if ('' === trim($innerSql)) {
-            // No wikis were queried.
-            return true === $count ? 0 : [];
+            $innerSql = $this->getRevisionsInnerSql($event, $wiki);
+            if (empty($innerSql)) {
+                continue;
+            }
+
+            $sql = 'SELECT '.($count ? 'COUNT(id)' : '*')." FROM ($innerSql) a";
+
+            if (false === $count) {
+                $sql .= "\nORDER BY timestamp ASC";
+            }
+            if (null !== $offset) {
+                $sql .= "\nLIMIT $offset, $limit";
+            }
+
+            $start = $event->getStartUTC()->format('YmdHis');
+            $end = $event->getEndUTC()->format('YmdHis');
+
+            $ewRepo = $this->em->getRepository(EventWiki::class);
+            $ewRepo->setContainer($this->container);
+            $dbName = $ewRepo->getDbNameFromDomain($wiki->getDomain());
+            $stmt = $this->executeReplicaQuery($dbName, $sql, [
+                'startDate' => $start,
+                'endDate' => $end,
+            ]);
+            if (true === $count) {
+                $revisionsData += (int)$stmt->fetchColumn();
+            } else {
+                $revisionsData = array_merge($revisionsData, $stmt->fetchAll());
+            }
         }
-
-        $sql = 'SELECT '.($count ? 'COUNT(id)' : '*')." FROM ($innerSql) a";
-
-        if (false === $count) {
-            $sql .= "\nORDER BY timestamp ASC";
+        if (is_array($revisionsData)) {
+            usort($revisionsData, function ($revA, $revB) {
+                return $revB['timestamp'] > $revA['timestamp'];
+            });
         }
-        if (null !== $offset) {
-            $sql .= "\nLIMIT $offset, $limit";
-        }
-
-        $start = $event->getStartUTC()->format('YmdHis');
-        $end = $event->getEndUTC()->format('YmdHis');
-
-        $stmt = $this->executeReplicaQuery($sql, [
-            'startDate' => $start,
-            'endDate' => $end,
-        ]);
-
-        if (true === $count) {
-            return (int)$stmt->fetchColumn();
-        } else {
-            return $stmt->fetchAll();
-        }
+        return $revisionsData;
     }
 
     /**
@@ -382,17 +398,17 @@ class EventRepository extends Repository
      * @param Event $event
      * @return string
      */
-    private function getRevisionsInnerSql(Event $event): string
+    private function getRevisionsInnerSql(Event $event, EventWiki $wiki): string
     {
-        if (isset($this->revisionsInnerSql)) {
-            return $this->revisionsInnerSql;
+        $ewRepo = $this->em->getRepository(EventWiki::class);
+        $ewRepo->setContainer($this->container);
+
+        $domain = $wiki->getDomain();
+        $dbName = $ewRepo->getDbNameFromDomain($domain);
+
+        if (isset($this->revisionsInnerSql[$dbName])) {
+            return $this->revisionsInnerSql[$dbName];
         }
-
-        /** @var EventWikiRepository $eventWikiRepo */
-        $eventWikiRepo = $this->em->getRepository('Model:EventWiki');
-        $eventWikiRepo->setContainer($this->container);
-
-        $sqlClauses = [];
 
         $revisionTable = $this->getTableName('revision');
         $pageTable = $this->getTableName('page');
@@ -400,48 +416,36 @@ class EventRepository extends Repository
         $userIds = $event->getParticipantIds();
         $usernames = array_column($this->getUsernamesFromIds($userIds), 'user_name');
 
-        foreach ($event->getWikis() as $wiki) {
-            // Family wikis are essentially placeholder EventWikis. They are not queryable by themselves.
-            // An EventWiki may be invalid (exempt from stats generation) if there are no categories on it
-            //   and no participants on the Event.
-            if ($wiki->isFamilyWiki() || !$wiki->isValid()) {
-                continue;
-            }
+        $pageIdsSql = implode(',', array_merge($wiki->getPages(), $wiki->getPagesFiles()));
 
-            $domain = $wiki->getDomain();
-            $dbName = $eventWikiRepo->getDbNameFromDomain($domain);
-            $pageIdsSql = implode(',', array_merge($wiki->getPages(), $wiki->getPagesFiles()));
-
-            $actors = $this->getActorIdsFromUsernames($dbName, $usernames);
-            // The above function guarantees it returns only ints
-            $actorList = ltrim(implode(',', $actors), ',');
-
-            // Skip if there are no pages to query (otherwise `rev_page IN` clause will cause SQL error).
-            if ('' === $pageIdsSql) {
-                continue;
-            }
-
-            $actorClause = '' === $actorList ? '' : "AND rev_actor IN ($actorList)";
-
-            $sqlClauses[] = "SELECT rev_id AS 'id',
-                    rev_timestamp AS 'timestamp',
-                    REPLACE(page_title, '_', ' ') AS 'page',
-                    page_namespace AS namespace,
-                    actor_name AS 'username',
-                    IFNULL(comment_text, '') AS 'summary',
-                    '$domain' AS 'wiki'
-                FROM $dbName.$revisionTable
-                    INNER JOIN $dbName.$pageTable ON page_id = rev_page
-                    LEFT OUTER JOIN $dbName.comment ON rev_comment_id = comment_id
-                    JOIN $dbName.actor ON rev_actor = actor_id
-                WHERE page_is_redirect = 0
-                $actorClause
-                AND rev_page IN ($pageIdsSql)
-                AND rev_timestamp BETWEEN :startDate AND :endDate";
+        // Skip if there are no pages to query (otherwise `rev_page IN` clause will cause SQL error).
+        if ('' === $pageIdsSql) {
+            return '';
         }
 
-        $this->revisionsInnerSql = implode(' UNION ', $sqlClauses);
-        return $this->revisionsInnerSql;
+        $actors = $this->getActorIdsFromUsernames($dbName, $usernames);
+        // The above function guarantees it returns only ints
+        $actorList = ltrim(implode(',', $actors), ',');
+
+        $actorClause = '' === $actorList ? '' : "AND rev_actor IN ($actorList)";
+
+        $sql = "SELECT rev_id AS 'id',
+                rev_timestamp AS 'timestamp',
+                REPLACE(page_title, '_', ' ') AS 'page',
+                page_namespace AS namespace,
+                actor_name AS 'username',
+                IFNULL(comment_text, '') AS 'summary',
+                '$domain' AS 'wiki'
+            FROM $revisionTable
+                INNER JOIN $pageTable ON page_id = rev_page
+                LEFT OUTER JOIN comment ON rev_comment_id = comment_id
+                JOIN actor ON rev_actor = actor_id
+            WHERE page_is_redirect = 0
+            $actorClause
+            AND rev_page IN ($pageIdsSql)
+            AND rev_timestamp BETWEEN :startDate AND :endDate";
+        $this->revisionsInnerSql[$dbName] = $sql;
+        return $this->revisionsInnerSql[$dbName];
     }
 
     /**

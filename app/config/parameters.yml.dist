@@ -14,8 +14,22 @@ parameters:
     database.test.user: root
     database.test.password: ~
 
-    database.replica.host: 127.0.0.1
-    database.replica.port: ~
+    database.replica.host_s1: ~
+    database.replica.host_s2: ~
+    database.replica.host_s3: ~
+    database.replica.host_s4: ~
+    database.replica.host_s5: ~
+    database.replica.host_s6: ~
+    database.replica.host_s7: ~
+    database.replica.host_s8: ~
+    database.replica.port_s1: ~
+    database.replica.port_s2: ~
+    database.replica.port_s3: ~
+    database.replica.port_s4: ~
+    database.replica.port_s5: ~
+    database.replica.port_s6: ~
+    database.replica.port_s7: ~
+    database.replica.port_s8: ~
     database.replica.name: enwiki_p
     database.replica.user: root
     database.replica.password:

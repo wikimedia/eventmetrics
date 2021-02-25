@@ -141,10 +141,11 @@ abstract class DatabaseAwareWebTestCase extends EventMetricsTestCase
             return;
         }
 
-        self::$container->get('doctrine')
-            ->getManager('replicas')
-            ->getConnection()
-            ->close();
+        for ($slice = 1; $slice < 9; $slice++) {
+            self::$container->get('doctrine')
+                ->getConnection('toolforge_s'.$slice)
+                ->close();
+        }
         self::$container->get('doctrine')
             ->getManager('centralauth')
             ->getConnection()

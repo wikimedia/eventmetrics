@@ -10,10 +10,10 @@ namespace AppBundle\Service;
 use AppBundle\Model\Event;
 use AppBundle\Model\Job;
 use DateTime;
-use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Wikimedia\ToolforgeBundle\Service\ReplicasClient;
 
 /**
  * A JobHandler spawns new jobs from the queue if there is quota.
@@ -27,6 +27,9 @@ class JobHandler
 
     /** @var ContainerInterface The application's container interface. */
     private $container;
+
+    /** @var ReplicasClient */
+    private $replicasClient;
 
     /** @var LoggerInterface The logger. */
     private $logger;
@@ -49,10 +52,12 @@ class JobHandler
     public function __construct(
         LoggerInterface $logger,
         ContainerInterface $container,
+        ReplicasClient $replicasClient,
         EventProcessor $eventProcessor
     ) {
         $this->logger = $logger;
         $this->container = $container;
+        $this->replicasClient = $replicasClient;
         $this->eventProcessor = $eventProcessor;
         $this->entityManager = $container->get('doctrine')->getManager();
     }
@@ -213,20 +218,22 @@ class JobHandler
     }
 
     /**
-     * Get the number of open connections to the replicas database.
+     * Get the number of open connections to the replicas databases.
      * @return int
      */
     private function getNumOpenConnections(): int
     {
-        /** @var Connection $conn */
-        $conn = $this->container
-            ->get('doctrine')
-            ->getManager('replicas')
-            ->getConnection();
-
-        return (int)$conn->query(
-            'SELECT COUNT(*) FROM information_schema.PROCESSLIST'
-        )->fetchColumn(0);
+        /** @var \Doctrine\Bundle\DoctrineBundle\Registry $registry */
+        $registry = $this->container->get('doctrine');
+        $maxProcessCount = 0;
+        for ($slice = 1; $slice < 9; $slice++) {
+            $conn = $registry->getConnection('toolforge_s'.$slice);
+            $processCount = (int)$conn->executeQuery(
+                'SELECT COUNT(*) FROM information_schema.PROCESSLIST'
+            )->fetchFirstColumn();
+            $maxProcessCount = max($processCount, $maxProcessCount);
+        }
+        return $maxProcessCount;
     }
 
     /**

@@ -23,6 +23,7 @@ use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
+use Wikimedia\ToolforgeBundle\Service\ReplicasClient;
 
 /**
  * A Repository is responsible for retrieving data from wherever it lives (databases, APIs, filesystems, etc.).
@@ -45,8 +46,11 @@ abstract class Repository extends EntityRepository
     /** @var Connection The connection to the eventmetrics database. */
     private $eventmetricsConnection;
 
-    /** @var Connection The database connection to the replicas. */
-    private $replicaConnection;
+    /** @var ReplicasClient */
+    private $replicasClient;
+
+    /** @var Connection[] The database connections to the replicas. */
+    private $replicaConnections;
 
     /** @var Connection The CentralAuth database connection. */
     private $centralAuthConnection;
@@ -88,6 +92,7 @@ abstract class Repository extends EntityRepository
         $this->container = $container;
         // HACK: DI should do this automatically via setCachePool() but it doesn't
         $this->cache = $container->get('cache.app');
+        $this->replicasClient = $container->get(ReplicasClient::class);
     }
 
     /**
@@ -115,6 +120,19 @@ abstract class Repository extends EntityRepository
     public function setLogger(LoggerInterface $logger): void
     {
         $this->log = $logger;
+    }
+
+    /**
+     * @param ReplicasClient $replicasClient
+     */
+    public function setReplicasClient(ReplicasClient $replicasClient): void
+    {
+        $this->replicasClient = $replicasClient;
+    }
+
+    protected function getReplicasClient(): ?ReplicasClient
+    {
+        return $this->replicasClient;
     }
 
     /*******************
@@ -245,18 +263,18 @@ abstract class Repository extends EntityRepository
     }
 
     /**
-     * Get the database connection for the replicas.
+     * Get one of the database connections for the replicas.
      * @return Connection
      */
-    protected function getReplicaConnection(): Connection
+    protected function getReplicaConnection(string $db): Connection
     {
-        if (!$this->replicaConnection instanceof Connection) {
-            $this->replicaConnection = $this->container
-                ->get('doctrine')
-                ->getManager('replicas')
-                ->getConnection();
+        if (!$this->replicasClient) {
+            throw new \Exception('ReplicasClient not set for '.static::class);
         }
-        return $this->replicaConnection;
+        if (!isset($this->replicaConnections[$db])) {
+            $this->replicaConnections[$db] = $this->replicasClient->getConnection($db);
+        }
+        return $this->replicaConnections[$db];
     }
 
     /*************
@@ -327,7 +345,7 @@ abstract class Repository extends EntityRepository
      */
     public function getActorIdsFromUsernames(string $dbName, array $usernames): array
     {
-        $conn = $this->getReplicaConnection();
+        $conn = $this->getReplicaConnection($dbName);
         $rqb = $conn->createQueryBuilder();
 
         $rqb->select('actor_id')
@@ -377,6 +395,7 @@ abstract class Repository extends EntityRepository
      * @return ResultStatement
      */
     public function executeReplicaQueryWithTypes(
+        string $dbName,
         string $sql,
         array $params = [],
         array $types = [],
@@ -384,7 +403,7 @@ abstract class Repository extends EntityRepository
     ): ResultStatement {
         try {
             $sql = $this->getQueryTimeoutClause($timeout).$sql;
-            return $this->getReplicaConnection()->executeQuery($sql, $params, $types);
+            return $this->getReplicaConnection($dbName)->executeQuery($sql, $params, $types);
         } catch (DriverException $e) {
             $this->handleDriverError($e, $timeout);
         }
@@ -400,9 +419,13 @@ abstract class Repository extends EntityRepository
      * @throws DriverException
      * @throws DBALException
      */
-    public function executeReplicaQuery(string $sql, array $params = [], ?int $timeout = null): ResultStatement
-    {
-        return $this->executeReplicaQueryWithTypes($sql, $params, [], $timeout);
+    public function executeReplicaQuery(
+        string $dbName,
+        string $sql,
+        array $params = [],
+        ?int $timeout = null
+    ): ResultStatement {
+        return $this->executeReplicaQueryWithTypes($dbName, $sql, $params, [], $timeout);
     }
 
     /**

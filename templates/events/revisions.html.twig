@@ -51,7 +51,7 @@
 
         {##### PAGINATION #####}
         {% set num_pages = (numRevisions / numResultsPerPage)|round(0, 'ceil') %}
-        {% if num_pages > 1 %}
+        {% if false and num_pages > 1 %}
             {% set has_prev = offset - 1 >= 1 %}
             {% set has_next = offset + 1 < num_pages + 1 %}
             {% set path_vars = {'programId': program.id, 'eventId': event.id} %}

@@ -62,6 +62,7 @@ services:
             - [setContainer, ["@service_container"]]
             - [setLogger, ['@logger']]
             - [setCachePool, ["@cache.app"]]
+            - [setReplicasClient, ['@Wikimedia\ToolforgeBundle\Service\ReplicasClient']]
         exclude: '../../src/AppBundle/Repository/PageviewsRepository.php'
 
     AppBundle\Service\EventProcessor:
@@ -70,4 +71,7 @@ services:
             - { name: monolog.logger, channel: event_processor }
 
     AppBundle\Service\JobHandler:
+        public: true
+
+    Wikimedia\ToolforgeBundle\Service\ReplicasClient:
         public: true

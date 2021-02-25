@@ -55,7 +55,9 @@ class EventDataController extends EntityController
             $format = 'html';
 
             // The pagination number, where page 1 starts with row 0.
-            $page = (int)$this->request->query->get('offset', 1);
+            // @TODO Temporarily disabled for now. Needs to be converted to timestamp-based pagination.
+            //$page = (int)$this->request->query->get('offset', 1);
+            $page = 1;
 
             // Number of rows per page.
             $limit = $this->container->getParameter('app.revisions_per_page');

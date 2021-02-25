@@ -14,8 +14,22 @@ parameters:
     database.test.user: root
     database.test.password: ~
 
-    database.replica.host: 127.0.0.1
-    database.replica.port: 4711
+    database.replica.host_s1: 127.0.0.1
+    database.replica.port_s1: 4711
+    database.replica.host_s2: 127.0.0.1
+    database.replica.port_s2: 4712
+    database.replica.host_s3: 127.0.0.1
+    database.replica.port_s3: 4713
+    database.replica.host_s4: 127.0.0.1
+    database.replica.port_s4: 4714
+    database.replica.host_s5: 127.0.0.1
+    database.replica.port_s5: 4715
+    database.replica.host_s6: 127.0.0.1
+    database.replica.port_s6: 4716
+    database.replica.host_s7: 127.0.0.1
+    database.replica.port_s7: 4717
+    database.replica.host_s8: 127.0.0.1
+    database.replica.port_s8: 4718
     database.replica.name: enwiki_p
     database.replica.user: '%env(DB_USER)%'
     database.replica.password: '%env(DB_PASSWORD)%'

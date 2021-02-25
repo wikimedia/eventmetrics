@@ -21,6 +21,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Wikimedia\ToolforgeBundle\Service\ReplicasClient;
 
 /**
  * An EventProcessor handles generating statistics for an Event.
@@ -95,18 +96,26 @@ class EventProcessor
     /** @var int[][] Per-wiki actor IDs cache. */
     private $actorCache = [];
 
+    /** @var ReplicasClient */
+    private $replicasClient;
+
     /**
      * Constructor for the EventProcessor.
      * @param LoggerInterface $logger
      * @param ContainerInterface $container
      * @param Stopwatch $stopwatch
      */
-    public function __construct(LoggerInterface $logger, ContainerInterface $container, Stopwatch $stopwatch)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        ContainerInterface $container,
+        Stopwatch $stopwatch,
+        ReplicasClient $replicasClient
+    ) {
         $this->logger = $logger;
         $this->container = $container;
         $this->entityManager = $container->get('doctrine')->getManager();
         $this->stopwatch = $stopwatch;
+        $this->replicasClient = $replicasClient;
     }
 
     /**
