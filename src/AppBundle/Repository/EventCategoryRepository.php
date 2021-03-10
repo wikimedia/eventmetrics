@@ -35,7 +35,7 @@ class EventCategoryRepository extends Repository
      */
     public function getPagesInCategories(string $dbName, array $ids, ?int $limit = 20000): array
     {
-        $rqb = $this->getReplicaConnection()->createQueryBuilder();
+        $rqb = $this->getReplicaConnection($dbName)->createQueryBuilder();
         $rqb->select(['DISTINCT(cl_from)'])
             ->from("$dbName.categorylinks")
             ->join("$dbName.categorylinks", "$dbName.category", 'cl', 'cl_to = cat_title')
@@ -71,7 +71,7 @@ class EventCategoryRepository extends Repository
         $ewRepo->setContainer($this->container);
         $dbName = $ewRepo->getDbNameFromDomain($domain);
 
-        $rqb = $this->getReplicaConnection()->createQueryBuilder();
+        $rqb = $this->getReplicaConnection($dbName)->createQueryBuilder();
         $rqb->select('cat_id')
             ->from("$dbName.category")
             ->where('cat_title = :title')

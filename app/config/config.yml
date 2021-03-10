@@ -30,12 +30,17 @@ framework:
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
     fragments: ~
     http_method_override: true
+    http_client:
     assets:
         json_manifest_path: '%kernel.project_dir%/public/assets/manifest.json'
     php_errors:
         log: true
     cache:
         app: "cache.adapter.%cache.adapter%"
+        pools:
+            cache.replicas:
+                adapter: "cache.adapter.%cache.adapter%"
+                default_lifetime: 600
 
 # Twig Configuration
 twig:
@@ -51,6 +56,7 @@ twig:
 doctrine:
     dbal:
         connections:
+            # The centralauth and meta databases are on slice 7.
             eventmetrics:
                 driver:   pdo_mysql
                 host:     "%database.host%"
@@ -61,28 +67,60 @@ doctrine:
                 charset:  UTF8
             centralauth:
                 driver:   pdo_mysql
-                host:     "%database.replica.host%"
-                port:     "%database.replica.port%"
+                host:     "%database.replica.host_s7%"
+                port:     "%database.replica.port_s7%"
                 dbname:   "centralauth_p"
                 user:     "%database.replica.user%"
                 password: "%database.replica.password%"
                 charset:  UTF8
             meta:
                 driver:   pdo_mysql
-                host:     "%database.replica.host%"
-                port:     "%database.replica.port%"
+                host:     "%database.replica.host_s7%"
+                port:     "%database.replica.port_s7%"
                 dbname:   "meta_p"
                 user:     "%database.replica.user%"
                 password: "%database.replica.password%"
                 charset:  UTF8
-            replicas:
-                driver:   pdo_mysql
-                host:     "%database.replica.host%"
-                port:     "%database.replica.port%"
-                dbname:   "%database.replica.name%"
-                user:     "%database.replica.user%"
-                password: "%database.replica.password%"
-                charset:  UTF8
+            toolforge_s1:
+                host: '%database.replica.host_s1%'
+                port: '%database.replica.port_s1%'
+                user: '%database.replica.user%'
+                password: '%database.replica.password%'
+            toolforge_s2:
+                host: '%database.replica.host_s2%'
+                port: '%database.replica.port_s2%'
+                user: '%database.replica.user%'
+                password: '%database.replica.password%'
+            toolforge_s3:
+                host: '%database.replica.host_s3%'
+                port: '%database.replica.port_s3%'
+                user: '%database.replica.user%'
+                password: '%database.replica.password%'
+            toolforge_s4:
+                host: '%database.replica.host_s4%'
+                port: '%database.replica.port_s4%'
+                user: '%database.replica.user%'
+                password: '%database.replica.password%'
+            toolforge_s5:
+                host: '%database.replica.host_s5%'
+                port: '%database.replica.port_s5%'
+                user: '%database.replica.user%'
+                password: '%database.replica.password%'
+            toolforge_s6:
+                host: '%database.replica.host_s6%'
+                port: '%database.replica.port_s6%'
+                user: '%database.replica.user%'
+                password: '%database.replica.password%'
+            toolforge_s7:
+                host: '%database.replica.host_s7%'
+                port: '%database.replica.port_s7%'
+                user: '%database.replica.user%'
+                password: '%database.replica.password%'
+            toolforge_s8:
+                host: '%database.replica.host_s8%'
+                port: '%database.replica.port_s8%'
+                user: '%database.replica.user%'
+                password: '%database.replica.password%'
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
@@ -99,9 +137,6 @@ doctrine:
                         is_bundle: false
             centralauth:
                 connection: centralauth
-                naming_strategy: doctrine.orm.naming_strategy.underscore
-            replicas:
-                connection: replicas
                 naming_strategy: doctrine.orm.naming_strategy.underscore
             meta:
                 connection: meta

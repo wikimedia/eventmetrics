@@ -20,7 +20,7 @@ doctrine:
         connections:
             eventmetrics:
                 driver:   pdo_mysql
-                host:     localhost
+                host:     "%database.test.host%"
                 port:     "%database.test.port%"
                 dbname:   "%database.test.name%"
                 user:     "%database.test.user%"
