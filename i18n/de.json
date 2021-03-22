@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"FF11",
 			"Metalhead64"
 		]
 	},
@@ -86,7 +87,7 @@
 	"event": "Ereignis",
 	"event-all-edits": "Alle Bearbeitungen",
 	"event-all-edits-report": "Bericht „Alle Bearbeitungen“",
-	"event-created": "Das Ereignis „$1“ wurde erfolgreich erstellt.",
+	"event-created": "Das Ereignis „$1“ wurde erstellt.",
 	"event-deleted": "Das Ereignis „$1“ wurde gelöscht.",
 	"event-download-csv": "CSV herunterladen",
 	"event-download-reports": "Berichte herunterladen",
@@ -96,11 +97,11 @@
 	"event-list": "Ereignisliste",
 	"event-metrics": "Event Metrics",
 	"event-metrics-welcome": "Willkommen bei Event Metrics",
-	"event-no-data": "Ereignis-Einstellungen erfolgreich gespeichert. Klicke auf $1, um Metriken zu erhalten.",
+	"event-no-data": "Ereignis-Einstellungen gespeichert. Klicke auf $1, um Metriken zu erhalten.",
 	"event-settings": "Ereigniseinstellungen",
 	"event-summary": "Ereigniszusammenfassung",
 	"event-summary-report": "Bericht „Ereigniszusammenfassung“",
-	"event-updated": "Das Ereignis „$1“ wurde erfolgreich aktualisiert. Die Statistiken müssen eventuell erneut erzeugt werden.",
+	"event-updated": "Das Ereignis „$1“ wurde aktualisiert. Die Statistiken müssen eventuell erneut erzeugt werden.",
 	"events": "Ereignisse",
 	"fatal-error": "Fataler Fehler",
 	"feedback": "Rückmeldung",
@@ -174,10 +175,10 @@
 	"per-wiki-metrics": "Metriken pro Wiki",
 	"please-login": "Zum Fortfahren bitte anmelden.",
 	"program": "Programm",
-	"program-created": "Das Programm „$1“ wurde erfolgreich erstellt.",
+	"program-created": "Das Programm „$1“ wurde erstellt.",
 	"program-deleted": "Das Programm „$1“ wurde gelöscht.",
 	"program-settings": "Programmeinstellungen",
-	"program-updated": "Das Programm „$1“ wurde erfolgreich aktualisiert.",
+	"program-updated": "Das Programm „$1“ wurde aktualisiert.",
 	"queued": "In Warteschlange",
 	"queued-desc": "Die Statistiken werden erzeugt …",
 	"remove": "Entfernen",
