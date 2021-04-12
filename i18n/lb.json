@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Robby"
+			"Robby",
+			"Soued031"
 		]
 	},
 	"add-category": "Kategorie derbäisetzen",
@@ -23,7 +24,7 @@
 	"edit-summary": "Resumé änneren",
 	"edits": "Ännerungen",
 	"end-date": "Schlussdatum",
-	"error-event-retry-link": "dëse Problem mellen",
+	"error-event-retry-link": "dëse Probleem mellen",
 	"error-filters-header": "obligatoresch Filteren",
 	"error-filters-wikidata-panel": "Obligatoresch fir Wikidata",
 	"error-invalid": "Dëse Wäert ass net valabel.",
@@ -68,7 +69,7 @@
 	"participation": "Partizipatioun",
 	"program": "Programm",
 	"remove": "Ewechhuelen",
-	"report-issue": "E Problem mellen",
+	"report-issue": "E Probleem mellen",
 	"save": "Späicheren",
 	"save-categories": "Kategorië späicheren",
 	"settings": "Astellungen",
