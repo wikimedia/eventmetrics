@@ -1,6 +1,19 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Yardom78"
+		]
 	},
+	"add-category": "Pridať kategóriu",
+	"add-more-participants": "Pridajte používateľské meno na wiki, do každého riadku len jedno, aby ste obmedzili metriky na konkrétnych účastníkov.",
+	"add-more-participants-tooltip": "Viac informácií o filtrovaní účastníkov",
+	"add-more-participants-note": "Môžete kopírovať/vkladať priamo zo zoznamu na wiki.",
+	"add-organizer": "Pridať organizátora",
+	"add-wiki": "Pridať wiki",
+	"all": "Všetky",
+	"all-wikipedias": "Všetky Wikipédie",
+	"apply": "Použiť",
+	"attribution": "Uvedenie autora",
+	"attribution-background": "Obrázok pozadia je dostupný na Commons ako $1",
 	"feedback": "Spätná väzba"
 }
