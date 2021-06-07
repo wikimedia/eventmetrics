@@ -64,5 +64,9 @@
 	"error-filters-desc-tooltip": "Zistite viac ako funguje filtrovanie",
 	"error-filters-every-wiki": "Musíte zadať filtrovanie pre každú wiki pre, ktorú chcete získať metriky.",
 	"error-filters-header": "Požadované filtre",
+	"error-filters-participants-desc": "Filtrovanie účastníkov sa použije na všetky wiki.",
+	"error-filters-participants-none": "Neboli zadaný žiadni účastníci",
+	"error-filters-participants-or-categories": "Môžete filtrovať podľa účastníkov, alebo kategórií, alebo skombinovať oba filtre.",
+	"error-filters-wikidata": "Pre získanie metrík o Wikidáta musíte pridať účastníkov. (kategórie na Wikidáta neexistujú)",
 	"feedback": "Spätná väzba"
 }
