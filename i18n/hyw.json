@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Armeniki",
+			"Azniv Stepanian",
 			"Kareyac"
 		]
 	},
@@ -20,7 +21,7 @@
 	"page": "Էջ",
 	"pager-newer-n": "{{PLURAL:$1|նոր 1|աւելի նոր $1}}",
 	"pager-older-n": "{{PLURAL:$1|աւելի հին 1|աւելի հին $1}}",
-	"remove": "Հանել",
+	"remove": "Հեռացնել",
 	"start-date": "Սկզբնաւորութեան թուական",
 	"start-time": "Սկզբնաւորութեան ժամ",
 	"statistics": "Վիճակագրութիւն",
