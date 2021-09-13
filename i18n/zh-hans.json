@@ -6,6 +6,7 @@
 			"Deathkon",
 			"Liuxinyu970226",
 			"SomeyaMako",
+			"Tranve",
 			"佛壁灯",
 			"列维劳德"
 		]
@@ -23,7 +24,7 @@
 	"attribution-font": "$1字体以$2许可证形式授权，作者为$3",
 	"attribution-font-awesome": "$1图标以$2许可证形式授权，作者为$3",
 	"byte-difference": "更改的字节数",
-	"byte-difference-desc": "在主命名空间页中添加和删除的净字节数。不包括图像或其他文件，但确实计算维基文本编码。不计算对共享资源和维基数据页面上的更改。",
+	"byte-difference-desc": "在主命名空间页中添加和删除的净字节数。不包括图像或其他文件，但确实计算wikitext编码。不计算对共享资源和维基数据页面上的更改。",
 	"calculate-totals": "整体统计",
 	"cancel": "取消",
 	"categories": "分类",
