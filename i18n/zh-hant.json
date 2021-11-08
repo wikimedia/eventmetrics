@@ -3,6 +3,7 @@
 		"authors": [
 			"A2093064",
 			"Kly",
+			"Winston Sung",
 			"Xiplus"
 		]
 	},
@@ -152,7 +153,7 @@
 	"organizers": "籌辦者",
 	"page": "頁面",
 	"pager-newer-n": "{{PLURAL:$1|較新 $1 筆}}",
-	"pager-older-n": "{{PLURAL:$1|較舊 $1 筆}}",
+	"pager-older-n": "{{PLURAL:$1|較早 $1 筆}}",
 	"pages-created": "頁面已創建",
 	"pages-created-desc": "在事項期間所建立的主命名空間頁面數量（不包含在維基共享資源與維基數據的頁面）。",
 	"pages-created-pageviews": "已創建頁面的檢視數",
