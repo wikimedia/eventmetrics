@@ -3,6 +3,7 @@
 		"authors": [
 			"A2093064",
 			"Kly",
+			"Tranve",
 			"Winston Sung",
 			"Xiplus"
 		]
@@ -22,7 +23,7 @@
 	"attribution-font-awesome": "$1 圖標基於 $2 所釋出，在此感謝原創者 $3 的貢獻",
 	"avg-views": "平均檢視數",
 	"byte-difference": "位元組已變更",
-	"byte-difference-desc": "在主命名空間頁面所添加與刪除的淨位元組。這會計算到 wiki 文字代碼，但不包含圖片或其它檔案。在維基共享資源和維基數據頁面上的變更也不會被計算到。",
+	"byte-difference-desc": "在主命名空間頁面所添加與刪除的淨位元組。這會計算到 wikitext 代碼，但不包含圖片或其它檔案。在維基共享資源和維基數據頁面上的變更也不會被計算到。",
 	"byte-difference-during-event": "事項期間變動的位元組大小",
 	"calculate-totals": "計算加總",
 	"cancel": "取消",
@@ -93,7 +94,7 @@
 	"event-deleted": "事項「$1」已刪除。",
 	"event-download-csv": "下載 CSV",
 	"event-download-reports": "下載報告",
-	"event-download-wikitext": "取得 wiki 文字",
+	"event-download-wikitext": "取得 wikitext",
 	"event-in-future": "安排在往後時間的事項",
 	"event-in-future-details": "無法產生統計內容，如果您想要更改日期，請前往$1。",
 	"event-list": "事項清單",
