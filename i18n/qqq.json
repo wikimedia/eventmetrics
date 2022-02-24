@@ -22,7 +22,7 @@
 	"attribution-background": "Text giving credit to the background image (which is variable). $1 is a link to the image on Commons.",
 	"attribution-font": "Text giving credit to the author of the font used in the application. $1 is a link to the font homepage, $2 is a link to the license, and $3 is a link to the author.",
 	"attribution-font-awesome": "Text giving credit to the author of the Font Awesome icon set. $1 is a link to the font homepage, $2 is a link to the license, and $3 is a link to the author.",
-	"avg-views": "Title for column showing average pageviews of pages, where 'views' is short for 'pageviews'. Similar to {{msg-wm|views}}.",
+	"avg-views": "Title for column showing average pageviews of pages, where 'views' is short for 'pageviews'. Similar to {{msg-wm|Pageviews-views}}.",
 	"byte-difference": "Heading for the column listing the number of bytes changed during a program, shown in the 'My Programs' table.",
 	"byte-difference-desc": "Description for the {{msg-wm|bytes-difference}} metric.",
 	"byte-difference-during-event": "Heading for column listing the number of bytes changed to a page during an event. Used in the Pages Created report.",
