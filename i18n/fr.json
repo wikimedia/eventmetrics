@@ -9,7 +9,7 @@
 		]
 	},
 	"add-category": "Ajouter une catégorie",
-	"add-more-participants": "Ajouter des noms d’'utilisateurs wiki ci-dessous, un par ligne, pour limiter les métriques à des participants spécifiques.",
+	"add-more-participants": "Ajouter des noms d’utilisateurs wiki ci-dessous, un par ligne, pour limiter les métriques à des participants spécifiques.",
 	"add-more-participants-tooltip": "Lire davantage sur le filtrage des participants",
 	"add-more-participants-note": "Vous pouvez copier/coller directement à partir d’une liste sur le wiki.",
 	"add-organizer": "Ajouter un organisateur",
