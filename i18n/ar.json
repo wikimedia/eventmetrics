@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Hubaishan",
 			"Meno25",
 			"ديفيد",
 			"علاء",
@@ -152,7 +153,7 @@
 	"num-wikis": "{{PLURAL:$1|ويكي|ويكيات}}",
 	"organizers": "المنظمون",
 	"page": "صفحة",
-	"pager-newer-n": "{{PLURAL:$1|أجدد 1|أجدد $1}}",
+	"pager-newer-n": "{{PLURAL:$1|أحدث 1|أحدث $1}}",
 	"pager-older-n": "{{PLURAL:$1|أقدم 1|أقدم $1}}",
 	"pages-created": "الصفحات المنشأة",
 	"pages-created-desc": "عدد صفحات النطاق المنشأة أثناء الحدث، لا يتم تضمين الصفحات على كومنز وويكي بيانات.",
