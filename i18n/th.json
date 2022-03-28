@@ -3,9 +3,11 @@
 		"authors": [
 			"B20180",
 			"Geonuch",
-			"TMo3289"
+			"TMo3289",
+			"Trisorn Triboon"
 		]
 	},
+	"add-category": "เพิ่มหมวดหมู่",
 	"add-more-participants": "เพิ่มผู้ร่วมสร้างสรรค์ หนึ่งคนต่อหนึ่งบรรทัด",
 	"add-organizer": "เพิ่มผู้ประสานงาน/ผู้จัดการ",
 	"add-wiki": "เพิ่มวิกิ",
@@ -15,13 +17,19 @@
 	"attribution": "การแสดงที่มา",
 	"byte-difference": "เพิ่มไบต์แล้ว",
 	"cancel": "ยกเลิก",
+	"category-name": "ชื่อหมวดหมู่",
+	"close": "ปิด",
+	"copy": "คัดลอก",
 	"date": "วันที่",
+	"delete": "ลบ",
 	"documentation": "เอกสาร",
 	"edit-summary": "ความคิดเห็น",
+	"edits": "การแก้ไข",
 	"error-event-retry": "โปรดลองอีกครั้งหรือ $1 (อย่าลืมรวมลิงก์ไปยังกิจกรรมของคุณ)",
 	"error-event-retry-link": "รายงานปัญหานี้",
 	"error-event-timeout": "กระบวนการนี้ใช้เวลานานเกินไปและหยุดทำงาน",
 	"error-unknown": "มีบางอย่างผิดพลาด",
+	"event-all-edits": "การแก้ไขทั้งหมด",
 	"fatal-error": "การผิดพลาดร้ายแรง",
 	"help": "วิธีใช้",
 	"help-translate": "ช่วยแปลภาษา",
@@ -39,8 +47,10 @@
 	"save": "บันทึก",
 	"settings": "การตั้งค่า",
 	"submit": "บันทึก",
+	"time": "เวลา",
 	"totals": "ทั้งหมด",
 	"unknown": "ไม่ทราบ",
 	"username": "ชื่อผู้ใช้",
-	"view-source": "ดูต้นฉบับ"
+	"view-source": "ดูต้นฉบับ",
+	"wiki": "วิกิ"
 }

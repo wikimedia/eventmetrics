@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Beginneruser",
 			"FarsiNevis"
 		]
 	},
@@ -11,7 +12,7 @@
 	"date": "تاریخ",
 	"diff": "تفاوت",
 	"documentation": "مستندات",
-	"edit-summary": "توضیح",
+	"edit-summary": "خلاصهٔ ویرایش",
 	"error-server-message": "پاسخ سرور: $1",
 	"fatal-error": "خطای بحرانی",
 	"feedback": "بازخورد",
