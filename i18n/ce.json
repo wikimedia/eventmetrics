@@ -5,7 +5,10 @@
 		]
 	},
 	"edit-summary": "Къамел",
+	"end-date": "Чекхйолу хан",
 	"logout": "Болх дӀаберзор",
+	"metadata-end-date": "Чекхйолу хан:",
+	"metadata-start-date": "Йолайелла хан:",
 	"num-days": "{{PLURAL: $1|де}}",
 	"num-hours": "{{PLURAL:$1|сахьт}}",
 	"num-minutes": "{{PLURAL:$1|минут}}",
@@ -13,6 +16,7 @@
 	"num-seconds": "{{PLURAL:$1|секунд}}",
 	"pager-newer-n": "{{PLURAL:$1|алсамо керла 1|алсамо керланаш $1}}",
 	"pager-older-n": "{{PLURAL:$1|алсамо шира 1|алсамо ширниш $1}}",
+	"start-date": "Йолайелла хан",
 	"submit": "ДӀадахьийта",
 	"unknown": "Хууш дац",
 	"username": "Декъашхочун цӀе",
