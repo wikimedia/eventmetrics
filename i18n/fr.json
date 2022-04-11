@@ -94,7 +94,7 @@
 	"event-deleted": "L’événement « $1 » a été supprimé.",
 	"event-download-csv": "Télécharger le fichier CSV",
 	"event-download-reports": "Télécharger les rapports",
-	"event-download-wikitext": "Obtenir le wikitexte",
+	"event-download-wikitext": "Obtenir le wikicode",
 	"event-in-future": "Cet événement se produit dans le futur",
 	"event-in-future-details": "Les statistiques ne peuvent pas encore être générées. Si vous voulez changer les dates, allez à $1.",
 	"event-list": "Liste d’événements",
