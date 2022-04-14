@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Beginneruser",
-			"FarsiNevis"
+			"FarsiNevis",
+			"Mohammad ebz"
 		]
 	},
 	"all": "همه",
@@ -13,6 +14,7 @@
 	"diff": "تفاوت",
 	"documentation": "مستندات",
 	"edit-summary": "خلاصهٔ ویرایش",
+	"error-filters-wikidata-panel": "ضروری برای ویکی‌داده",
 	"error-server-message": "پاسخ سرور: $1",
 	"fatal-error": "خطای بحرانی",
 	"feedback": "بازخورد",
@@ -37,5 +39,6 @@
 	"update-data": "به‌روزرسانی داده‌ها",
 	"updating": "در حال روزآمدسازی",
 	"username": "نام کاربری",
-	"view-source": "نمایش مبدأ"
+	"view-source": "نمایش مبدأ",
+	"wiki": "ویکی"
 }
