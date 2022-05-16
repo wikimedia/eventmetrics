@@ -1,0 +1,29 @@
+version: '3'
+services:
+
+  web:
+    image: docker-registry.tools.wmflabs.org/toollabs-php72-web
+    volumes:
+      - ./:/eventmetrics/
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    working_dir: /eventmetrics/
+    command: ./.docker/run.sh
+
+  db:
+    image: mysql
+    restart: always
+    volumes:
+      - ./var/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpwd
+      MYSQL_DATABASE: eventmetrics
+      MYSQL_USER: eventmetrics
+      MYSQL_PASSWORD: eventmetricspwd
+
+  assets:
+    image: node
+    working_dir: /eventmetrics/
+    command: npm install
