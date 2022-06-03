@@ -1,0 +1,41 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-php:
+    name: PHP
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: [ '7.2' ]
+
+    steps:
+    - uses: actions/checkout@v3
+
+
+    - name: Setup PHP with tools
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        tools: composer
+
+    - name: Composer self-update
+      run: composer self-update --1
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Install dependencies
+      run: composer install --no-scripts
+
+    - name: Run test suite
+      run: composer test
