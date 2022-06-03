@@ -19,7 +19,11 @@ jobs:
         php-version: [ '7.3' ]
         experimental: [ false ]
         include:
-          - php-version: [ '7.2', '7.4', '8.0' ]
+          - php-version: '7.2'
+            experimental: true
+          - php-version: '7.4'
+            experimental: true
+          - php-version: '8.0'
             experimental: true
 
     steps:
