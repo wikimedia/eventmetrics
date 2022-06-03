@@ -28,9 +28,6 @@ jobs:
         php-version: ${{ matrix.php-version }}
         tools: composer
 
-    - name: Composer self-update
-      run: composer self-update --1
-
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
