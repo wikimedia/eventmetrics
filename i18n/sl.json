@@ -16,6 +16,7 @@
 	"pager-newer-n": "{{PLURAL:$1|novejši|novejša|novejši|novejših}} $1",
 	"pager-older-n": "{{PLURAL:$1|starejši|starejša|starejši|starejših}} $1",
 	"save": "Shrani",
+	"select-report-format": "Prosimo, izberite format za poročilo.",
 	"settings": "Nastavitve",
 	"statistics": "Statistika",
 	"view-source": "Izvorno besedilo"
