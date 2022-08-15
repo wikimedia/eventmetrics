@@ -1,7 +1,10 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Pacha Tchernof"
+		]
 	},
+	"cancel": "אַנולירן",
 	"help": "הילף",
 	"save": "אויפֿהיטן",
 	"settings": "איינשטעלונגען"
