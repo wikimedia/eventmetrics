@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bada Kaji",
 			"Nirajan pant",
 			"पर्वत सुबेदी",
 			"सरोज कुमार ढकाल",
@@ -27,7 +28,7 @@
 	"pager-older-n": "{{PLURAL:$1|पुरानो १|पुरानो $1}}",
 	"program-settings": "कार्यक्रम सेटिङहरू",
 	"save": "सङ्ग्रह गर्नुहोस्",
-	"settings": "सेटिङहरू",
+	"settings": "मेरो अभिरुचिहरू",
 	"statistics": "तथ्याङ्कहरू",
 	"submit": "संग्रह गर्नुहोस्",
 	"totals": "कुल",
