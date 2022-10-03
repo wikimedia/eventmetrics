@@ -30,7 +30,7 @@
 	"categories": "Catégories",
 	"categories-panel-title": "Filtre de catégories",
 	"categories-description": "Saisir les catégories (avec les noms wiki) pour limiter les métriques dans les pages de ces catégories.",
-	"categories-description-tooltip": "Apprendre sur le filtrage des catégories",
+	"categories-description-tooltip": "En savoir plus sur le filtrage des catégories",
 	"categories-explanation": "Les catégories doivent porter sur des pages de l’espace de noms principal ; les catégories masquées sont autorisées.",
 	"categories-commons-explanation": "Sur Commons uniquement, utiliser cela pour filtrer les fichiers (images, vidéos, etc.) au lieu des pages.",
 	"category-warning-header": "Événement partiellement configuré",
