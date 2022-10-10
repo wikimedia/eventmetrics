@@ -10,6 +10,7 @@
 	"date": "Datum",
 	"documentation": "Dokumentacija",
 	"fatal-error": "Usodna napaka",
+	"files-uploaded": "Naložene datoteke",
 	"help": "Pomoč",
 	"help-translate": "Pomoč pri prevajanju",
 	"page": "Stran",
@@ -19,5 +20,6 @@
 	"select-report-format": "Prosimo, izberite format za poročilo.",
 	"settings": "Nastavitve",
 	"statistics": "Statistika",
+	"uploads": "Naložitve",
 	"view-source": "Izvorno besedilo"
 }
