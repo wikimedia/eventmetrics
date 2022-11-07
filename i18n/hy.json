@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kareyac"
+			"Kareyac",
+			"Սերգեյ Սաֆարյան"
 		]
 	},
 	"add-category": "Ավելացնել կատեգորիա",
@@ -19,7 +20,7 @@
 	"help": "Օգնություն",
 	"logout": "Դուրս գալ",
 	"no-results": "Ոչինչ չի գտնվել",
-	"metadata-categories-label": "{{PLURAL:$1|Կատեգորիա|Կատեգորիաներ}}",
+	"metadata-categories-label": "{{PLURAL:$1|Կատեգորիա|Կատեգորիաներ}}՝",
 	"metadata-wikis-label": "{{PLURAL:$1|Վիքի|Վիքիներ}}:",
 	"num-days": "{{PLURAL:$1|օր}}",
 	"num-hours": "{{PLURAL:$1|ժամ}}",
@@ -32,7 +33,7 @@
 	"pager-older-n": "{{PLURAL:$1|ավելի հին 1|ավելի հին $1}}",
 	"save": "Պահպանել",
 	"settings": "Կարգավորումներ",
-	"submit": "Հաշվել",
+	"submit": "Ուղարկել",
 	"totals": "Ընդամենը",
 	"unknown": "Հայտնի չէ",
 	"username": "Մասնակցի անուն՝",
