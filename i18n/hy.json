@@ -25,7 +25,7 @@
 	"num-days": "{{PLURAL:$1|օր}}",
 	"num-hours": "{{PLURAL:$1|ժամ}}",
 	"num-minutes": "{{PLURAL:$1|րոպե}}",
-	"num-participants": "$1 {{PLURAL:$1|մասնակից|մասնակիցներ}}",
+	"num-participants": "$1 {{PLURAL:$1|մասնակից}}",
 	"num-revisions": "{{PLURAL:$1|տարբերակ}}",
 	"num-seconds": "{{PLURAL:$1|վայրկյան}}",
 	"page": "Էջ",
