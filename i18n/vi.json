@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Minh Nguyen",
 			"Tuanminh01"
 		]
 	},
@@ -19,7 +20,7 @@
 	"attribution-font-awesome": "Biểu tượng $1 được phát hành dưới $2 nhờ có $3",
 	"avg-views": "Lượng xem trung bình",
 	"byte-difference": "Số bytes thay đổi",
-	"byte-difference-desc": "Các bytes được thêm và xóa trong các trang không gian tên chính. Không bao gồm hình ảnh hoặc các tệp khác nhưng không tính mã hóa wikitext. Thay đổi trang trên Commons và Wikidata không được tính.",
+	"byte-difference-desc": "Các byte được thêm và xóa trong các trang không gian tên chính, không tính hình ảnh hoặc các tập tin khác nhưng có tính mã wiki. Các thay đổi trang trên Commons và Wikidata không được tính.",
 	"byte-difference-during-event": "Byte thay đổi trong sự kiện",
 	"calculate-totals": "Tính toán tổng hợp",
 	"cancel": "Hủy bỏ",
