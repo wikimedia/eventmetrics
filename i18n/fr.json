@@ -184,7 +184,7 @@
 	"program-updated": "Le programme « $1 » a été mis à jour.",
 	"queued": "Mis en file d’attente",
 	"queued-desc": "Les statistiques sont en attente de génération...",
-	"remove": "Enlever",
+	"remove": "Retirer",
 	"report-issue": "Signaler un problème",
 	"retention": "Rétention après $1 jour{{PLURAL:$1||s}}",
 	"retention-desc": "Le nombre de nouveaux contributeurs qui ont fait au moins une modification, sur n’importe quel projet Wikimedia, dans un quelconque espace de noms, à n’importe quel moment depuis $1 jour{{PLURAL:$1||s}} après l’événement.",
