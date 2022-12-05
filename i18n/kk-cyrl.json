@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Batyrbek.kz",
 			"Nurlan"
 		]
 	},
@@ -9,6 +10,9 @@
 	"cancel": "Қажет емес",
 	"help-translate": "Аударуға көмектесу",
 	"no-results": "Ешбір нәтиже табылмады",
+	"num-hours": "{{PLURAL:$1|сағат|сағат}}",
+	"num-minutes": "{{PLURAL:$1|минут|минут}}",
+	"num-seconds": "{{PLURAL:$1|секунд|секунд}}",
 	"page": "Бет",
 	"pager-newer-n": "{{PLURAL:$1|жаңалау 1|жаңалау $1}}",
 	"pager-older-n": "{{PLURAL:$1|ескілеу 1|ескілеу $1}}",
