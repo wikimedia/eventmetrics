@@ -68,7 +68,7 @@
 	"error-filters-participants-none": "Ni navedenih udeležencev",
 	"error-filters-participants-or-categories": "Filtrirate lahko po udeležencih ali kategorijah ali oboje združite.",
 	"error-filters-wikidata": "Če želite pridobiti metrike o Wikipodatkih, morate navesti udeležence. (Kategorije v Wikipodatkih ne obstajajo.)",
-	"error-filters-wikidata-only": "Za ta dogodek ste določili samo en viki: <strong>Wikidata</strong>",
+	"error-filters-wikidata-only": "Za ta dogodek ste določili samo en viki: <strong>Wikipodatki</strong>",
 	"error-filters-wikidata-panel": "Potrebno za Wikipodatke",
 	"error-invalid": "Ta vrednost ni veljavna.",
 	"error-non-organizer": "Za ogled tega programa niste pooblaščeni, ker niste organizator.",
