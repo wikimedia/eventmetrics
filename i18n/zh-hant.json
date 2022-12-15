@@ -6,7 +6,8 @@
 			"Kly",
 			"Tranve",
 			"Winston Sung",
-			"Xiplus"
+			"Xiplus",
+			"捍粵者"
 		]
 	},
 	"add-category": "添加分類",
@@ -180,7 +181,7 @@
 	"please-login": "請先登入以繼續。",
 	"program": "方案",
 	"program-created": "已建立方案「$1」。",
-	"program-deleted": "方案「$1」已被刪除。",
+	"program-deleted": "方案「$1」已刪除。",
 	"program-settings": "方案設定",
 	"program-updated": "方案「$1」已更新。",
 	"queued": "已佇列",
