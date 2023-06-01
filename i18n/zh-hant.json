@@ -80,7 +80,7 @@
 	"error-non-organizer": "您不被允許來檢視此方案，因為您非籌辦者。",
 	"error-not-found": "查無所要求的方案或事項。這可能是因為已被刪除或重新命名。",
 	"error-program-undeletable": "此方案不可被刪除，因為有包含著一個或以上的事項。",
-	"error-query-timeout": "很抱歉，所請求訊息花費太長時間處理（逾時 $1 {{PLURAL:$1|\n秒}}）。為了保護系統資源，已自動將查詢給刪除。",
+	"error-query-timeout": "很抱歉，所請求訊息花費太長時間處理（逾時 $1 {{PLURAL:$1|秒}}）。為了保護系統資源，已自動將查詢給刪除。",
 	"error-server-message": "伺服器報告：$1",
 	"error-service-overload": "Event Metrics 目前被其它請求給導致負荷過量。請等幾分鐘後再重試。",
 	"error-title-invalid-chars": "標題不可包含以下任何字元：$1。",
