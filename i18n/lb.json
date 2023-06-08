@@ -7,6 +7,7 @@
 		]
 	},
 	"add-category": "Kategorie derbäisetzen",
+	"add-organizer": "Organisateur derbäisetzen",
 	"add-wiki": "Wiki derbäisetzen",
 	"all": "All",
 	"all-wikipedias": "All Wikipediaen",
@@ -82,6 +83,7 @@
 	"report-issue": "E Probleem mellen",
 	"save": "Späicheren",
 	"save-categories": "Kategorië späicheren",
+	"select-report-format": "Wielt wgl. e Format fir de Rapport.",
 	"settings": "Astellungen",
 	"show-section": "Dësen Abschnitt weisen",
 	"start-date": "Ufanksdatum",
