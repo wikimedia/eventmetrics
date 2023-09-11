@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"BaRaN6161 TURK",
 			"Grkn gll",
 			"Hedda",
@@ -149,7 +150,7 @@
 	"num-abbrev-thousand": "b",
 	"num-categories": "$1 {{PLURAL:$1|kategori|kategori}}",
 	"num-days": "{{PLURAL: $1|gün|gün}}",
-	"num-hours": "{{PLURAL: $1|hour|saat}}",
+	"num-hours": "{{PLURAL: $1|saat}}",
 	"num-minutes": "{{PLURAL: $1|minute|dakika}}",
 	"num-participants": "$1 {{PLURAL:$1|katılımcı|katılımcı}}",
 	"num-revisions": "{{PLURAL:$1|Düzenleme|Düzenleme}}",
