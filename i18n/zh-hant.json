@@ -149,7 +149,7 @@
 	"num-days": "{{PLURAL:$1|天}}",
 	"num-hours": "{{PLURAL:$1|小時}}",
 	"num-minutes": "{{PLURAL:$1|分}}",
-	"num-participants": "$1 名{{PLURAL:$1|參與者}}",
+	"num-participants": "$1位{{PLURAL:$1|參與者}}",
 	"num-revisions": "{{PLURAL:$1|修訂}}",
 	"num-seconds": "{{PLURAL:$1|秒}}",
 	"num-wikis": "{{PLURAL:$1|wiki}}",
