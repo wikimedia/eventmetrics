@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Aue Nai"
+			"Aue Nai",
+			"咽頭べさ"
 		]
 	},
 	"add-organizer": "ထပ် ညးစန်ပကောံ",
@@ -14,6 +15,7 @@
 	"cancel": "တးပဲါ",
 	"close": "ကၟာတ်",
 	"confirm-deletion": "မၞး မိက်ဂွံ ဇိုတ်ပလီု $1 ကွေဟ်ဟ်ရဟာ？",
+	"contributions": "အရာမကၠောန်သ္ပလဝ်အထံက်အပၚ်ဂမၠိုၚ်",
 	"copy": "စၠောအ်ကပ်ပဳ",
 	"create-new-event": "ခၞံကၠောန် စရင် တၟိ",
 	"create-new-program": "ခၞံကၠောန် အစဳအဇန်တၟိ",
