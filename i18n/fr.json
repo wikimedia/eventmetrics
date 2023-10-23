@@ -120,7 +120,7 @@
 	"items-created": "Éléments de Wikidata créés",
 	"items-created-desc": "Un nombre de nouveaux éléments Wikidata créés durant l'événement.",
 	"items-improved": "Éléments de Wikidata améliorés",
-	"items-improved-desc": "Le nombre de tous les éléments Wikidata modifiés pendant l'événement (hors des éléments Wikidata créés).",
+	"items-improved-desc": "Le nombre de tous les éléments Wikidata modifiés pendant l'événement (sans les éléments Wikidata créés).",
 	"last-updated": "Dernière mise à jour le $1",
 	"last-updated-table": "Dernière mise à jour",
 	"login-with-oauth": "Connexion avec OAuth",
