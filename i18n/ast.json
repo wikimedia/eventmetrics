@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Fitoschido",
-			"Xuacu"
+			"Xuacu",
+			"YoaR"
 		]
 	},
 	"add-category": "Amestar categoría",
@@ -13,7 +14,7 @@
 	"attribution-background": "Imaxe de fondu disponible'n Commons en $1",
 	"attribution-font": "tipografía $1 disponible baxo la llicencia $2, cortesía de $3",
 	"byte-difference": "Bytes camudaos",
-	"cancel": "Encaboxar",
+	"cancel": "Zarrar",
 	"category-name": "Nome de la categoría",
 	"close": "Zarrar",
 	"confirm-deletion": "¿Tas seguru de que quies desaniciar «$1»?",
