@@ -1,7 +1,19 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Thakurji"
+		]
 	},
+	"add-category": "Vibhag jorro",
+	"all": "Sab",
+	"all-wikipedias": "Sab Wikipedia",
+	"apply": "Laabu karo",
+	"cancel": "Cancel karo",
+	"categories": "Vibhag",
 	"close": "Band karo",
+	"copy": "Copy karo",
+	"date": "Taarik",
+	"edits": "Badlao",
+	"event-list": "Event ke suchi",
 	"feedback": "Feedback do"
 }

@@ -123,7 +123,7 @@
 	"items-improved-desc": "ספירה של כל פריטי ויקינתונים שנוצרו במהלך האירוע (לא כולל פריטי ויקינתונים שנוצרו).",
 	"last-updated": "עדכון אחרון $1",
 	"last-updated-table": "עודכן לאחרונה",
-	"login-with-oauth": "כניסה עם OAuth",
+	"login-with-oauth": "כניסה באמצעות OAuth",
 	"logout": "יציאה מהחשבון",
 	"metrics-about-link": "אודות המספרים האלה",
 	"more-page-metrics": "עוד מדדי דפים",
