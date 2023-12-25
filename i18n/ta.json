@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Fahimrazick"
+		]
 	},
 	"close": "மூடு",
 	"date": "நாள்",
@@ -17,7 +19,7 @@
 	"page": "பக்கம்",
 	"pager-newer-n": "{{PLURAL:$1|புதிய ஒரு|புதிய $1}}",
 	"pager-older-n": "{{PLURAL:$1|பழைய ஒரு|பழைய $1}}",
-	"save": "சேமிக்கவும்",
+	"save": "சேமி",
 	"settings": "செயலமைப்புகள்",
 	"submit": "சமர்ப்பிக்கவும்",
 	"totals": "மொத்தம்",
