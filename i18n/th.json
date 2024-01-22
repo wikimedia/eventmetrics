@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"B20180",
+			"Ekminarin",
 			"Geonuch",
 			"TMo3289",
 			"Trisorn Triboon"
@@ -23,7 +24,7 @@
 	"date": "วันที่",
 	"delete": "ลบ",
 	"documentation": "เอกสาร",
-	"edit-summary": "ความคิดเห็น",
+	"edit-summary": "ความย่อการแก้ไข",
 	"edits": "การแก้ไข",
 	"error-event-retry": "โปรดลองอีกครั้งหรือ $1 (อย่าลืมรวมลิงก์ไปยังกิจกรรมของคุณ)",
 	"error-event-retry-link": "รายงานปัญหานี้",
