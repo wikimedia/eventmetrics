@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Bashkorttan"
+		]
 	},
 	"all": "Барыһы",
 	"apply": "Ҡулланырға",
@@ -14,5 +16,5 @@
 	"save": "Һаҡларға",
 	"settings": "Көйләүҙәр",
 	"totals": "Һөҙөмтәләр",
-	"view-source": "Сығанаҡты ҡарарға"
+	"view-source": "Сығанаҡты ҡарау"
 }
