@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Plaga med"
+		]
 	},
 	"all": "Усё",
 	"apply": "Прымяніць",
@@ -8,6 +10,8 @@
 	"close": "Закрыць",
 	"date": "Дата",
 	"documentation": "Дакументацыя",
+	"event-download-csv": "Спампаваць CSV",
+	"event-download-reports": "Спампаваць справаздачы",
 	"fatal-error": "Фатальная памылка",
 	"feedback": "Зваротная сувязь",
 	"help": "Даведка",
