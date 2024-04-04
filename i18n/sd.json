@@ -5,6 +5,7 @@
 			"Mehtab ahmed"
 		]
 	},
+	"add-category": "زمرو وجهو",
 	"all": "سڀ",
 	"contributions": "ڀاڱيداريون",
 	"diff": "فرق",
@@ -15,8 +16,11 @@
 	"event-all-edits": "سڀ سنوارون",
 	"feedback": "اوهان جي راءِ",
 	"help-translate": "ترجمي ۾ مدد ڪيو",
+	"impact": "اثر",
 	"metadata-end-date": "پڄاڻيءَ جي تاريخ:",
 	"metadata-start-date": "شروع ٿيڻ جي تاريخ:",
+	"num-hours": "{{PLURAL: $1|ڪلاڪ}}",
+	"num-minutes": "{{PLURAL:$1|منٽ}}",
 	"page": "صفحو",
 	"save": "سانڍيو",
 	"start-date": "شروع ٿيڻ جي تاريخ",
@@ -24,5 +28,6 @@
 	"submit": "اماڻيو",
 	"url": "يوآرايل",
 	"username": "واپرائيندڙنانءُ",
+	"view-all-edits": "سڀ سنوارون ڏسو",
 	"view-source": "ذريعو ڏسو"
 }
