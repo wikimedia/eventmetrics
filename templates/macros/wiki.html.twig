@@ -1,12 +1,12 @@
-{% macro extLink(url, label, overrideLabel) %}{% spaceless %}
+{% macro extLink(url, label, overrideLabel) %}{% apply spaceless %}
     {% if overrideLabel is not empty %}
         {% set label = overrideLabel %}
     {% endif %}
     <a href='{{ url }}' target='_blank'>{{ label|raw }}</a>
-    {% endspaceless %}
+    {% endapply %}
 {% endmacro %}
 
-{% macro pageLink(pageTitle, domain, label = null, wikitext = false) %}{% spaceless %}
+{% macro pageLink(pageTitle, domain, label = null, wikitext = false) %}{% apply spaceless %}
     {% from _self import extLink as extLink %}
     {% if wikitext %}
         {% if label is empty %}
@@ -16,16 +16,16 @@
     {% else %}
         {{ extLink('https://' ~ domain ~ '.org/wiki/' ~ pageTitle|wiki_encode, pageTitle|replace({'_': ' '}), label) }}
     {% endif %}
-{% endspaceless %}{% endmacro %}
+{% endapply %}{% endmacro %}
 
 {##
  # Given a revision, or a page title and namespace,
  # generate the path including the namespace.
  # TODO: programatically get namespace from meta API.
  #}
-{% macro pagePath(rev, ns = null) %}{% spaceless %}
+{% macro pagePath(rev, ns = null) %}{% apply spaceless %}
     {% if rev is not iterable %}
         {% set rev = {page: rev, namespace: ns} %}
     {% endif %}
     {{ ((rev.namespace == 6 ? 'File:' : '') ~ rev.page|replace({' ': '_'}))|raw }}
-{% endspaceless %}{% endmacro %}
+{% endapply %}{% endmacro %}

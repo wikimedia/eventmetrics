@@ -13,14 +13,14 @@
 ! {{ msg('incoming-links') }}
 ! {{ msg('more-page-metrics') }}
 {% for page in pagesImproved %}
-    |-
-    | {{ wikiHelper.pageLink(page.pageTitle, page.wiki, null, true) }}
-    | {{ page.wiki }}
-    | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.edits }}}}
-    | style="text-align:right" | {% if page.bytes > 0 %}+{% endif %}{% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.bytes }}}}
-    | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.avgPageviews }}}}
-    | style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.links }}}}
-    | [https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle|wiki_encode }} XTools]
-    |-
+|-
+| {{ wikiHelper.pageLink(page.pageTitle, page.wiki, null, true) }}
+| {{ page.wiki }}
+| style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.edits }}}}
+| style="text-align:right" | {% if page.bytes > 0 %}+{% endif %}{% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.bytes }}}}
+| style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.avgPageviews }}}}
+| style="text-align:right" | {% verbatim %}{{FORMATNUM:{% endverbatim %}{{ page.links }}}}
+| [https://xtools.wmflabs.org/articleinfo/{{ page.wiki }}/{{ page.pageTitle|wiki_encode }} XTools]
+|-
 {% endfor %}
 |}

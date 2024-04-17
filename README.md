@@ -4,43 +4,44 @@ Event Metrics
 A Wikimedia Foundation tool that provides event organizers and grantees a simple, easy to use interface for reporting their shared metrics, removing the need for any manual counting.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Build Status](https://travis-ci.org/wikimedia/eventmetrics.svg?branch=master)](https://travis-ci.org/wikimedia/eventmetrics)
-[![Code Coverage](https://scrutinizer-ci.com/g/wikimedia/eventmetrics/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/eventmetrics/?branch=master)
-[![Maintainability](https://api.codeclimate.com/v1/badges/8e85e93cd9f6848bebfc/maintainability)](https://codeclimate.com/github/wikimedia/eventmetrics/maintainability)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wikimedia/eventmetrics/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wikimedia/eventmetrics/?branch=master)
+[![CI](https://github.com/wikimedia/eventmetrics/actions/workflows/ci.yaml/badge.svg)](https://github.com/wikimedia/eventmetrics/actions/workflows/ci.yaml)
 
 ## Installation for development
 
 Prerequisites:
 
-* PHP 7.2 and MySQL.
-* A [Wikimedia developer account](https://wikitech.wikimedia.org/wiki/Help:Create_a_Wikimedia_developer_account) with which to access the Wikimedia database replicas.
+* PHP 8.1+ and MySQL 5.7+.
+* [Composer](https://getcomposer.org/)
+* A [Wikimedia developer account](https://wikitech.wikimedia.org/wiki/Help:Create_a_Wikimedia_developer_account) with which to access the Toolforge replicas.
+* [Symfony CLI](https://symfony.com/download) for running the server.
 
 After cloning the repository:
 
-1. Create a local database called e.g. `eventmetrics`.
-2. Run `composer install` (this will prompt for some configuration values):
-   * Fill out your local database credentials according to your local configuration;
-     those for `database.replica.user` and `database.replica.password` can be found in
+1. Copy [.env.dist](.env.dist) to `.env` and fill in the necessary values:
+   * Values for `DATABASE_REPLICA_USER` and `DATABASE_REPLICA_PASSWORD` can be found in
      your `replica.my.cnf` file in the home directory of your account on Toolforge.
-   * `app.logged_in_user` is used to mock the current user, instead of going through OAuth. Must be a valid Wikimedia username. In production this should be `null`.
-3. Open a tunnel to the WMF databases: `ssh -L 4711:enwiki.web.db.svc.eqiad.wmflabs:3306 -L 4712:tools-db:3306 tools-dev.wmflabs.org -l your-username`
-  (where `your-username` is your Wikimedia developer account username).
-4. `./bin/console server:start` to start the server (shortcut: `s:s`).
+   * `APP_LOGGED_IN_USER` is used to mock the current user, instead of going through OAuth.
+     Must be a valid Wikimedia username.
+2. Run `composer install`.
+3. Open a tunnel to the WMF databases: `./bin/console toolforge:ssh`.
+4. `symfony server start` to start the server.
 5. You should be up and running at http://localhost:8000
 
 To update: after pulling the latest code, run `composer install`.
 
 ## Usage
 
-The web interface is hopefully straightforward to use. However developers can also do some functionality via the console. In the same directory as the application:
+The web interface is hopefully straightforward to use. However, developers can also do some
+functionality via the console. In the same directory as the application:
 
-* `php bin/console app:process-event <eventId>` - will generate [`EventStat`](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/Model/EventStat.php)s for the Event with the ID `<eventId>`.
-* `php bin/console app:spawn-jobs` - queries the [Job queue](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/Model/Job.php) and runs `app:process-event` for Events that are in the queue. There is a limit on the number of concurrent jobs to ensure the database quota on the replicas is not exceeded.
+* `./bin/console app:process-event <eventId>` - will generate [`EventStat`](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/Model/EventStat.php)s for the Event with the ID `<eventId>`.
+* `./bin/console app:spawn-jobs` - queries the [Job queue](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/Model/Job.php) and runs `app:process-event`
+  for Events that are in the queue. There is a limit on the number of concurrent jobs to
+  ensure the database quota on the replicas is not exceeded.
 
 ## PHP and framework
 
-There is one internal [Symfony bundle](https://symfony.com/doc/current/bundles.html), called `AppBundle`. It contains a separate directory for the controllers, models, repositories, Twig helpers, and fixtures.
+Event Metrics uses the [Symfony](https://symfony.com/) framework.
 
 Models are [Doctrine ORM entities](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html) that directly correlate to tables in the `eventmetrics` database. Database interaction should generally be done with Doctrine's `EntityManager`.
 
@@ -50,14 +51,13 @@ Repositories should automatically be assigned to the models, and can be injected
 
 ## Assets
 
-Assets are managed with [Webpack Encore](https://github.com/symfony/webpack-encore).
-Local CSS and JavaScript live in [app/Resources/assets](https://github.com/wikimedia/eventmetrics/tree/master/app/Resources/assets).
-Fonts and vendor assets must be defined in [webpack.config.js](https://github.com/wikimedia/eventmetrics/blob/master/webpack.config.js),
-and if needed, sourced in the `<head>` of [base.html.twig](https://github.com/wikimedia/eventmetrics/blob/master/templates/base.html.twig).
+Assets are managed by [Webpack Encore](https://symfony.com/doc/current/frontend.html).
+The entry point is [assets/js/application.js](assets/js/application.js), and the output is in `public/build/`.
+Compiled assets must be committed to the repository.
 
-On compilation, all assets are copied to the `public/assets/` directory (publicly accessible).
-This happens by running `./node_modules/.bin/encore production` (or `dev` if you don't want the files to be minified and versioned).
-You can also continually watch for file changes with `./node_modules/.bin/encore production --watch`.
+* `npm run build` - compiles assets for production.
+* `npm run watch` - compiles assets for development and watches for changes.
+* `npm run dev` - compiles assets for development without watching.
 
 ## i18n
 
@@ -108,8 +108,8 @@ See [`ProgramControllerTest`](https://github.com/wikimedia/eventmetrics/blob/mas
 
 ## Deployment
 
-For maintainer documentation, see https://wikitech.wikimedia.org/wiki/Tool:Event_Metrics
+For maintainer documentation, see https://wikitech.wikimedia.org/wiki/Nova_Resource:Eventmetrics
 
-The application currently is running on WMF's VPS environment at https://eventmetrics.wmflabs.org
+The application currently is running on WMF's VPS environment at https://eventmetrics.wmcloud.org
 
 Deployment happens automatically after a new version tag is created.

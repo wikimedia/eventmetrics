@@ -43,9 +43,9 @@
 <fieldset class="event__time">
     <div class="form-group">
         <div class="col-sm-2 text-right">
-            <label class="control-label">{% spaceless %}
+            <label class="control-label">{% apply spaceless %}
                 {{ msg('time') }}
-            {% endspaceless %}</label>
+            {% endapply %}</label>
         </div>
         <div class="col-sm-8{% if form_errors(form.start) or form_errors(form.end) %} has-error{% endif %}">
             {{ form_widget(form.time) }}
@@ -66,4 +66,3 @@
 </fieldset>
 
 {{ form_row(form._token) }}
-{{ form_widget(form.submit, {'label': msg('submit'), 'attr': {'class': 'btn-primary'}}) }}

@@ -1,0 +1,291 @@
+@import 'mixins';
+@import 'bootstrap';
+@import 'bootstrap-daterangepicker';
+@import url('https://tools-static.wmflabs.org/fontcdn/css?family=Roboto:400,700');
+
+html {
+    height: 100%;
+}
+
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'),
+        url('https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'),
+        url('https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf') format('truetype'),
+        url('https://tools-static.wmflabs.org/cdnjs/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.svg') format('svg');
+}
+
+.font-awesome {
+    font-family: 'FontAwesome';
+}
+
+body {
+    font-family: 'Roboto', sans-serif !important;
+    min-height: 100%;
+    position: relative;
+
+    /* add spacing for sticky footer */
+    &::after {
+        content: '';
+        display: block;
+        min-height: 75px;
+    }
+}
+
+.site-notice {
+    margin: 0 18px;
+}
+
+.form-horizontal label {
+    font-weight: normal;
+}
+
+.app-header {
+    line-height: 48px;
+    min-height: 53px !important;
+
+    > .container-fluid {
+        padding-right: 7px;
+    }
+
+    .breadcrumb {
+        background: transparent;
+        display: inline;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.app-header--logo {
+    height: 42px;
+    width: 42px;
+}
+
+.home-link {
+    display: inline-block;
+    margin-right: 12px;
+    padding-right: 12px;
+    position: relative;
+
+    &::after {
+        background: #e7e7e7;
+        bottom: 0;
+        content: '';
+        display: inline-block;
+        height: 80%;
+        left: 100%;
+        margin: auto;
+        position: absolute;
+        top: 3px;
+        width: 1px;
+    }
+}
+
+.logged-in,
+.help-dropdown {
+    margin-right: 6px;
+}
+
+.help-dropdown .glyphicon {
+    font-size: 14px;
+    top: 2px;
+}
+
+.lang-group {
+    .dropdown-menu {
+        max-height: 214px;
+        overflow-y: scroll;
+    }
+
+    .btn {
+        padding-left: 30px;
+    }
+
+    svg {
+        height: 17px;
+        left: 8px;
+        position: absolute;
+        top: 8px;
+        width: 17px;
+    }
+}
+
+.alert-container .alert:last-child {
+    margin: 0;
+
+    .close {
+        opacity: 0.8;
+        top: -1px;
+    }
+}
+
+.page-header {
+    padding-bottom: 20px;
+}
+
+.page-subject-title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 10px;
+
+    a {
+        color: inherit;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+.app-footer {
+    border-radius: 0 !important;
+    bottom: 0;
+    left: 0;
+    line-height: 40px;
+    margin-bottom: 0 !important;
+    margin-top: 30px;
+    min-height: 40px !important;
+    position: absolute !important;
+    width: 100%;
+
+    ul {
+        margin: 0;
+    }
+}
+
+.footer-links {
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+
+    li {
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+}
+
+.form-group {
+    // TODO: Not safe for i18n.
+    label::after {
+        content: ':';
+    }
+
+    .valid-input {
+        color: $bootstrap-success-text;
+        font-size: 18px;
+        position: absolute;
+        right: 24px;
+        top: 6px;
+    }
+}
+
+.has-error {
+    position: relative;
+
+    &::after {
+        color: $bootstrap-danger-text;
+        content: '\f071';
+        font-family: 'FontAwesome';
+        font-size: 18px;
+        position: absolute;
+        right: 24px;
+        top: 6px;
+    }
+}
+
+.em-table {
+    td:not(:first-child),
+    th:not(:first-child) {
+        text-align: center;
+    }
+}
+
+.sort-link {
+    @include prefix(user-select, none);
+    cursor: pointer !important;
+
+    &::after {
+        content: '\f0dc';
+        font-family: 'FontAwesome';
+        font-size: 12px;
+    }
+
+    &.sort-link--asc::after {
+        content: '\f0dd';
+    }
+
+    &.sort-link--desc::after {
+        content: '\f0de';
+    }
+}
+
+.page-title {
+    font-size: 12px;
+    font-variant: small-caps;
+    font-weight: bold;
+}
+
+a.disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
+.event-action:hover,
+.program-action:hover {
+    text-decoration: none;
+}
+
+.glyphicon-trash {
+    color: $bootstrap-gray;
+
+    &:hover {
+        color: inherit;
+    }
+}
+
+@media (max-width: $bootstrap-sm) {
+    .page-subject-title {
+        clear: both;
+        padding-top: 20px;
+    }
+
+    .footer-links {
+        display: block;
+
+        li {
+            display: block !important;
+            text-align: left;
+        }
+    }
+
+    /* add spacing for sticky footer */
+    body::after {
+        min-height: 275px;
+    }
+}
+
+// Panel macro styles. See also templates/macros/layout.html.twig and assets/js/application.js
+.panel {
+    .panel-heading {
+        display: flex;
+        align-items: center;
+        .panel-title {
+            font-size: 24px;
+            flex: 3;
+        }
+        .panel-description {
+            flex: 1;
+        }
+        // Add a caret to the left-side of the title and toggle it when collapsed.
+        a.collapsed:before {
+            content: "▸";
+        }
+        a:not(.collapsed):before {
+            content: "▾";
+        }
+    }
+}
