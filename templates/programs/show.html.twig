@@ -49,7 +49,7 @@
                         {% if isOrganizer %}
                             <th class="text-nowrap"></th>
                         {% endif %}
-                        {% for metric in visibleMetrics if metrics[metric] is defined %}
+                        {% for metric in visibleMetrics|filter(metric => metrics[metric] is defined) %}
                             <th class="text-nowrap">
                                 <div class="sort-link sort-link--{{ metric }}" data-column="{{ metric }}">
                                     {{ msg(metric, [metrics[metric]]) }}
@@ -70,7 +70,7 @@
                                     {{ layout.actionButtons('Event', event, {'programId': program.id, 'eventId': event.id}, num_participants == 0) }}
                                 </td>
                             {% endif %}
-                            {% for metric in visibleMetrics if metrics[metric] is defined %}
+                            {% for metric in visibleMetrics|filter(metric => metrics[metric] is defined) %}
                                 {% set stat = event.statistic(metric) %}
                                 <td class="text-nowrap sort-entry--{{ metric }} text-nowrap" data-value="{{ stat ? stat.value : -1 }}">
                                     {{ (stat ? stat.value|num_format : '&ndash;')|raw }}

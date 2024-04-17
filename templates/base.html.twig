@@ -7,7 +7,7 @@
             {% if gmTitle is defined %}{{ msg_if_exists(gmTitle) }} - {% elseif exception is defined %}{{ msg('fatal-error') }} - {% endif %}
             {{ msg('event-metrics') }}
         </title>
-        <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="{{ asset('assets/images/favicon.ico') }}" />
+        <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="{{ asset('build/images/favicon.ico') }}" />
 
         {# Must be before loading the individual JS files #}
         <script type="text/javascript">
@@ -16,19 +16,11 @@
         </script>
 
         {% block javascripts %}
-            <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
             {% include '@toolforge/i18n.html.twig' %}
-            <script type="text/javascript" src="{{ asset('assets/runtime.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('assets/app.js') }}"></script>
-            <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-            <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.19.4/moment.min.js"></script>
-            <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-daterangepicker/2.1.27/daterangepicker.min.js"></script>
+            <script type="text/javascript" src="{{ asset('build/app.js') }}"></script>
         {% endblock %}
         {% block stylesheets %}
-            <link rel="stylesheet" type="text/css" media="screen" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-            <link rel="stylesheet" type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
-            <link rel="stylesheet" type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-daterangepicker/2.1.27/daterangepicker.min.css">
-            <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/app.css') }}">
+            <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('build/app.css') }}">
         {% endblock %}
     </head>
     <body class="{% if exception is not defined %}{{ getControllerName() }} {{ getControllerName() }}-{{ getActionName() }}{% endif %}{% if is_rtl() %} rtl{% endif %}{% if event is defined and event.hasJob and event.job.isBusy %} disabled-state{% endif %}">
@@ -36,7 +28,7 @@
             <div class="container-fluid">
                 <span class="navbar-left">
                     <span class="home-link">
-                        <img class="app-header--logo" src="{{ asset('assets/images/logo.svg') }}" alt="{{ msg('event-metrics') }}" />
+                        <img class="app-header--logo" src="{{ asset('build/images/logo.svg') }}" alt="{{ msg('event-metrics') }}" />
                     </span>
                     {##
                      # When viewing a program/event that you don't organize, the link to 'My Programs'
@@ -96,10 +88,10 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li>
-                                    <a target="_blank" href="https://translatewiki.net/w/i.php?title=Special:Translate&group=grant-metrics&language={{ lang() }}&action=translate">{{ msg('help-translate') }}</a>
+                                    <a target="_blank" href="https://translatewiki.net/w/i.php?title=Special:Translate&amp;group=grant-metrics&amp;language={{ lang() }}&amp;action=translate">{{ msg('help-translate') }}</a>
                                 </li>
                                 <li class="divider" role="separator"></li>
-                                {% for key, value in all_langs() if key != 'qqq' %}
+                                {% for key, value in all_langs()|filter(key => key != 'qqq') %}
                                     <li>
                                         <a class="lang-link" href="{{ path(app.request.attributes.get('_route'), app.request.get('_route_params')|merge({'uselang': key})) }}" data-lang="{{ key }}">{{ value|e }}</a>
                                     </li>
@@ -111,10 +103,10 @@
             </div>
         </header>
 
-        {% if siteNoticeText is not empty %}
+        {% if site_notice_text is not empty %}
             <div class="site-notice container-full text-center">
-                <div class="alert alert-{{ siteNoticeStyle }} alert-dismissible" role="alert">
-                    {{ siteNoticeText|raw }}
+                <div class="alert alert-{{ site_notice_style }} alert-dismissible" role="alert">
+                    {{ aite_notice_text|raw }}
 
                     {% if 'localhost' in baseUrl or 'eventmetrics-dev' in baseUrl %}
                         Current branch:
@@ -146,7 +138,7 @@
         {{ include('_footer.html.twig') }}
         {% include('_attribution.html.twig') %}
 
-        {% if 'prod' == app.environment and logged_in_user() and not (isAdmin()) %}
+        {% if 'prod' == app.environment and logged_in_user() and not (is_admin()) %}
             {# Matomo usage tracking #}
             <script type="text/javascript">
                 var _paq = _paq || [];

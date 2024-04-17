@@ -1,0 +1,71 @@
+App\Model\Organizer:
+    organizer1:
+        __construct: ['MusikAnimal']
+App\Model\Program:
+    program1:
+        __construct: ['@organizer1']
+        title: 'My_fun_program'
+    program2:
+        __construct: ['@organizer1']
+        title: 'Foo_bar'
+App\Model\Event:
+    event1:
+        __construct: ['@program1', 'Oliver and Company']
+        timezone: 'America/New_York'
+        start: '2018-06-09T00:00:00Z'
+        end: '2018-06-11T23:59:59Z'
+    event2:
+        __construct: ['@program1', 'Event without participants']
+        timezone: 'America/New_York'
+        start: '2018-06-09T00:00:00Z'
+        end: '2018-06-11T23:59:59Z'
+    event3:
+        __construct: ['@program1', 'Wiktionary']
+        timezone: 'America/Los_Angeles'
+        start: '2006-05-01T00:00:00Z'
+        end: '2006-06-30T00:00:00Z'
+App\Model\EventWiki:
+    eventwiki1:
+        __construct: ['@event1', 'en.wikipedia']
+    eventWiki2:
+        __construct: ['@event1', 'commons.wikimedia']
+    eventWiki3:
+        __construct: ['@event1', 'www.wikidata']
+    event2wiki1:
+        __construct: ['@event2', 'en.wikipedia']
+    event2wiki2:
+        __construct: ['@event2', 'commons.wikimedia']
+    event3wiki:
+        __construct: ['@event3', 'en.wiktionary']
+App\Model\Participant:
+    MusikAnimal:
+        # See https://en.wikipedia.org/wiki/Special:Contribs/MusikAnimal?namespace=0&start=2018-06-10&end=2018-06-11
+        # Old editor, 5 pages improved, 1 page creation, 1 Commons upload.
+        __construct: ['@event1']
+        userId: 10584730
+    SingleTransferrableNerd:
+        # See https://en.wikipedia.org/wiki/Special:Contribs/SingleTransferrableNerd?namespace=0&start=2018-06-10&end=2018-06-11
+        # New editor, 1 edit in period.
+        __construct: ['@event1']
+        userId: 54502394
+    Samwilson:
+        # See https://www.wikidata.org/wiki/Special:Contribs/Samwilson?namespace=0&start=2018-06-10&end=2018-06-11
+        # Old editor, 2 items created in period, 4 improved (no redirects). 1 more edit outside list, because we can't give Special:Contribs exact times.
+        __construct: ['@event1']
+        userId: 6398
+    JeBonSer:
+        # See https://en.wikipedia.org/w/index.php?title=Special:Contributions/JeBonSer&start=2018-06-10&end=2018-06-11
+        # Old editor, 2 pages created, 2 local uploads.
+        __construct: ['@event1']
+        userId: 10120606
+    MaxSem:
+        # See https://en.wiktionary.org/wiki/Special:Contributions/MaxSem
+        # 2 edits in May-June 2006
+        __construct: ['@event3']
+        userId: 511
+App\Model\EventCategory:
+    eventCategory1:
+        __construct: ['@event2', 'Parks in Brooklyn', 'en.wikipedia']
+    eventCategory2:
+        # One file upload in period: https://commons.wikimedia.org/wiki/File:DSC00988_YAKIMA,_WASHINGTON_FROM_THE_EAST_AT_3000_FEET_OVERHEAD.jpg
+        __construct: ['@event2', 'Aerial photographs of Washington (state)', 'commons.wikimedia']

@@ -1,0 +1,74 @@
+imports:
+    - { resource: random_background.yaml }
+
+# Learn more about services, parameters and containers at
+# https://symfony.com/doc/current/service_container.html
+parameters:
+    locale: 'en'
+    #parameter_name: value
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: true
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: false
+
+        bind:
+            $appAdmins: '%env(APP_ADMINS)%'
+            $revisionsPerPage: '%env(int:APP_REVISIONS_PER_PAGE)%'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude:
+            - '../src/Kernel.php'
+            - '../src/Model/'
+            - '../migrations/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_subscriber']
+
+    # EntityController is separately defined so that we can inject the validator.
+    App\Controller\EntityController:
+        calls:
+            - [setValidator, ['@validator']]
+        tags: ['controller.service_subscriber']
+
+    App\EventSubscriber\ProgramSubscriber:
+        tags:
+            - { name: doctrine.orm.entity_listener }
+
+    App\EventSubscriber\OrganizerSubscriber:
+        tags:
+            - { name: doctrine.orm.entity_listener }
+
+    App\EventSubscriber\CategorySubscriber:
+        tags:
+            - { name: doctrine.orm.entity_listener }
+
+    App\EventSubscriber\ExceptionSubscriber:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+        arguments: ['@twig', '@logger', '%kernel.environment%']
+
+    App\EventSubscriber\EventDataSubscriber:
+        arguments: ['@router']
+
+    App\Service\EventProcessor:
+        public: true
+        tags:
+            - { name: monolog.logger, channel: event_processor }
+
+    cache.replicas:
+        alias: cache.app

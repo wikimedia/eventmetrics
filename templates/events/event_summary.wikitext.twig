@@ -9,14 +9,14 @@
 
 |-
 | {{ msg(metric, [stat.offset]) }}
-| style="text-align:right" | {% spaceless %}
+| style="text-align:right" | {% apply spaceless %}
     {% if stat.value is null %}
         &ndash;
     {% else %}
         {% if metric == 'byte-difference' and stat.value > 0 %}+{% endif %}{#
         #}{{ stat.value|num_format }}
     {% endif %}
-{% endspaceless %}{% endif %}
+{% endapply %}{% endif %}
 {% endfor %}
 
 |}

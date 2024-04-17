@@ -1,0 +1,56 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+
+jobs:
+    build:
+
+        services:
+            mysql:
+                image: mysql:5.7
+                env:
+                    MYSQL_DATABASE: eventmetrics_test
+                    MYSQL_ROOT_PASSWORD: testpwd
+                ports:
+                    - 3306:3306
+
+        strategy:
+            matrix:
+                os: [ 'ubuntu-latest' ]
+                php: [ '8.1', '8.2' ]
+
+        env:
+            APP_ENV: test
+            DATABASE_HOST: 127.0.0.1
+            DATABASE_NAME: eventmetrics_test
+            DATABASE_PORT: 3306
+            DATABASE_USER: root
+            DATABASE_PASSWORD: testpwd
+
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: intl, pdo_mysql, bz2, json
+                  coverage: none
+
+            - name: Install Event Metrics
+              run: |
+                  composer install --no-scripts
+                  ./bin/console doctrine:migrations:migrate --no-interaction
+
+            - name: Test
+              run: |
+                  ./bin/phpunit --exclude-group=replicas
