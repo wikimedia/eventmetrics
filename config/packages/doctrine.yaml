@@ -1,0 +1,88 @@
+doctrine:
+    dbal:
+        default_connection: eventmetrics
+        connections:
+            eventmetrics:
+                driver:   pdo_mysql
+                host:     "%env(DATABASE_HOST)%"
+                port:     "%env(DATABASE_PORT)%"
+                dbname:   "%env(DATABASE_NAME)%"
+                user:     "%env(DATABASE_USER)%"
+                password: "%env(DATABASE_PASSWORD)%"
+                charset:  UTF8
+            centralauth:
+                driver:   pdo_mysql
+                host:     "%env(DATABASE_REPLICA_HOST_S7)%"
+                port:     "%env(DATABASE_REPLICA_PORT_S7)%"
+                dbname:   "centralauth_p"
+                user:     "%env(DATABASE_REPLICA_USER)%"
+                password: "%env(DATABASE_REPLICA_PASSWORD)%"
+                charset:  UTF8
+            meta:
+                driver:   pdo_mysql
+                host:     "%env(DATABASE_REPLICA_HOST_S7)%"
+                port:     "%env(DATABASE_REPLICA_PORT_S7)%"
+                dbname:   "meta_p"
+                user:     "%env(DATABASE_REPLICA_USER)%"
+                password: "%env(DATABASE_REPLICA_PASSWORD)%"
+                charset:  UTF8
+            toolforge_s1:
+                host:     '%env(DATABASE_REPLICA_HOST_S1)%'
+                port:     '%env(DATABASE_REPLICA_PORT_S1)%'
+                user:     '%env(DATABASE_REPLICA_USER)%'
+                password: '%env(DATABASE_REPLICA_PASSWORD)%'
+            toolforge_s2:
+                host:     '%env(DATABASE_REPLICA_HOST_S2)%'
+                port:     '%env(DATABASE_REPLICA_PORT_S2)%'
+                user:     '%env(DATABASE_REPLICA_USER)%'
+                password: '%env(DATABASE_REPLICA_PASSWORD)%'
+            toolforge_s3:
+                host:     '%env(DATABASE_REPLICA_HOST_S3)%'
+                port:     '%env(DATABASE_REPLICA_PORT_S3)%'
+                user:     '%env(DATABASE_REPLICA_USER)%'
+                password: '%env(DATABASE_REPLICA_PASSWORD)%'
+            toolforge_s4:
+                host:     '%env(DATABASE_REPLICA_HOST_S4)%'
+                port:     '%env(DATABASE_REPLICA_PORT_S4)%'
+                user:     '%env(DATABASE_REPLICA_USER)%'
+                password: '%env(DATABASE_REPLICA_PASSWORD)%'
+            toolforge_s5:
+                host:     '%env(DATABASE_REPLICA_HOST_S5)%'
+                port:     '%env(DATABASE_REPLICA_PORT_S5)%'
+                user:     '%env(DATABASE_REPLICA_USER)%'
+                password: '%env(DATABASE_REPLICA_PASSWORD)%'
+            toolforge_s6:
+                host:     '%env(DATABASE_REPLICA_HOST_S6)%'
+                port:     '%env(DATABASE_REPLICA_PORT_S6)%'
+                user:     '%env(DATABASE_REPLICA_USER)%'
+                password: '%env(DATABASE_REPLICA_PASSWORD)%'
+            toolforge_s7:
+                host:     '%env(DATABASE_REPLICA_HOST_S7)%'
+                port:     '%env(DATABASE_REPLICA_PORT_S7)%'
+                user:     '%env(DATABASE_REPLICA_USER)%'
+                password: '%env(DATABASE_REPLICA_PASSWORD)%'
+            toolforge_s8:
+                host:     '%env(DATABASE_REPLICA_HOST_S8)%'
+                port:     '%env(DATABASE_REPLICA_PORT_S8)%'
+                user:     '%env(DATABASE_REPLICA_USER)%'
+                password: '%env(DATABASE_REPLICA_PASSWORD)%'
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        default_entity_manager: eventmetrics
+        entity_managers:
+            eventmetrics:
+                connection: eventmetrics
+                mappings:
+                    model:
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Model'
+                        prefix: App\Model
+                        alias: Model
+                        is_bundle: false
+            centralauth:
+                connection: centralauth
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+            meta:
+                connection: meta
+                naming_strategy: doctrine.orm.naming_strategy.underscore

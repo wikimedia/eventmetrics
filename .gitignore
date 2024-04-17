@@ -1,10 +1,4 @@
 /.web-server-pid
-/app/config/parameters.yml
-/phpunit.xml
-/var/
-/vendor/
-/node_modules/
-/public/bundles/
 /public/fonts/
 /public/assets/app.css
 /public/assets/app.js
@@ -16,13 +10,34 @@
 
 *.swp
 .DS_Store
-i18n_helper.js
-deploy.sh
-phpDocumentor.phar*
-/bin/phpdoc*
 
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
 .phpunit.result.cache
+###< phpunit/phpunit ###
 
-build/ci/travis.tar
-cc-test-reporter
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###
 
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###

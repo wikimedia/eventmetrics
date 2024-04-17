@@ -1,7 +1,0 @@
-AppBundle\Model\Organizer:
-    organizer1:
-        __construct: ['MusikAnimal']
-AppBundle\Model\Program:
-    program1:
-        __construct: ['@organizer1']
-        title: 'My_fun_program'

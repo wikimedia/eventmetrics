@@ -1,5 +1,0 @@
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
-toolforge:
-    resource: '@ToolforgeBundle/Resources/config/routes.yaml'

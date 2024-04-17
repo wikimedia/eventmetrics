@@ -1,42 +1,42 @@
 {% block form_errors -%}
-    {% for error in form.vars.errors.form.getErrors(true) %}
-        {% if error.message != '' -%}
-            <div class="alert alert-danger alert-dismissible" role="alert">
-                <button class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <ul class="list-unstyled">
-                    {% set error_params = error.messageParameters %}
-                    {##
-                     # Merge the 'payload' variables into the messageParameters.
-                     # This is how variables are passed from the models,
-                     # using the message= and payload= options within the annotation.
-                     #}
-                    {% if error.cause.constraint.payload is defined and error.cause.constraint.payload|length > 0 %}
-                        {% set error_params = error_params|merge(error.cause.constraint.payload) %}
-                    {% endif %}
-                    {% if error.messageTemplate == 'error-invalid' and error_params[0] is defined %}
-                        {##
-                         # Special handling for generic 'error-invalid' message.
-                         # Here the 0 index of the messageParameters should be the
-                         # i18n message used in the <label> for the field label.
-                         #}
-                        <strong>{{ msg_if_exists(error_params[0]) }}</strong>:
-                        {{ msg_if_exists(error.messageTemplate) }}
-                    {% else %}
-                        {{ msg_if_exists(error.messageTemplate, error_params) }}
-                    {% endif %}
-                </ul>
-            </div>
-        {%- endif %}
-    {% endfor %}
+	{% for error in form.vars.errors.form.getErrors(true) %}
+		{% if error.message != '' -%}
+			<div class="alert alert-danger alert-dismissible" role="alert">
+				<button class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<ul class="list-unstyled">
+					{% set error_params = error.messageParameters %}
+					{##
+					 # Merge the 'payload' variables into the messageParameters.
+					 # This is how variables are passed from the models,
+					 # using the message= and payload= options within the annotation.
+					 #}
+					{% if error.cause.constraint.payload is defined and error.cause.constraint.payload|length > 0 %}
+						{% set error_params = error_params|merge(error.cause.constraint.payload) %}
+					{% endif %}
+					{% if error.messageTemplate == 'error-invalid' and error_params[0] is defined %}
+						{##
+						 # Special handling for generic 'error-invalid' message.
+						 # Here the 0 index of the messageParameters should be the
+						 # i18n message used in the <label> for the field label.
+						 #}
+						<strong>{{ msg_if_exists(error_params[0]) }}</strong>:
+						{{ msg_if_exists(error.messageTemplate) }}
+					{% else %}
+						{{ msg_if_exists(error.messageTemplate, error_params) }}
+					{% endif %}
+				</ul>
+			</div>
+		{%- endif %}
+	{% endfor %}
 {%- endblock form_errors %}
 
 {% block form_row %}
-    <div class="form-group">
-        {{- form_label(form, null, {'label_attr': {'class': 'col-sm-2'}}) -}}
-        <div class="col-sm-8{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
-            {{- form_widget(form) -}}
-        </div>
-    </div>
+	<div class="form-group">
+		{{- form_label(form, null, {'label_attr': {'class': 'col-sm-2'}}) -}}
+		<div class="col-sm-8{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %}">
+			{{- form_widget(form) -}}
+		</div>
+	</div>
 {% endblock %}
