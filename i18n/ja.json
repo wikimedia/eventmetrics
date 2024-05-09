@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Chqaz",
 			"Omotecho",
 			"Suyama"
 		]
@@ -66,6 +67,7 @@
 	"page": "ページ",
 	"pager-newer-n": "{{PLURAL:$1|以後の$1件}}",
 	"pager-older-n": "{{PLURAL:$1|以前の$1件}}",
+	"participants": "参加者",
 	"report-issue": "問題の報告",
 	"save": "保存",
 	"settings": "設定",
