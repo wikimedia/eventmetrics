@@ -1,0 +1,7 @@
+toolforge:
+    oauth:
+        consumer_key: '%env(APP_OAUTH_KEY)%'
+        consumer_secret: '%env(APP_OAUTH_SECRET)%'
+        logged_in_user: '%env(APP_LOGGED_IN_USER)%'
+    intuition:
+        domain: 'eventmetrics'

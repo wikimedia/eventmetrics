@@ -1,0 +1,9 @@
+when@dev:
+    framework:
+        cache:
+            app: "cache.adapter.filesystem"
+
+when@prod:
+    framework:
+        cache:
+            app: "cache.adapter.apcu"
