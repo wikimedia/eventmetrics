@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Revi",
+			"Suleiman the Magnificent Television",
 			"Ykhwong"
 		]
 	},
@@ -16,7 +17,9 @@
 	"attribution": "저작자표시",
 	"attribution-background": "배경 사진은 공용에서 찾을 수 있음 $1",
 	"attribution-font": "$1 폰트는 $3 제공으로 $2 라이선스로 사용 가능함",
+	"avg-views": "평균 관람",
 	"byte-difference": "변경된 바이트",
+	"byte-difference-during-event": "이벤트 기간 동안 바이트가 변경되었습니다",
 	"cancel": "취소",
 	"categories": "분류",
 	"categories-panel-title": "분류 필터",
@@ -32,6 +35,7 @@
 	"creator": "만든이",
 	"date": "날짜",
 	"delete": "삭제",
+	"developed-by": "커뮤니티 테크에서 개발",
 	"diff": "차이",
 	"documentation": "설명서",
 	"edit-program": "프로그램 편집",
