@@ -20,6 +20,7 @@
 	"impact": "اثر",
 	"metadata-end-date": "پڄاڻيءَ جي تاريخ:",
 	"metadata-start-date": "شروع ٿيڻ جي تاريخ:",
+	"num-days": "{{PLURAL:$1|ڏينھن}}",
 	"num-hours": "{{PLURAL: $1|ڪلاڪ}}",
 	"num-minutes": "{{PLURAL:$1|منٽ}}",
 	"page": "صفحو",
