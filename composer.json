@@ -41,7 +41,7 @@
         "symfony/http-client": "4.4.*",
         "symfony/swiftmailer-bundle": "^3.0",
         "symfony/symfony": "4.4.*",
-        "symfony/webpack-encore-pack": "^1.0",
+        "symfony/webpack-encore-bundle": "^1.0",
         "twig/twig": "^2.0",
         "wikimedia/toolforge-bundle": "^1.3"
     },

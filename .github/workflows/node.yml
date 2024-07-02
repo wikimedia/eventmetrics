@@ -1,0 +1,32 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-node:
+    name: Node
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ '11.4.0' ]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: dcodeIO/setup-node-nvm@master
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: |
+        node --version
+        npm --version
+        npm ci
+        npm test
