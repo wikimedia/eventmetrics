@@ -1,11 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"Oujon",
 			"Yardom78"
 		]
 	},
 	"add-category": "Pridať kategóriu",
-	"add-more-participants": "Pridajte používateľské meno na wiki, do každého riadku len jedno, aby ste obmedzili metriky na konkrétnych účastníkov.",
+	"add-more-participants": "Nižšie pridajte používateľské mená wiki, jedno na riadok, aby ste metriky obmedzili na konkrétnych účastníkov.",
 	"add-more-participants-tooltip": "Viac informácií o filtrovaní účastníkov",
 	"add-more-participants-note": "Môžete kopírovať/vkladať priamo zo zoznamu na wiki.",
 	"add-organizer": "Pridať organizátora",
