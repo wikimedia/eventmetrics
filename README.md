@@ -23,7 +23,7 @@ After cloning the repository:
    * `APP_LOGGED_IN_USER` is used to mock the current user, instead of going through OAuth.
      Must be a valid Wikimedia username.
 2. Run `composer install`.
-3. Open a tunnel to the WMF databases: `./bin/console toolforge:ssh`.
+3. Open a tunnel to the WMF databases: `symfony console toolforge:ssh`.
 4. `symfony server start` to start the server.
 5. You should be up and running at http://localhost:8000
 
@@ -34,8 +34,8 @@ To update: after pulling the latest code, run `composer install`.
 The web interface is hopefully straightforward to use. However, developers can also do some
 functionality via the console. In the same directory as the application:
 
-* `./bin/console app:process-event <eventId>` - will generate [`EventStat`](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/Model/EventStat.php)s for the Event with the ID `<eventId>`.
-* `./bin/console app:spawn-jobs` - queries the [Job queue](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/Model/Job.php) and runs `app:process-event`
+* `symfony console app:process-event <eventId>` - will generate [`EventStat`](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/Model/EventStat.php)s for the Event with the ID `<eventId>`.
+* `symfony console app:spawn-jobs` - queries the [Job queue](https://github.com/wikimedia/eventmetrics/blob/master/src/AppBundle/Model/Job.php) and runs `app:process-event`
   for Events that are in the queue. There is a limit on the number of concurrent jobs to
   ensure the database quota on the replicas is not exceeded.
 
