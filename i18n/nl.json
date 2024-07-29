@@ -6,7 +6,8 @@
 			"McDutchie",
 			"Ndecouck",
 			"Optilete",
-			"Romaine"
+			"Romaine",
+			"Siebrand"
 		]
 	},
 	"add-category": "Categorie toevoegen",
@@ -192,7 +193,7 @@
 	"save-participants": "Deelnemers opslaan",
 	"select-report-format": "Selecteer een formaat voor het rapport.",
 	"settings": "Instellingen",
-	"show-section": "Deze sectie tonen",
+	"show-section": "Deze sectie weergeven",
 	"start-date": "Begindatum",
 	"start-time": "Begintijd",
 	"statistics": "Statistieken",
