@@ -149,7 +149,7 @@
 	"num-minutes": "minute{{PLURAL: $1||s}}",
 	"num-participants": "$1 participant{{PLURAL:$1||s}}",
 	"num-revisions": "révision{{PLURAL: $1||s}}",
-	"num-seconds": "seconde{{PLURAL: $1||s}}",
+	"num-seconds": "{{PLURAL: $1|seconde|secondes}}",
 	"num-wikis": "wiki{{PLURAL:$1||s}}",
 	"organizers": "Organisateurs",
 	"page": "Page",

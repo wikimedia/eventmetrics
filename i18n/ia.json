@@ -142,7 +142,7 @@
 	"num-minutes": "minuta{{PLURAL:$1||s}}",
 	"num-participants": "$1 participante{{PLURAL:$1||s}}",
 	"num-revisions": "version{{PLURAL:$1||es}}",
-	"num-seconds": "secunda{{PLURAL:$1||s}}",
+	"num-seconds": "{{PLURAL:$1|secunda|secundas}}",
 	"num-wikis": "wiki{{PLURAL:$1||s}}",
 	"organizers": "Organisatores",
 	"page": "Pagina",
