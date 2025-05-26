@@ -3,12 +3,13 @@
 		"authors": [
 			"Chqaz",
 			"Omotecho",
+			"Shirayuki",
 			"Suyama"
 		]
 	},
 	"add-category": "カテゴリを追加",
 	"add-more-participants": "参加者のウィキプロジェクトに登録した利用者名は、1行に1人ずつ追加して利用者に固有の指標を割り当てます。",
-	"add-more-participants-tooltip": "参加者の絞り込み（フィルタ）について学ぶ",
+	"add-more-participants-tooltip": "参加者の絞り込み (フィルター) について学ぶ",
 	"add-more-participants-note": "オンウィキに一覧があるなら、直接コピーペーストできます。",
 	"add-organizer": "主催者を追加",
 	"add-wiki": "ウィキを追加",
@@ -28,7 +29,7 @@
 	"categories": "カテゴリ",
 	"categories-panel-title": "カテゴリ フィルタ",
 	"categories-description": "指標をカテゴリの特定のページに限定するには、カテゴリ (Wiki 名を含む) を入力。",
-	"categories-description-tooltip": "カテゴリ フィルタについて学ぶ",
+	"categories-description-tooltip": "カテゴリフィルターについて学ぶ",
 	"categories-explanation": "カテゴリは必ずメインの名前空間ページに記します。カテゴリの非表示化は認められます。",
 	"categories-commons-explanation": "これを使えるのは Commons のみで、ページの代わりにファイルの絞り込みに使います。（画像や動画など）",
 	"category-warning-header": "イベントの一部が構成済み",
