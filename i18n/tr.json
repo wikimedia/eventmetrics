@@ -76,7 +76,7 @@
 	"error-filters-participants-none": "Katılımcı girilmedi",
 	"error-filters-participants-or-categories": "Katılımcılara veya kategorilere göre filtreleyebilir veya ikisini birleştirebilirsiniz.",
 	"error-filters-wikidata": "Vikiveri ile ilgili metrikler almak için, Katılımcıları sağlamalısınız. (Kategoriler Vikiveri'de yok.)",
-	"error-filters-wikidata-only": "Bu etkinlik için yalnızca bir viki belirttiniz: <strong>Wikidata</strong>",
+	"error-filters-wikidata-only": "Bu etkinlik için yalnızca bir viki belirttiniz: <strong>Vikiveri</strong>",
 	"error-filters-wikidata-panel": "Vikiveri için gerekli",
 	"error-invalid": "Bu değer geçerli değil.",
 	"error-non-organizer": "Organizatör olmadığınız için bu programı görme yetkiniz yok.",
