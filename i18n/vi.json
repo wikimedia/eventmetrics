@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Chaiwan2009",
 			"Minh Nguyen",
 			"Tuanminh01"
 		]
@@ -29,6 +30,7 @@
 	"date": "Ngày tháng",
 	"documentation": "Tài liệu",
 	"edit-summary": "Miêu tả",
+	"error-unknown": "Đã xảy ra sự cố",
 	"fatal-error": "Lỗi chí tử",
 	"help": "Trợ giúp",
 	"help-translate": "Giúp biên dịch",
