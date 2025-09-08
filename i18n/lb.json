@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"GilPe",
 			"Robby",
 			"Soued031",
 			"Volvox"
@@ -26,7 +27,7 @@
 	"diff": "Ënnerscheed",
 	"documentation": "Dokumentatioun",
 	"edit-program": "Programm änneren",
-	"edit-summary": "Resumé änneren",
+	"edit-summary": "Resümmee änneren",
 	"edits": "Ännerungen",
 	"end-date": "Schlussdatum",
 	"error-event-retry-link": "dëse Probleem mellen",
