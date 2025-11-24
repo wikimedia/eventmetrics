@@ -1,16 +1,19 @@
 {
 	"@metadata": {
 		"authors": [
+			"ElangoRamanujam",
 			"Fahimrazick"
 		]
 	},
 	"close": "மூடு",
 	"date": "நாள்",
 	"edit-summary": "கருத்துரை",
+	"events": "நிகழ்வுகள்",
 	"fatal-error": "மாபெரும் தவறு",
 	"feedback": "கருத்து",
 	"help": "உதவி",
 	"logout": "விடுபதிகை",
+	"no-results": "முடிவுகள் எதுவும் காணப்படவில்லை",
 	"num-days": "{{PLURAL: $1|நாள்|நாட்கள்}}",
 	"num-hours": "{{PLURAL: $1|மணி|மணிகள்}}",
 	"num-minutes": "{{PLURAL:$1|நிமிடம்|நிமிடங்கள்}}",
@@ -19,10 +22,31 @@
 	"page": "பக்கம்",
 	"pager-newer-n": "{{PLURAL:$1|புதிய ஒரு|புதிய $1}}",
 	"pager-older-n": "{{PLURAL:$1|பழைய ஒரு|பழைய $1}}",
+	"participants": "பங்கேற்பாளர்கள்",
+	"participation": "பங்கேற்பு",
+	"please-login": "தொடர தயவுசெய்து உள்நுழையவும்.",
+	"remove": "அகற்று",
+	"report-issue": "ஒரு சிக்கலைப் புகாரளிக்கவும்",
 	"save": "சேமி",
+	"save-categories": "வகைகளைச் சேமி",
+	"save-participants": "பங்கேற்பாளர்களைச் சேமி",
 	"settings": "செயலமைப்புகள்",
+	"show-section": "இந்தப் பகுதியைக் காட்டு",
+	"start-date": "தொடக்க நாள்",
+	"start-time": "தொடக்க நேரம்",
+	"statistics": "புள்ளிவிவரங்கள்",
 	"submit": "சமர்ப்பிக்கவும்",
+	"time": "நேரம்",
+	"timezone": "நேர மண்டலம்",
+	"title": "தலைப்பு",
 	"totals": "மொத்தம்",
 	"unknown": "அறியப்படாதது",
-	"username": "பயனர் பெயர்"
+	"uploads": "பதிவேற்றங்கள்",
+	"username": "பயனர் பெயர்",
+	"view-all-edits": "அனைத்து திருத்தங்களையும் காண்க",
+	"view-source": "மூலத்தைக் காண்க",
+	"views": "பார்வைகள்",
+	"wiki": "விக்கி",
+	"wikidata-not-applicable": "விக்கிடேட்டாவுடன் வேலை செய்யாது.",
+	"wikis": "விக்கிகள்"
 }
