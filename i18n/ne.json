@@ -24,7 +24,7 @@
 	"help": "सहायता",
 	"logout": "निर्गमन गर्नुहोस्",
 	"num-days": "{{PLURAL: $1|दिन}}",
-	"num-hours": "{{PLURAL: $1|घण्टा|घण्टाहरू}}",
+	"num-hours": "{{PLURAL: $1|घन्टा|घन्टाहरू}}",
 	"num-minutes": "{{PLURAL: $1|minute|minutes}}",
 	"num-seconds": "{{PLURAL: $1|second|seconds}}",
 	"page": "पृष्ठ",
