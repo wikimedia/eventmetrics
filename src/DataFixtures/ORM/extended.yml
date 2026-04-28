@@ -68,4 +68,4 @@ App\Model\EventCategory:
         __construct: ['@event2', 'Parks in Brooklyn', 'en.wikipedia']
     eventCategory2:
         # One file upload in period: https://commons.wikimedia.org/wiki/File:DSC00988_YAKIMA,_WASHINGTON_FROM_THE_EAST_AT_3000_FEET_OVERHEAD.jpg
-        __construct: ['@event2', 'Aerial photographs of Washington (state)', 'commons.wikimedia']
+        __construct: ['@event2', 'Aerial photographs of Yakima County, Washington', 'commons.wikimedia']

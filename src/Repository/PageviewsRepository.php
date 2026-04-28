@@ -48,6 +48,9 @@ class PageviewsRepository {
 			'connect_timeout' => self::CONNECT_TIMEOUT,
 			'delay' => self::REQUEST_DELAY,
 			'handler' => $this->getRetryHandler(),
+			'headers' => [
+				'User-Agent' => 'Event Metrics (https://eventmetrics.wmcloud.org/; tools.grantmetrics@toolforge.org)'
+			]
 		] );
 		$this->logger = new NullLogger();
 	}

@@ -154,14 +154,22 @@ class EventRepository extends Repository {
 					'gil_to = page_title AND page_namespace = 6 AND gil_page_namespace_id = 0'
 				);
 		} else {
-			$rqb->select( [ 'COUNT(DISTINCT(il_to)) AS count' ] )
+			$rqb->select( [ 'COUNT(DISTINCT(lt_id)) AS count' ] )
 				->from( "$dbName.imagelinks" )
 				->join(
 					"$dbName.imagelinks",
+					"$dbName.linktarget",
+					'links_target',
+					"il_target_id = lt_id"
+				)
+				->join(
+					"links_target",
 					"$dbName.page",
-					null,
-					'il_to = page_title AND page_namespace = 6 AND il_from_namespace = 0'
-				);
+					'links_page',
+					'lt_title = page_title AND lt_namespace = page_namespace'
+				)
+				->where( 'lt_namespace = 6' )
+				->andWhere( 'il_from_namespace = 0' );
 		}
 
 		$rqb->where( 'page_id IN (:pageIds)' );
@@ -188,7 +196,14 @@ class EventRepository extends Repository {
 		} else {
 			$rqb->select( 'COUNT(DISTINCT(il_from)) AS count' )
 				->from( "$dbName.imagelinks" )
-				->where( 'il_to = :filename' )
+				->join(
+					"$dbName.imagelinks",
+					"$dbName.linktarget",
+					null,
+					"il_target_id = lt_id"
+				)
+				->where( 'lt_title = :filename' )
+				->andWhere( 'lt_namespace = 6' )
 				->andWhere( 'il_from_namespace = 0' );
 		}
 
@@ -223,8 +238,8 @@ class EventRepository extends Repository {
 		} else {
 			$rqb->select( [ "'$dbName' AS dbName", 'il_from AS pageId' ] )
 				->from( "$dbName.imagelinks" )
-				->join( "$dbName.imagelinks", "$dbName.image", 'links_image', 'il_to = img_name' )
-				->join( 'links_image', "$dbName.page", 'image_page', 'il_to = page_title AND page_namespace = 6' )
+				->join( "$dbName.imagelinks", "$dbName.linktarget", 'links_target', 'il_target_id = lt_id' )
+				->join( 'links_target', "$dbName.page", 'links_page', 'lt_title = page_title AND lt_namespace = page_namespace' )
 				->where( 'il_from_namespace = 0' )
 				->andWhere( 'page_id IN (:pageIds)' );
 		}

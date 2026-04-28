@@ -242,7 +242,13 @@ class EventWikiRepository extends Repository {
 
 		if ( $shouldUseCategories ) {
 			$rqb->join( "$dbName.$revisionTable", "$dbName.categorylinks", 'category_rev', 'cl_from = rev_page' )
-				->where( 'cl_to IN (:categoryTitles)' )
+				->join(
+					"$dbName.$revisionTable",
+					"$dbName.linktarget",
+					null,
+					"cl_target_id = lt_id"
+				)
+				->where( 'lt_title IN (:categoryTitles)' )
 				->setParameter( 'categoryTitles', $categoryTitles, Connection::PARAM_STR_ARRAY );
 		}
 
