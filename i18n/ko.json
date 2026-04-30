@@ -3,6 +3,7 @@
 		"authors": [
 			"Revi",
 			"Suleiman the Magnificent Television",
+			"Tensama0415",
 			"Ykhwong"
 		]
 	},
@@ -128,7 +129,7 @@
 	"participants-panel-title": "참여자 필터",
 	"please-login": "계속하려면 로그인해 주십시오.",
 	"program": "프로그램",
-	"program-created": "'$1' 프로그램이 성공적으로 생성되었습니다.",
+	"program-created": "'$1' 프로그램이 생성되었습니다.",
 	"program-deleted": "'$1' 프로그램이 삭제되었습니다.",
 	"program-settings": "프로그램 설정",
 	"program-updated": "'$1' 프로그램이 업데이트되었습니다.",
