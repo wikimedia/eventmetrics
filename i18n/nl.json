@@ -58,7 +58,7 @@
 	"enable-event-times": "Begin- en einddatums voor dit evenement inschakelen.",
 	"end-date": "Einddatum",
 	"end-time": "Eindtijd",
-	"error-categories": "$1 {{PLURAL:$1|categorie is|categorieën zijn}} ongeldig. Bewerk of verwijder ze en verzend opnieuw om op te slaan. Controleer op onjuiste spelling en zorg ervoor dat de wiki geldig is.",
+	"error-categories": "$1 {{PLURAL:$1|categorie is|categorieën zijn}} incorrect. Bewerk of verwijder ze en verzend opnieuw om op te slaan. Controleer op onjuiste spelling en zorg ervoor dat de wiki geldig is.",
 	"error-event-retry": "Probeer het opnieuw of $1 (vergeet niet om een link naar uw evenement op te nemen).",
 	"error-event-retry-link": "meld dit probleem",
 	"error-event-timeout": "Dit proces duurde te lang en is gestopt.",
