@@ -75,6 +75,8 @@
 	"pager-newer-n": "{{PLURAL:$1|nächsten|nächst $1}}",
 	"pager-older-n": "{{PLURAL:$1|vireg|vireg $1}}",
 	"pages-improved": "Verbessert Säiten",
+	"pageviews-average": "Duerchschnëttlech Säitenopriff pro Dag",
+	"pageviews-cumulative": "Säitenopriff, kumulativ",
 	"participants": "Participanten",
 	"participation": "Partizipatioun",
 	"please-login": "Loggt Iech wgl. a fir virunzefueren.",
