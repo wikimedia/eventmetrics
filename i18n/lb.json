@@ -37,6 +37,7 @@
 	"error-server-message": "Äntwert vum Server: $1",
 	"error-title-numeric": "Titel ka keng Zuel sinn.",
 	"error-unknown": "Et ass eppes schif gaangen",
+	"error-wikis": "$1 {{PLURAL:$1|Wiki ass|Wikie sinn}} ongülteg. Iwwerpréift d'Schreifweis.",
 	"event": "Evenement",
 	"event-all-edits": "All Ännerungen",
 	"event-download-csv": "Als CSV eroflueden",
