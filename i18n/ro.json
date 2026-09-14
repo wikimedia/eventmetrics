@@ -1,12 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"Babu"
+			"Babu",
+			"Blaséd"
 		]
 	},
 	"all": "Toate",
 	"apply": "Aplică",
-	"cancel": "Anulare",
+	"cancel": "Anulează",
 	"date": "Dată",
 	"diff": "Diferență",
 	"documentation": "Documentație",
