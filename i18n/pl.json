@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Chrumps",
+			"PanWor",
 			"Woytecr"
 		]
 	},
@@ -62,7 +63,7 @@
 	"new-editors": "Nowi edytorzy",
 	"new-editors-desc": "Liczba nowoutworzonych kont, w tym użytkowników, którzy zarejestrowali się {{PLURAL:$1|jeden dzień|$1 dni}} przed wydarzeniem (na dowolnej wiki).",
 	"no-events": "Brak wydarzeń w tym programie!",
-	"no-programs": "Nie utworzyłeś żadnych programów.",
+	"no-programs": "Nie utworzono żadnych programów.",
 	"no-results": "Brak wyników",
 	"num-categories": "$1 {{PLURAL:$1|kategoria|kategorie|kategorii}}",
 	"num-days": "{{PLURAL:$1|dzień|dni}}",
