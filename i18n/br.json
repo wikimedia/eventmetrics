@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ar choler",
 			"Gwenn-Ael",
 			"Huñvreüs"
 		]
@@ -54,7 +55,7 @@
 	"error-title-invalid-chars": "En titloù ne c'hall ket bezañ arouezennoù : $1",
 	"error-title-numeric": "Ne c'hall ket an titl bezañ ur sifr.",
 	"error-unconfigured-wiki": "N'eo ket kefluniet $1 evit an darvoud-mañ. Ouzhpennañ ar wiki d'an darvoud da gentañ, mar plij.",
-	"error-unknown": "Un dra bennak a-dreuz a zo bet",
+	"error-unknown": "Un dra bennak zo aet a-dreuz",
 	"error-usernames": "$1 {{PLURAL:$1|anv implijerer zo direizh|anv implijer zo direizh}}. Reizhañ pe tennañ anezho, mar plij hag adkasit evit enrollañ. Gwiriit ar gerioù n'int ket skrivet mat, ar pennlizherennoù hag ar furmadaozadurioù ouzhpenn.",
 	"error-wikis": "$1 wiki zo direizh. Gwiriit hag-eñ eo skrivet mat.",
 	"event": "Darvoud",
